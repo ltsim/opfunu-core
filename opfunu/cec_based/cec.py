@@ -4,15 +4,15 @@
 #       Github: https://github.com/thieu1995        %                         
 # --------------------------------------------------%
 
-from abc import ABC
+import abc
+import importlib.resources
 
 import numpy as np
-import pkg_resources
 
 from opfunu.benchmark import Benchmark
 
 
-class CecBenchmark(Benchmark, ABC):
+class CecBenchmark(Benchmark, abc.ABC):
     """
     Defines an abstract class for optimization benchmark problem.
 
@@ -80,7 +80,7 @@ class CecBenchmark(Benchmark, ABC):
         self.verbose = False
 
     def make_support_data_path(self, data_name):
-        self.support_path = pkg_resources.resource_filename("opfunu", f"cec_based/{data_name}")
+        self.support_path = importlib.resources.files("opfunu").joinpath(f"cec_based/{data_name}")
 
     def check_shift_data(self, f_shift):
         if type(f_shift) is str:
