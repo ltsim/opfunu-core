@@ -28,7 +28,7 @@
 # >>> f2.plot_2d(selected_dims=(2, 3), n_points=300)
 # >>> f2.plot_3d(selected_dims=(1, 4), n_points=300)
 
-__version__ = "1.0.4"
+__version__ = "1.0.5"
 
 import inspect
 import re
