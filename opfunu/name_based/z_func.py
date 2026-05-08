@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import numpy as np
+
 from opfunu.benchmark import Benchmark
 
 
@@ -198,7 +199,8 @@ class Zimmerman(Benchmark):
         Zh2 = lambda x: (x[0] - 3.0) ** 2.0 + (x[1] - 2.0) ** 2.0 - 16.0
         Zh3 = lambda x: x[0] * x[1] - 14.0
         Zp = lambda x: 100.0 * (1.0 + x)
-        return max(Zh1(x), Zp(Zh2(x)) * np.sign(Zh2(x)), Zp(Zh3(x)) * np.sign(Zh3(x)), Zp(-x[0]) * np.sign(x[0]),Zp(-x[1]) * np.sign(x[1]))
+        return max(Zh1(x), Zp(Zh2(x)) * np.sign(Zh2(x)), Zp(Zh3(x)) * np.sign(Zh3(x)), Zp(-x[0]) * np.sign(x[0]),
+                   Zp(-x[1]) * np.sign(x[1]))
 
 
 class Zirilli(Benchmark):

@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import numpy as np
+
 from opfunu.cec_based.cec import CecBenchmark
 from opfunu.utils import operator
 
@@ -34,6 +35,7 @@ class F12008(CecBenchmark):
     rotated = False
 
     modality = False  # Number of ambiguous peaks, unknown # peaks
+
     # n_basins = 1
     # n_valleys = 1
 
@@ -42,7 +44,8 @@ class F12008(CecBenchmark):
         self.dim_changeable = True
         self.dim_default = 500
         self.dim_max = 1000
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2008")
         self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
         self.f_bias = f_bias
@@ -81,6 +84,7 @@ class F22008(CecBenchmark):
     rotated = False
 
     modality = False  # Number of ambiguous peaks, unknown # peaks
+
     # n_basins = 1
     # n_valleys = 1
 
@@ -89,7 +93,8 @@ class F22008(CecBenchmark):
         self.dim_changeable = True
         self.dim_default = 500
         self.dim_max = 1000
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2008")
         self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
         self.f_bias = f_bias
@@ -128,6 +133,7 @@ class F32008(CecBenchmark):
     rotated = False
 
     modality = False  # Number of ambiguous peaks, unknown # peaks
+
     # n_basins = 1
     # n_valleys = 1
 
@@ -136,7 +142,8 @@ class F32008(CecBenchmark):
         self.dim_changeable = True
         self.dim_default = 500
         self.dim_max = 1000
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2008")
         self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
         self.f_bias = f_bias
@@ -175,6 +182,7 @@ class F42008(CecBenchmark):
     rotated = False
 
     modality = True  # Number of ambiguous peaks, unknown # peaks
+
     # n_basins = 1
     # n_valleys = 1
 
@@ -223,6 +231,7 @@ class F52008(CecBenchmark):
     rotated = False
 
     modality = False  # Number of ambiguous peaks, unknown # peaks
+
     # n_basins = 1
     # n_valleys = 1
 
@@ -231,7 +240,8 @@ class F52008(CecBenchmark):
         self.dim_changeable = True
         self.dim_default = 500
         self.dim_max = 1000
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-600., 600.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-600., 600.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2008")
         self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
         self.f_bias = f_bias
@@ -271,6 +281,7 @@ class F62008(CecBenchmark):
     rotated = False
 
     modality = False  # Number of ambiguous peaks, unknown # peaks
+
     # n_basins = 1
     # n_valleys = 1
 
@@ -292,6 +303,7 @@ class F62008(CecBenchmark):
         self.check_solution(x, self.dim_max, self.dim_supported)
         z = x - self.f_shift
         return operator.ackley_func(z) + self.f_bias
+
 
 class F72008(CecBenchmark):
     """
@@ -318,6 +330,7 @@ class F72008(CecBenchmark):
     rotated = False
 
     modality = True  # Number of ambiguous peaks, unknown # peaks
+
     # n_basins = 1
     # n_valleys = 1
 
@@ -339,5 +352,5 @@ class F72008(CecBenchmark):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         ndim = len(x)
-        results = [operator.fractal_1d_func(x[idx] + operator.twist_func(x[idx+1])) for idx in range(0, ndim-1)]
+        results = [operator.fractal_1d_func(x[idx] + operator.twist_func(x[idx + 1])) for idx in range(0, ndim - 1)]
         return np.sum(results) + operator.fractal_1d_func(x[-1] + operator.twist_func(x[0])) + self.f_bias

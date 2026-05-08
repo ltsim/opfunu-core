@@ -4,6 +4,7 @@
 # --------------------------------------------------%
 
 import numpy as np
+
 from opfunu import get_all_cec_based_functions
 
 

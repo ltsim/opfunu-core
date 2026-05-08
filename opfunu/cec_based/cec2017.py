@@ -6,6 +6,7 @@
 
 
 import numpy as np
+
 from opfunu.cec_based.cec import CecBenchmark
 from opfunu.utils import operator
 
@@ -46,7 +47,8 @@ class F12017(CecBenchmark):
         self.dim_default = 30
         self.dim_max = 100
         self.dim_supported = [2, 10, 20, 30, 50, 100]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2017")
         self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
@@ -109,7 +111,7 @@ class F32017(F12017):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 2.048*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 2.048 * (x - self.f_shift) / 100)
         return operator.rosenbrock_func(z, shift=1.0) + self.f_bias
 
 
@@ -129,7 +131,8 @@ class F42017(F12017):
     # n_basins = 1
     # n_valleys = 1
 
-    characteristics = ["Local optima’s number is huge", "The second better local optimum is far from the global optimum"]
+    characteristics = ["Local optima’s number is huge",
+                       "The second better local optimum is far from the global optimum"]
 
     def __init__(self, ndim=None, bounds=None, f_shift="shift_data_4", f_matrix="M_4_D", f_bias=400.):
         super().__init__(ndim, bounds, f_shift, f_matrix, f_bias)
@@ -165,7 +168,7 @@ class F52017(F12017):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 0.5*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 0.5 * (x - self.f_shift) / 100)
         return operator.schaffer_f7_func(z) + self.f_bias
 
 
@@ -193,7 +196,7 @@ class F62017(F12017):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 600.*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 600. * (x - self.f_shift) / 100)
         return operator.lunacek_bi_rastrigin_func(z, shift=2.5) + self.f_bias
 
 
@@ -221,7 +224,7 @@ class F72017(F12017):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 5.12*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 5.12 * (x - self.f_shift) / 100)
         return operator.non_continuous_rastrigin_func(z) + self.f_bias
 
 
@@ -246,7 +249,7 @@ class F82017(F12017):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 5.12*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 5.12 * (x - self.f_shift) / 100)
         return operator.levy_func(z, shift=1.0) + self.f_bias
 
 
@@ -263,7 +266,8 @@ class F92017(F12017):
 
     unimodal = False
     modality = True  # Number of ambiguous peaks, unknown # peaks
-    characteristics = ["Local optima’s number is huge", "The second better local optimum is far from the global optimum"]
+    characteristics = ["Local optima’s number is huge",
+                       "The second better local optimum is far from the global optimum"]
 
     def __init__(self, ndim=None, bounds=None, f_shift="shift_data_9", f_matrix="M_9_D", f_bias=900.):
         super().__init__(ndim, bounds, f_shift, f_matrix, f_bias)
@@ -271,7 +275,7 @@ class F92017(F12017):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 1000.*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 1000. * (x - self.f_shift) / 100)
         return operator.modified_schwefel_func(z) + self.f_bias
 
 
@@ -305,13 +309,15 @@ class F102017(CecBenchmark):
 
     characteristics = []
 
-    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_10", f_matrix="M_10_D", f_shuffle="shuffle_data_10_D", f_bias=1000.):
+    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_10", f_matrix="M_10_D",
+                 f_shuffle="shuffle_data_10_D", f_bias=1000.):
         super().__init__()
         self.dim_changeable = True
         self.dim_default = 30
         self.dim_max = 100
         self.dim_supported = [10, 30, 50, 100]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2017")
         self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
@@ -324,8 +330,10 @@ class F102017(CecBenchmark):
         self.p = np.array([0.2, 0.4, 0.4])
         self.n1 = int(np.ceil(self.p[0] * self.ndim))
         self.n2 = int(np.ceil(self.p[1] * self.ndim)) + self.n1
-        self.idx1, self.idx2, self.idx3 = self.f_shuffle[:self.n1], self.f_shuffle[self.n1:self.n2], self.f_shuffle[self.n2:self.ndim]
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix, "f_shuffle": self.f_shuffle}
+        self.idx1, self.idx2, self.idx3 = self.f_shuffle[:self.n1], self.f_shuffle[self.n1:self.n2], self.f_shuffle[
+            self.n2:self.ndim]
+        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix,
+                      "f_shuffle": self.f_shuffle}
 
     def evaluate(self, x, *args):
         self.n_fe += 1
@@ -347,17 +355,20 @@ class F112017(F102017):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 1100.0'
 
-    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_11", f_matrix="M_11_D", f_shuffle="shuffle_data_11_D", f_bias=1100.):
+    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_11", f_matrix="M_11_D",
+                 f_shuffle="shuffle_data_11_D", f_bias=1100.):
         super().__init__(ndim, bounds, f_shift, f_matrix, f_shuffle, f_bias)
         self.n_funcs = 3
         self.p = np.array([0.3, 0.3, 0.4])
         self.n1 = int(np.ceil(self.p[0] * self.ndim))
         self.n2 = int(np.ceil(self.p[1] * self.ndim)) + self.n1
-        self.idx1, self.idx2, self.idx3 = self.f_shuffle[:self.n1], self.f_shuffle[self.n1:self.n2], self.f_shuffle[self.n2:self.ndim]
+        self.idx1, self.idx2, self.idx3 = self.f_shuffle[:self.n1], self.f_shuffle[self.n1:self.n2], self.f_shuffle[
+            self.n2:self.ndim]
         self.g1 = operator.elliptic_func
         self.g2 = operator.modified_schwefel_func
         self.g3 = operator.bent_cigar_func
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix, "f_shuffle": self.f_shuffle}
+        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix,
+                      "f_shuffle": self.f_shuffle}
 
     def evaluate(self, x, *args):
         self.n_fe += 1
@@ -377,14 +388,17 @@ class F122017(F102017):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 1200.0'
 
-    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_12", f_matrix="M_12_D", f_shuffle="shuffle_data_12_D", f_bias=1200.):
+    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_12", f_matrix="M_12_D",
+                 f_shuffle="shuffle_data_12_D", f_bias=1200.):
         super().__init__(ndim, bounds, f_shift, f_matrix, f_shuffle, f_bias)
         self.n_funcs = 3
         self.p = np.array([0.3, 0.3, 0.4])
         self.n1 = int(np.ceil(self.p[0] * self.ndim))
         self.n2 = int(np.ceil(self.p[1] * self.ndim)) + self.n1
-        self.idx1, self.idx2, self.idx3 = self.f_shuffle[:self.n1], self.f_shuffle[self.n1:self.n2], self.f_shuffle[self.n2:self.ndim]
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix, "f_shuffle": self.f_shuffle}
+        self.idx1, self.idx2, self.idx3 = self.f_shuffle[:self.n1], self.f_shuffle[self.n1:self.n2], self.f_shuffle[
+            self.n2:self.ndim]
+        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix,
+                      "f_shuffle": self.f_shuffle}
 
     def evaluate(self, x, *args):
         self.n_fe += 1
@@ -407,7 +421,8 @@ class F132017(F102017):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 1300.0'
 
-    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_13", f_matrix="M_13_D", f_shuffle="shuffle_data_13_D", f_bias=1300.):
+    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_13", f_matrix="M_13_D",
+                 f_shuffle="shuffle_data_13_D", f_bias=1300.):
         super().__init__(ndim, bounds, f_shift, f_matrix, f_shuffle, f_bias)
         self.n_funcs = 4
         self.p = np.array([0.2, 0.2, 0.2, 0.4])
@@ -420,13 +435,15 @@ class F132017(F102017):
         self.g2 = operator.ackley_func
         self.g3 = operator.schaffer_f7_func
         self.g4 = operator.rastrigin_func
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix, "f_shuffle": self.f_shuffle}
+        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix,
+                      "f_shuffle": self.f_shuffle}
 
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         mz = np.dot(self.f_matrix, x - self.f_shift)
-        return self.g1(mz[self.idx1]) + self.g2(mz[self.idx2]) + self.g3(mz[self.idx3]) + self.g4(mz[self.idx4]) + self.f_bias
+        return self.g1(mz[self.idx1]) + self.g2(mz[self.idx2]) + self.g3(mz[self.idx3]) + self.g4(
+            mz[self.idx4]) + self.f_bias
 
 
 class F142017(F102017):
@@ -440,7 +457,8 @@ class F142017(F102017):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 1400.0'
 
-    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_14", f_matrix="M_14_D", f_shuffle="shuffle_data_14_D", f_bias=1400.):
+    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_14", f_matrix="M_14_D",
+                 f_shuffle="shuffle_data_14_D", f_bias=1400.):
         super().__init__(ndim, bounds, f_shift, f_matrix, f_shuffle, f_bias)
         self.n_funcs = 4
         self.p = np.array([0.2, 0.2, 0.3, 0.3])
@@ -449,7 +467,8 @@ class F142017(F102017):
         self.n3 = int(np.ceil(self.p[2] * self.ndim)) + self.n2
         self.idx1, self.idx2 = self.f_shuffle[:self.n1], self.f_shuffle[self.n1:self.n2]
         self.idx3, self.idx4 = self.f_shuffle[self.n2:self.n3], self.f_shuffle[self.n3:self.ndim]
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix, "f_shuffle": self.f_shuffle}
+        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix,
+                      "f_shuffle": self.f_shuffle}
 
     def evaluate(self, x, *args):
         self.n_fe += 1
@@ -472,7 +491,8 @@ class F152017(F102017):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 1500.0'
 
-    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_15", f_matrix="M_15_D", f_shuffle="shuffle_data_15_D", f_bias=1500.):
+    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_15", f_matrix="M_15_D",
+                 f_shuffle="shuffle_data_15_D", f_bias=1500.):
         super().__init__(ndim, bounds, f_shift, f_matrix, f_shuffle, f_bias)
         self.n_funcs = 4
         self.p = np.array([0.2, 0.2, 0.3, 0.3])
@@ -481,7 +501,8 @@ class F152017(F102017):
         self.n3 = int(np.ceil(self.p[2] * self.ndim)) + self.n2
         self.idx1, self.idx2 = self.f_shuffle[:self.n1], self.f_shuffle[self.n1:self.n2]
         self.idx3, self.idx4 = self.f_shuffle[self.n2:self.n3], self.f_shuffle[self.n3:self.ndim]
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix, "f_shuffle": self.f_shuffle}
+        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix,
+                      "f_shuffle": self.f_shuffle}
 
     def evaluate(self, x, *args):
         self.n_fe += 1
@@ -504,7 +525,8 @@ class F162017(F102017):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 1600.0'
 
-    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_16", f_matrix="M_16_D", f_shuffle="shuffle_data_16_D", f_bias=1600.):
+    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_16", f_matrix="M_16_D",
+                 f_shuffle="shuffle_data_16_D", f_bias=1600.):
         super().__init__(ndim, bounds, f_shift, f_matrix, f_shuffle, f_bias)
         self.n_funcs = 5
         self.p = np.array([0.1, 0.2, 0.2, 0.2, 0.3])
@@ -520,14 +542,15 @@ class F162017(F102017):
         self.g3 = operator.expanded_griewank_rosenbrock_func
         self.g4 = operator.modified_schwefel_func
         self.g5 = operator.rastrigin_func
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix, "f_shuffle": self.f_shuffle}
+        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix,
+                      "f_shuffle": self.f_shuffle}
 
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         mz = np.dot(self.f_matrix, x - self.f_shift)
         return self.g1(mz[self.idx1]) + self.g2(mz[self.idx2]) + self.g3(mz[self.idx3]) + \
-               self.g4(mz[self.idx4]) + self.g5(mz[self.idx5]) + self.f_bias
+            self.g4(mz[self.idx4]) + self.g5(mz[self.idx5]) + self.f_bias
 
 
 class F172017(F102017):
@@ -541,7 +564,8 @@ class F172017(F102017):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 1700.0'
 
-    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_17", f_matrix="M_17_D", f_shuffle="shuffle_data_17_D", f_bias=1700.):
+    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_17", f_matrix="M_17_D",
+                 f_shuffle="shuffle_data_17_D", f_bias=1700.):
         super().__init__(ndim, bounds, f_shift, f_matrix, f_shuffle, f_bias)
         self.n_funcs = 5
         self.p = np.array([0.2, 0.2, 0.2, 0.2, 0.2])
@@ -552,7 +576,8 @@ class F172017(F102017):
         self.idx1, self.idx2 = self.f_shuffle[:self.n1], self.f_shuffle[self.n1:self.n2]
         self.idx3, self.idx4 = self.f_shuffle[self.n2:self.n3], self.f_shuffle[self.n3:self.n4]
         self.idx5 = self.f_shuffle[self.n4:self.ndim]
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix, "f_shuffle": self.f_shuffle}
+        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix,
+                      "f_shuffle": self.f_shuffle}
 
     def evaluate(self, x, *args):
         self.n_fe += 1
@@ -576,7 +601,8 @@ class F182017(F102017):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 1800.0'
 
-    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_18", f_matrix="M_18_D", f_shuffle="shuffle_data_18_D", f_bias=1800.):
+    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_18", f_matrix="M_18_D",
+                 f_shuffle="shuffle_data_18_D", f_bias=1800.):
         super().__init__(ndim, bounds, f_shift, f_matrix, f_shuffle, f_bias)
         self.n_funcs = 5
         self.p = np.array([0.2, 0.2, 0.2, 0.2, 0.2])
@@ -592,14 +618,15 @@ class F182017(F102017):
         self.g3 = operator.expanded_griewank_rosenbrock_func
         self.g4 = operator.weierstrass_norm_func
         self.g5 = operator.expanded_scaffer_f6_func
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix, "f_shuffle": self.f_shuffle}
+        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix,
+                      "f_shuffle": self.f_shuffle}
 
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         mz = np.dot(self.f_matrix, x - self.f_shift)
         return self.g1(mz[self.idx1]) + self.g2(mz[self.idx2]) + self.g3(mz[self.idx3]) + \
-               self.g4(mz[self.idx4]) + self.g5(mz[self.idx5]) + self.f_bias
+            self.g4(mz[self.idx4]) + self.g5(mz[self.idx5]) + self.f_bias
 
 
 class F192017(F102017):
@@ -613,7 +640,8 @@ class F192017(F102017):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 1900.0'
 
-    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_19", f_matrix="M_19_D", f_shuffle="shuffle_data_19_D", f_bias=1900.):
+    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_19", f_matrix="M_19_D",
+                 f_shuffle="shuffle_data_19_D", f_bias=1900.):
         super().__init__(ndim, bounds, f_shift, f_matrix, f_shuffle, f_bias)
         self.n_funcs = 6
         self.p = np.array([0.1, 0.1, 0.2, 0.2, 0.2, 0.2])
@@ -625,7 +653,8 @@ class F192017(F102017):
         self.idx1, self.idx2 = self.f_shuffle[:self.n1], self.f_shuffle[self.n1:self.n2]
         self.idx3, self.idx4 = self.f_shuffle[self.n2:self.n3], self.f_shuffle[self.n3:self.n4]
         self.idx5, self.idx6 = self.f_shuffle[self.n4:self.n5], self.f_shuffle[self.n5:self.ndim]
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix, "f_shuffle": self.f_shuffle}
+        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix,
+                      "f_shuffle": self.f_shuffle}
 
     def evaluate(self, x, *args):
         self.n_fe += 1
@@ -674,7 +703,8 @@ class F202017(CecBenchmark):
         self.dim_default = 30
         self.dim_max = 100
         self.dim_supported = [2, 10, 20, 30, 50, 100]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2017")
         self.f_shift = self.check_shift_matrix(f_shift)[:, :self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix)[:, :self.ndim]
@@ -695,17 +725,17 @@ class F202017(CecBenchmark):
         self.check_solution(x, self.dim_max, self.dim_supported)
 
         # 1. Rosenbrock’s Function F4’
-        z0 = np.dot(self.f_matrix[:self.ndim, :], 2.048*(x - self.f_shift[0])/100) + 1
+        z0 = np.dot(self.f_matrix[:self.ndim, :], 2.048 * (x - self.f_shift[0]) / 100) + 1
         g0 = self.lamdas[0] * self.g0(z0) + self.bias[0]
         w0 = operator.calculate_weight(x - self.f_shift[0], self.xichmas[0])
 
         # 2. High Conditioned Elliptic Function F11’
-        z1 = np.dot(self.f_matrix[self.ndim:2*self.ndim, :], x - self.f_shift[1])
+        z1 = np.dot(self.f_matrix[self.ndim:2 * self.ndim, :], x - self.f_shift[1])
         g1 = self.lamdas[1] * self.g1(z1) + self.bias[1]
         w1 = operator.calculate_weight(x - self.f_shift[1], self.xichmas[1])
 
         # 3. Rastrigin’s Function F4’
-        z2 = np.dot(self.f_matrix[2*self.ndim:3*self.ndim, :], x - self.f_shift[2])
+        z2 = np.dot(self.f_matrix[2 * self.ndim:3 * self.ndim, :], x - self.f_shift[2])
         g2 = self.lamdas[2] * self.g2(z2) + self.bias[2]
         w2 = operator.calculate_weight(x - self.f_shift[2], self.xichmas[2])
 
@@ -752,13 +782,13 @@ class F212017(F202017):
         w0 = operator.calculate_weight(x - self.f_shift[0], self.xichmas[0])
 
         # 2. Griewank’s Function F15’
-        z1 = np.dot(self.f_matrix[self.ndim:2*self.ndim, :], x - self.f_shift[1])
+        z1 = np.dot(self.f_matrix[self.ndim:2 * self.ndim, :], x - self.f_shift[1])
         g1 = self.lamdas[1] * self.g1(z1) + self.bias[1]
         w1 = operator.calculate_weight(x - self.f_shift[1], self.xichmas[1])
 
         # 3. Modifed Schwefel's Function F10’
         # z2 = np.dot(self.f_matrix[2*self.ndim:3*self.ndim, :], x - self.f_shift[2])
-        z2 = 1000*(x - self.f_shift[2])/100
+        z2 = 1000 * (x - self.f_shift[2]) / 100
         g2 = self.lamdas[2] * self.g2(z2) + self.bias[2]
         w2 = operator.calculate_weight(x - self.f_shift[2], self.xichmas[2])
 
@@ -801,17 +831,17 @@ class F222017(F202017):
         self.check_solution(x, self.dim_max, self.dim_supported)
 
         # 1. Rosenbrock’s Function F4’
-        z0 = np.dot(self.f_matrix[:self.ndim, :], 2.048*(x - self.f_shift[0])/100) + 1
+        z0 = np.dot(self.f_matrix[:self.ndim, :], 2.048 * (x - self.f_shift[0]) / 100) + 1
         g0 = self.lamdas[0] * self.g0(z0) + self.bias[0]
         w0 = operator.calculate_weight(x - self.f_shift[0], self.xichmas[0])
 
         # 2. Ackley’s Function F13’
-        z1 = np.dot(self.f_matrix[self.ndim:2*self.ndim, :], x - self.f_shift[1])
+        z1 = np.dot(self.f_matrix[self.ndim:2 * self.ndim, :], x - self.f_shift[1])
         g1 = self.lamdas[1] * self.g1(z1) + self.bias[1]
         w1 = operator.calculate_weight(x - self.f_shift[1], self.xichmas[1])
 
         # 3. Modified Schwefel's Function F10’
-        z2 = np.dot(self.f_matrix[2*self.ndim:3*self.ndim, :], x - self.f_shift[2])
+        z2 = np.dot(self.f_matrix[2 * self.ndim:3 * self.ndim, :], x - self.f_shift[2])
         g2 = self.lamdas[2] * self.g2(z2) + self.bias[2]
         w2 = operator.calculate_weight(x - self.f_shift[2], self.xichmas[2])
 
@@ -864,12 +894,12 @@ class F232017(F202017):
         w0 = operator.calculate_weight(x - self.f_shift[0], self.xichmas[0])
 
         # 2. High Conditioned Elliptic Function F11’
-        z1 = np.dot(self.f_matrix[self.ndim:2*self.ndim, :], x - self.f_shift[1])
+        z1 = np.dot(self.f_matrix[self.ndim:2 * self.ndim, :], x - self.f_shift[1])
         g1 = self.lamdas[1] * self.g1(z1) + self.bias[1]
         w1 = operator.calculate_weight(x - self.f_shift[1], self.xichmas[1])
 
         # 3. Girewank Function F15’
-        z2 = np.dot(self.f_matrix[2*self.ndim:3*self.ndim, :], x - self.f_shift[2])
+        z2 = np.dot(self.f_matrix[2 * self.ndim:3 * self.ndim, :], x - self.f_shift[2])
         g2 = self.lamdas[2] * self.g2(z2) + self.bias[2]
         w2 = operator.calculate_weight(x - self.f_shift[2], self.xichmas[2])
 
@@ -923,12 +953,12 @@ class F242017(F202017):
         w0 = operator.calculate_weight(x - self.f_shift[0], self.xichmas[0])
 
         # 2. Happycat Function F17’
-        z1 = np.dot(self.f_matrix[self.ndim:2*self.ndim, :], x - self.f_shift[0])
+        z1 = np.dot(self.f_matrix[self.ndim:2 * self.ndim, :], x - self.f_shift[0])
         g1 = self.lamdas[1] * self.g1(z1) + self.bias[1]
         w1 = operator.calculate_weight(x - self.f_shift[1], self.xichmas[1])
 
         # 3. Ackley Function F13’
-        z2 = np.dot(self.f_matrix[2*self.ndim:3*self.ndim, :], x - self.f_shift[0])
+        z2 = np.dot(self.f_matrix[2 * self.ndim:3 * self.ndim, :], x - self.f_shift[0])
         g2 = self.lamdas[2] * self.g2(z2) + self.bias[2]
         w2 = operator.calculate_weight(x - self.f_shift[2], self.xichmas[2])
 
@@ -938,7 +968,7 @@ class F242017(F202017):
         w3 = operator.calculate_weight(x - self.f_shift[3], self.xichmas[3])
 
         # 5. Rosenbrock’s Function F4’
-        z4 = np.dot(self.f_matrix[4 * self.ndim:5 * self.ndim, :], 2.048*(x - self.f_shift[0])/100) + 1
+        z4 = np.dot(self.f_matrix[4 * self.ndim:5 * self.ndim, :], 2.048 * (x - self.f_shift[0]) / 100) + 1
         g4 = self.lamdas[4] * self.g4(z4) + self.bias[4]
         w4 = operator.calculate_weight(x - self.f_shift[4], self.xichmas[4])
 
@@ -988,17 +1018,17 @@ class F252017(F202017):
 
         # 2. Modified Schwefel's Function F10’
         # z1 = np.dot(self.f_matrix[self.ndim:2*self.ndim, :], x - self.f_shift[1])
-        z1 = np.dot(self.f_matrix[self.ndim:2*self.ndim, :], 1000*(x - self.f_shift[0]) / 100)
+        z1 = np.dot(self.f_matrix[self.ndim:2 * self.ndim, :], 1000 * (x - self.f_shift[0]) / 100)
         g1 = self.lamdas[1] * self.g1(z1) + self.bias[1]
         w1 = operator.calculate_weight(x - self.f_shift[1], self.xichmas[1])
 
         # 3. Griewank’s Function F15’
-        z2 = np.dot(self.f_matrix[2*self.ndim:3*self.ndim, :], 600*(x - self.f_shift[0])/100)
+        z2 = np.dot(self.f_matrix[2 * self.ndim:3 * self.ndim, :], 600 * (x - self.f_shift[0]) / 100)
         g2 = self.lamdas[2] * self.g2(z2) + self.bias[2]
         w2 = operator.calculate_weight(x - self.f_shift[2], self.xichmas[2])
 
         # 4. Rosenbrock’s Function F4’
-        z3 = np.dot(self.f_matrix[3 * self.ndim:4 * self.ndim, :], 2.048*(x - self.f_shift[0])/100) + 1
+        z3 = np.dot(self.f_matrix[3 * self.ndim:4 * self.ndim, :], 2.048 * (x - self.f_shift[0]) / 100) + 1
         g3 = self.lamdas[3] * self.g3(z3) + self.bias[3]
         w3 = operator.calculate_weight(x - self.f_shift[3], self.xichmas[3])
 
@@ -1032,7 +1062,7 @@ class F262017(F202017):
     def __init__(self, ndim=None, bounds=None, f_shift="shift_data_27", f_matrix="M_27_D", f_bias=2600.):
         super().__init__(ndim, bounds, f_shift, f_matrix, f_bias)
         self.n_funcs = 6
-        self.xichmas = [10, 20, 30, 40, 50, 60,]
+        self.xichmas = [10, 20, 30, 40, 50, 60, ]
         self.lamdas = [10, 10, 2.5, 1e-26, 1e-6, 5e-4]
         self.bias = [0, 100, 200, 300, 400, 500]
         self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix}
@@ -1042,17 +1072,17 @@ class F262017(F202017):
         self.check_solution(x, self.dim_max, self.dim_supported)
 
         # 1. HGBat Function F18’
-        z0 = np.dot(self.f_matrix[:self.ndim, :], 5*(x - self.f_shift[0])/100)
+        z0 = np.dot(self.f_matrix[:self.ndim, :], 5 * (x - self.f_shift[0]) / 100)
         g0 = self.lamdas[0] * operator.hgbat_func(z0, shift=-1.0) + self.bias[0]
         w0 = operator.calculate_weight(x - self.f_shift[0], self.xichmas[0])
 
         # 2. Rastrigin’s Function F5’
-        z1 = np.dot(self.f_matrix[self.ndim:2*self.ndim, :], 5.12*(x - self.f_shift[0]) / 100)
+        z1 = np.dot(self.f_matrix[self.ndim:2 * self.ndim, :], 5.12 * (x - self.f_shift[0]) / 100)
         g1 = self.lamdas[1] * operator.rastrigin_func(z1) + self.bias[1]
         w1 = operator.calculate_weight(x - self.f_shift[1], self.xichmas[1])
 
         # 3. Modified Schwefel's Function F10’
-        z2 = np.dot(self.f_matrix[2*self.ndim:3*self.ndim, :], 1000*(x - self.f_shift[0])/100)
+        z2 = np.dot(self.f_matrix[2 * self.ndim:3 * self.ndim, :], 1000 * (x - self.f_shift[0]) / 100)
         g2 = self.lamdas[2] * operator.modified_schwefel_func(z2) + self.bias[2]
         w2 = operator.calculate_weight(x - self.f_shift[2], self.xichmas[2])
 
@@ -1093,7 +1123,7 @@ class F272017(F202017):
     def __init__(self, ndim=None, bounds=None, f_shift="shift_data_28", f_matrix="M_28_D", f_bias=2700.):
         super().__init__(ndim, bounds, f_shift, f_matrix, f_bias)
         self.n_funcs = 6
-        self.xichmas = [10, 20, 30, 40, 50, 60,]
+        self.xichmas = [10, 20, 30, 40, 50, 60, ]
         self.lamdas = [10, 10, 1e-6, 1, 1, 5e-4]
         self.bias = [0, 100, 200, 300, 400, 500]
         self.g0 = operator.ackley_func
@@ -1114,22 +1144,22 @@ class F272017(F202017):
         w0 = operator.calculate_weight(x - self.f_shift[0], self.xichmas[0])
 
         # 2. Griewank’s Function F15’
-        z1 = np.dot(self.f_matrix[self.ndim:2*self.ndim, :], 600*(x - self.f_shift[0]) / 100)
+        z1 = np.dot(self.f_matrix[self.ndim:2 * self.ndim, :], 600 * (x - self.f_shift[0]) / 100)
         g1 = self.lamdas[1] * self.g1(z1) + self.bias[1]
         w1 = operator.calculate_weight(x - self.f_shift[1], self.xichmas[1])
 
         # 3. Discus Function F12’
-        z2 = np.dot(self.f_matrix[2*self.ndim:3*self.ndim, :], x - self.f_shift[0])
+        z2 = np.dot(self.f_matrix[2 * self.ndim:3 * self.ndim, :], x - self.f_shift[0])
         g2 = self.lamdas[2] * self.g2(z2) + self.bias[2]
         w2 = operator.calculate_weight(x - self.f_shift[2], self.xichmas[2])
 
         # 4. Rosenbrock’s Function F4’
-        z3 = np.dot(self.f_matrix[3 * self.ndim:4 * self.ndim, :], 2.048*(x - self.f_shift[0])/100) + 1
+        z3 = np.dot(self.f_matrix[3 * self.ndim:4 * self.ndim, :], 2.048 * (x - self.f_shift[0]) / 100) + 1
         g3 = self.lamdas[3] * self.g3(z3) + self.bias[3]
         w3 = operator.calculate_weight(x - self.f_shift[3], self.xichmas[3])
 
         # 5. HappyCat Function F17’
-        z4 = np.dot(self.f_matrix[4 * self.ndim:5 * self.ndim, :], 5*(x - self.f_shift[0])/100)
+        z4 = np.dot(self.f_matrix[4 * self.ndim:5 * self.ndim, :], 5 * (x - self.f_shift[0]) / 100)
         g4 = self.lamdas[4] * self.g4(z4) + self.bias[4]
         w4 = operator.calculate_weight(x - self.f_shift[4], self.xichmas[4])
 
@@ -1158,7 +1188,8 @@ class F282017(F202017):
     characteristics = ["Asymmetrical", "Different properties around different local optima",
                        "Different properties for different variables subcomponents"]
 
-    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_29", f_matrix="M_29_D", f_shuffle="shuffle_data_29_D", f_bias=2800.):
+    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_29", f_matrix="M_29_D",
+                 f_shuffle="shuffle_data_29_D", f_bias=2800.):
         super().__init__(ndim, bounds, f_shift, f_matrix, f_bias)
         self.dim_supported = [10, 30, 50, 100]
         self.f_shuffle = self.check_shuffle_data(f_shuffle, needed_dim=True).reshape((10, -1))
@@ -1167,8 +1198,10 @@ class F282017(F202017):
         self.lamdas = [1., 1., 1.]
         self.bias = [0, 100, 200]
         self.g0 = F142017(self.ndim, None, self.f_shift[0], self.f_matrix[:self.ndim, :], self.f_shuffle[0], 0)
-        self.g1 = F152017(self.ndim, None, self.f_shift[0], self.f_matrix[self.ndim:2*self.ndim, :], self.f_shuffle[1], 0)
-        self.g2 = F162017(self.ndim, None, self.f_shift[0], self.f_matrix[2*self.ndim:3*self.ndim, :], self.f_shuffle[2], 0)
+        self.g1 = F152017(self.ndim, None, self.f_shift[0], self.f_matrix[self.ndim:2 * self.ndim, :],
+                          self.f_shuffle[1], 0)
+        self.g2 = F162017(self.ndim, None, self.f_shift[0], self.f_matrix[2 * self.ndim:3 * self.ndim, :],
+                          self.f_shuffle[2], 0)
         self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix}
 
     def evaluate(self, x, *args):
@@ -1207,7 +1240,8 @@ class F292017(F202017):
     characteristics = ["Asymmetrical", "Different properties around different local optima",
                        "Different properties for different variables subcomponents"]
 
-    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_30", f_matrix="M_30_D", f_shuffle="shuffle_data_30_D", f_bias=2900.):
+    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_30", f_matrix="M_30_D",
+                 f_shuffle="shuffle_data_30_D", f_bias=2900.):
         super().__init__(ndim, bounds, f_shift, f_matrix, f_bias)
         self.dim_supported = [10, 30, 50, 100]
         self.f_shuffle = self.check_shuffle_data(f_shuffle, needed_dim=True).reshape((10, -1))
@@ -1216,8 +1250,10 @@ class F292017(F202017):
         self.lamdas = [1., 1., 1.]
         self.bias = [0, 100, 200]
         self.g0 = F142017(self.ndim, None, self.f_shift[0], self.f_matrix[:self.ndim, :], self.f_shuffle[0], 0)
-        self.g1 = F172017(self.ndim, None, self.f_shift[0], self.f_matrix[self.ndim:2*self.ndim, :], self.f_shuffle[1], 0)
-        self.g2 = F182017(self.ndim, None, self.f_shift[0], self.f_matrix[2*self.ndim:3*self.ndim, :], self.f_shuffle[2], 0)
+        self.g1 = F172017(self.ndim, None, self.f_shift[0], self.f_matrix[self.ndim:2 * self.ndim, :],
+                          self.f_shuffle[1], 0)
+        self.g2 = F182017(self.ndim, None, self.f_shift[0], self.f_matrix[2 * self.ndim:3 * self.ndim, :],
+                          self.f_shuffle[2], 0)
         self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix}
 
     def evaluate(self, x, *args):

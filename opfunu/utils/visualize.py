@@ -4,17 +4,17 @@
 #       Github: https://github.com/thieu1995        %                         
 # --------------------------------------------------%
 
+import platform
 import re
 from io import BytesIO
 from pathlib import Path
+
 import matplotlib.pyplot as plt
-import platform
 import numpy as np
 import requests
 from PIL import Image
 from matplotlib import cm
 from matplotlib.ticker import ScalarFormatter, FuncFormatter
-
 
 cmap = [(0, '#2f9599'), (0.45, '#eeeeee'), (1, '#8800ff')]
 cmap = cm.colors.LinearSegmentedColormap.from_list('Custom', cmap, N=256)
@@ -26,16 +26,16 @@ def __clean_filename__(filename):
     regular_expression = '[' + re.escape(''.join(chars_to_remove)) + ']'
 
     temp = filename.encode("ascii", "ignore")
-    fname = temp.decode()                           # Removed all non-ascii characters
-    fname = re.sub(regular_expression, '', fname)   # Removed all special characters
-    fname.replace("_", "-")                         # Replaced _ by -
+    fname = temp.decode()  # Removed all non-ascii characters
+    fname = re.sub(regular_expression, '', fname)  # Removed all special characters
+    fname.replace("_", "-")  # Replaced _ by -
     return fname
 
 
 def __check_filepath__(filename):
-    filename.replace("\\", "/")                     # For better handling the parent folder
+    filename.replace("\\", "/")  # For better handling the parent folder
     if "/" in filename:
-        list_names = filename.split("/")[:-1]       # Remove last element because it is filename
+        list_names = filename.split("/")[:-1]  # Remove last element because it is filename
         filepath = "/".join(list_names)
         Path(filepath).mkdir(parents=True, exist_ok=True)
     return filename
@@ -337,7 +337,7 @@ def draw_3d(func, lb=None, ub=None, selected_dims=None, n_points=1000,
 
     # Add a color bar which maps values to colors
     cbar_ax = fig.add_axes([0.825, 0.175, 0.05, 0.55])
-    cbar = fig.colorbar(surf, cax=cbar_ax, label='Function Value', shrink=0.5, aspect=5,)
+    cbar = fig.colorbar(surf, cax=cbar_ax, label='Function Value', shrink=0.5, aspect=5, )
     # cbar = fig.colorbar(surf, ax=ax, shrink=0.5, aspect=5, label='Function Value')
     cbar.formatter = ScalarFormatter()
     cbar.formatter.set_scientific(True)

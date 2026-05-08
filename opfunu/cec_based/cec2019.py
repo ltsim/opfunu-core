@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import numpy as np
+
 from opfunu.cec_based.cec import CecBenchmark
 from opfunu.utils import operator
 
@@ -44,7 +45,8 @@ class F12019(CecBenchmark):
         self.dim_changeable = False
         self.dim_default = 9
         self.dim_max = 9
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-8192., 8192.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-8192., 8192.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2019")
         self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
         self.f_bias = f_bias
@@ -93,7 +95,8 @@ class F22019(CecBenchmark):
         self.dim_changeable = False
         self.dim_default = 16
         self.dim_max = 16
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-16384., 16384.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-16384., 16384.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2019")
         self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
         self.f_bias = f_bias
@@ -196,7 +199,8 @@ class F42019(CecBenchmark):
         self.dim_default = 10
         self.dim_max = 10
         self.dim_supported = [2, 10]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2019")
         self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
@@ -312,7 +316,7 @@ class F82019(F42019):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 0.005*(x - self.f_shift))
+        z = np.dot(self.f_matrix, 0.005 * (x - self.f_shift))
         return operator.expanded_scaffer_f6_func(z) + self.f_bias
 
 

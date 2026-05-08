@@ -28,13 +28,14 @@
 # >>> f2.plot_2d(selected_dims=(2, 3), n_points=300)
 # >>> f2.plot_3d(selected_dims=(1, 4), n_points=300)
 
-__version__ = "1.0.4"
+__version__ = "1.0.5"
 
 import inspect
 import re
-from .utils.visualize import draw_2d, draw_3d, draw_latex
-from . import name_based
+
 from . import cec_based
+from . import name_based
+from .utils.visualize import draw_2d, draw_3d, draw_latex
 
 FUNC_DATABASE = inspect.getmembers(name_based, inspect.isclass)
 CEC_DATABASE = inspect.getmembers(cec_based, inspect.isclass)
@@ -52,7 +53,8 @@ def get_functions_by_classname(name=None):
     -------
         List of the functions, but all the classname are different, so the result is list of 1 function or list of empty
     """
-    functions = [cls for classname, cls in ALL_DATABASE if (classname not in EXCLUDES and (classname.lower() == name.lower()))]
+    functions = [cls for classname, cls in ALL_DATABASE if
+                 (classname not in EXCLUDES and (classname.lower() == name.lower()))]
     return functions
 
 
@@ -66,7 +68,8 @@ def get_functions_based_classname(name=None):
     -------
         List of the functions
     """
-    functions = [cls for classname, cls in ALL_DATABASE if (classname not in EXCLUDES and re.search(name.lower(), classname.lower()))]
+    functions = [cls for classname, cls in ALL_DATABASE if
+                 (classname not in EXCLUDES and re.search(name.lower(), classname.lower()))]
     return functions
 
 
@@ -111,7 +114,7 @@ def get_all_cec_based_functions():
 
 
 def get_name_based_functions(ndim, continuous=None, linear=None, convex=None, unimodal=None, separable=None,
-                  differentiable=None, scalable=None, randomized_term=None, parametric=None, modality=None):
+                             differentiable=None, scalable=None, randomized_term=None, parametric=None, modality=None):
     functions = [cls for classname, cls in FUNC_DATABASE if classname not in EXCLUDES]
     functions = list(filter(lambda f: f().is_ndim_compatible(ndim), functions))
 
@@ -128,8 +131,10 @@ def get_name_based_functions(ndim, continuous=None, linear=None, convex=None, un
     return functions
 
 
-def get_cec_based_functions(ndim=None, continuous=None, linear=None, convex=None, unimodal=None, separable=None, differentiable=None,
-             scalable=None, randomized_term=None, parametric=True, shifted=True, rotated=None , modality=None):
+def get_cec_based_functions(ndim=None, continuous=None, linear=None, convex=None, unimodal=None, separable=None,
+                            differentiable=None,
+                            scalable=None, randomized_term=None, parametric=True, shifted=True, rotated=None,
+                            modality=None):
     functions = [cls for classname, cls in CEC_DATABASE if classname not in EXCLUDES]
     functions = list(filter(lambda f: f().is_ndim_compatible(ndim), functions))
 

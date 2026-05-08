@@ -30,6 +30,7 @@ def rosenbrock_func(x, shift=0.0):
     term2 = (x[:-1] - 1) ** 2
     return np.sum(term1 + term2)
 
+
 def scaffer_func(x):
     x = np.array(x).ravel()
     return 0.5 + (np.sin(np.sqrt(np.sum(x ** 2))) ** 2 - 0.5) / (1 + 0.001 * np.sum(x ** 2)) ** 2
@@ -132,7 +133,6 @@ def elliptic_func(x):
     return np.sum(10 ** (6.0 * idx / (ndim - 1)) * x ** 2)
 
 
-
 def sphere_noise_func(x):
     x = np.array(x).ravel()
     return np.sum(x ** 2) * (1 + 0.1 * np.abs(np.random.normal(0, 1)))
@@ -160,7 +160,9 @@ def fractal_1d_func(x):
         upper = 2 ** (k - 1) + 1
         for t in range(1, upper):
             selected = np.random.choice([0, 1, 2], p=1 / 3 * np.ones(3))
-            result2 += np.sum([doubledip(x, np.random.uniform(0, 1), 1.0 / (2 ** (k - 1) * (2 - np.random.uniform(0, 1)))) for _ in range(0, selected)])
+            result2 += np.sum(
+                [doubledip(x, np.random.uniform(0, 1), 1.0 / (2 ** (k - 1) * (2 - np.random.uniform(0, 1)))) for _ in
+                 range(0, selected)])
         result1 += result2
     return result1
 
@@ -228,7 +230,8 @@ def gz_func(x):
     x = np.array(x).ravel()
     ndim = len(x)
     t1 = (500 - np.mod(x, 500)) * np.sin(np.sqrt(np.abs(500 - np.mod(x, 500)))) - (x - 500) ** 2 / (10000 * ndim)
-    t2 = (np.mod(np.abs(x), 500) - 500) * np.sin(np.sqrt(np.abs(np.mod(np.abs(x), 500) - 500))) - (x + 500) ** 2 / (10000 * ndim)
+    t2 = (np.mod(np.abs(x), 500) - 500) * np.sin(np.sqrt(np.abs(np.mod(np.abs(x), 500) - 500))) - (x + 500) ** 2 / (
+                10000 * ndim)
     t3 = x * np.sin(np.abs(x) ** 0.5)
     conditions = [x < -500, (-500 <= x) & (x <= 500), x > 500]
     choices = [t2, t3, t1]
@@ -289,9 +292,9 @@ def modified_schwefel_func(x):
     mask3 = ~mask1 & ~mask2
     fx = np.zeros(nx)
     fx[mask1] -= ((500.0 - np.fmod(z[mask1], 500)) * np.sin(np.sqrt(500.0 - np.fmod(z[mask1], 500))) -
-                 ((z[mask1] - 500.0) / 100.) ** 2 / nx)
+                  ((z[mask1] - 500.0) / 100.) ** 2 / nx)
     fx[mask2] -= (-500.0 + np.fmod(np.abs(z[mask2]), 500)) * np.sin(np.sqrt(500.0 - np.fmod(np.abs(z[mask2]), 500))) - (
-                 (z[mask2] + 500.0) / 100.) ** 2 / nx
+            (z[mask2] + 500.0) / 100.) ** 2 / nx
     fx[mask3] -= z[mask3] * np.sin(np.sqrt(np.abs(z[mask3])))
 
     return np.sum(fx) + 4.189828872724338e+002 * nx
@@ -368,7 +371,7 @@ def chebyshev_func(x):
     dx_arr = np.zeros(ndim)
     dx_arr[:2] = [1.0, 1.2]
     for i in range(2, ndim):
-        dx_arr[i] = 2.4 * dx_arr[i-1] - dx_arr[i-2]
+        dx_arr[i] = 2.4 * dx_arr[i - 1] - dx_arr[i - 2]
     dx = dx_arr[-1]
 
     dy = 2.0 / sample
@@ -430,7 +433,7 @@ def lennard_jones_func(x):
     sum_val = 0
 
     x_matrix = x.reshape((k, 3))
-    for i in range(k-1):
+    for i in range(k - 1):
         for j in range(i + 1, k):
             # Use slicing to get the differences between points i and j
             diff = x_matrix[i] - x_matrix[j]

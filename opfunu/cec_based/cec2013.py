@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import numpy as np
+
 from opfunu.cec_based.cec import CecBenchmark
 from opfunu.utils import operator
 
@@ -35,6 +36,7 @@ class F12013(CecBenchmark):
     rotated = False
 
     modality = False  # Number of ambiguous peaks, unknown # peaks
+
     # n_basins = 1
     # n_valleys = 1
 
@@ -44,7 +46,8 @@ class F12013(CecBenchmark):
         self.dim_default = 30
         self.dim_max = 100
         self.dim_supported = [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2013")
         self.f_shift = self.check_shift_matrix(f_shift, selected_idx=0)
         self.f_bias = f_bias
@@ -95,7 +98,8 @@ class F22013(CecBenchmark):
         self.dim_default = 30
         self.dim_max = 100
         self.dim_supported = [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2013")
         self.f_shift = self.check_shift_matrix(f_shift, selected_idx=0)
         self.f_matrix = self.check_matrix_data(f_matrix)[:self.ndim, :self.ndim]
@@ -148,10 +152,11 @@ class F32013(CecBenchmark):
         self.dim_default = 30
         self.dim_max = 100
         self.dim_supported = [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2013")
         self.f_shift = self.check_shift_matrix(f_shift, selected_idx=0)
-        self.f_matrix = self.check_matrix_data(f_matrix)[:2*self.ndim, :self.ndim]
+        self.f_matrix = self.check_matrix_data(f_matrix)[:2 * self.ndim, :self.ndim]
         self.f_bias = f_bias
         self.f_global = f_bias
         self.x_global = self.f_shift
@@ -161,7 +166,7 @@ class F32013(CecBenchmark):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         M1 = self.f_matrix[:self.ndim, :]
-        M2 = self.f_matrix[self.ndim:2*self.ndim, :]
+        M2 = self.f_matrix[self.ndim:2 * self.ndim, :]
         z = operator.tasy_func(np.dot(M1, x - self.f_shift), beta=0.5)
         return operator.bent_cigar_func(np.dot(M2, z)) + self.f_bias
 
@@ -237,7 +242,7 @@ class F62013(F22013):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 2.048*(x - self.f_shift)/100) + 1
+        z = np.dot(self.f_matrix, 2.048 * (x - self.f_shift) / 100) + 1
         return operator.rosenbrock_func(z) + self.f_bias
 
 
@@ -264,15 +269,15 @@ class F72013(F32013):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         M1 = self.f_matrix[:self.ndim, :]
-        M2 = self.f_matrix[self.ndim:2*self.ndim, :]
+        M2 = self.f_matrix[self.ndim:2 * self.ndim, :]
         alpha = operator.generate_diagonal_matrix(self.ndim, alpha=10)
         temp = operator.tasy_func(np.dot(M1, x - self.f_shift), beta=0.5)
         y = np.dot(np.matmul(alpha, M2), temp)
         result = 0.
-        for idx in range(0, self.ndim-1):
-            z = np.sqrt(y[idx]**2 + y[idx+1]**2)
-            result += np.sqrt(z) * (1 + np.sin(50*z**0.2)**2)
-        return result**2 + self.f_bias
+        for idx in range(0, self.ndim - 1):
+            z = np.sqrt(y[idx] ** 2 + y[idx + 1] ** 2)
+            result += np.sqrt(z) * (1 + np.sin(50 * z ** 0.2) ** 2)
+        return result ** 2 + self.f_bias
 
 
 class F82013(F32013):
@@ -297,7 +302,7 @@ class F82013(F32013):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         M1 = self.f_matrix[:self.ndim, :]
-        M2 = self.f_matrix[self.ndim:2*self.ndim, :]
+        M2 = self.f_matrix[self.ndim:2 * self.ndim, :]
         alpha = operator.generate_diagonal_matrix(self.ndim, alpha=10)
         temp = operator.tasy_func(np.dot(M1, x - self.f_shift), beta=0.5)
         z = np.dot(np.matmul(alpha, M2), temp)
@@ -320,7 +325,8 @@ class F92013(F32013):
     modality = True  # Number of ambiguous peaks, unknown # peaks
     characteristics = ["Asymmetrical", "Continuous but differentiable only on a set of points"]
 
-    def __init__(self, ndim=None, bounds=None, f_shift="shift_data", f_matrix="M_D", f_bias=-600., a=0.5, b=3., k_max=20):
+    def __init__(self, ndim=None, bounds=None, f_shift="shift_data", f_matrix="M_D", f_bias=-600., a=0.5, b=3.,
+                 k_max=20):
         super().__init__(ndim, bounds, f_shift, f_matrix, f_bias)
         self.a = a
         self.b = b
@@ -332,9 +338,9 @@ class F92013(F32013):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         M1 = self.f_matrix[:self.ndim, :]
-        M2 = self.f_matrix[self.ndim:2*self.ndim, :]
+        M2 = self.f_matrix[self.ndim:2 * self.ndim, :]
         alpha = operator.generate_diagonal_matrix(self.ndim, alpha=10)
-        temp = operator.tasy_func(np.dot(M1, 0.5*(x - self.f_shift)/100), beta=0.5)
+        temp = operator.tasy_func(np.dot(M1, 0.5 * (x - self.f_shift) / 100), beta=0.5)
         z = np.dot(np.matmul(alpha, M2), temp)
         return operator.weierstrass_norm_func(z, a=0.5, b=3., k_max=20) + self.f_bias
 
@@ -362,8 +368,8 @@ class F102013(F22013):
         self.check_solution(x, self.dim_max, self.dim_supported)
         alpha = operator.generate_diagonal_matrix(self.ndim, alpha=100)
         temp = np.matmul(alpha, self.f_matrix)
-        z = np.dot(temp, 600.0*(x - self.f_shift)/100)
-        return operator.griewank_func(z)+ self.f_bias
+        z = np.dot(temp, 600.0 * (x - self.f_shift) / 100)
+        return operator.griewank_func(z) + self.f_bias
 
 
 class F112013(F12013):
@@ -392,7 +398,7 @@ class F112013(F12013):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         alpha = operator.generate_diagonal_matrix(self.ndim, alpha=10)
-        temp = operator.tosz_func(5.12*(x - self.f_shift)/100)
+        temp = operator.tosz_func(5.12 * (x - self.f_shift) / 100)
         z = np.matmul(alpha, operator.tasy_func(temp, beta=0.2))
         return operator.rastrigin_func(z) + self.f_bias
 
@@ -424,10 +430,10 @@ class F122013(F32013):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         M1 = self.f_matrix[:self.ndim, :]
-        M2 = self.f_matrix[self.ndim:2*self.ndim, :]
+        M2 = self.f_matrix[self.ndim:2 * self.ndim, :]
         alpha = operator.generate_diagonal_matrix(self.ndim, alpha=10)
         temp1 = np.matmul(np.matmul(M1, alpha), M2)
-        temp2 = operator.tosz_func(np.dot(M1, 5.12*(x - self.f_shift)/100))
+        temp2 = operator.tosz_func(np.dot(M1, 5.12 * (x - self.f_shift) / 100))
         z = np.dot(temp1, operator.tasy_func(temp2, beta=0.2))
         return operator.rastrigin_func(z) + self.f_bias
 
@@ -462,9 +468,9 @@ class F132013(F32013):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         M1 = self.f_matrix[:self.ndim, :]
-        M2 = self.f_matrix[self.ndim:2*self.ndim, :]
+        M2 = self.f_matrix[self.ndim:2 * self.ndim, :]
         alpha = operator.generate_diagonal_matrix(self.ndim, alpha=10)
-        x_star = np.dot(M1, 5.12*(x - self.f_shift)/100)
+        x_star = np.dot(M1, 5.12 * (x - self.f_shift) / 100)
         y = operator.rounder(x_star, np.abs(x_star))
         temp1 = operator.tasy_func(operator.tosz_func(y), beta=0.2)
         temp2 = np.matmul(np.matmul(M1, alpha), M2)
@@ -495,7 +501,8 @@ class F142013(F12013):
     # n_basins = 1
     # n_valleys = 1
 
-    characteristics = ["Asymmetrical", "Local optima’s number is huge", "Second better local optimum is far from the global optimum"]
+    characteristics = ["Asymmetrical", "Local optima’s number is huge",
+                       "Second better local optimum is far from the global optimum"]
 
     def __init__(self, ndim=None, bounds=None, f_shift="shift_data", f_bias=-100.):
         super().__init__(ndim, bounds, f_shift, f_bias)
@@ -504,7 +511,7 @@ class F142013(F12013):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         alpha = operator.generate_diagonal_matrix(self.ndim, alpha=10)
-        z = np.dot(alpha, 1000*(x - self.f_shift)/100)
+        z = np.dot(alpha, 1000 * (x - self.f_shift) / 100)
         return operator.modified_schwefel_func(z) + self.f_bias
 
 
@@ -527,7 +534,8 @@ class F152013(F22013):
     # n_basins = 1
     # n_valleys = 1
 
-    characteristics = ["Asymmetrical", "Local optima’s number is huge", "The second better local optimum is far from the global optimum"]
+    characteristics = ["Asymmetrical", "Local optima’s number is huge",
+                       "The second better local optimum is far from the global optimum"]
 
     def __init__(self, ndim=None, bounds=None, f_shift="shift_data", f_matrix="M_D", f_bias=100.):
         super().__init__(ndim, bounds, f_shift, f_matrix, f_bias)
@@ -538,6 +546,7 @@ class F152013(F22013):
         alpha = operator.generate_diagonal_matrix(self.ndim, alpha=10)
         z = np.dot(np.matmul(alpha, self.f_matrix), 1000 * (x - self.f_shift) / 100)
         return operator.modified_schwefel_func(z) + self.f_bias
+
 
 class F162013(F32013):
     """
@@ -567,9 +576,9 @@ class F162013(F32013):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         M1 = self.f_matrix[:self.ndim, :]
-        M2 = self.f_matrix[self.ndim:2*self.ndim, :]
+        M2 = self.f_matrix[self.ndim:2 * self.ndim, :]
         alpha = operator.generate_diagonal_matrix(self.ndim, alpha=100)
-        temp = np.dot(M1, 5.*(x - self.f_shift)/100)
+        temp = np.dot(M1, 5. * (x - self.f_shift) / 100)
         z = np.dot(np.matmul(M2, alpha), temp)
         return operator.katsuura_func(z) + self.f_bias
 
@@ -591,6 +600,7 @@ class F172013(F12013):
     separable = False
     differentiable = False
     modality = True  # Number of ambiguous peaks, unknown # peaks
+
     # n_basins = 1
     # n_valleys = 1
 
@@ -601,8 +611,8 @@ class F172013(F12013):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         miu0 = 2.5
-        y = 10.0*(x - self.f_shift)/100
-        x_hat = 2*np.sign(self.f_shift)*y
+        y = 10.0 * (x - self.f_shift) / 100
+        x_hat = 2 * np.sign(self.f_shift) * y
         return operator.lunacek_bi_rastrigin_func(x_hat, miu0=miu0, d=1, shift=miu0) + self.f_bias
 
 
@@ -635,8 +645,8 @@ class F182013(F32013):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         miu0 = 2.5
-        y = 10.0*(x - self.f_shift)/100
-        x_hat = 2*np.sign(y)*y
+        y = 10.0 * (x - self.f_shift) / 100
+        x_hat = 2 * np.sign(y) * y
         return operator.lunacek_bi_rastrigin_func(x_hat, miu0=miu0, d=1, shift=miu0) + self.f_bias
 
 
@@ -664,8 +674,9 @@ class F192013(F22013):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 5*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 5 * (x - self.f_shift) / 100)
         return operator.grie_rosen_cec_func(z) + self.f_bias
+
 
 class F202013(F32013):
     """
@@ -693,7 +704,7 @@ class F202013(F32013):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         M1 = self.f_matrix[:self.ndim, :]
-        M2 = self.f_matrix[self.ndim:2*self.ndim, :]
+        M2 = self.f_matrix[self.ndim:2 * self.ndim, :]
         z = np.dot(M2, operator.tasy_func(np.dot(M1, x - self.f_shift), beta=0.5))
         return operator.expanded_scaffer_f6_func(z) + self.f_bias
 
@@ -734,7 +745,8 @@ class F212013(CecBenchmark):
         self.dim_default = 30
         self.dim_max = 100
         self.dim_supported = [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2013")
         self.f_shift = self.check_shift_matrix(f_shift)[:, :self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix)[:, :self.ndim]
@@ -747,7 +759,7 @@ class F212013(CecBenchmark):
         self.bias = [0, 100, 200, 300, 400]
         self.g0 = F62013(self.ndim, f_shift=self.f_shift[0], f_matrix=self.f_matrix[:self.ndim, :self.ndim], f_bias=0)
         self.g1 = F52013(self.ndim, None, self.f_shift[1], f_bias=0)
-        self.g2 = F32013(self.ndim, None, self.f_shift[2], f_matrix=self.f_matrix[:2*self.ndim, :self.ndim], f_bias=0)
+        self.g2 = F32013(self.ndim, None, self.f_shift[2], f_matrix=self.f_matrix[:2 * self.ndim, :self.ndim], f_bias=0)
         self.g3 = F42013(self.ndim, None, self.f_shift[3], self.f_matrix[:self.ndim, :self.ndim], 0)
         self.g4 = F12013(self.ndim, None, self.f_shift[4], f_bias=0)
         self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix}
@@ -822,7 +834,8 @@ class F222013(CecBenchmark):
         self.dim_default = 30
         self.dim_max = 100
         self.dim_supported = [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2013")
         self.f_shift = self.check_shift_matrix(f_shift)[:, :self.ndim]
         self.f_bias = f_bias
@@ -893,7 +906,8 @@ class F232013(CecBenchmark):
         self.dim_default = 30
         self.dim_max = 100
         self.dim_supported = [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2013")
         self.f_shift = self.check_shift_matrix(f_shift)[:, :self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix)[:, :self.ndim]
@@ -965,7 +979,8 @@ class F242013(CecBenchmark):
         self.dim_default = 30
         self.dim_max = 100
         self.dim_supported = [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2013")
         self.f_shift = self.check_shift_matrix(f_shift)[:, :self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix)[:, :self.ndim]
@@ -977,8 +992,8 @@ class F242013(CecBenchmark):
         self.lamdas = [0.25, 1.0, 2.5]
         self.bias = [0, 100, 200]
         self.g0 = F152013(self.ndim, None, self.f_shift[0], self.f_matrix[:self.ndim, :self.ndim], f_bias=0)
-        self.g1 = F122013(self.ndim, None, self.f_shift[1], self.f_matrix[:2*self.ndim, :self.ndim], f_bias=0)
-        self.g2 = F92013(self.ndim, None, self.f_shift[2], self.f_matrix[:2*self.ndim, :self.ndim], f_bias=0)
+        self.g1 = F122013(self.ndim, None, self.f_shift[1], self.f_matrix[:2 * self.ndim, :self.ndim], f_bias=0)
+        self.g2 = F92013(self.ndim, None, self.f_shift[2], self.f_matrix[:2 * self.ndim, :self.ndim], f_bias=0)
         self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias}
 
     def evaluate(self, x, *args):
@@ -1056,7 +1071,8 @@ class F262013(CecBenchmark):
         self.dim_default = 30
         self.dim_max = 100
         self.dim_supported = [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2013")
         self.f_shift = self.check_shift_matrix(f_shift)[:, :self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix)[:, :self.ndim]
@@ -1068,9 +1084,9 @@ class F262013(CecBenchmark):
         self.lamdas = [0.25, 1., 1e-7, 2.5, 10.]
         self.bias = [0, 100, 200, 300, 400]
         self.g0 = F152013(self.ndim, None, self.f_shift[0], self.f_matrix[:self.ndim, :self.ndim], f_bias=0)
-        self.g1 = F122013(self.ndim, None, self.f_shift[1], self.f_matrix[:2*self.ndim, :self.ndim], f_bias=0)
+        self.g1 = F122013(self.ndim, None, self.f_shift[1], self.f_matrix[:2 * self.ndim, :self.ndim], f_bias=0)
         self.g2 = F22013(self.ndim, None, self.f_shift[2], self.f_matrix[:self.ndim, :self.ndim], f_bias=0)
-        self.g3 = F92013(self.ndim, None, self.f_shift[3], self.f_matrix[:2*self.ndim, :self.ndim], f_bias=0)
+        self.g3 = F92013(self.ndim, None, self.f_shift[3], self.f_matrix[:2 * self.ndim, :self.ndim], f_bias=0)
         self.g4 = F102013(self.ndim, None, self.f_shift[4], self.f_matrix[:self.ndim, :self.ndim], f_bias=0)
         self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix}
 
@@ -1140,7 +1156,8 @@ class F272013(CecBenchmark):
         self.dim_default = 30
         self.dim_max = 100
         self.dim_supported = [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2013")
         self.f_shift = self.check_shift_matrix(f_shift)[:, :self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix)[:, :self.ndim]
@@ -1152,9 +1169,9 @@ class F272013(CecBenchmark):
         self.lamdas = [100, 10, 2.5, 25, 0.1]
         self.bias = [0, 100, 200, 300, 400]
         self.g0 = F102013(self.ndim, None, self.f_shift[0], self.f_matrix[:self.ndim, :self.ndim], f_bias=0)
-        self.g1 = F122013(self.ndim, None, self.f_shift[1], self.f_matrix[:2*self.ndim, :self.ndim], f_bias=0)
+        self.g1 = F122013(self.ndim, None, self.f_shift[1], self.f_matrix[:2 * self.ndim, :self.ndim], f_bias=0)
         self.g2 = F152013(self.ndim, None, self.f_shift[2], self.f_matrix[:self.ndim, :self.ndim], f_bias=0)
-        self.g3 = F92013(self.ndim, None, self.f_shift[3], self.f_matrix[:2*self.ndim, :self.ndim], f_bias=0)
+        self.g3 = F92013(self.ndim, None, self.f_shift[3], self.f_matrix[:2 * self.ndim, :self.ndim], f_bias=0)
         self.g4 = F12013(self.ndim, None, self.f_shift[4], f_bias=0)
         self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix}
 
@@ -1224,7 +1241,8 @@ class F282013(CecBenchmark):
         self.dim_default = 30
         self.dim_max = 100
         self.dim_supported = [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2013")
         self.f_shift = self.check_shift_matrix(f_shift)[:, :self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix)[:, :self.ndim]
@@ -1236,9 +1254,10 @@ class F282013(CecBenchmark):
         self.lamdas = [2.5, 2.5e-6, 2.5, 5e-4, 0.1]
         self.bias = [0, 100, 200, 300, 400]
         self.g0 = F192013(self.ndim, None, self.f_shift[0], self.f_matrix[:self.ndim, :self.ndim], f_bias=0)
-        self.g1 = F72013(self.ndim, None, self.f_shift[1], self.f_matrix[2*self.ndim:4*self.ndim, :self.ndim], f_bias=0)
+        self.g1 = F72013(self.ndim, None, self.f_shift[1], self.f_matrix[2 * self.ndim:4 * self.ndim, :self.ndim],
+                         f_bias=0)
         self.g2 = F152013(self.ndim, None, self.f_shift[2], self.f_matrix[:self.ndim, :self.ndim], f_bias=0)
-        self.g3 = F202013(self.ndim, None, self.f_shift[3], self.f_matrix[:2*self.ndim, :self.ndim], f_bias=0)
+        self.g3 = F202013(self.ndim, None, self.f_shift[3], self.f_matrix[:2 * self.ndim, :self.ndim], f_bias=0)
         self.g4 = F12013(self.ndim, None, self.f_shift[4], f_bias=0)
         self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix}
 

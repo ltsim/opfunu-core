@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import numpy as np
+
 from opfunu.benchmark import Benchmark
 
 
@@ -143,7 +144,7 @@ class Quartic(Benchmark):
         self.check_solution(x)
         self.n_fe += 1
         i = np.arange(1, self.ndim + 1)
-        return np.sum(i*x**4.) + np.random.rand()
+        return np.sum(i * x ** 4.) + np.random.rand()
 
 
 class Quintic(Benchmark):
@@ -183,7 +184,7 @@ class Quintic(Benchmark):
         self.dim_default = 2
         self.check_ndim_and_bounds(ndim, bounds, np.array([[-10., 10.] for _ in range(self.dim_default)]))
         self.f_global = 0.
-        self.x_global = -1*np.ones(self.ndim)
+        self.x_global = -1 * np.ones(self.ndim)
 
     def evaluate(self, x, *args):
         self.check_solution(x)

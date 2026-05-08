@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import numpy as np
+
 from opfunu.benchmark import Benchmark
 
 
@@ -151,9 +152,9 @@ class Kowalik(Benchmark):
         self.f_global = 0.00030748610
         self.x_global = np.array([0.192833, 0.190836, 0.123117, 0.135766])
         self.a = np.asarray([4.0, 2.0, 1.0, 1 / 2.0, 1 / 4.0, 1 / 6.0, 1 / 8.0,
-                          1 / 10.0, 1 / 12.0, 1 / 14.0, 1 / 16.0])
+                             1 / 10.0, 1 / 12.0, 1 / 14.0, 1 / 16.0])
         self.b = np.asarray([0.1957, 0.1947, 0.1735, 0.1600, 0.0844, 0.0627,
-                          0.0456, 0.0342, 0.0323, 0.0235, 0.0246])
+                             0.0456, 0.0342, 0.0323, 0.0235, 0.0246])
 
     def evaluate(self, x, *args):
         self.check_solution(x)

@@ -3,9 +3,9 @@
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3620960.svg)](https://doi.org/10.5281/zenodo.3620960)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-OPFUNU (OPtimization benchmark FUnctions in NUmpy) is the largest python library for cutting-edge numerical 
+This is a fork from [OPFUNU (OPtimization benchmark FUnctions in NUmpy)](https://github.com/thieu1995/opfunu). A largest python library for cutting-edge numerical 
 optimization benchmark functions. Contains all CEC competition functions from 2005, 2008, 2010, 2013, 2014, 2015, 
-2017, 2019, 2020, 2021, 2022. Besides, more than 300 traditional functions with different dimensions are implemented.
+2017, 2019, 2020, 2021, 2022. Besides, more than 300 traditional functions with different dimensions are implemented. But maintained to work with the latest versions of NumPy and Python.
 
 * **Free software:** GNU General Public License (GPL) V3 license
 * **Total problems**: > 500 problems
@@ -41,7 +41,7 @@ Please include these citations if you plan to use this library:
 
 Install the [current PyPI release](https://pypi.python.org/pypi/opfunu):
 ```sh
-$ pip install opfunu
+$ pip install git+https://github.com/ltsim/opfunu-core
 ```
 
 After installation, you can import and check version of Opfunu:

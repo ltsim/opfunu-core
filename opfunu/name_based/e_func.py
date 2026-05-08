@@ -6,6 +6,7 @@
 
 
 import numpy as np
+
 from opfunu.benchmark import Benchmark
 
 
@@ -15,8 +16,8 @@ class Easom(Benchmark):
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
     name = "Easom Function"
-    latex_formula = r'f(x) = a - \frac{a}{e^{b \sqrt{\frac{\sum_{i=1}^{n}' +\
-        r'x_i^{2}}{n}}}} + e - e^{\frac{\sum_{i=1}^{n} \cos\left(c x_i\right)} {n}}'
+    latex_formula = r'f(x) = a - \frac{a}{e^{b \sqrt{\frac{\sum_{i=1}^{n}' + \
+                    r'x_i^{2}}{n}}}} + e - e^{\frac{\sum_{i=1}^{n} \cos\left(c x_i\right)} {n}}'
     latex_formula_dimension = r'd = 2'
     latex_formula_bounds = r'x_i \in [-100, 100], \forall i \in \llbracket 1, d\rrbracket'
     latex_formula_global_optimum = r'f(pi, pi) = -1'
@@ -128,8 +129,8 @@ class EggHolder(Benchmark):
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
     name = "Egg Holder Function"
-    latex_formula = r'f(x) = \sum_{1}^{n - 1}\left[-\left(x_{i + 1}' +\
-        r'+ 47 \right ) \sin\sqrt{\lvert x_{i+1} + x_i/2 + 47 \rvert} - x_i \sin\sqrt{\lvert x_i - (x_{i + 1} + 47)\rvert}\right ]'
+    latex_formula = r'f(x) = \sum_{1}^{n - 1}\left[-\left(x_{i + 1}' + \
+                    r'+ 47 \right ) \sin\sqrt{\lvert x_{i+1} + x_i/2 + 47 \rvert} - x_i \sin\sqrt{\lvert x_i - (x_{i + 1} + 47)\rvert}\right ]'
     latex_formula_dimension = r'd \in N^+'
     latex_formula_bounds = r'x_i \in [-512, 512], \forall i \in \llbracket 1, d\rrbracket'
     latex_formula_global_optimum = r'f(512, 404.2319) = -959.640662711'
@@ -157,7 +158,8 @@ class EggHolder(Benchmark):
     def evaluate(self, x, *args):
         self.check_solution(x)
         self.n_fe += 1
-        vec = (-(x[1:] + 47) * np.sin(np.sqrt(abs(x[1:] + x[:-1] / 2. + 47))) - x[:-1] * np.sin(np.sqrt(np.abs(x[:-1] - (x[1:] + 47)))))
+        vec = (-(x[1:] + 47) * np.sin(np.sqrt(abs(x[1:] + x[:-1] / 2. + 47))) - x[:-1] * np.sin(
+            np.sqrt(np.abs(x[:-1] - (x[1:] + 47)))))
         return np.sum(vec)
 
 
@@ -268,29 +270,29 @@ class Eckerle4(Benchmark):
         self.f_global = 1.4635887487E-03
         self.x_global = np.array([1.5543827178, 4.0888321754, 4.5154121844e2])
         self.a = np.asarray([1.5750000E-04, 1.6990000E-04, 2.3500000E-04,
-                     3.1020000E-04, 4.9170000E-04, 8.7100000E-04,
-                     1.7418000E-03, 4.6400000E-03, 6.5895000E-03,
-                     9.7302000E-03, 1.4900200E-02, 2.3731000E-02,
-                     4.0168300E-02, 7.1255900E-02, 1.2644580E-01,
-                     2.0734130E-01, 2.9023660E-01, 3.4456230E-01,
-                     3.6980490E-01, 3.6685340E-01, 3.1067270E-01,
-                     2.0781540E-01, 1.1643540E-01, 6.1676400E-02,
-                     3.3720000E-02, 1.9402300E-02, 1.1783100E-02,
-                     7.4357000E-03, 2.2732000E-03, 8.8000000E-04,
-                     4.5790000E-04, 2.3450000E-04, 1.5860000E-04,
-                     1.1430000E-04, 7.1000000E-05])
+                             3.1020000E-04, 4.9170000E-04, 8.7100000E-04,
+                             1.7418000E-03, 4.6400000E-03, 6.5895000E-03,
+                             9.7302000E-03, 1.4900200E-02, 2.3731000E-02,
+                             4.0168300E-02, 7.1255900E-02, 1.2644580E-01,
+                             2.0734130E-01, 2.9023660E-01, 3.4456230E-01,
+                             3.6980490E-01, 3.6685340E-01, 3.1067270E-01,
+                             2.0781540E-01, 1.1643540E-01, 6.1676400E-02,
+                             3.3720000E-02, 1.9402300E-02, 1.1783100E-02,
+                             7.4357000E-03, 2.2732000E-03, 8.8000000E-04,
+                             4.5790000E-04, 2.3450000E-04, 1.5860000E-04,
+                             1.1430000E-04, 7.1000000E-05])
         self.b = np.asarray([4.0000000E+02, 4.0500000E+02, 4.1000000E+02,
-                          4.1500000E+02, 4.2000000E+02, 4.2500000E+02,
-                          4.3000000E+02, 4.3500000E+02, 4.3650000E+02,
-                          4.3800000E+02, 4.3950000E+02, 4.4100000E+02,
-                          4.4250000E+02, 4.4400000E+02, 4.4550000E+02,
-                          4.4700000E+02, 4.4850000E+02, 4.5000000E+02,
-                          4.5150000E+02, 4.5300000E+02, 4.5450000E+02,
-                          4.5600000E+02, 4.5750000E+02, 4.5900000E+02,
-                          4.6050000E+02, 4.6200000E+02, 4.6350000E+02,
-                          4.6500000E+02, 4.7000000E+02, 4.7500000E+02,
-                          4.8000000E+02, 4.8500000E+02, 4.9000000E+02,
-                          4.9500000E+02, 5.0000000E+02])
+                             4.1500000E+02, 4.2000000E+02, 4.2500000E+02,
+                             4.3000000E+02, 4.3500000E+02, 4.3650000E+02,
+                             4.3800000E+02, 4.3950000E+02, 4.4100000E+02,
+                             4.4250000E+02, 4.4400000E+02, 4.4550000E+02,
+                             4.4700000E+02, 4.4850000E+02, 4.5000000E+02,
+                             4.5150000E+02, 4.5300000E+02, 4.5450000E+02,
+                             4.5600000E+02, 4.5750000E+02, 4.5900000E+02,
+                             4.6050000E+02, 4.6200000E+02, 4.6350000E+02,
+                             4.6500000E+02, 4.7000000E+02, 4.7500000E+02,
+                             4.8000000E+02, 4.8500000E+02, 4.9000000E+02,
+                             4.9500000E+02, 5.0000000E+02])
 
     def evaluate(self, x, *args):
         self.check_solution(x)

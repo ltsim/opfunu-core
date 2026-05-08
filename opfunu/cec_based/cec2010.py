@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import numpy as np
+
 from opfunu.cec_based.cec import CecBenchmark
 from opfunu.utils import operator
 
@@ -33,6 +34,7 @@ class F12010(CecBenchmark):
     rotated = False
 
     modality = True  # Number of ambiguous peaks, unknown # peaks
+
     # n_basins = 1
     # n_valleys = 1
 
@@ -41,12 +43,13 @@ class F12010(CecBenchmark):
         self.dim_changeable = True
         self.dim_default = 1000
         self.dim_max = 1000
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2010")
         self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
         self.f_global = 0
         self.x_global = self.f_shift
-        self.paras = {"f_shift": self.f_shift,}
+        self.paras = {"f_shift": self.f_shift, }
 
     def evaluate(self, x, *args):
         self.n_fe += 1
@@ -122,6 +125,7 @@ class F42010(CecBenchmark):
     rotated = True
 
     modality = True  # Number of ambiguous peaks, unknown # peaks
+
     # n_basins = 1
     # n_valleys = 1
 
@@ -130,7 +134,8 @@ class F42010(CecBenchmark):
         self.dim_changeable = True
         self.dim_default = 1000
         self.dim_max = 1000
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2010")
         f_shift = self.load_matrix_data(f_shift)
         self.f_matrix = self.check_matrix_data(f_matrix, False)
@@ -153,7 +158,7 @@ class F42010(CecBenchmark):
         idx2 = self.P[self.m_group:]
         z_rot_elliptic = np.dot(z[idx1], self.f_matrix[:self.m_group, :self.m_group])
         z_elliptic = z[idx2]
-        return operator.elliptic_func(z_rot_elliptic)*10**6 + operator.elliptic_func(z_elliptic)
+        return operator.elliptic_func(z_rot_elliptic) * 10 ** 6 + operator.elliptic_func(z_elliptic)
 
 
 class F52010(F42010):
@@ -180,7 +185,7 @@ class F52010(F42010):
         idx2 = self.P[self.m_group:]
         z_rot_ras = np.dot(z[idx1], self.f_matrix[:self.m_group, :self.m_group])
         z_ras = z[idx2]
-        return operator.rastrigin_func(z_rot_ras)*10**6 + operator.rastrigin_func(z_ras)
+        return operator.rastrigin_func(z_rot_ras) * 10 ** 6 + operator.rastrigin_func(z_ras)
 
 
 class F62010(F42010):
@@ -207,7 +212,7 @@ class F62010(F42010):
         idx2 = self.P[self.m_group:]
         z_rot_ras = np.dot(z[idx1], self.f_matrix[:self.m_group, :self.m_group])
         z_ras = z[idx2]
-        return operator.ackley_func(z_rot_ras)*10**6 + operator.ackley_func(z_ras)
+        return operator.ackley_func(z_rot_ras) * 10 ** 6 + operator.ackley_func(z_ras)
 
 
 class F72010(CecBenchmark):
@@ -234,6 +239,7 @@ class F72010(CecBenchmark):
     rotated = False
 
     modality = True  # Number of ambiguous peaks, unknown # peaks
+
     # n_basins = 1
     # n_valleys = 1
 
@@ -242,7 +248,8 @@ class F72010(CecBenchmark):
         self.dim_changeable = True
         self.dim_default = 1000
         self.dim_max = 1000
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2010")
         f_shift = self.load_matrix_data(f_shift)
         self.f_shift = f_shift[:1, :].ravel()[:self.ndim]
@@ -262,7 +269,7 @@ class F72010(CecBenchmark):
         z = x - self.f_shift
         z_schwefel = z[self.P[:self.m_group]]
         z_sphere = z[self.P[self.m_group:]]
-        return operator.schwefel_12_func(z_schwefel)*10**6 + operator.sphere_func(z_sphere)
+        return operator.schwefel_12_func(z_schwefel) * 10 ** 6 + operator.sphere_func(z_sphere)
 
 
 class F82010(F72010):
@@ -289,7 +296,7 @@ class F82010(F72010):
         z = x - self.f_shift
         z_rosen = z[self.P[:self.m_group]]
         z_sphere = z[self.P[self.m_group:]]
-        return operator.rosenbrock_func(z_rosen)*10**6 + operator.sphere_func(z_sphere)
+        return operator.rosenbrock_func(z_rosen) * 10 ** 6 + operator.sphere_func(z_sphere)
 
 
 class F92010(CecBenchmark):
@@ -316,6 +323,7 @@ class F92010(CecBenchmark):
     rotated = True
 
     modality = True  # Number of ambiguous peaks, unknown # peaks
+
     # n_basins = 1
     # n_valleys = 1
 
@@ -324,7 +332,8 @@ class F92010(CecBenchmark):
         self.dim_changeable = True
         self.dim_default = 1000
         self.dim_max = 1000
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2010")
         self.f_matrix = self.check_matrix_data(f_matrix, False)
         f_shift = self.load_matrix_data(f_shift)
@@ -337,7 +346,7 @@ class F92010(CecBenchmark):
         self.m_group = self.check_m_group(m_group)
         self.f_global = 0
         self.x_global = self.f_shift
-        self.count_up = int(self.ndim / (2*self.m_group))
+        self.count_up = int(self.ndim / (2 * self.m_group))
         self.paras = {"f_shift": self.f_shift, "P": self.P, "f_matrix": self.f_matrix, "m_group": self.m_group}
 
     def evaluate(self, x, *args):
@@ -346,10 +355,10 @@ class F92010(CecBenchmark):
         z = x - self.f_shift
         result = 0.0
         for k in range(0, self.count_up):
-            idx1 = self.P[k*self.m_group: (k + 1)*self.m_group]
+            idx1 = self.P[k * self.m_group: (k + 1) * self.m_group]
             z1 = np.dot(z[idx1], self.f_matrix[:len(idx1), :len(idx1)])
             result += operator.elliptic_func(z1)
-        z2 = z[self.P[int(self.ndim/2):]]
+        z2 = z[self.P[int(self.ndim / 2):]]
         return result + operator.elliptic_func(z2)
 
 
@@ -375,10 +384,10 @@ class F102010(F92010):
         z = x - self.f_shift
         result = 0.0
         for k in range(0, self.count_up):
-            idx1 = self.P[k*self.m_group: (k + 1)*self.m_group]
+            idx1 = self.P[k * self.m_group: (k + 1) * self.m_group]
             z1 = np.dot(z[idx1], self.f_matrix[:len(idx1), :len(idx1)])
             result += operator.rastrigin_func(z1)
-        z2 = z[self.P[int(self.ndim/2):]]
+        z2 = z[self.P[int(self.ndim / 2):]]
         return result + operator.rastrigin_func(z2)
 
 
@@ -404,10 +413,10 @@ class F112010(F92010):
         z = x - self.f_shift
         result = 0.0
         for k in range(0, self.count_up):
-            idx1 = self.P[k*self.m_group: (k + 1)*self.m_group]
+            idx1 = self.P[k * self.m_group: (k + 1) * self.m_group]
             z1 = np.dot(z[idx1], self.f_matrix[:len(idx1), :len(idx1)])
             result += operator.ackley_func(z1)
-        z2 = z[self.P[int(self.ndim/2):]]
+        z2 = z[self.P[int(self.ndim / 2):]]
         return result + operator.ackley_func(z2)
 
 
@@ -431,9 +440,9 @@ class F122010(F72010):
         z = x - self.f_shift
         result = 0.0
         for k in range(0, self.count_up):
-            idx1 = self.P[k*self.m_group: (k + 1)*self.m_group]
+            idx1 = self.P[k * self.m_group: (k + 1) * self.m_group]
             result += operator.schwefel_12_func(z[idx1])
-        z2 = z[self.P[int(self.ndim/2):]]
+        z2 = z[self.P[int(self.ndim / 2):]]
         return result + operator.sphere_func(z2)
 
 
@@ -452,8 +461,8 @@ class F132010(F72010):
         super().__init__(ndim, bounds, f_shift, m_group)
         self.count_up = int(self.ndim / (2 * self.m_group))
         self.x_global = self.f_shift.copy()
-        self.x_global[self.P[:int(self.ndim/2)]] = self.f_shift[self.P[:int(self.ndim/2)]] + 1
-        self.x_global[self.P[int(self.ndim/2):]] = self.f_shift[self.P[int(self.ndim/2):]]
+        self.x_global[self.P[:int(self.ndim / 2)]] = self.f_shift[self.P[:int(self.ndim / 2)]] + 1
+        self.x_global[self.P[int(self.ndim / 2):]] = self.f_shift[self.P[int(self.ndim / 2):]]
 
     def evaluate(self, x, *args):
         self.n_fe += 1
@@ -461,9 +470,9 @@ class F132010(F72010):
         z = x - self.f_shift
         result = 0.0
         for k in range(0, self.count_up):
-            idx1 = self.P[k*self.m_group: (k + 1)*self.m_group]
+            idx1 = self.P[k * self.m_group: (k + 1) * self.m_group]
             result += operator.rosenbrock_func(z[idx1])
-        z2 = z[self.P[int(self.ndim/2):]]
+        z2 = z[self.P[int(self.ndim / 2):]]
         return result + operator.sphere_func(z2)
 
 
@@ -487,7 +496,7 @@ class F142010(F92010):
         z = x - self.f_shift
         result = 0.0
         for k in range(0, self.count_up):
-            idx1 = self.P[k*self.m_group: (k + 1)*self.m_group]
+            idx1 = self.P[k * self.m_group: (k + 1) * self.m_group]
             z1 = np.dot(z[idx1], self.f_matrix[:len(idx1), :len(idx1)])
             result += operator.elliptic_func(z1)
         return result
@@ -516,7 +525,7 @@ class F152010(F92010):
         z = x - self.f_shift
         result = 0.0
         for k in range(0, self.count_up):
-            idx1 = self.P[k*self.m_group: (k + 1)*self.m_group]
+            idx1 = self.P[k * self.m_group: (k + 1) * self.m_group]
             z1 = np.dot(z[idx1], self.f_matrix[:len(idx1), :len(idx1)])
             result += operator.rastrigin_func(z1)
         return result
@@ -545,7 +554,7 @@ class F162010(F92010):
         z = x - self.f_shift
         result = 0.0
         for k in range(0, self.count_up):
-            idx1 = self.P[k*self.m_group: (k + 1)*self.m_group]
+            idx1 = self.P[k * self.m_group: (k + 1) * self.m_group]
             z1 = np.dot(z[idx1], self.f_matrix[:len(idx1), :len(idx1)])
             result += operator.ackley_func(z1)
         return result
@@ -573,7 +582,7 @@ class F172010(F72010):
         z = x - self.f_shift
         result = 0.0
         for k in range(0, self.count_up):
-            idx1 = self.P[k*self.m_group: (k + 1)*self.m_group]
+            idx1 = self.P[k * self.m_group: (k + 1) * self.m_group]
             result += operator.ackley_func(z[idx1])
         return result
 
@@ -601,7 +610,7 @@ class F182010(F72010):
         z = x - self.f_shift
         result = 0.0
         for k in range(0, self.count_up):
-            idx1 = self.P[k*self.m_group: (k + 1)*self.m_group]
+            idx1 = self.P[k * self.m_group: (k + 1) * self.m_group]
             result += operator.rosenbrock_func(z[idx1])
         return result
 

@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import numpy as np
+
 from opfunu.benchmark import Benchmark
 
 
@@ -61,7 +62,8 @@ class Langermann(Benchmark):
         self.check_solution(x)
         self.n_fe += 1
         return (-np.sum(self.c * np.exp(-(1 / np.pi) * ((x[0] - self.a) ** 2 +
-                (x[1] - self.b) ** 2)) * np.cos(np.pi * ((x[0] - self.a) ** 2 + (x[1] - self.b) ** 2))))
+                                                        (x[1] - self.b) ** 2)) * np.cos(
+            np.pi * ((x[0] - self.a) ** 2 + (x[1] - self.b) ** 2))))
 
 
 class LennardJones(Benchmark):
@@ -116,7 +118,7 @@ class LennardJones(Benchmark):
                        -32.765970, -37.967600, -44.326801, -47.845157,
                        -52.322627, -56.815742, -61.317995, -66.530949,
                        -72.659782, -77.1777043]
-        self.f_global = self.minima[int(self.ndim/3) - 2]
+        self.f_global = self.minima[int(self.ndim / 3) - 2]
         self.x_global = np.zeros(self.ndim)
 
     def evaluate(self, x, *args):
@@ -322,4 +324,3 @@ class Levy13(Benchmark):
         v = (x[0] - 1) ** 2 * (1 + (np.sin(3 * np.pi * x[1])) ** 2)
         w = (x[1] - 1) ** 2 * (1 + (np.sin(2 * np.pi * x[1])) ** 2)
         return u + v + w
-
