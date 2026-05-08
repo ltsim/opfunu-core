@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import numpy as np
+
 from opfunu.cec_based.cec import CecBenchmark
 from opfunu.utils import operator
 
@@ -45,7 +46,8 @@ class F12020(CecBenchmark):
         self.dim_default = 30
         self.dim_max = 100
         self.dim_supported = [2, 5, 10, 15, 20, 30, 50, 100]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2020")
         self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
@@ -97,7 +99,8 @@ class F22020(CecBenchmark):
         self.dim_default = 30
         self.dim_max = 100
         self.dim_supported = [2, 5, 10, 15, 20, 30, 50, 100]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2020")
         self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
@@ -109,7 +112,7 @@ class F22020(CecBenchmark):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 1000.*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 1000. * (x - self.f_shift) / 100)
         return operator.modified_schwefel_func(z) + self.f_bias
 
 
@@ -149,7 +152,8 @@ class F32020(CecBenchmark):
         self.dim_default = 30
         self.dim_max = 100
         self.dim_supported = [2, 5, 10, 15, 20, 30, 50, 100]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2020")
         self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
@@ -161,7 +165,7 @@ class F32020(CecBenchmark):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 600.*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 600. * (x - self.f_shift) / 100)
         return operator.lunacek_bi_rastrigin_func(z, shift=2.5) + self.f_bias
 
 
@@ -201,7 +205,8 @@ class F42020(CecBenchmark):
         self.dim_default = 30
         self.dim_max = 100
         self.dim_supported = [2, 5, 10, 15, 20, 30, 50, 100]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2020")
         self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
@@ -247,13 +252,15 @@ class F52020(CecBenchmark):
 
     characteristics = ["Different properties for different variables subcomponents"]
 
-    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_6", f_matrix="M_6_D", f_shuffle="shuffle_data_6_D", f_bias=1700.):
+    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_6", f_matrix="M_6_D", f_shuffle="shuffle_data_6_D",
+                 f_bias=1700.):
         super().__init__()
         self.dim_changeable = True
         self.dim_default = 30
         self.dim_max = 100
         self.dim_supported = [10, 15, 20, 30, 50, 100]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2020")
         self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
@@ -266,11 +273,13 @@ class F52020(CecBenchmark):
         self.p = np.array([0.3, 0.3, 0.4])
         self.n1 = int(np.ceil(self.p[0] * self.ndim))
         self.n2 = int(np.ceil(self.p[1] * self.ndim)) + self.n1
-        self.idx1, self.idx2, self.idx3 = self.f_shuffle[:self.n1], self.f_shuffle[self.n1:self.n2], self.f_shuffle[self.n2:self.ndim]
+        self.idx1, self.idx2, self.idx3 = self.f_shuffle[:self.n1], self.f_shuffle[self.n1:self.n2], self.f_shuffle[
+            self.n2:self.ndim]
         self.g1 = operator.modified_schwefel_func
         self.g2 = operator.rastrigin_func
         self.g3 = operator.elliptic_func
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix, "f_shuffle": self.f_shuffle}
+        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix,
+                      "f_shuffle": self.f_shuffle}
 
     def evaluate(self, x, *args):
         self.n_fe += 1
@@ -311,13 +320,15 @@ class F62020(CecBenchmark):
 
     characteristics = []
 
-    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_7", f_matrix="M_7_D", f_shuffle="shuffle_data_7_D", f_bias=1600.):
+    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_7", f_matrix="M_7_D", f_shuffle="shuffle_data_7_D",
+                 f_bias=1600.):
         super().__init__()
         self.dim_changeable = True
         self.dim_default = 30
         self.dim_max = 100
         self.dim_supported = [10, 15, 20, 30, 50, 100]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2020")
         self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
@@ -333,7 +344,8 @@ class F62020(CecBenchmark):
         self.n3 = int(np.ceil(self.p[2] * self.ndim)) + self.n2
         self.idx1, self.idx2 = self.f_shuffle[:self.n1], self.f_shuffle[self.n1:self.n2]
         self.idx3, self.idx4 = self.f_shuffle[self.n2:self.n3], self.f_shuffle[self.n3:self.ndim]
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix, "f_shuffle": self.f_shuffle}
+        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix,
+                      "f_shuffle": self.f_shuffle}
 
     def evaluate(self, x, *args):
         self.n_fe += 1
@@ -375,13 +387,15 @@ class F72020(CecBenchmark):
 
     characteristics = ["Different properties for different variables subcomponents"]
 
-    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_16", f_matrix="M_16_D", f_shuffle="shuffle_data_16_D", f_bias=2100.):
+    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_16", f_matrix="M_16_D",
+                 f_shuffle="shuffle_data_16_D", f_bias=2100.):
         super().__init__()
         self.dim_changeable = True
         self.dim_default = 30
         self.dim_max = 100
         self.dim_supported = [10, 15, 20, 30, 50, 100]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2020")
         self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
@@ -396,9 +410,11 @@ class F72020(CecBenchmark):
         self.n2 = int(np.ceil(self.p[1] * self.ndim)) + self.n1
         self.n3 = int(np.ceil(self.p[2] * self.ndim)) + self.n2
         self.n4 = int(np.ceil(self.p[3] * self.ndim)) + self.n3
-        self.idx1, self.idx2, self.idx3 = self.f_shuffle[:self.n1], self.f_shuffle[self.n1:self.n2], self.f_shuffle[self.n2:self.n3]
+        self.idx1, self.idx2, self.idx3 = self.f_shuffle[:self.n1], self.f_shuffle[self.n1:self.n2], self.f_shuffle[
+            self.n2:self.n3]
         self.idx4, self.idx5 = self.f_shuffle[self.n3:self.n4], self.f_shuffle[self.n4:self.ndim]
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix, "f_shuffle": self.f_shuffle}
+        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix,
+                      "f_shuffle": self.f_shuffle}
 
     def evaluate(self, x, *args):
         self.n_fe += 1
@@ -446,7 +462,8 @@ class F82020(CecBenchmark):
         self.dim_default = 30
         self.dim_max = 100
         self.dim_supported = [2, 5, 10, 15, 20, 30, 50, 100]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2020")
         self.f_shift = self.check_shift_matrix(f_shift)[:, :self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix)[:, :self.ndim]
@@ -472,13 +489,13 @@ class F82020(CecBenchmark):
         w0 = operator.calculate_weight(x - self.f_shift[0], self.xichmas[0])
 
         # 2. Griewank’s Function F15’
-        z1 = np.dot(self.f_matrix[self.ndim:2*self.ndim, :], x - self.f_shift[1])
+        z1 = np.dot(self.f_matrix[self.ndim:2 * self.ndim, :], x - self.f_shift[1])
         g1 = self.lamdas[1] * self.g1(z1) + self.bias[1]
         w1 = operator.calculate_weight(x - self.f_shift[1], self.xichmas[1])
 
         # 3. Modifed Schwefel's Function F10’
         # z2 = np.dot(self.f_matrix[2*self.ndim:3*self.ndim, :], x - self.f_shift[2])
-        z2 = 1000*(x - self.f_shift[2])/100
+        z2 = 1000 * (x - self.f_shift[2]) / 100
         g2 = self.lamdas[2] * self.g2(z2) + self.bias[2]
         w2 = operator.calculate_weight(x - self.f_shift[2], self.xichmas[2])
 
@@ -523,7 +540,8 @@ class F92020(CecBenchmark):
         self.dim_default = 30
         self.dim_max = 100
         self.dim_supported = [2, 5, 10, 15, 20, 30, 50, 100]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2020")
         self.f_shift = self.check_shift_matrix(f_shift)[:, :self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix)[:, :self.ndim]
@@ -550,12 +568,12 @@ class F92020(CecBenchmark):
         w0 = operator.calculate_weight(x - self.f_shift[0], self.xichmas[0])
 
         # 2. High Conditioned Elliptic Function F11’
-        z1 = np.dot(self.f_matrix[self.ndim:2*self.ndim, :], x - self.f_shift[1])
+        z1 = np.dot(self.f_matrix[self.ndim:2 * self.ndim, :], x - self.f_shift[1])
         g1 = self.lamdas[1] * self.g1(z1) + self.bias[1]
         w1 = operator.calculate_weight(x - self.f_shift[1], self.xichmas[1])
 
         # 3. Girewank Function F15’
-        z2 = np.dot(self.f_matrix[2*self.ndim:3*self.ndim, :], x - self.f_shift[2])
+        z2 = np.dot(self.f_matrix[2 * self.ndim:3 * self.ndim, :], x - self.f_shift[2])
         g2 = self.lamdas[2] * self.g2(z2) + self.bias[2]
         w2 = operator.calculate_weight(x - self.f_shift[2], self.xichmas[2])
 
@@ -605,7 +623,8 @@ class F102020(CecBenchmark):
         self.dim_default = 30
         self.dim_max = 100
         self.dim_supported = [2, 5, 10, 15, 20, 30, 50, 100]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2020")
         self.f_shift = self.check_shift_matrix(f_shift)[:, :self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix)[:, :self.ndim]
@@ -633,12 +652,12 @@ class F102020(CecBenchmark):
         w0 = operator.calculate_weight(x - self.f_shift[0], self.xichmas[0])
 
         # 2. Happycat Function F17’
-        z1 = np.dot(self.f_matrix[self.ndim:2*self.ndim, :], x - self.f_shift[0])
+        z1 = np.dot(self.f_matrix[self.ndim:2 * self.ndim, :], x - self.f_shift[0])
         g1 = self.lamdas[1] * self.g1(z1) + self.bias[1]
         w1 = operator.calculate_weight(x - self.f_shift[1], self.xichmas[1])
 
         # 3. Ackley Function F13’
-        z2 = np.dot(self.f_matrix[2*self.ndim:3*self.ndim, :], x - self.f_shift[0])
+        z2 = np.dot(self.f_matrix[2 * self.ndim:3 * self.ndim, :], x - self.f_shift[0])
         g2 = self.lamdas[2] * self.g2(z2) + self.bias[2]
         w2 = operator.calculate_weight(x - self.f_shift[2], self.xichmas[2])
 
@@ -648,7 +667,7 @@ class F102020(CecBenchmark):
         w3 = operator.calculate_weight(x - self.f_shift[3], self.xichmas[3])
 
         # 5. Rosenbrock’s Function F4’
-        z4 = np.dot(self.f_matrix[4 * self.ndim:5 * self.ndim, :], 2.048*(x - self.f_shift[0])/100) + 1
+        z4 = np.dot(self.f_matrix[4 * self.ndim:5 * self.ndim, :], 2.048 * (x - self.f_shift[0]) / 100) + 1
         g4 = self.lamdas[4] * self.g4(z4) + self.bias[4]
         w4 = operator.calculate_weight(x - self.f_shift[4], self.xichmas[4])
 

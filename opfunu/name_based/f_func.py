@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import numpy as np
+
 from opfunu.benchmark import Benchmark
 
 
@@ -14,8 +15,8 @@ class FreudensteinRoth(Benchmark):
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
     name = "Freudenstein Roth Function"
-    latex_formula = r'f(x) = \left\{x_1 - 13 + \left[(5 - x_2) x_2' +\
-        r'- 2 \right] x_2 \right\}^2 + \left \{x_1 - 29 + \left[(x_2 + 1) x_2 - 14 \right] x_2 \right\}^2'
+    latex_formula = r'f(x) = \left\{x_1 - 13 + \left[(5 - x_2) x_2' + \
+                    r'- 2 \right] x_2 \right\}^2 + \left \{x_1 - 29 + \left[(x_2 + 1) x_2 - 14 \right] x_2 \right\}^2'
     latex_formula_dimension = r'd = 2'
     latex_formula_bounds = r'x_i \in [-10, 10], \forall i \in \llbracket 1, d\rrbracket'
     latex_formula_global_optimum = r'f(5, 4) = 0'

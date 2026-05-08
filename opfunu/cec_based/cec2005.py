@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import numpy as np
+
 from opfunu.cec_based.cec import CecBenchmark
 from opfunu.utils import operator
 
@@ -43,7 +44,8 @@ class F12005(CecBenchmark):
         self.dim_changeable = True
         self.dim_default = 30
         self.dim_max = 100
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2005")
         self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
         self.f_bias = f_bias
@@ -91,7 +93,8 @@ class F22005(CecBenchmark):
         self.dim_changeable = True
         self.dim_default = 30
         self.dim_max = 100
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2005")
         self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
         self.f_bias = f_bias
@@ -137,13 +140,15 @@ class F32005(CecBenchmark):
     # n_basins = 1
     # n_valleys = 1
 
-    def __init__(self, ndim=None, bounds=None, f_shift="data_high_cond_elliptic_rot", f_matrix="elliptic_M_D", f_bias=-450.):
+    def __init__(self, ndim=None, bounds=None, f_shift="data_high_cond_elliptic_rot", f_matrix="elliptic_M_D",
+                 f_bias=-450.):
         super().__init__()
         self.dim_changeable = True
         self.dim_default = 30
         self.dim_max = 100
         self.dim_supported = [10, 30, 50]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2005")
         self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix)
@@ -194,7 +199,8 @@ class F42005(CecBenchmark):
         self.dim_changeable = True
         self.dim_default = 30
         self.dim_max = 100
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2005")
         self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
         self.f_bias = f_bias
@@ -248,7 +254,8 @@ class F52005(CecBenchmark):
         self.dim_changeable = True
         self.dim_default = 30
         self.dim_max = 100
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2005")
         shift_data, matrix_data = self.load_shift_and_matrix_data(f_shift)
         self.f_shift = shift_data[:self.ndim]
@@ -264,7 +271,8 @@ class F52005(CecBenchmark):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         ndim = len(x)
-        results = [np.abs(np.dot(self.f_matrix[idx], x) - np.dot(self.f_matrix[idx], self.f_shift)) for idx in range(0, ndim)]
+        results = [np.abs(np.dot(self.f_matrix[idx], x) - np.dot(self.f_matrix[idx], self.f_shift)) for idx in
+                   range(0, ndim)]
         return np.max(results) + self.f_bias
 
 
@@ -303,7 +311,8 @@ class F62005(CecBenchmark):
         self.dim_changeable = True
         self.dim_default = 30
         self.dim_max = 100
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2005")
         self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
         self.f_bias = f_bias
@@ -415,7 +424,7 @@ class F82005(CecBenchmark):
         self.paras = {"f_shift": self.f_shift, "f_matrix": self.f_matrix, "f_bias": self.f_bias}
         a = np.arange(0, self.ndim)
         self.f_shift[a % 2 == 0] = -32
-        self.f_shift[a % 2 == 1] = np.random.uniform(-32., 32., int(self.ndim/2))
+        self.f_shift[a % 2 == 1] = np.random.uniform(-32., 32., int(self.ndim / 2))
 
     def evaluate(self, x, *args):
         self.n_fe += 1
@@ -612,6 +621,7 @@ class F122005(CecBenchmark):
     rotated = False
 
     modality = True  # Number of ambiguous peaks, unknown # peaks
+
     # n_basins = 1
     # n_valleys = 1
 
@@ -620,7 +630,8 @@ class F122005(CecBenchmark):
         self.dim_changeable = True
         self.dim_default = 30
         self.dim_max = 100
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-np.pi, np.pi] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-np.pi, np.pi] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2005")
         shift_data, a_matrix, b_matrix = self.load_two_matrix_and_shift_data(f_shift)
         self.f_shift = shift_data[:self.ndim]
@@ -629,7 +640,8 @@ class F122005(CecBenchmark):
         self.f_bias = f_bias
         self.f_global = f_bias
         self.x_global = self.f_shift
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix_a": self.f_matrix_a, "f_matrix_b": self.f_matrix_b}
+        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix_a": self.f_matrix_a,
+                      "f_matrix_b": self.f_matrix_b}
 
     def evaluate(self, x, *args):
         self.n_fe += 1
@@ -672,6 +684,7 @@ class F132005(CecBenchmark):
     rotated = False
 
     modality = True  # Number of ambiguous peaks, unknown # peaks
+
     # n_basins = 1
     # n_valleys = 1
 
@@ -722,6 +735,7 @@ class F142005(CecBenchmark):
     rotated = False
 
     modality = True  # Number of ambiguous peaks, unknown # peaks
+
     # n_basins = 1
     # n_valleys = 1
 
@@ -731,7 +745,8 @@ class F142005(CecBenchmark):
         self.dim_default = 30
         self.dim_max = 100
         self.dim_supported = [10, 30, 50]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2005")
         self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix)
@@ -773,6 +788,7 @@ class F152005(CecBenchmark):
     rotated = False
 
     modality = True  # Number of ambiguous peaks, unknown # peaks
+
     # n_basins = 1
     # n_valleys = 1
 
@@ -783,9 +799,9 @@ class F152005(CecBenchmark):
         self.dim_max = 100
         self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-5., 5.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2005")
-        self.f_shift = self.load_matrix_data(f_shift)[:, :self.ndim]        # This shift as matrix for M functions
+        self.f_shift = self.load_matrix_data(f_shift)[:, :self.ndim]  # This shift as matrix for M functions
         self.lamdas = np.array([1, 1, 10, 10, 5.0 / 60, 5.0 / 60, 5.0 / 32, 5.0 / 32, 5.0 / 100, 5.0 / 100])
-        self.bias = np.array([0, 100, 200, 300, 400, 500, 600, 700, 800, 900])      # ==> f_shift[0] is the global optimum
+        self.bias = np.array([0, 100, 200, 300, 400, 500, 600, 700, 800, 900])  # ==> f_shift[0] is the global optimum
         self.n_funcs = 10
         self.xichmas = np.ones(self.n_funcs)
         self.C = 2000
@@ -825,7 +841,7 @@ class F152005(CecBenchmark):
             fits[idx] = fit_i
 
         maxw = np.max(weights)
-        weights = np.where(weights != maxw, weights*(1 - maxw**10), weights)
+        weights = np.where(weights != maxw, weights * (1 - maxw ** 10), weights)
         weights = weights / np.sum(weights)
         return np.sum(np.dot(weights, (fits + self.bias))) + self.f_bias
 
@@ -856,6 +872,7 @@ class F162005(CecBenchmark):
     rotated = True
 
     modality = True  # Number of ambiguous peaks, unknown # peaks
+
     # n_basins = 1
     # n_valleys = 1
 
@@ -867,10 +884,10 @@ class F162005(CecBenchmark):
         self.dim_supported = [10, 30, 50]
         self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-5., 5.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2005")
-        self.f_shift = self.load_matrix_data(f_shift)[:, :self.ndim]        # This shift as matrix for M functions
+        self.f_shift = self.load_matrix_data(f_shift)[:, :self.ndim]  # This shift as matrix for M functions
         self.M = self.check_matrix_data(f_matrix)
         self.lamdas = np.array([1, 1, 10, 10, 5.0 / 60, 5.0 / 60, 5.0 / 32, 5.0 / 32, 5.0 / 100, 5.0 / 100])
-        self.bias = np.array([0, 100, 200, 300, 400, 500, 600, 700, 800, 900])      # ==> f_shift[0] is the global optimum
+        self.bias = np.array([0, 100, 200, 300, 400, 500, 600, 700, 800, 900])  # ==> f_shift[0] is the global optimum
         self.n_funcs = 10
         self.xichmas = np.ones(self.n_funcs)
         self.C = 2000
@@ -901,15 +918,15 @@ class F162005(CecBenchmark):
         fits = np.ones(self.n_funcs)
         for idx in range(0, self.n_funcs):
             w_i = np.exp(-np.sum((x - self.f_shift[idx]) ** 2) / (2 * ndim * self.xichmas[idx] ** 2))
-            z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx*ndim:(idx+1)*ndim, :])
+            z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx * ndim:(idx + 1) * ndim, :])
             fit_i = self.fi__(z, idx)
-            f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx*ndim:(idx+1)*ndim, :]), idx)
+            f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx * ndim:(idx + 1) * ndim, :]), idx)
             fit_i = self.C * fit_i / f_max_i
             weights[idx] = w_i
             fits[idx] = fit_i
 
         maxw = np.max(weights)
-        weights = np.where(weights != maxw, weights*(1 - maxw**10), weights)
+        weights = np.where(weights != maxw, weights * (1 - maxw ** 10), weights)
         weights = weights / np.sum(weights)
         return np.sum(np.dot(weights, (fits + self.bias))) + self.f_bias
 
@@ -939,17 +956,17 @@ class F172005(F162005):
         fits = np.ones(self.n_funcs)
         for idx in range(0, self.n_funcs):
             w_i = np.exp(-np.sum((x - self.f_shift[idx]) ** 2) / (2 * ndim * self.xichmas[idx] ** 2))
-            z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx*ndim:(idx+1)*ndim, :])
+            z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx * ndim:(idx + 1) * ndim, :])
             fit_i = self.fi__(z, idx)
-            f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx*ndim:(idx+1)*ndim, :]), idx)
+            f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx * ndim:(idx + 1) * ndim, :]), idx)
             fit_i = self.C * fit_i / f_max_i
             weights[idx] = w_i
             fits[idx] = fit_i
 
         maxw = np.max(weights)
-        weights = np.where(weights != maxw, weights*(1 - maxw**10), weights)
+        weights = np.where(weights != maxw, weights * (1 - maxw ** 10), weights)
         weights = weights / np.sum(weights)
-        return np.sum(np.dot(weights, (fits + self.bias)))*(1 + 0.2*np.abs(np.random.normal(0, 1))) + self.f_bias
+        return np.sum(np.dot(weights, (fits + self.bias))) * (1 + 0.2 * np.abs(np.random.normal(0, 1))) + self.f_bias
 
 
 class F182005(CecBenchmark):
@@ -978,6 +995,7 @@ class F182005(CecBenchmark):
     rotated = True
 
     modality = True  # Number of ambiguous peaks, unknown # peaks
+
     # n_basins = 1
     # n_valleys = 1
 
@@ -989,10 +1007,11 @@ class F182005(CecBenchmark):
         self.dim_supported = [10, 30, 50]
         self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-5., 5.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2005")
-        self.f_shift = self.load_matrix_data(f_shift)[:, :self.ndim]        # This shift as matrix for M functions
+        self.f_shift = self.load_matrix_data(f_shift)[:, :self.ndim]  # This shift as matrix for M functions
         self.M = self.check_matrix_data(f_matrix)
-        self.lamdas = np.array([2*5.0/32, 5.0/32, 2*1, 1, 2*5.0/100, 5.0/100, 2*10, 10, 2*5.0/60, 5.0/60])
-        self.bias = np.array([0, 100, 200, 300, 400, 500, 600, 700, 800, 900])      # ==> f_shift[0] is the global optimum
+        self.lamdas = np.array(
+            [2 * 5.0 / 32, 5.0 / 32, 2 * 1, 1, 2 * 5.0 / 100, 5.0 / 100, 2 * 10, 10, 2 * 5.0 / 60, 5.0 / 60])
+        self.bias = np.array([0, 100, 200, 300, 400, 500, 600, 700, 800, 900])  # ==> f_shift[0] is the global optimum
         self.n_funcs = 10
         self.xichmas = np.array([1, 2, 1.5, 1.5, 1, 1, 1.5, 1.5, 2, 2])
         self.C = 2000
@@ -1023,15 +1042,15 @@ class F182005(CecBenchmark):
         fits = np.ones(self.n_funcs)
         for idx in range(0, self.n_funcs):
             w_i = np.exp(-np.sum((x - self.f_shift[idx]) ** 2) / (2 * ndim * self.xichmas[idx] ** 2))
-            z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx*ndim:(idx+1)*ndim, :])
+            z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx * ndim:(idx + 1) * ndim, :])
             fit_i = self.fi__(z, idx)
-            f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx*ndim:(idx+1)*ndim, :]), idx)
+            f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx * ndim:(idx + 1) * ndim, :]), idx)
             fit_i = self.C * fit_i / f_max_i
             weights[idx] = w_i
             fits[idx] = fit_i
 
         maxw = np.max(weights)
-        weights = np.where(weights != maxw, weights*(1 - maxw**10), weights)
+        weights = np.where(weights != maxw, weights * (1 - maxw ** 10), weights)
         weights = weights / np.sum(weights)
         return np.sum(np.dot(weights, (fits + self.bias))) + self.f_bias
 
@@ -1051,7 +1070,8 @@ class F192005(F182005):
 
     def __init__(self, ndim=None, bounds=None, f_shift="data_hybrid_func2", f_matrix="hybrid_func2_M_D", f_bias=10.):
         super().__init__(ndim, bounds, f_shift, f_matrix, f_bias)
-        self.lamdas = np.array([0.1 * 5 / 32, 5.0 / 32, 2 * 1, 1, 2 * 5.0 / 100, 5.0 / 100, 2.0 * 10, 10, 2 * 5.0 / 60, 5.0 / 60])
+        self.lamdas = np.array(
+            [0.1 * 5 / 32, 5.0 / 32, 2 * 1, 1, 2 * 5.0 / 100, 5.0 / 100, 2.0 * 10, 10, 2 * 5.0 / 60, 5.0 / 60])
         self.xichmas = np.array([0.1, 2, 1.5, 1.5, 1, 1, 1.5, 1.5, 2, 2])
         self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "lambda": self.lamdas, "bias": self.bias,
                       "n_funcs": self.n_funcs, "C": self.C, "M": self.M, "y": self.y}
@@ -1104,6 +1124,7 @@ class F212005(CecBenchmark):
     rotated = True
 
     modality = True  # Number of ambiguous peaks, unknown # peaks
+
     # n_basins = 1
     # n_valleys = 1
 
@@ -1115,10 +1136,12 @@ class F212005(CecBenchmark):
         self.dim_supported = [10, 30, 50]
         self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-5., 5.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2005")
-        self.f_shift = self.load_matrix_data(f_shift)[:, :self.ndim]        # This shift as matrix for M functions
+        self.f_shift = self.load_matrix_data(f_shift)[:, :self.ndim]  # This shift as matrix for M functions
         self.M = self.check_matrix_data(f_matrix)
-        self.lamdas = np.array([5.0 * 5.0 / 100.0, 5.0 / 100.0, 5.0 * 1.0, 1.0, 5.0 * 1.0, 1.0, 5.0 * 10.0, 10.0, 5.0 * 5.0 / 200.0, 5.0 / 200.0])
-        self.bias = np.array([0, 100, 200, 300, 400, 500, 600, 700, 800, 900])      # ==> f_shift[0] is the global optimum
+        self.lamdas = np.array(
+            [5.0 * 5.0 / 100.0, 5.0 / 100.0, 5.0 * 1.0, 1.0, 5.0 * 1.0, 1.0, 5.0 * 10.0, 10.0, 5.0 * 5.0 / 200.0,
+             5.0 / 200.0])
+        self.bias = np.array([0, 100, 200, 300, 400, 500, 600, 700, 800, 900])  # ==> f_shift[0] is the global optimum
         self.n_funcs = 10
         self.xichmas = np.array([1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 2.0, 2.0, 2.0, 2.0])
         self.C = 2000
@@ -1149,15 +1172,15 @@ class F212005(CecBenchmark):
         fits = np.ones(self.n_funcs)
         for idx in range(0, self.n_funcs):
             w_i = np.exp(-np.sum((x - self.f_shift[idx]) ** 2) / (2 * ndim * self.xichmas[idx] ** 2))
-            z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx*ndim:(idx+1)*ndim, :])
+            z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx * ndim:(idx + 1) * ndim, :])
             fit_i = self.fi__(z, idx)
-            f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx*ndim:(idx+1)*ndim, :]), idx)
+            f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx * ndim:(idx + 1) * ndim, :]), idx)
             fit_i = self.C * fit_i / f_max_i
             weights[idx] = w_i
             fits[idx] = fit_i
 
         maxw = np.max(weights)
-        weights = np.where(weights != maxw, weights*(1 - maxw**10), weights)
+        weights = np.where(weights != maxw, weights * (1 - maxw ** 10), weights)
         weights = weights / np.sum(weights)
         return np.sum(np.dot(weights, (fits + self.bias))) + self.f_bias
 
@@ -1206,15 +1229,15 @@ class F232005(F212005):
         fits = np.ones(self.n_funcs)
         for idx in range(0, self.n_funcs):
             w_i = np.exp(-np.sum((x - self.f_shift[idx]) ** 2) / (2 * ndim * self.xichmas[idx] ** 2))
-            z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx*ndim:(idx+1)*ndim, :])
+            z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx * ndim:(idx + 1) * ndim, :])
             fit_i = self.fi__(z, idx)
-            f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx*ndim:(idx+1)*ndim, :]), idx)
+            f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx * ndim:(idx + 1) * ndim, :]), idx)
             fit_i = self.C * fit_i / f_max_i
             weights[idx] = w_i
             fits[idx] = fit_i
 
         maxw = np.max(weights)
-        weights = np.where(weights != maxw, weights*(1 - maxw**10), weights)
+        weights = np.where(weights != maxw, weights * (1 - maxw ** 10), weights)
         weights = weights / np.sum(weights)
         return np.sum(np.dot(weights, (fits + self.bias))) + self.f_bias
 
@@ -1245,6 +1268,7 @@ class F242005(CecBenchmark):
     rotated = True
 
     modality = True  # Number of ambiguous peaks, unknown # peaks
+
     # n_basins = 1
     # n_valleys = 1
 
@@ -1256,10 +1280,11 @@ class F242005(CecBenchmark):
         self.dim_supported = [10, 30, 50]
         self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-5., 5.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2005")
-        self.f_shift = self.load_matrix_data(f_shift)[:, :self.ndim]        # This shift as matrix for M functions
+        self.f_shift = self.load_matrix_data(f_shift)[:, :self.ndim]  # This shift as matrix for M functions
         self.M = self.check_matrix_data(f_matrix)
-        self.lamdas = np.array([10.0, 5.0 / 20.0, 1.0, 5.0 / 32.0, 1.0, 5.0 / 100.0, 5.0 / 50.0, 1.0, 5.0 / 100.0, 5.0 / 100.0])
-        self.bias = np.array([0, 100, 200, 300, 400, 500, 600, 700, 800, 900])      # ==> f_shift[0] is the global optimum
+        self.lamdas = np.array(
+            [10.0, 5.0 / 20.0, 1.0, 5.0 / 32.0, 1.0, 5.0 / 100.0, 5.0 / 50.0, 1.0, 5.0 / 100.0, 5.0 / 100.0])
+        self.bias = np.array([0, 100, 200, 300, 400, 500, 600, 700, 800, 900])  # ==> f_shift[0] is the global optimum
         self.n_funcs = 10
         self.xichmas = 2 * np.ones(self.ndim)
         self.C = 2000
@@ -1300,15 +1325,15 @@ class F242005(CecBenchmark):
         fits = np.ones(self.n_funcs)
         for idx in range(0, self.n_funcs):
             w_i = np.exp(-np.sum((x - self.f_shift[idx]) ** 2) / (2 * ndim * self.xichmas[idx] ** 2))
-            z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx*ndim:(idx+1)*ndim, :])
+            z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx * ndim:(idx + 1) * ndim, :])
             fit_i = self.fi__(z, idx)
-            f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx*ndim:(idx+1)*ndim, :]), idx)
+            f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx * ndim:(idx + 1) * ndim, :]), idx)
             fit_i = self.C * fit_i / f_max_i
             weights[idx] = w_i
             fits[idx] = fit_i
 
         maxw = np.max(weights)
-        weights = np.where(weights != maxw, weights*(1 - maxw**10), weights)
+        weights = np.where(weights != maxw, weights * (1 - maxw ** 10), weights)
         weights = weights / np.sum(weights)
         return np.sum(np.dot(weights, (fits + self.bias))) + self.f_bias
 

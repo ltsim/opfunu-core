@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import numpy as np
+
 from opfunu.benchmark import Benchmark
 
 
@@ -442,7 +443,8 @@ class Mishra05(Benchmark):
         self.check_solution(x)
         self.n_fe += 1
         return (0.01 * x[0] + 0.1 * x[1]
-                + (np.sin((np.cos(x[0]) + np.cos(x[1])) ** 2) ** 2 + np.cos((np.sin(x[0]) + np.sin(x[1])) ** 2) ** 2 + x[0]) ** 2)
+                + (np.sin((np.cos(x[0]) + np.cos(x[1])) ** 2) ** 2 + np.cos((np.sin(x[0]) + np.sin(x[1])) ** 2) ** 2 +
+                   x[0]) ** 2)
 
 
 class Mishra06(Benchmark):
@@ -575,8 +577,9 @@ class Mishra08(Benchmark):
     def evaluate(self, x, *args):
         self.check_solution(x)
         self.n_fe += 1
-        val = np.abs(x[0] ** 10 - 20 * x[0] ** 9 + 180 * x[0] ** 8 - 960 * x[0] ** 7 + 3360 * x[0] ** 6 - 8064 * x[0] ** 5
-                     + 13340 * x[0] ** 4 - 15360 * x[0] ** 3 + 11520 * x[0] ** 2 - 5120 * x[0] + 2624)
+        val = np.abs(
+            x[0] ** 10 - 20 * x[0] ** 9 + 180 * x[0] ** 8 - 960 * x[0] ** 7 + 3360 * x[0] ** 6 - 8064 * x[0] ** 5
+            + 13340 * x[0] ** 4 - 15360 * x[0] ** 3 + 11520 * x[0] ** 2 - 5120 * x[0] + 2624)
         val += np.abs(x[1] ** 4 + 12 * x[1] ** 3 + 54 * x[1] ** 2 + 108 * x[1] + 81)
         return 0.001 * val ** 2
 

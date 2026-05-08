@@ -4,9 +4,11 @@
 #       Github: https://github.com/thieu1995        %                         
 # --------------------------------------------------%
 
+from abc import ABC
+
 import numpy as np
 import pkg_resources
-from abc import ABC
+
 from opfunu.benchmark import Benchmark
 
 
@@ -173,7 +175,8 @@ class CecBenchmark(Benchmark, ABC):
         """
         # if not self.dim_changeable and (len(x) != self._ndim):
         if len(x) != self._ndim:
-            raise ValueError(f"{self.__class__.__name__} problem, the length of solution should have {self._ndim} variables!")
+            raise ValueError(
+                f"{self.__class__.__name__} problem, the length of solution should have {self._ndim} variables!")
         if (dim_max is not None) and (len(x) > dim_max):
             raise ValueError(f"{self.__class__.__name__} problem is not supported ndim > {dim_max}!")
         if (dim_support is not None) and (len(x) not in dim_support):
@@ -232,4 +235,5 @@ class CecBenchmark(Benchmark, ABC):
                     if self._bounds.shape[0] == self.dim_default:
                         self._ndim = self.dim_default
                     else:
-                        raise ValueError(f"{self.__class__.__name__} is fixed problem with {self._ndim} variables. Please setup the correct bounds!")
+                        raise ValueError(
+                            f"{self.__class__.__name__} is fixed problem with {self._ndim} variables. Please setup the correct bounds!")

@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import numpy as np
+
 from opfunu.cec_based.cec import CecBenchmark
 from opfunu.utils import operator
 
@@ -46,7 +47,8 @@ class F12015(CecBenchmark):
         self.dim_default = 10
         self.dim_max = 30
         self.dim_supported = [10, 30]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2015")
         self.f_shift = self.check_matrix_data(f_shift, needed_dim=True).ravel()
         self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
@@ -109,7 +111,7 @@ class F32015(F12015):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 0.5*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 0.5 * (x - self.f_shift) / 100)
         return operator.weierstrass_norm_func(z) + self.f_bias
 
 
@@ -129,7 +131,8 @@ class F42015(F12015):
     unimodal = False
     modality = True
 
-    characteristics = ["Local optima’s number is huge",  "The second better local optimum is far from the global optimum"]
+    characteristics = ["Local optima’s number is huge",
+                       "The second better local optimum is far from the global optimum"]
 
     def __init__(self, ndim=None, bounds=None, f_shift="shift_data_4_D", f_matrix="M_4_D", f_bias=400.):
         super().__init__(ndim, bounds, f_shift, f_matrix, f_bias)
@@ -137,7 +140,7 @@ class F42015(F12015):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 1000*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 1000 * (x - self.f_shift) / 100)
         return operator.modified_schwefel_func(z) + self.f_bias
 
 
@@ -166,7 +169,7 @@ class F52015(F12015):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 5*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 5 * (x - self.f_shift) / 100)
         return operator.katsuura_func(z) + self.f_bias
 
 
@@ -195,8 +198,9 @@ class F62015(F12015):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 5*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 5 * (x - self.f_shift) / 100)
         return operator.happy_cat_func(z, shift=-1.0) + self.f_bias
+
 
 class F72015(F12015):
     """
@@ -222,7 +226,7 @@ class F72015(F12015):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 5*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 5 * (x - self.f_shift) / 100)
         return operator.hgbat_func(z, shift=-1.0) + self.f_bias
 
 
@@ -250,7 +254,7 @@ class F82015(F12015):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 5.*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 5. * (x - self.f_shift) / 100)
         return operator.expanded_griewank_rosenbrock_func(z) + self.f_bias
 
 
@@ -314,13 +318,15 @@ class F102015(CecBenchmark):
 
     characteristics = []
 
-    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_10_D", f_matrix="M_10_D", f_shuffle="shuffle_data_10_D", f_bias=1000.):
+    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_10_D", f_matrix="M_10_D",
+                 f_shuffle="shuffle_data_10_D", f_bias=1000.):
         super().__init__()
         self.dim_changeable = True
         self.dim_default = 10
         self.dim_max = 30
         self.dim_supported = [10, 30]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2015")
         self.f_shift = self.check_matrix_data(f_shift, needed_dim=True).ravel()
         self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
@@ -333,11 +339,13 @@ class F102015(CecBenchmark):
         self.p = np.array([0.3, 0.3, 0.4])
         self.n1 = int(np.ceil(self.p[0] * self.ndim))
         self.n2 = int(np.ceil(self.p[1] * self.ndim)) + self.n1
-        self.idx1, self.idx2, self.idx3 = self.f_shuffle[:self.n1], self.f_shuffle[self.n1:self.n2], self.f_shuffle[self.n2:self.ndim]
+        self.idx1, self.idx2, self.idx3 = self.f_shuffle[:self.n1], self.f_shuffle[self.n1:self.n2], self.f_shuffle[
+            self.n2:self.ndim]
         self.g1 = operator.modified_schwefel_func
         self.g2 = operator.rastrigin_func
         self.g3 = operator.elliptic_func
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix, "f_shuffle": self.f_shuffle}
+        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix,
+                      "f_shuffle": self.f_shuffle}
 
     def evaluate(self, x, *args):
         self.n_fe += 1
@@ -360,7 +368,8 @@ class F112015(F102015):
 
     characteristics = []
 
-    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_11_D", f_matrix="M_11_D", f_shuffle="shuffle_data_11_D", f_bias=1100.):
+    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_11_D", f_matrix="M_11_D",
+                 f_shuffle="shuffle_data_11_D", f_bias=1100.):
         super().__init__(ndim, bounds, f_shift, f_matrix, f_shuffle, f_bias)
         self.n_funcs = 4
         self.p = np.array([0.2, 0.2, 0.3, 0.3])
@@ -369,7 +378,8 @@ class F112015(F102015):
         self.n3 = int(np.ceil(self.p[2] * self.ndim)) + self.n2
         self.idx1, self.idx2 = self.f_shuffle[:self.n1], self.f_shuffle[self.n1:self.n2]
         self.idx3, self.idx4 = self.f_shuffle[self.n2:self.n3], self.f_shuffle[self.n3:self.ndim]
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix, "f_shuffle": self.f_shuffle}
+        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix,
+                      "f_shuffle": self.f_shuffle}
 
     def evaluate(self, x, *args):
         self.n_fe += 1
@@ -395,7 +405,8 @@ class F122015(F102015):
 
     characteristics = []
 
-    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_11_D", f_matrix="M_11_D", f_shuffle="shuffle_data_11_D", f_bias=1200.):
+    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_11_D", f_matrix="M_11_D",
+                 f_shuffle="shuffle_data_11_D", f_bias=1200.):
         super().__init__(ndim, bounds, f_shift, f_matrix, f_shuffle, f_bias)
         self.n_funcs = 5
         self.p = np.array([0.1, 0.2, 0.2, 0.2, 0.3])
@@ -404,8 +415,10 @@ class F122015(F102015):
         self.n3 = int(np.ceil(self.p[2] * self.ndim)) + self.n2
         self.n4 = int(np.ceil(self.p[3] * self.ndim)) + self.n3
         self.idx1, self.idx2 = self.f_shuffle[:self.n1], self.f_shuffle[self.n1:self.n2]
-        self.idx3, self.idx4, self.idx5 = self.f_shuffle[self.n2:self.n3], self.f_shuffle[self.n3:self.n4], self.f_shuffle[self.n4:self.ndim]
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix, "f_shuffle": self.f_shuffle}
+        self.idx3, self.idx4, self.idx5 = self.f_shuffle[self.n2:self.n3], self.f_shuffle[
+            self.n3:self.n4], self.f_shuffle[self.n4:self.ndim]
+        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix,
+                      "f_shuffle": self.f_shuffle}
 
     def evaluate(self, x, *args):
         self.n_fe += 1
@@ -454,7 +467,8 @@ class F132015(CecBenchmark):
         self.dim_default = 10
         self.dim_max = 30
         self.dim_supported = [10, 30]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2015")
         self.f_shift = self.check_matrix_data(f_shift, needed_dim=True).ravel().reshape((5, -1))
         self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
@@ -481,7 +495,7 @@ class F132015(CecBenchmark):
         w1 = operator.calculate_weight(x - self.f_shift[1], self.xichmas[1])
 
         # 3. Rotated Bent Cigar Function f1
-        z2 = np.dot(self.f_matrix[2*self.ndim:3*self.ndim, :], x - self.f_shift[2])
+        z2 = np.dot(self.f_matrix[2 * self.ndim:3 * self.ndim, :], x - self.f_shift[2])
         g2 = self.lamdas[2] * operator.bent_cigar_func(z2) + self.bias[2]
         w2 = operator.calculate_weight(x - self.f_shift[2], self.xichmas[2])
 
@@ -540,12 +554,12 @@ class F142015(F132015):
         w0 = operator.calculate_weight(x - self.f_shift[0], self.xichmas[0])
 
         # 2. Rotated Rastrigin’s Function f12
-        z1 = np.dot(self.f_matrix[self.ndim:2*self.ndim, :], x - self.f_shift[1])
+        z1 = np.dot(self.f_matrix[self.ndim:2 * self.ndim, :], x - self.f_shift[1])
         g1 = self.lamdas[1] * self.g1(z1) + self.bias[1]
         w1 = operator.calculate_weight(x - self.f_shift[1], self.xichmas[1])
 
         # 3. Rotated High Conditioned Elliptic Function f13
-        z2 = np.dot(self.f_matrix[2*self.ndim:3*self.ndim, :], x - self.f_shift[2])
+        z2 = np.dot(self.f_matrix[2 * self.ndim:3 * self.ndim, :], x - self.f_shift[2])
         g2 = self.lamdas[2] * self.g2(z2) + self.bias[2]
         w2 = operator.calculate_weight(x - self.f_shift[2], self.xichmas[2])
 
@@ -575,7 +589,8 @@ class F152015(CecBenchmark):
         self.dim_default = 10
         self.dim_max = 30
         self.dim_supported = [10, 30]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2015")
         self.f_shift = self.check_matrix_data(f_shift, needed_dim=True).ravel().reshape((5, -1))
         self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
@@ -598,12 +613,12 @@ class F152015(CecBenchmark):
         w0 = operator.calculate_weight(x - self.f_shift[0], self.xichmas[0])
 
         # 2. Rotated Rastrigin’s Function f12
-        z1 = np.dot(self.f_matrix[self.ndim:2*self.ndim, :], x - self.f_shift[1])
+        z1 = np.dot(self.f_matrix[self.ndim:2 * self.ndim, :], x - self.f_shift[1])
         g1 = self.lamdas[1] * operator.rastrigin_func(z1) + self.bias[1]
         w1 = operator.calculate_weight(x - self.f_shift[1], self.xichmas[1])
 
         # 3. Rotated Schwefel's Function f4
-        z2 = np.dot(self.f_matrix[2*self.ndim:3*self.ndim, :], x - self.f_shift[2])
+        z2 = np.dot(self.f_matrix[2 * self.ndim:3 * self.ndim, :], x - self.f_shift[2])
         g2 = self.lamdas[2] * operator.modified_schwefel_func(z2) + self.bias[2]
         w2 = operator.calculate_weight(x - self.f_shift[2], self.xichmas[2])
 

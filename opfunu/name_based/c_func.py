@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import numpy as np
+
 from opfunu.benchmark import Benchmark
 
 
@@ -42,7 +43,7 @@ class CamelThreeHump(Benchmark):
     def evaluate(self, x, *args):
         self.check_solution(x)
         self.n_fe += 1
-        return 2*x[0]**2 - 1.05*x[0]**4 + x[0]**6/6 + x[0]*x[1] + x[1]**2
+        return 2 * x[0] ** 2 - 1.05 * x[0] ** 4 + x[0] ** 6 / 6 + x[0] * x[1] + x[1] ** 2
 
 
 class CamelSixHump(Benchmark):
@@ -80,7 +81,7 @@ class CamelSixHump(Benchmark):
     def evaluate(self, x, *args):
         self.check_solution(x)
         self.n_fe += 1
-        return (4 - 2.1*x[0]**2 + x[0]**4/3)*x[0]**2 + x[0]*x[1] + (4*x[1]**2 - 4)*x[1]**2
+        return (4 - 2.1 * x[0] ** 2 + x[0] ** 4 / 3) * x[0] ** 2 + x[0] * x[1] + (4 * x[1] ** 2 - 4) * x[1] ** 2
 
 
 class ChenBird(Benchmark):
@@ -117,7 +118,8 @@ class ChenBird(Benchmark):
     def evaluate(self, x, *args):
         self.check_solution(x)
         self.n_fe += 1
-        return -0.001/(0.001**2 + (x[0] - 0.4*x[1] - 0.1)**2) - 0.001/(0.001**2 + (2*x[0] + x[1] - 1.5)**2)
+        return -0.001 / (0.001 ** 2 + (x[0] - 0.4 * x[1] - 0.1) ** 2) - 0.001 / (
+                    0.001 ** 2 + (2 * x[0] + x[1] - 1.5) ** 2)
 
 
 class ChenV(Benchmark):
@@ -158,7 +160,9 @@ class ChenV(Benchmark):
     def evaluate(self, x, *args):
         self.check_solution(x)
         self.n_fe += 1
-        return -0.001/(0.001**2 + (x[0]**2 + x[1]**2 - 1)**2) - 0.001/(0.001**2 + (x[0]**2 + x[1]**2 - 0.5)**2) - 0.001/(0.001**2 + (x[0]**2 - x[1]**2)**2)
+        return -0.001 / (0.001 ** 2 + (x[0] ** 2 + x[1] ** 2 - 1) ** 2) - 0.001 / (
+                    0.001 ** 2 + (x[0] ** 2 + x[1] ** 2 - 0.5) ** 2) - 0.001 / (
+                    0.001 ** 2 + (x[0] ** 2 - x[1] ** 2) ** 2)
 
 
 class Chichinadze(Benchmark):
@@ -167,8 +171,8 @@ class Chichinadze(Benchmark):
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
     name = "Chichinadze Function"
-    latex_formula = r'f(x) = x_{1}^{2} - 12 x_{1} + 8 \sin\left(\frac{5}{2} \pi x_{1}\right)' +\
-        r'+ 10 \cos\left(\frac{1}{2} \pi x_{1}\right) + 11 - 0.2 \frac{\sqrt{5}}{e^{\frac{1}{2} \left(x_{2} -0.5 \right)^{2}}}'
+    latex_formula = r'f(x) = x_{1}^{2} - 12 x_{1} + 8 \sin\left(\frac{5}{2} \pi x_{1}\right)' + \
+                    r'+ 10 \cos\left(\frac{1}{2} \pi x_{1}\right) + 11 - 0.2 \frac{\sqrt{5}}{e^{\frac{1}{2} \left(x_{2} -0.5 \right)^{2}}}'
     latex_formula_dimension = r'd = 2'
     latex_formula_bounds = r'x_i \in [-30, 30], \forall i \in \llbracket 1, d\rrbracket'
     latex_formula_global_optimum = r'f(6.189866586965680, 0.5) = -42.94438701899098'
@@ -234,7 +238,7 @@ class ChungReynolds(Benchmark):
     def evaluate(self, x, *args):
         self.check_solution(x)
         self.n_fe += 1
-        return np.sum(x**2)**2
+        return np.sum(x ** 2) ** 2
 
 
 class Cigar(Benchmark):
@@ -300,20 +304,22 @@ class Cola(Benchmark):
         super().__init__()
         self.dim_changeable = False
         self.dim_default = 17
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[0.0, 4.0]] + [[-4., 4.] for _ in range(self.dim_default-1)]))
+        self.check_ndim_and_bounds(ndim, bounds,
+                                   np.array([[0.0, 4.0]] + [[-4., 4.] for _ in range(self.dim_default - 1)]))
         self.f_global = 11.7464
         self.x_global = np.array([0.651906, 1.30194, 0.099242, -0.883791, -0.8796, 0.204651, -3.28414, 0.851188,
-                                -3.46245, 2.53245, -0.895246, 1.40992, -3.07367, 1.96257, -2.97872, -0.807849, -1.68978])
+                                  -3.46245, 2.53245, -0.895246, 1.40992, -3.07367, 1.96257, -2.97872, -0.807849,
+                                  -1.68978])
         self.d = np.asarray([[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [1.27, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [1.69, 1.43, 0, 0, 0, 0, 0, 0, 0, 0],
-                 [2.04, 2.35, 2.43, 0, 0, 0, 0, 0, 0, 0],
-                 [3.09, 3.18, 3.26, 2.85, 0, 0, 0, 0, 0, 0],
-                 [3.20, 3.22, 3.27, 2.88, 1.55, 0, 0, 0, 0, 0],
-                 [2.86, 2.56, 2.58, 2.59, 3.12, 3.06, 0, 0, 0, 0],
-                 [3.17, 3.18, 3.18, 3.12, 1.31, 1.64, 3.00, 0, 0, 0],
-                 [3.21, 3.18, 3.18, 3.17, 1.70, 1.36, 2.95, 1.32, 0, 0],
-                 [2.38, 2.31, 2.42, 1.94, 2.85, 2.81, 2.56, 2.91, 2.97, 0.]])
+                             [1.27, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                             [1.69, 1.43, 0, 0, 0, 0, 0, 0, 0, 0],
+                             [2.04, 2.35, 2.43, 0, 0, 0, 0, 0, 0, 0],
+                             [3.09, 3.18, 3.26, 2.85, 0, 0, 0, 0, 0, 0],
+                             [3.20, 3.22, 3.27, 2.88, 1.55, 0, 0, 0, 0, 0],
+                             [2.86, 2.56, 2.58, 2.59, 3.12, 3.06, 0, 0, 0, 0],
+                             [3.17, 3.18, 3.18, 3.12, 1.31, 1.64, 3.00, 0, 0, 0],
+                             [3.21, 3.18, 3.18, 3.17, 1.70, 1.36, 2.95, 1.32, 0, 0],
+                             [2.38, 2.31, 2.42, 1.94, 2.85, 2.81, 2.56, 2.91, 2.97, 0.]])
 
     def evaluate(self, x, *args):
         self.check_solution(x)
@@ -443,7 +449,7 @@ class CosineMixture(Benchmark):
         self.dim_changeable = True
         self.dim_default = 2
         self.check_ndim_and_bounds(ndim, bounds, np.array([[-1.0, 1.0] for _ in range(self.dim_default)]))
-        self.f_global = -0.9*self.ndim
+        self.f_global = -0.9 * self.ndim
         self.x_global = -1 * np.ones(self.ndim)
 
     def evaluate(self, x, *args):
@@ -458,8 +464,8 @@ class CrossInTray(Benchmark):
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
     name = "Cross-in-Tray Function"
-    latex_formula = r'f(x) = - 0.0001 \left(\left|{e^{\left|{100' +\
-        r'- \frac{\sqrt{x_{1}^{2} + x_{2}^{2}}}{\pi}}\right|} \sin\left(x_{1}\right) \sin\left(x_{2}\right)}\right| + 1\right)^{0.1}'
+    latex_formula = r'f(x) = - 0.0001 \left(\left|{e^{\left|{100' + \
+                    r'- \frac{\sqrt{x_{1}^{2} + x_{2}^{2}}}{\pi}}\right|} \sin\left(x_{1}\right) \sin\left(x_{2}\right)}\right| + 1\right)^{0.1}'
     latex_formula_dimension = r'd = 2'
     latex_formula_bounds = r'x_i \in [-10, 10], \forall i \in \llbracket 1, d\rrbracket'
     latex_formula_global_optimum = r'f(±1.349406608602084, ±1.349406608602084) = -2.062611870822739'
@@ -484,14 +490,15 @@ class CrossInTray(Benchmark):
         self.f_global = -2.062611870822739
         self.x_global = np.array([1.349406608602084, 1.349406608602084])
         self.x_globals = np.array([(1.349406685353340, 1.349406608602084),
-                               (-1.349406685353340, 1.349406608602084),
-                               (1.349406685353340, -1.349406608602084),
-                               (-1.349406685353340, -1.349406608602084)])
+                                   (-1.349406685353340, 1.349406608602084),
+                                   (1.349406685353340, -1.349406608602084),
+                                   (-1.349406685353340, -1.349406608602084)])
 
     def evaluate(self, x, *args):
         self.check_solution(x)
         self.n_fe += 1
-        return (-0.0001 * (np.abs(np.sin(x[0]) * np.sin(x[1]) * np.exp(abs(100 - np.sqrt(x[0] ** 2 + x[1] ** 2) / np.pi)))+ 1) ** (0.1))
+        return (-0.0001 * (np.abs(
+            np.sin(x[0]) * np.sin(x[1]) * np.exp(abs(100 - np.sqrt(x[0] ** 2 + x[1] ** 2) / np.pi))) + 1) ** (0.1))
 
 
 class CrossLegTable(Benchmark):
@@ -501,7 +508,7 @@ class CrossLegTable(Benchmark):
     """
     name = "Cross-Leg-Table Function"
     latex_formula = r'f(x) = -\frac{1}{\left(\left|{e^{\left|{100 - \frac{\sqrt{x_{1}^{2} + x_{2}^{2}}}{\pi}}\right|}' + \
-        r'\sin\left(x_{1}\right) \sin\left(x_{2}\right)}\right| + 1\right)^{0.1}}'
+                    r'\sin\left(x_{1}\right) \sin\left(x_{2}\right)}\right| + 1\right)^{0.1}}'
     latex_formula_dimension = r'd = 2'
     latex_formula_bounds = r'x_i \in [-10, 10], \forall i \in \llbracket 1, d\rrbracket'
     latex_formula_global_optimum = r'f(0, 0) = -1'
@@ -541,7 +548,7 @@ class CrownedCross(Benchmark):
     """
     name = "Cross-Leg-Table Function"
     latex_formula = r'f(x) = 0.0001 \left(\left|{e^{\left|{100 - \frac{\sqrt{x_{1}^{2} + x_{2}^{2}}}{\pi}}\right|}' + \
-        r'\sin\left(x_{1}\right) \sin\left(x_{2}\right)}\right| + 1\right)^{0.1}'
+                    r'\sin\left(x_{1}\right) \sin\left(x_{2}\right)}\right| + 1\right)^{0.1}'
     latex_formula_dimension = r'd = 2'
     latex_formula_bounds = r'x_i \in [-10, 10], \forall i \in \llbracket 1, d\rrbracket'
     latex_formula_global_optimum = r'f(0, 0) = 0.0001'
@@ -608,7 +615,7 @@ class Csendes(Benchmark):
     def evaluate(self, x, *args):
         self.check_solution(x)
         self.n_fe += 1
-        return np.sum((x ** 6.0) * (2.0 + np.sin(1.0/(x+self.epsilon))))
+        return np.sum((x ** 6.0) * (2.0 + np.sin(1.0 / (x + self.epsilon))))
 
 
 class Cube(Benchmark):

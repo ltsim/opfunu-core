@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import numpy as np
+
 from opfunu.benchmark import Benchmark
 
 
@@ -14,8 +15,8 @@ class Giunta(Benchmark):
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
     name = "Giunta Function"
-    latex_formula = r'f(x) = 0.6 + \sum_{i=1}^{n} \left[\sin^{2}\left(1' +\
-        r'- \frac{16}{15} x_i\right) - \frac{1}{50} \sin\left(4 - \frac{64}{15} x_i\right) - \sin\left(1 - \frac{16}{15} x_i\right)\right]'
+    latex_formula = r'f(x) = 0.6 + \sum_{i=1}^{n} \left[\sin^{2}\left(1' + \
+                    r'- \frac{16}{15} x_i\right) - \frac{1}{50} \sin\left(4 - \frac{64}{15} x_i\right) - \sin\left(1 - \frac{16}{15} x_i\right)\right]'
     latex_formula_dimension = r'd = 2'
     latex_formula_bounds = r'x_i \in [-1, 1], \forall i \in \llbracket 1, d\rrbracket'
     latex_formula_global_optimum = r'f([0.4673200277395354, 0.4673200169591304]) = 0.06447042053690566'
@@ -176,7 +177,7 @@ class Gear(Benchmark):
     """
     name = "Gear Problem"
     latex_formula = r'f(x) = \left \{ \frac{1.0}{6.931}' + \
-       r'- \frac{\lfloor x_1\rfloor \lfloor x_2 \rfloor } {\lfloor x_3 \rfloor \lfloor x_4 \rfloor } \right\}^2'
+                    r'- \frac{\lfloor x_1\rfloor \lfloor x_2 \rfloor } {\lfloor x_3 \rfloor \lfloor x_4 \rfloor } \right\}^2'
     latex_formula_dimension = r'd = 4'
     latex_formula_bounds = r'x_i \in [12, 60], \forall i \in \llbracket 1, d\rrbracket'
     latex_formula_global_optimum = r'f(16, 19, 43, 49) = 2.7 \cdot 10^{-12}'

@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import numpy as np
+
 from opfunu.cec_based.cec import CecBenchmark
 from opfunu.utils import operator
 
@@ -46,7 +47,8 @@ class F12014(CecBenchmark):
         self.dim_default = 30
         self.dim_max = 100
         self.dim_supported = [10, 20, 30, 50, 100]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2014")
         self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
@@ -132,7 +134,7 @@ class F42014(F12014):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 2.048*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 2.048 * (x - self.f_shift) / 100)
         return operator.rosenbrock_func(z, shift=1.0) + self.f_bias
 
 
@@ -186,7 +188,7 @@ class F62014(F12014):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 0.5*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 0.5 * (x - self.f_shift) / 100)
         return operator.weierstrass_norm_func(z) + self.f_bias
 
 
@@ -212,7 +214,7 @@ class F72014(F12014):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 600.*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 600. * (x - self.f_shift) / 100)
         return operator.griewank_func(z) + self.f_bias
 
 
@@ -253,7 +255,8 @@ class F82014(CecBenchmark):
         self.dim_default = 30
         self.dim_max = 100
         self.dim_supported = [10, 20, 30, 50, 100]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2014")
         self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
         self.f_bias = f_bias
@@ -294,7 +297,7 @@ class F92014(F12014):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 5.12*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 5.12 * (x - self.f_shift) / 100)
         return operator.rastrigin_func(z) + self.f_bias
 
 
@@ -310,7 +313,8 @@ class F102014(F82014):
     latex_formula_bounds = r'x_i \in [-100.0, 100.0], \forall i \in  [1, D]'
     latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_1(x^*) = bias = 1000.0'
 
-    characteristics = ["Local optima’s number is huge", "The second better local optimum is far from the global optimum"]
+    characteristics = ["Local optima’s number is huge",
+                       "The second better local optimum is far from the global optimum"]
 
     def __init__(self, ndim=None, bounds=None, f_shift="shift_data_10", f_bias=1000.):
         super().__init__(ndim, bounds, f_shift, f_bias)
@@ -318,7 +322,7 @@ class F102014(F82014):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        return operator.modified_schwefel_func(1000*(x - self.f_shift)/100) + self.f_bias
+        return operator.modified_schwefel_func(1000 * (x - self.f_shift) / 100) + self.f_bias
 
 
 class F112014(F12014):
@@ -339,7 +343,8 @@ class F112014(F12014):
     # n_basins = 1
     # n_valleys = 1
 
-    characteristics = ["Local optima’s number is huge", "The second better local optimum is far from the global optimum"]
+    characteristics = ["Local optima’s number is huge",
+                       "The second better local optimum is far from the global optimum"]
 
     def __init__(self, ndim=None, bounds=None, f_shift="shift_data_11", f_matrix="M_11_D", f_bias=1100.):
         super().__init__(ndim, bounds, f_shift, f_matrix, f_bias)
@@ -347,7 +352,7 @@ class F112014(F12014):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 1000*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 1000 * (x - self.f_shift) / 100)
         return operator.modified_schwefel_func(z) + self.f_bias
 
 
@@ -379,7 +384,7 @@ class F122014(F12014):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 5*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 5 * (x - self.f_shift) / 100)
         return operator.katsuura_func(z) + self.f_bias
 
 
@@ -409,7 +414,7 @@ class F132014(F12014):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 5*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 5 * (x - self.f_shift) / 100)
         return operator.happy_cat_func(z, shift=-1.0) + self.f_bias
 
 
@@ -440,7 +445,7 @@ class F142014(F12014):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 5*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 5 * (x - self.f_shift) / 100)
         return operator.hgbat_func(z, shift=-1.0) + self.f_bias
 
 
@@ -469,7 +474,7 @@ class F152014(F12014):
     def evaluate(self, x, *args):
         self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 5*(x - self.f_shift)/100)
+        z = np.dot(self.f_matrix, 5 * (x - self.f_shift) / 100)
         return operator.expanded_griewank_rosenbrock_func(z) + self.f_bias
 
 
@@ -534,13 +539,15 @@ class F172014(CecBenchmark):
 
     characteristics = ["Different properties for different variables subcomponents"]
 
-    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_17", f_matrix="M_17_D", f_shuffle="shuffle_data_17_D", f_bias=1700.):
+    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_17", f_matrix="M_17_D",
+                 f_shuffle="shuffle_data_17_D", f_bias=1700.):
         super().__init__()
         self.dim_changeable = True
         self.dim_default = 30
         self.dim_max = 100
         self.dim_supported = [10, 20, 30, 50, 100]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2014")
         self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
@@ -553,11 +560,13 @@ class F172014(CecBenchmark):
         self.p = np.array([0.3, 0.3, 0.4])
         self.n1 = int(np.ceil(self.p[0] * self.ndim))
         self.n2 = int(np.ceil(self.p[1] * self.ndim)) + self.n1
-        self.idx1, self.idx2, self.idx3 = self.f_shuffle[:self.n1], self.f_shuffle[self.n1:self.n2], self.f_shuffle[self.n2:self.ndim]
+        self.idx1, self.idx2, self.idx3 = self.f_shuffle[:self.n1], self.f_shuffle[self.n1:self.n2], self.f_shuffle[
+            self.n2:self.ndim]
         self.g1 = operator.modified_schwefel_func
         self.g2 = operator.rastrigin_func
         self.g3 = operator.elliptic_func
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix, "f_shuffle": self.f_shuffle}
+        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix,
+                      "f_shuffle": self.f_shuffle}
 
     def evaluate(self, x, *args):
         self.n_fe += 1
@@ -599,7 +608,8 @@ class F182014(F172014):
 
     characteristics = ["Different properties for different variables subcomponents"]
 
-    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_18", f_matrix="M_18_D", f_shuffle="shuffle_data_18_D", f_bias=1800.):
+    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_18", f_matrix="M_18_D",
+                 f_shuffle="shuffle_data_18_D", f_bias=1800.):
         super().__init__(ndim, bounds, f_shift, f_matrix, f_shuffle, f_bias)
 
     def evaluate(self, x, *args):
@@ -644,7 +654,8 @@ class F192014(F172014):
 
     characteristics = ["Different properties for different variables subcomponents"]
 
-    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_19", f_matrix="M_19_D", f_shuffle="shuffle_data_19_D", f_bias=1900.):
+    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_19", f_matrix="M_19_D",
+                 f_shuffle="shuffle_data_19_D", f_bias=1900.):
         super().__init__(ndim, bounds, f_shift, f_matrix, f_shuffle, f_bias)
         self.n_funcs = 4
         self.p = np.array([0.2, 0.2, 0.3, 0.3])
@@ -697,7 +708,8 @@ class F202014(F192014):
 
     characteristics = ["Different properties for different variables subcomponents"]
 
-    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_20", f_matrix="M_20_D", f_shuffle="shuffle_data_20_D", f_bias=2000.):
+    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_20", f_matrix="M_20_D",
+                 f_shuffle="shuffle_data_20_D", f_bias=2000.):
         super().__init__(ndim, bounds, f_shift, f_matrix, f_shuffle, f_bias)
 
     def evaluate(self, x, *args):
@@ -710,6 +722,7 @@ class F202014(F192014):
                 operator.discus_func(mz[self.n1:self.n2]) +
                 operator.expanded_griewank_rosenbrock_func(mz[self.n2:self.n3]) +
                 operator.rastrigin_func(mz[self.n3:]) + self.f_bias)
+
 
 class F212014(F172014):
     """
@@ -742,7 +755,8 @@ class F212014(F172014):
 
     characteristics = ["Different properties for different variables subcomponents"]
 
-    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_21", f_matrix="M_21_D", f_shuffle="shuffle_data_21_D", f_bias=2100.):
+    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_21", f_matrix="M_21_D",
+                 f_shuffle="shuffle_data_21_D", f_bias=2100.):
         super().__init__(ndim, bounds, f_shift, f_matrix, f_shuffle, f_bias)
         self.n_funcs = 5
         self.p = np.array([0.1, 0.2, 0.2, 0.2, 0.3])
@@ -750,9 +764,9 @@ class F212014(F172014):
         self.n2 = int(np.ceil(self.p[1] * self.ndim)) + self.n1
         self.n3 = int(np.ceil(self.p[2] * self.ndim)) + self.n2
         self.n4 = int(np.ceil(self.p[3] * self.ndim)) + self.n3
-        self.idx1, self.idx2, self.idx3 = self.f_shuffle[:self.n1], self.f_shuffle[self.n1:self.n2], self.f_shuffle[self.n2:self.n3]
+        self.idx1, self.idx2, self.idx3 = self.f_shuffle[:self.n1], self.f_shuffle[self.n1:self.n2], self.f_shuffle[
+            self.n2:self.n3]
         self.idx4, self.idx5 = self.f_shuffle[self.n3:self.n4], self.f_shuffle[self.n4:self.ndim]
-
 
     def evaluate(self, x, *args):
         self.n_fe += 1
@@ -798,7 +812,8 @@ class F222014(F212014):
 
     characteristics = ["Different properties for different variables subcomponents"]
 
-    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_22", f_matrix="M_22_D", f_shuffle="shuffle_data_22_D", f_bias=2200.):
+    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_22", f_matrix="M_22_D",
+                 f_shuffle="shuffle_data_22_D", f_bias=2200.):
         super().__init__(ndim, bounds, f_shift, f_matrix, f_shuffle, f_bias)
 
     def evaluate(self, x, *args):
@@ -812,6 +827,7 @@ class F222014(F212014):
                 operator.expanded_griewank_rosenbrock_func(mz[self.n2:self.n3]) +
                 operator.modified_schwefel_func(mz[self.n3:self.n4]) +
                 operator.ackley_func(mz[self.n4:]) + self.f_bias)
+
 
 class F232014(CecBenchmark):
     """
@@ -849,7 +865,8 @@ class F232014(CecBenchmark):
         self.dim_default = 30
         self.dim_max = 100
         self.dim_supported = [10, 20, 30, 50, 100]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-100., 100.] for _ in range(self.dim_default)]))
+        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
+                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2014")
         self.f_shift = self.check_shift_matrix(f_shift)[:, :self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix)[:, :self.ndim]
@@ -860,11 +877,11 @@ class F232014(CecBenchmark):
         self.xichmas = [10, 20, 30, 40, 50]
         self.lamdas = [1., 1e-6, 1e-26, 1e-6, 1e-6]
         self.bias = [0, 100, 200, 300, 400]
-        self.g0 = F42014(self.ndim, None, self.f_shift[0], self.f_matrix[:self.ndim,:], f_bias=0)
-        self.g1 = F12014(self.ndim, None, self.f_shift[1], self.f_matrix[self.ndim:2*self.ndim,:], f_bias=0)
-        self.g2 = F22014(self.ndim, None, self.f_shift[2], self.f_matrix[2*self.ndim:3*self.ndim,:], f_bias=0)
-        self.g3 = F32014(self.ndim, None, self.f_shift[3], self.f_matrix[3*self.ndim:4*self.ndim,:], f_bias=0)
-        self.g4 = F12014(self.ndim, None, self.f_shift[4], self.f_matrix[4*self.ndim:5*self.ndim, :],f_bias=0)
+        self.g0 = F42014(self.ndim, None, self.f_shift[0], self.f_matrix[:self.ndim, :], f_bias=0)
+        self.g1 = F12014(self.ndim, None, self.f_shift[1], self.f_matrix[self.ndim:2 * self.ndim, :], f_bias=0)
+        self.g2 = F22014(self.ndim, None, self.f_shift[2], self.f_matrix[2 * self.ndim:3 * self.ndim, :], f_bias=0)
+        self.g3 = F32014(self.ndim, None, self.f_shift[3], self.f_matrix[3 * self.ndim:4 * self.ndim, :], f_bias=0)
+        self.g4 = F12014(self.ndim, None, self.f_shift[4], self.f_matrix[4 * self.ndim:5 * self.ndim, :], f_bias=0)
         self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix}
 
     def evaluate(self, x, *args):
@@ -1133,11 +1150,11 @@ class F282014(F232014):
         self.xichmas = [10, 20, 30, 40, 50]
         self.lamdas = [2.5, 10, 2.5, 5e-4, 1e-6]
         self.bias = [0, 100, 200, 300, 400]
-        self.g0 = F152014(self.ndim, None, self.f_shift[0], self.f_matrix[:self.ndim,:], f_bias=0)
-        self.g1 = F132014(self.ndim, None, self.f_shift[1], self.f_matrix[self.ndim:2*self.ndim,:], f_bias=0)
-        self.g2 = F112014(self.ndim, None, self.f_shift[2], self.f_matrix[2*self.ndim:3*self.ndim,:], f_bias=0)
-        self.g3 = F162014(self.ndim, None, self.f_shift[3], self.f_matrix[3*self.ndim:4*self.ndim,:], f_bias=0)
-        self.g4 = F12014(self.ndim, None, self.f_shift[4], self.f_matrix[4*self.ndim:5*self.ndim,:], f_bias=0)
+        self.g0 = F152014(self.ndim, None, self.f_shift[0], self.f_matrix[:self.ndim, :], f_bias=0)
+        self.g1 = F132014(self.ndim, None, self.f_shift[1], self.f_matrix[self.ndim:2 * self.ndim, :], f_bias=0)
+        self.g2 = F112014(self.ndim, None, self.f_shift[2], self.f_matrix[2 * self.ndim:3 * self.ndim, :], f_bias=0)
+        self.g3 = F162014(self.ndim, None, self.f_shift[3], self.f_matrix[3 * self.ndim:4 * self.ndim, :], f_bias=0)
+        self.g4 = F12014(self.ndim, None, self.f_shift[4], self.f_matrix[4 * self.ndim:5 * self.ndim, :], f_bias=0)
         self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix}
 
     def evaluate(self, x, *args):
@@ -1185,7 +1202,8 @@ class F292014(F232014):
     convex = False
     characteristics = ["Asymmetrical", "Different properties around different local optima"]
 
-    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_29", f_matrix="M_29_D", f_shuffle="shuffle_data_29_D", f_bias=2900.):
+    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_29", f_matrix="M_29_D",
+                 f_shuffle="shuffle_data_29_D", f_bias=2900.):
         super().__init__(ndim, bounds, f_shift, f_matrix, f_bias)
         self.n_funcs = 3
         self.xichmas = [10, 30, 50]
@@ -1193,7 +1211,7 @@ class F292014(F232014):
         self.bias = [0, 100, 200]
         self.x_global = self.f_shift[0]
         self.g0 = F172014(self.ndim, None, self.f_shift[0], f_shuffle=f_shuffle, f_bias=0)
-        self.g1 = F182014(self.ndim, None, self.f_shift[1], f_shuffle=f_shuffle,f_bias=0)
+        self.g1 = F182014(self.ndim, None, self.f_shift[1], f_shuffle=f_shuffle, f_bias=0)
         self.g2 = F192014(self.ndim, None, self.f_shift[2], f_shuffle=f_shuffle, f_bias=0)
         self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix}
 
@@ -1235,7 +1253,8 @@ class F302014(F232014):
     characteristics = ["Asymmetrical", "Different properties around different local optima",
                        "Different properties for different variables subcomponents"]
 
-    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_30", f_matrix="M_30_D", f_shuffle="shuffle_data_30_D", f_bias=3000.):
+    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_30", f_matrix="M_30_D",
+                 f_shuffle="shuffle_data_30_D", f_bias=3000.):
         super().__init__(ndim, bounds, f_shift, f_matrix, f_bias)
         self.n_funcs = 3
         self.xichmas = [10, 30, 50]
@@ -1243,8 +1262,10 @@ class F302014(F232014):
         self.bias = [0, 100, 200]
         self.x_global = self.f_shift[0]
         self.g0 = F202014(self.ndim, None, self.f_shift[0], self.f_matrix[:self.ndim, :], f_shuffle=f_shuffle, f_bias=0)
-        self.g1 = F212014(self.ndim, None, self.f_shift[1], self.f_matrix[self.ndim:2*self.ndim, :], f_shuffle=f_shuffle,f_bias=0)
-        self.g2 = F222014(self.ndim, None, self.f_shift[2], self.f_matrix[2*self.ndim:3*self.ndim, :], f_shuffle=f_shuffle, f_bias=0)
+        self.g1 = F212014(self.ndim, None, self.f_shift[1], self.f_matrix[self.ndim:2 * self.ndim, :],
+                          f_shuffle=f_shuffle, f_bias=0)
+        self.g2 = F222014(self.ndim, None, self.f_shift[2], self.f_matrix[2 * self.ndim:3 * self.ndim, :],
+                          f_shuffle=f_shuffle, f_bias=0)
         self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix}
 
     def evaluate(self, x, *args):

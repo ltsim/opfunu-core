@@ -5,6 +5,7 @@
 # --------------------------------------------------%
 
 import numpy as np
+
 from opfunu.utils.visualize import draw_2d, draw_3d, draw_latex
 
 
@@ -105,7 +106,8 @@ class Benchmark:
                 else:
                     self._bounds = np.array(bounds).T
                     if self._bounds.shape[0] != self.dim_default:
-                        raise ValueError(f"{self.__class__.__name__} is fixed problem with {self._ndim} variables. Please setup the correct bounds!")
+                        raise ValueError(
+                            f"{self.__class__.__name__} is fixed problem with {self._ndim} variables. Please setup the correct bounds!")
                     else:
                         self._ndim = self.dim_default
 
@@ -159,7 +161,8 @@ class Benchmark:
         val: bool
              Always true if dim_changeable = True, Else return ndim == self.ndim
         """
-        assert (ndim is None) or (isinstance(ndim, int) and (not ndim < 0)), "The dimension ndim must be None or a positive integer"
+        assert (ndim is None) or (
+                    isinstance(ndim, int) and (not ndim < 0)), "The dimension ndim must be None or a positive integer"
         if ndim is None:
             return True
         else:
@@ -253,7 +256,8 @@ class Benchmark:
         """
         return np.random.uniform(self.lb, self.ub)
 
-    def plot_latex(self, latex, title="Latex equation", figsize=(8, 3), dpi=500, filename=None, exts=(".png", ".pdf"), verbose=True):
+    def plot_latex(self, latex, title="Latex equation", figsize=(8, 3), dpi=500, filename=None, exts=(".png", ".pdf"),
+                   verbose=True):
         """
         Draw latex equation.
 
@@ -276,8 +280,10 @@ class Benchmark:
         """
         draw_latex(latex, title=title, figsize=figsize, dpi=dpi, filename=filename, exts=exts, verbose=verbose)
 
-    def plot_2d(self, selected_dims=None, n_points=500, ct_cmap="viridis", ct_levels=30, ct_alpha=0.7, fixed_strategy="mean", fixed_values=None,
-                title="Contour map of the function", x_label=None, y_label=None, figsize=(10, 8), filename=None, exts=(".png", ".pdf"), verbose=True):
+    def plot_2d(self, selected_dims=None, n_points=500, ct_cmap="viridis", ct_levels=30, ct_alpha=0.7,
+                fixed_strategy="mean", fixed_values=None,
+                title="Contour map of the function", x_label=None, y_label=None, figsize=(10, 8), filename=None,
+                exts=(".png", ".pdf"), verbose=True):
         """
         Draw 2D contour of the function.
 
@@ -322,11 +328,15 @@ class Benchmark:
             Show the figure or not. It will not show on linux system.
         """
         draw_2d(self.evaluate, self.lb, self.ub, selected_dims=selected_dims, n_points=n_points,
-                ct_cmap=ct_cmap, ct_levels=ct_levels, ct_alpha=ct_alpha, fixed_strategy=fixed_strategy, fixed_values=fixed_values,
-                title=title, x_label=x_label, y_label=y_label, figsize=figsize, filename=filename, exts=exts, verbose=verbose)
+                ct_cmap=ct_cmap, ct_levels=ct_levels, ct_alpha=ct_alpha, fixed_strategy=fixed_strategy,
+                fixed_values=fixed_values,
+                title=title, x_label=x_label, y_label=y_label, figsize=figsize, filename=filename, exts=exts,
+                verbose=verbose)
 
-    def plot_3d(self, selected_dims=None, n_points=500, ct_cmap="viridis", ct_levels=30, ct_alpha=0.7, fixed_strategy="mean", fixed_values=None,
-                title="3D visualization of the function", x_label=None, y_label=None, figsize=(10, 8), filename=None, exts=(".png", ".pdf"), verbose=True):
+    def plot_3d(self, selected_dims=None, n_points=500, ct_cmap="viridis", ct_levels=30, ct_alpha=0.7,
+                fixed_strategy="mean", fixed_values=None,
+                title="3D visualization of the function", x_label=None, y_label=None, figsize=(10, 8), filename=None,
+                exts=(".png", ".pdf"), verbose=True):
         """
         Draw 3D of the function.
 
@@ -371,5 +381,7 @@ class Benchmark:
             Show the figure or not. It will not show on linux system.
         """
         draw_3d(self.evaluate, self.lb, self.ub, selected_dims=selected_dims, n_points=n_points,
-                ct_cmap=ct_cmap, ct_levels=ct_levels, ct_alpha=ct_alpha, fixed_strategy=fixed_strategy, fixed_values=fixed_values,
-                title=title, x_label=x_label, y_label=y_label, figsize=figsize, filename=filename, exts=exts, verbose=verbose)
+                ct_cmap=ct_cmap, ct_levels=ct_levels, ct_alpha=ct_alpha, fixed_strategy=fixed_strategy,
+                fixed_values=fixed_values,
+                title=title, x_label=x_label, y_label=y_label, figsize=figsize, filename=filename, exts=exts,
+                verbose=verbose)
