@@ -96,7 +96,7 @@ addopts = "-v --tb=short --strict-markers"
 
 [tool.mypy]
 files = ["opfunu"]
-exclude = ["tests/", "scripts/"]
+exclude = ["tests/", "scripts/", "docs/", "examples/"]
 warn_unused_ignores = true
 warn_redundant_casts = true
 warn_unreachable = true
