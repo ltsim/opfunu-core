@@ -1,3 +1,9 @@
+# Version 1.0.5.1
+
++ Compatibility with Pypy 3.11
+
+---------------------------------------------------------------------
+
 # Version 1.0.5
 
 + Maintenance for later versions of Python 3.10
