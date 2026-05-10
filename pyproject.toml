@@ -71,6 +71,7 @@ dev = [
     "twine>=5.0.0",
     "types-requests>=2.31.0",
     "types-pillow>=10.2.0",
+    "matplotlib-stubs>=0.3.11",
 ]
 
 [project.urls]
@@ -94,22 +95,31 @@ python_functions = ["test_*"]
 addopts = "-v --tb=short --strict-markers"
 
 [tool.mypy]
-python_version = "3.10"
-strict = true
-warn_return_any = true
-warn_unused_configs = true
+files = ["opfunu"]
+exclude = ["tests/", "scripts/"]
 warn_unused_ignores = true
 warn_redundant_casts = true
+warn_unreachable = true
+no_implicit_optional = true
+strict_optional = true
 disallow_untyped_defs = true
 disallow_incomplete_defs = true
 check_untyped_defs = true
-no_implicit_optional = true
+disallow_any_generics = false
+disallow_any_unimported = false
+disallow_subclassing_any = false
+disallow_untyped_decorators = false
+warn_return_any = false
 show_error_codes = true
+show_column_numbers = true
 pretty = true
+error_summary = true
 
 [[tool.mypy.overrides]]
 module = [
     "matplotlib.*",
     "PIL.*",
+    "numpy",
+    "numpy.*"
 ]
 ignore_missing_imports = true

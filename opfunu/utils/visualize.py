@@ -9,16 +9,20 @@ import re
 from io import BytesIO
 from pathlib import Path
 
+import matplotlib.colors as mc
 import matplotlib.pyplot as plt
 import numpy as np
 import requests
 from PIL import Image
-from matplotlib import cm
 from matplotlib.ticker import ScalarFormatter, FuncFormatter
 
-cmap = [(0, '#2f9599'), (0.45, '#eeeeee'), (1, '#8800ff')]
-cmap = cm.colors.LinearSegmentedColormap.from_list('Custom', cmap, N=256)
-SUPPORTED_ARRAY = (list, tuple, np.ndarray)
+cmap = mc.LinearSegmentedColormap.from_list(
+    'Custom',
+    [(0, '#2f9599'), (0.45, '#eeeeee'), (1, '#8800ff')],
+    N=256
+)
+
+SUPPORTED_ARRAY = list, tuple, np.ndarray
 
 
 def __clean_filename__(filename):
