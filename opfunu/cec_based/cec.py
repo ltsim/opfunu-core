@@ -60,11 +60,14 @@ class CecBenchmark(Benchmark, abc.ABC):
 
     modality = True  # Number of ambiguous peaks, unknown # peaks
 
+    characteristics: list[str]
+
     # n_basins = 1
     # n_valleys = 1
 
     def __init__(self):
         super().__init__()
+
         self._bounds = None
         self._ndim = None
         self.dim_changeable = True
@@ -136,7 +139,7 @@ class CecBenchmark(Benchmark, abc.ABC):
         else:
             raise ValueError(f"m_group is positive integer!")
 
-    def load_shift_data(self, filename=None):
+    def load_shift_data(self, filename):
         data = np.genfromtxt(f"{self.support_path}/{filename}.txt", dtype=float)
         return data.reshape((-1))
 
@@ -173,12 +176,16 @@ class CecBenchmark(Benchmark, abc.ABC):
         dim_max : The maximum number of variables that the function is supported
         dim_support : List of the supported dimensions
         """
+
         # if not self.dim_changeable and (len(x) != self._ndim):
+
         if len(x) != self._ndim:
             raise ValueError(
                 f"{self.__class__.__name__} problem, the length of solution should have {self._ndim} variables!")
+
         if (dim_max is not None) and (len(x) > dim_max):
             raise ValueError(f"{self.__class__.__name__} problem is not supported ndim > {dim_max}!")
+
         if (dim_support is not None) and (len(x) not in dim_support):
             raise ValueError(f"{self.__class__.__name__} problem is only supported ndim in {dim_support}!")
 
@@ -197,9 +204,11 @@ class CecBenchmark(Benchmark, abc.ABC):
         default_bounds : np.ndarray
             List of initial lower bound and upper bound values
         """
+
         if ndim is None:
             self._bounds = default_bounds if bounds is None else np.array(bounds).T
             self._ndim = self._bounds.shape[0]
+
             if dim_max is not None and self._ndim > dim_max:
                 raise ValueError(f"{self.__class__.__name__} problem supports maximum {dim_max} variables!")
         else:
