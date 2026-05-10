@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "opfunu-core"
-version = "1.0.5.1"
+dynamic = ["version"]
 description = "Opfunu-core: An Open-source Python Library for Optimization Benchmark Functions"
 readme = "README.md"
 license = { text = "GPL-3.0-only" }
@@ -86,6 +86,9 @@ exclude = ["tests*", "examples*"]
 
 [tool.setuptools]
 include-package-data = true
+
+[tool.setuptools.dynamic]
+version = {attr = "opfunu.__version__"}
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
