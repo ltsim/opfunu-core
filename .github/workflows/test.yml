@@ -3,7 +3,7 @@ name: Compatibility and code verification tests
 on:
   pull_request:
     branches:
-      - main
+      - master
 
 jobs:
   test:
