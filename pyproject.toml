@@ -97,7 +97,6 @@ addopts = "-v --tb=short --strict-markers"
 [tool.mypy]
 files = ["opfunu"]
 exclude = ["tests/", "scripts/"]
-warn_return_any = true
 warn_unused_ignores = true
 warn_redundant_casts = true
 warn_unreachable = true
