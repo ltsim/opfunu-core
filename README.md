@@ -1,9 +1,5 @@
 # opfunu-core
 
-![Python3](https://img.shields.io/badge/Python-blue?style=for-the-badge&logo=python&logoColor=white)
-![PyPy3](https://img.shields.io/badge/Pypy-green?style=for-the-badge&logo=pypy&logoColor=white)
-![NumPy](https://img.shields.io/badge/Numpy-purple?style=for-the-badge&logo=numpy&logoColor=white)
-
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg?style=flat-square)](https://www.gnu.org/licenses/gpl-3.0)
 ![PyPI - Version](https://img.shields.io/pypi/v/opfunu-core?style=flat-square)
 ![PyPI - Implementation](https://img.shields.io/pypi/implementation/opfunu-core?style=flat-square)
