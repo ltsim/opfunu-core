@@ -1,6 +1,8 @@
 name: Compatibility and code verification tests
 
 on:
+  release:
+    types: [published]
   pull_request:
     branches:
       - master
