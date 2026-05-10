@@ -13,7 +13,6 @@ This library is a maintenance version, a fork of [OPFUNU (Optimization Reference
 * **Free software:** GNU General Public License (GPL) V3 license
 * **Total problems**: > 500 problems
 * **Documentation:** https://opfunu.readthedocs.io
-* **Python versions:** >= 3.10.x
 
 # Citation Request 
 
