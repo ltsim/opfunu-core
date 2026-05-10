@@ -1,11 +1,18 @@
-# OPFUNU (Core)
+# opfunu-core
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3620960.svg)](https://doi.org/10.5281/zenodo.3620960)
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+![Python3](https://img.shields.io/badge/Pypy-blue?style=for-the-badge&logo=python&logoColor=white)
+![PyPy3](https://img.shields.io/badge/Pypy-green?style=for-the-badge&logo=pypy&logoColor=white)
+![NumPy](https://img.shields.io/badge/Numpy-purple?style=for-the-badge&logo=numpy&logoColor=white)
 
-This is a fork from [OPFUNU (OPtimization benchmark FUnctions in NUmpy)](https://github.com/thieu1995/opfunu). A largest python library for cutting-edge numerical 
-optimization benchmark functions. Contains all CEC competition functions from 2005, 2008, 2010, 2013, 2014, 2015, 
-2017, 2019, 2020, 2021, 2022. Besides, more than 300 traditional functions with different dimensions are implemented. But maintained to work with the latest versions of NumPy and Python.
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg?style=flat-square)](https://www.gnu.org/licenses/gpl-3.0)
+![PyPI - Version](https://img.shields.io/pypi/v/opfunu-core?style=flat-square)
+![PyPI - Implementation](https://img.shields.io/pypi/implementation/opfunu-core?style=flat-square)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/opfunu-core?style=flat-square)
+![PyPI - Wheel](https://img.shields.io/pypi/wheel/opfunu-core?style=flat-square)
+![GitHub Release Date](https://img.shields.io/github/release-date/ltsim/opfunu-core.svg?style=flat-square)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/opfunu-core?style=flat-square)
+
+This library is a maintenance version, a fork of [OPFUNU (Optimization Reference Functions in NUMPy)](https://github.com/thieu1995/opfunu). Is one of the most comprehensive Python libraries of numerical optimization reference functions. It contains all the functions from the CEC competitions of 2005, 2008, 2010, 2013, 2014, 2015, 2017, 2019, 2020, 2021, and 2022. In addition, it implements over 300 traditional functions with varying dimensions.
 
 * **Free software:** GNU General Public License (GPL) V3 license
 * **Total problems**: > 500 problems
@@ -17,7 +24,7 @@ optimization benchmark functions. Contains all CEC competition functions from 20
 
 Please include these citations if you plan to use this library:
 
-- LaTeX:
+**LaTeX Style**
 
 ```bibtex
   @article{Van_Thieu_2024_Opfunu,
@@ -30,16 +37,20 @@ Please include these citations if you plan to use this library:
   }
 ```
 
-- APA:
-  
-  Van Thieu, N. (2024). Opfunu: An Open-source Python Library for Optimization Benchmark Functions. <i>Journal of Open Research Software</i>, <i>12</i>(1), 8. https://doi.org/10.5334/jors.508
+**APA Style**
 
+Van Thieu, N. (2024). **Opfunu: An Open-source Python Library for Optimization Benchmark Functions.** _Journal of Open Research Software_, _12_(1), 8. https://doi.org/10.5334/jors.508
 
 # Installation and Usage
 
 ### Install with pip
 
 Install the [current PyPI release](https://pypi.python.org/pypi/opfunu):
+```sh
+$ pip install opfunu-core
+```
+
+Install from Github:
 ```sh
 $ pip install git+https://github.com/ltsim/opfunu-core
 ```
@@ -69,7 +80,6 @@ $ python
 
 Let's go through some examples.
 
-
 ### Examples
 
 How to get the function and use it
@@ -90,7 +100,6 @@ func = F102014(ndim=50)
 func.evaluate(func.create_solution())
 ```
 
-
 #### 2nd way
 
 ```python
@@ -105,7 +114,6 @@ func.evaluate(func.create_solution())
 all_funcs_2014 = opfunu.get_functions_based_classname("2014")
 print(all_funcs_2014)
 ```
-
 
 ### How to draw 2D, 3D 
 
@@ -131,20 +139,6 @@ draw_2d(f0.evaluate, f0.lb, f0.ub, selected_dims=(2, 3), n_points=300)
 draw_3d(f0.evaluate, f0.lb, f0.ub, selected_dims=(2, 3), n_points=300)
 ```
 
-<table>
-  <tr>
-    <td style="text-align: center;">
-      <img src=".github/img/2d-f12010.png" alt="F1-2010 CEC 2D" style="width: 100%;">
-      <p style="text-align: center;">F1-2010 CEC 2D</p>
-    </td>
-    <td style="text-align: center;">
-      <img src=".github/img/3d-f12010.png" alt="F1-2010 CEC 3D" style="width: 100%;">
-    <p style="text-align: center;">F1-2010 CEC 3D</p>
-    </td>
-  </tr>
-</table>
-
-
 ### How to draw Latex
 
 Two ways if you want to draw latex equation. 
@@ -166,11 +160,7 @@ draw_latex(f0.latex_formula_bounds, title="Boundary for Function")
 draw_latex(f1.latex_formula_dimension, title=None)
 ```
 
-
-
 For more usage examples please look at [examples](/examples) folder.
-
-
 
 # Contributing
 
@@ -178,17 +168,15 @@ There are lots of ways how you can contribute to Permetrics's development, and y
 you can report problems or make feature requests on the [issues](/issues) pages. To facilitate contributions, 
 please check for the guidelines in the [CONTRIBUTING.md](/CONTRIBUTING.md) file.
 
-
 # Official channels 
 
-* [Official source code repository](https://github.com/thieu1995/opfunu)
+* [Official source code repository](https://github.com/ltsim/opfunu-core)
 * [Official document](https://opfunu.readthedocs.io/)
-* [Download releases](https://pypi.org/project/opfunu/) 
-* [Issue tracker](https://github.com/thieu1995/opfunu/issues) 
-* [Notable changes log](/ChangeLog.md)
-* [Official discussion group](https://t.me/+fRVCJGuGJg1mNDg1)
-
+* [Download releases](https://pypi.org/project/opfunu-core/) 
+* [Issue tracker](https://github.com/ltsim/opfunu-core/issues) 
+* [Notable changes log](/CHANGELOG.md)
 
 ---
 
-Developed by: [Thieu](mailto:nguyenthieu2102@gmail.com?Subject=Opfunu_QUESTIONS) @ 2023
+* Maintained by: [LTSIM](mailto:tsim@cucei.udg.mx) @ 2026
+* Developed by: [Thieu](mailto:nguyenthieu2102@gmail.com?Subject=Opfunu_QUESTIONS) @ 2023
