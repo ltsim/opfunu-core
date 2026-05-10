@@ -12,6 +12,9 @@
 ![GitHub Release Date](https://img.shields.io/github/release-date/ltsim/opfunu-core.svg?style=flat-square)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/opfunu-core?style=flat-square)
 
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/ltsim/opfunu-core/publish.yml?style=flat-square&logo=pypi&label=Publish)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/ltsim/opfunu-core/test.yml?style=flat-square&logo=pytest&label=Testing)
+
 This library is a maintenance version, a fork of [OPFUNU (Optimization Reference Functions in NUMPy)](https://github.com/thieu1995/opfunu). Is one of the most comprehensive Python libraries of numerical optimization reference functions. It contains all the functions from the CEC competitions of 2005, 2008, 2010, 2013, 2014, 2015, 2017, 2019, 2020, 2021, and 2022. In addition, it implements over 300 traditional functions with varying dimensions.
 
 * **Free software:** GNU General Public License (GPL) V3 license
