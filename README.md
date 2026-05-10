@@ -1,6 +1,6 @@
 # opfunu-core
 
-![Python3](https://img.shields.io/badge/Pypy-blue?style=for-the-badge&logo=python&logoColor=white)
+![Python3](https://img.shields.io/badge/Python-blue?style=for-the-badge&logo=python&logoColor=white)
 ![PyPy3](https://img.shields.io/badge/Pypy-green?style=for-the-badge&logo=pypy&logoColor=white)
 ![NumPy](https://img.shields.io/badge/Numpy-purple?style=for-the-badge&logo=numpy&logoColor=white)
 
