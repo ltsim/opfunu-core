@@ -14,7 +14,6 @@ This library is a maintenance version, a fork of [OPFUNU (Optimization Reference
 * **Total problems**: > 500 problems
 * **Documentation:** https://opfunu.readthedocs.io
 * **Python versions:** >= 3.10.x
-* **Dependencies:** numpy, matplotlib
 
 # Citation Request 
 
