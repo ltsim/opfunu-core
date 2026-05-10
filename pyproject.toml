@@ -96,7 +96,7 @@ addopts = "-v --tb=short --strict-markers"
 
 [tool.mypy]
 files = ["opfunu"]
-exclude = ["tests/", "scripts/"]
+exclude = ["tests/", "scripts/", "docs/", "examples/"]
 warn_unused_ignores = true
 warn_redundant_casts = true
 warn_unreachable = true
@@ -104,11 +104,11 @@ no_implicit_optional = true
 strict_optional = true
 disallow_untyped_defs = true
 disallow_incomplete_defs = true
-check_untyped_defs = true
 disallow_any_generics = false
 disallow_any_unimported = false
 disallow_subclassing_any = false
 disallow_untyped_decorators = false
+check_untyped_defs = true
 warn_return_any = false
 show_error_codes = true
 show_column_numbers = true
