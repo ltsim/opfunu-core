@@ -42,7 +42,7 @@ Van Thieu, N. (2024). **Opfunu: An Open-source Python Library for Optimization B
 
 ### Install with pip
 
-Install the [current PyPI release](https://pypi.python.org/pypi/opfunu):
+Install the [current PyPI release](https://pypi.python.org/pypi/opfunu-core):
 ```sh
 $ pip install opfunu-core
 ```
