@@ -1,3 +1,9 @@
+# Version 1.0.5.1.1
+
++ Library dependency update
+
+---------------------------------------------------------------------
+
 # Version 1.0.5.1
 
 + Compatibility with Pypy 3.11
