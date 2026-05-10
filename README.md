@@ -1,9 +1,5 @@
 # opfunu-core
 
-![Python3](https://img.shields.io/badge/Pypy-blue?style=for-the-badge&logo=python&logoColor=white)
-![PyPy3](https://img.shields.io/badge/Pypy-green?style=for-the-badge&logo=pypy&logoColor=white)
-![NumPy](https://img.shields.io/badge/Numpy-purple?style=for-the-badge&logo=numpy&logoColor=white)
-
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg?style=flat-square)](https://www.gnu.org/licenses/gpl-3.0)
 ![PyPI - Version](https://img.shields.io/pypi/v/opfunu-core?style=flat-square)
 ![PyPI - Implementation](https://img.shields.io/pypi/implementation/opfunu-core?style=flat-square)
@@ -20,8 +16,6 @@ This library is a maintenance version, a fork of [OPFUNU (Optimization Reference
 * **Free software:** GNU General Public License (GPL) V3 license
 * **Total problems**: > 500 problems
 * **Documentation:** https://opfunu.readthedocs.io
-* **Python versions:** >= 3.10.x
-* **Dependencies:** numpy, matplotlib
 
 # Citation Request 
 
