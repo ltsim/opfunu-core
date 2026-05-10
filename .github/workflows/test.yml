@@ -1,4 +1,4 @@
-name: Compatibility and code verification tests
+name: Testing code
 
 on:
   release:
