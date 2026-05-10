@@ -1,4 +1,4 @@
-name: CI
+name: Compatibility and code verification tests
 
 on:
   pull_request:
