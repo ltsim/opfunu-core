@@ -1,3 +1,10 @@
+# Version 1.0.5
+
++ Maintenance for later versions of Python 3.10
++ Updating dependencies like Numpy
+
+---------------------------------------------------------------------
+
 # Version 1.0.4
 
 + Fix p value in F10 and F17 of CEC-2017

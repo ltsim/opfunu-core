@@ -1,4 +1,4 @@
-# Contributing to Opfunu
+# Contributing
 
 We appreciate your interest in contributing to Opfunu! This guide details how to contribute in a way that is efficient 
 for everyone.
@@ -20,7 +20,7 @@ All contributors are expected to adhere to the project's [Code of Conduct](CODE_
 1. Fork the project repository and clone your fork:
 
     ```
-    git clone https://github.com/thieu1995/opfunu.git
+    git clone https://github.com/ltsim/opfunu-core.git
     ```
 
 2. Create a new branch for your changes:
@@ -73,7 +73,7 @@ python -m pytest
 
 ## Pull Requests
 
-[Pull requests](https://github.com/thieu1995/opfunu/pulls) are the best way to propose changes to the codebase. We 
+[Pull requests](https://github.com/ltsim/opfunu-core/pulls) are the best way to propose changes to the codebase. We 
 actively welcome your pull requests:
 
 1. Fork the repo and create your branch from `main`.
@@ -84,12 +84,12 @@ actively welcome your pull requests:
 
 ## Issue Tracking
 
-We use [GitHub issues](https://github.com/thieu1995/opfunu/issues) to track public bugs and requests. Please ensure 
+We use [GitHub issues](https://github.com/ltsim/opfunu-core/issues) to track public bugs and requests. Please ensure 
 your description is clear and has sufficient instructions to be able to reproduce the issue.
 
 ## Any questions?
 
-Don't hesitate to contact us if you have any questions. Contact [@thieu1995](mailto:nguyenthieu2102@gmail.com)
+Don't hesitate to contact us if you have any questions. Contact [@ltsim](mailto:tsim@cucei.udg.mx)
 or ask your question on issues.
 
 Thank you for your contributions!
