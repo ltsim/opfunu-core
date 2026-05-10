@@ -5,6 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "opfunu-core"
 dynamic = ["version"]
+
 description = "Opfunu-core: An Open-source Python Library for Optimization Benchmark Functions"
 readme = "README.md"
 license = { text = "GPL-3.0-only" }
