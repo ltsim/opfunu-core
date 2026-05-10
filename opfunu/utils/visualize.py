@@ -6,16 +6,14 @@
 
 import platform
 import re
-
 from io import BytesIO
 from pathlib import Path
 
+import matplotlib.colors as mc
+import matplotlib.pyplot as plt
 import numpy as np
 import requests
-import matplotlib.pyplot as plt
-
 from PIL import Image
-import matplotlib.colors as mc
 from matplotlib.ticker import ScalarFormatter, FuncFormatter
 
 cmap = mc.LinearSegmentedColormap.from_list(

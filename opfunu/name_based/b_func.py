@@ -82,7 +82,7 @@ class Beale(Benchmark):
         self.check_solution(x)
         self.n_fe += 1
         return (1.5 - x[0] + x[0] * x[1]) ** 2 + (2.25 - x[0] + x[0] * x[1] ** 2) ** 2 + (
-                    2.625 - x[0] + x[0] * x[1] ** 3) ** 2
+                2.625 - x[0] + x[0] * x[1] ** 3) ** 2
 
 
 class BiggsExp02(Benchmark):
@@ -282,7 +282,7 @@ class Bird(Benchmark):
         self.check_solution(x)
         self.n_fe += 1
         return (np.sin(x[0]) * np.exp((1 - np.cos(x[1])) ** 2) + np.cos(x[1]) * np.exp((1 - np.sin(x[0])) ** 2) + (
-                    x[0] - x[1]) ** 2)
+                x[0] - x[1]) ** 2)
 
 
 class Bohachevsky1(Benchmark):
@@ -509,7 +509,7 @@ class Branin01(Benchmark):
         self.check_solution(x)
         self.n_fe += 1
         return ((x[1] - (5.1 / (4 * np.pi ** 2)) * x[0] ** 2 + 5 * x[0] / np.pi - 6) ** 2 + 10 * (
-                    1 - 1 / (8 * np.pi)) * np.cos(x[0]) + 10)
+                1 - 1 / (8 * np.pi)) * np.cos(x[0]) + 10)
 
 
 class Branin02(Benchmark):

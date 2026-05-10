@@ -119,7 +119,7 @@ class ChenBird(Benchmark):
         self.check_solution(x)
         self.n_fe += 1
         return -0.001 / (0.001 ** 2 + (x[0] - 0.4 * x[1] - 0.1) ** 2) - 0.001 / (
-                    0.001 ** 2 + (2 * x[0] + x[1] - 1.5) ** 2)
+                0.001 ** 2 + (2 * x[0] + x[1] - 1.5) ** 2)
 
 
 class ChenV(Benchmark):
@@ -161,8 +161,8 @@ class ChenV(Benchmark):
         self.check_solution(x)
         self.n_fe += 1
         return -0.001 / (0.001 ** 2 + (x[0] ** 2 + x[1] ** 2 - 1) ** 2) - 0.001 / (
-                    0.001 ** 2 + (x[0] ** 2 + x[1] ** 2 - 0.5) ** 2) - 0.001 / (
-                    0.001 ** 2 + (x[0] ** 2 - x[1] ** 2) ** 2)
+                0.001 ** 2 + (x[0] ** 2 + x[1] ** 2 - 0.5) ** 2) - 0.001 / (
+                0.001 ** 2 + (x[0] ** 2 - x[1] ** 2) ** 2)
 
 
 class Chichinadze(Benchmark):

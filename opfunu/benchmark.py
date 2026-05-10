@@ -162,7 +162,7 @@ class Benchmark:
              Always true if dim_changeable = True, Else return ndim == self.ndim
         """
         assert (ndim is None) or (
-                    isinstance(ndim, int) and (not ndim < 0)), "The dimension ndim must be None or a positive integer"
+                isinstance(ndim, int) and (not ndim < 0)), "The dimension ndim must be None or a positive integer"
         if ndim is None:
             return True
         else:
