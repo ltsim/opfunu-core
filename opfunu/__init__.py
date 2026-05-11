@@ -35,7 +35,6 @@ import re
 
 from . import cec_based
 from . import name_based
-from .utils.visualize import draw_2d, draw_3d, draw_latex
 
 FUNC_DATABASE = inspect.getmembers(name_based, inspect.isclass)
 CEC_DATABASE = inspect.getmembers(cec_based, inspect.isclass)

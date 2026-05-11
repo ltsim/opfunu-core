@@ -6,8 +6,7 @@
 
 # Version 1.0.5.1.2
 
-+ Remove support for Pypy
-+ Fix dependency for more
++ Remove visualize (Matplotlib and Pillow)
 
 ---------------------------------------------------------------------
 
