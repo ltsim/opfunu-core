@@ -4,7 +4,14 @@
 #       Github: https://github.com/thieu1995        %                         
 # --------------------------------------------------%
 
+import typing
+
 import numpy as np
+
+from opfunu.utils import latex
+
+if typing.TYPE_CHECKING:
+    from IPython.display import Latex
 
 
 class Benchmark:
@@ -35,11 +42,12 @@ class Benchmark:
         Whether we can change the benchmark function `x` variable length (i.e., the dimensionality of the problem)
     """
 
-    name = "Benchmark name"
-    latex_formula = r'f(\mathbf{x})'
-    latex_formula_dimension = r'd \in \mathbb{N}_{+}^{*}'
-    latex_formula_bounds = r'x_i \in [-2\pi, 2\pi], \forall i \in \llbracket 1, d\rrbracket'
-    latex_formula_global_optimum = r'f(0, ..., 0)=-1, \text{ for}, m=5, \beta=15'
+    name: typing.ClassVar[str] = "Benchmark name"
+    latex_formula: typing.ClassVar[str] = r'f(\mathbf{x})'
+    latex_formula_dimension: typing.ClassVar[str] = r'd \in \mathbb{N}_{+}^{*}'
+    latex_formula_bounds: typing.ClassVar[str] = r'x_i \in [-2\pi, 2\pi], \forall i \in \llbracket 1, d\rrbracket'
+    latex_formula_global_optimum: typing.ClassVar[str] = r'f(0, ..., 0)=-1, \text{ for}, m=5, \beta=15'
+
     continuous = True
     linear = False
     convex = True
@@ -67,6 +75,22 @@ class Benchmark:
         self.n_fe = 0
         self.paras = {}
         self.epsilon = 1e-8
+
+    @classmethod
+    def render_formula(cls) -> "Latex":
+        return latex.render_latex(cls.latex_formula)
+
+    @classmethod
+    def render_formula_dimension(cls) -> "Latex":
+        return latex.render_latex(cls.latex_formula_dimension)
+
+    @classmethod
+    def render_formula_bounds(cls) -> "Latex":
+        return latex.render_latex(cls.latex_formula_bounds)
+
+    @classmethod
+    def render_formula_global_optimum(cls) -> "Latex":
+        return latex.render_latex(cls.latex_formula_global_optimum)
 
     def check_ndim_and_bounds(self, ndim=None, bounds=None, default_bounds=None):
         """
