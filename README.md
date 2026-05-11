@@ -112,51 +112,6 @@ all_funcs_2014 = opfunu.get_functions_based_classname("2014")
 print(all_funcs_2014)
 ```
 
-### How to draw 2D, 3D 
-
-Two ways if you want to draw functions that available in Opfunu.
-
-```python
-from opfunu.cec_based import F12010
-f0 = F12010()
-
-# Visualize opfunu function using method in object
-f0.plot_2d(selected_dims=(2, 3), n_points=300, ct_cmap="viridis", ct_levels=30, ct_alpha=0.7,
-           fixed_strategy="mean", fixed_values=None, title="Contour map of the F1 CEC 2010 function",
-           x_label=None, y_label=None, figsize=(10, 8), filename="2d-f12010", exts=(".png", ".pdf"), verbose=True)
-
-f0.plot_3d(selected_dims=(1, 6), n_points=500, ct_cmap="viridis", ct_levels=30, ct_alpha=0.7,
-           fixed_strategy="mean", fixed_values=None, title="3D visualization of the F1 CEC 2010 function",
-           x_label=None, y_label=None, figsize=(10, 8), filename="3d-f12010", exts=(".png", ".pdf"), verbose=True)
-
-## Visualize opfunu function using utility function
-from opfunu import draw_2d, draw_3d
-
-draw_2d(f0.evaluate, f0.lb, f0.ub, selected_dims=(2, 3), n_points=300)
-draw_3d(f0.evaluate, f0.lb, f0.ub, selected_dims=(2, 3), n_points=300)
-```
-
-### How to draw Latex
-
-Two ways if you want to draw latex equation. 
-
-```python
-from opfunu.cec_based import F12010
-from opfunu.name_based import Ackley02
-from opfunu.utils.visualize import draw_latex
-
-f0 = F12010()
-f1 = Ackley02()
-
-## Plot using function inside the object
-f0.plot_latex(f0.latex_formula, figsize=(8, 3), dpi=500, title="Latex equation", exts=(".png", ".pdf"), verbose=True)
-f1.plot_latex(f1.latex_formula_global_optimum, figsize=(8, 3), dpi=500, title="Global optimum", verbose=True)
-
-## Plot using module
-draw_latex(f0.latex_formula_bounds, title="Boundary for Function")
-draw_latex(f1.latex_formula_dimension, title=None)
-```
-
 For more usage examples please look at [examples](/examples) folder.
 
 # Contributing
