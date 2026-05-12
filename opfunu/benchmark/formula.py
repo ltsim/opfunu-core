@@ -1,4 +1,5 @@
 import typing
+import abc
 
 from opfunu.utils import latex
 
@@ -6,7 +7,7 @@ if typing.TYPE_CHECKING:
     from IPython.display import Latex
 
 
-class LatexFormula(type):
+class LatexFormula(abc.ABCMeta):
     name: typing.ClassVar[str] = "Benchmark name"
     latex_formula: typing.ClassVar[str] = r'f(\mathbf{x})'
     latex_formula_dimension: typing.ClassVar[str] = r'd \in \mathbb{N}_{+}^{*}'
