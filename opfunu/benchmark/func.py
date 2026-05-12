@@ -70,7 +70,6 @@ class FuncBenchmark(Benchmark):
         self.f_global = None
         self.x_global = None
         self.n_fe = 0
-        self.epsilon = 1e-8
 
     def check_ndim_and_bounds(self, ndim=None, bounds=None, default_bounds=None):
         """

@@ -81,7 +81,6 @@ class CecBenchmark(Benchmark):
         self.f_bias = None
         self.support_path = None
         self.verbose = False
-        self.epsilon = 1e-8
 
     def make_support_data_path(self, data_name):
         self.support_path = importlib.resources.files("opfunu").joinpath(f"cec_based/{data_name}")

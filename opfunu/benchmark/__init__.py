@@ -12,6 +12,10 @@ class Benchmark(abc.ABC):
     def __init__(self):
         self.paras = {}
 
+    @property
+    def epsilon(self):
+        return 1e-8
+
     @abc.abstractmethod
     def check_ndim_and_bounds(self, ndim=None, bounds=None, default_bounds=None):
         """
