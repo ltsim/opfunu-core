@@ -3,8 +3,6 @@
 #       Email: nguyenthieu2102@gmail.com            %                                                    
 #       Github: https://github.com/thieu1995        %                         
 # --------------------------------------------------%
-
-import abc
 import importlib.resources
 
 import numpy as np
@@ -12,7 +10,7 @@ import numpy as np
 from opfunu.benchmark import Benchmark
 
 
-class CecBenchmark(Benchmark, abc.ABC):
+class CecBenchmark(Benchmark):
     """
     Defines an abstract class for optimization benchmark problem.
 
