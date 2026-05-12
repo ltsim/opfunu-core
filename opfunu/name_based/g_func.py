@@ -6,10 +6,10 @@
 
 import numpy as np
 
-from opfunu.benchmark import Benchmark
+from opfunu.benchmark.func import FuncBenchmark
 
 
-class Giunta(Benchmark):
+class Giunta(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -48,7 +48,7 @@ class Giunta(Benchmark):
         return 0.6 + np.sum(np.sin(arg) + np.sin(arg) ** 2 + np.sin(4 * arg) / 50.)
 
 
-class GoldsteinPrice(Benchmark):
+class GoldsteinPrice(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -92,7 +92,7 @@ class GoldsteinPrice(Benchmark):
         return a * b
 
 
-class Griewank(Benchmark):
+class Griewank(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -130,7 +130,7 @@ class Griewank(Benchmark):
         return np.sum(x ** 2 / 4000) - np.prod(np.cos(x / np.sqrt(i))) + 1
 
 
-class Gulf(Benchmark):
+class Gulf(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -171,7 +171,7 @@ class Gulf(Benchmark):
         return np.sum(vec ** 2)
 
 
-class Gear(Benchmark):
+class Gear(FuncBenchmark):
     """
     .. [1] Gavana, A. Global Optimization Benchmarks and AMPGO retrieved 2015
     """

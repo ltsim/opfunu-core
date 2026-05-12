@@ -6,10 +6,10 @@
 
 import numpy as np
 
-from opfunu.benchmark import Benchmark
+from opfunu.benchmark.func import FuncBenchmark
 
 
-class Rana(Benchmark):
+class Rana(FuncBenchmark):
     """
     .. [1]  Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization Problems
     Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.

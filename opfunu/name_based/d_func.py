@@ -6,10 +6,10 @@
 
 import numpy as np
 
-from opfunu.benchmark import Benchmark
+from opfunu.benchmark.func import FuncBenchmark
 
 
-class Damavandi(Benchmark):
+class Damavandi(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -51,7 +51,7 @@ class Damavandi(Benchmark):
         return factor1 * factor2
 
 
-class Deb01(Benchmark):
+class Deb01(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -88,7 +88,7 @@ class Deb01(Benchmark):
         return -(1.0 / self.ndim) * np.sum(np.sin(5 * np.pi * x) ** 6.0)
 
 
-class Deb03(Benchmark):
+class Deb03(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -125,7 +125,7 @@ class Deb03(Benchmark):
         return -(1.0 / self.ndim) * np.sum(np.sin(5 * np.pi * (x ** 0.75 - 0.05)) ** 6.0)
 
 
-class Decanomial(Benchmark):
+class Decanomial(FuncBenchmark):
     """
     .. [1] Gavana, A. Global Optimization Benchmarks and AMPGO retrieved 2015
     """
@@ -167,7 +167,7 @@ class Decanomial(Benchmark):
         return 0.001 * (abs(val) + abs(val2)) ** 2.
 
 
-class Deceptive(Benchmark):
+class Deceptive(FuncBenchmark):
     """
     .. [1] Gavana, A. Global Optimization Benchmarks and AMPGO retrieved 2015
     """
@@ -219,7 +219,7 @@ class Deceptive(Benchmark):
         return -((1.0 / self.ndim) * np.sum(g)) ** beta
 
 
-class DeckkersAarts(Benchmark):
+class DeckkersAarts(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -257,7 +257,7 @@ class DeckkersAarts(Benchmark):
         return (1.e5 * x[0] ** 2 + x[1] ** 2 - (x[0] ** 2 + x[1] ** 2) ** 2 + 1.e-5 * (x[0] ** 2 + x[1] ** 2) ** 4)
 
 
-class DeflectedCorrugatedSpring(Benchmark):
+class DeflectedCorrugatedSpring(FuncBenchmark):
     """
     .. [1] Gavana, A. Global Optimization Benchmarks and AMPGO retrieved 2015
     """
@@ -295,7 +295,7 @@ class DeflectedCorrugatedSpring(Benchmark):
         return -np.cos(K * np.sqrt(np.sum((x - self.alpha) ** 2))) + 0.1 * np.sum((x - self.alpha) ** 2)
 
 
-class DeVilliersGlasser01(Benchmark):
+class DeVilliersGlasser01(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -334,7 +334,7 @@ class DeVilliersGlasser01(Benchmark):
         return sum((x[0] * (x[1] ** t) * np.sin(x[2] * t + x[3]) - y) ** 2.0)
 
 
-class DeVilliersGlasser02(Benchmark):
+class DeVilliersGlasser02(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -374,7 +374,7 @@ class DeVilliersGlasser02(Benchmark):
         return np.sum((x[0] * (x[1] ** t) * np.tanh(x[2] * t + np.sin(x[3] * t)) * np.cos(t * np.exp(x[4])) - y) ** 2.0)
 
 
-class DixonPrice(Benchmark):
+class DixonPrice(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -413,7 +413,7 @@ class DixonPrice(Benchmark):
         return np.sum(s) + (x[0] - 1.0) ** 2.0
 
 
-class Dolan(Benchmark):
+class Dolan(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -451,7 +451,7 @@ class Dolan(Benchmark):
                     - 0.1 * x[3] * np.cos(x[3] + x[4] - x[0]) + 0.2 * x[4] ** 2 - x[1] - 1))
 
 
-class DropWave(Benchmark):
+class DropWave(FuncBenchmark):
     """
     .. [1] Gavana, A. Global Optimization Benchmarks and AMPGO retrieved 2015
     """

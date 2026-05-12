@@ -7,10 +7,10 @@
 
 import numpy as np
 
-from opfunu.benchmark import Benchmark
+from opfunu.benchmark.func import FuncBenchmark
 
 
-class Easom(Benchmark):
+class Easom(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -49,7 +49,7 @@ class Easom(Benchmark):
         return -np.cos(x[0]) * np.cos(x[1]) * np.exp(-a)
 
 
-class ElAttarVidyasagarDutta(Benchmark):
+class ElAttarVidyasagarDutta(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -86,7 +86,7 @@ class ElAttarVidyasagarDutta(Benchmark):
         return ((x[0] ** 2 + x[1] - 10) ** 2 + (x[0] + x[1] ** 2 - 7) ** 2 + (x[0] ** 2 + x[1] ** 3 - 1) ** 2)
 
 
-class EggCrate(Benchmark):
+class EggCrate(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -123,7 +123,7 @@ class EggCrate(Benchmark):
         return x[0] ** 2 + x[1] ** 2 + 25 * (np.sin(x[0]) ** 2 + np.sin(x[1]) ** 2)
 
 
-class EggHolder(Benchmark):
+class EggHolder(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -163,7 +163,7 @@ class EggHolder(Benchmark):
         return np.sum(vec)
 
 
-class Exponential(Benchmark):
+class Exponential(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -200,7 +200,7 @@ class Exponential(Benchmark):
         return -np.exp(-0.5 * np.sum(x ** 2.0))
 
 
-class Exp2(Benchmark):
+class Exp2(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -239,7 +239,7 @@ class Exp2(Benchmark):
         return np.sum(vec)
 
 
-class Eckerle4(Benchmark):
+class Eckerle4(FuncBenchmark):
     """
     [1] Eckerle, K., NIST (1979). Circular Interference Transmittance Study.
     [2] https://www.itl.nist.gov/div898/strd/nls/data/eckerle4.shtml

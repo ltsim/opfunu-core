@@ -6,10 +6,10 @@
 
 import numpy as np
 
-from opfunu.benchmark import Benchmark
+from opfunu.benchmark.func import FuncBenchmark
 
 
-class NeedleEye(Benchmark):
+class NeedleEye(FuncBenchmark):
     """
     .. [1] Gavana, A. Global Optimization Benchmarks and AMPGO retrieved 2015
 
@@ -69,7 +69,7 @@ class NeedleEye(Benchmark):
         return f
 
 
-class NewFunction01(Benchmark):
+class NewFunction01(FuncBenchmark):
     """
     .. [1] Mishra, S. Global Optimization by Differential Evolution and
     Particle Swarm Methods: Evaluation on Some Benchmark Functions. Munich Personal RePEc Archive, 2006, 1005
@@ -113,7 +113,7 @@ class NewFunction01(Benchmark):
         return ((np.abs(np.cos(np.sqrt(np.abs(x[0] ** 2 + x[1]))))) ** 0.5 + 0.01 * (x[0] + x[1]))
 
 
-class NewFunction02(Benchmark):
+class NewFunction02(FuncBenchmark):
     """
     .. [1] Mishra, S. Global Optimization by Differential Evolution and
     Particle Swarm Methods: Evaluation on Some Benchmark Functions. Munich Personal RePEc Archive, 2006, 1005

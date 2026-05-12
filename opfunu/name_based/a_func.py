@@ -6,10 +6,10 @@
 
 import numpy as np
 
-from opfunu.benchmark import Benchmark
+from opfunu.benchmark.func import FuncBenchmark
 
 
-class Ackley01(Benchmark):
+class Ackley01(FuncBenchmark):
     r"""
     .. [1] Adorio, E. MVF - "Multivariate Test Functions Library in C for Unconstrained Global Optimization", 2005
     TODO: the -0.2 factor in the exponent of the first term is given as -0.02 in Jamil et al.
@@ -48,7 +48,7 @@ class Ackley01(Benchmark):
         return (-20. * np.exp(-0.2 * np.sqrt(u / self.ndim)) - np.exp(v / self.ndim) + 20. + np.exp(1.))
 
 
-class Ackley02(Benchmark):
+class Ackley02(FuncBenchmark):
     r"""
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark FunctionsFor Global Optimization Problems Int.
     Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -85,7 +85,7 @@ class Ackley02(Benchmark):
         return -200 * np.exp(-0.02 * np.sqrt(x[0] ** 2 + x[1] ** 2))
 
 
-class Ackley03(Benchmark):
+class Ackley03(FuncBenchmark):
     r"""
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark FunctionsFor Global Optimization Problems Int.
     Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -122,7 +122,7 @@ class Ackley03(Benchmark):
         return -200 * np.exp(-0.02 * np.sqrt(x[0] ** 2 + x[1] ** 2)) + 5 * np.exp(np.cos(3 * x[0]) + np.sin(3 * x[1]))
 
 
-class Adjiman(Benchmark):
+class Adjiman(FuncBenchmark):
     """
     [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark FunctionsFor Global Optimization Problems Int.
     Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -159,7 +159,7 @@ class Adjiman(Benchmark):
         return np.cos(x[0]) * np.sin(x[1]) - x[0] / (x[1] ** 2 + 1)
 
 
-class Alpine01(Benchmark):
+class Alpine01(FuncBenchmark):
     """
     [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark FunctionsFor Global Optimization Problems Int.
     Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -196,7 +196,7 @@ class Alpine01(Benchmark):
         return np.sum(np.abs(x * np.sin(x) + 0.1 * x))
 
 
-class Alpine02(Benchmark):
+class Alpine02(FuncBenchmark):
     """
     [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark FunctionsFor Global Optimization Problems Int.
     Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -233,7 +233,7 @@ class Alpine02(Benchmark):
         return np.prod(np.sqrt(x) * np.sin(x))
 
 
-class AMGM(Benchmark):
+class AMGM(FuncBenchmark):
     """
     [1] The AMGM (Arithmetic Mean - Geometric Mean Equality).
     [2] Gavana, A. Global Optimization Benchmarks and AMPGO, retrieved 2015
