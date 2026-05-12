@@ -42,6 +42,7 @@ class Benchmark(abc.ABC):
         x : np.ndarray
             The solution
         """
+
     ...
 
     def get_paras(self):
