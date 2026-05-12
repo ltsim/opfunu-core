@@ -86,7 +86,7 @@ class FuncBenchmark(Benchmark):
         """
         if ndim is None:
             self.__bounds = default_bounds if bounds is None else np.array(bounds).T
-            self.__ndim = self._bounds.shape[0]
+            self.__ndim = self.__bounds.shape[0]
         else:
             if bounds is None:
                 if self.dim_changeable:
