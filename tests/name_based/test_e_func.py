@@ -15,7 +15,7 @@ def test_Easom_results():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -28,7 +28,7 @@ def test_ElAttarVidyasagarDutta_results():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -41,7 +41,7 @@ def test_EggCrate():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -54,7 +54,7 @@ def test_EggHolder():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -67,7 +67,7 @@ def test_Exponential():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -80,7 +80,7 @@ def test_Exp2():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -93,7 +93,7 @@ def test_Eckerle4():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim

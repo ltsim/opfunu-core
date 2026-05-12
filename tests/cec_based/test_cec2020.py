@@ -16,7 +16,6 @@ def test_F12020_results():
     result = problem.evaluate(x)
     assert type(result) == np.float64
     assert isinstance(problem, opfunu.cec_based.CecBenchmark)
-    assert isinstance(problem, opfunu.name_based.Benchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -30,7 +29,6 @@ def test_F22020_results():
     result = problem.evaluate(x)
     assert type(result) == np.float64
     assert isinstance(problem, opfunu.cec_based.CecBenchmark)
-    assert isinstance(problem, opfunu.name_based.Benchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -44,7 +42,6 @@ def test_F32020_results():
     result = problem.evaluate(x)
     assert type(result) == np.float64
     assert isinstance(problem, opfunu.cec_based.CecBenchmark)
-    assert isinstance(problem, opfunu.name_based.Benchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -58,7 +55,6 @@ def test_F42020_results():
     result = problem.evaluate(x)
     assert type(result) == np.float64
     assert isinstance(problem, opfunu.cec_based.CecBenchmark)
-    assert isinstance(problem, opfunu.name_based.Benchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -72,7 +68,6 @@ def test_F52020_results():
     result = problem.evaluate(x)
     assert type(result) == np.float64
     assert isinstance(problem, opfunu.cec_based.CecBenchmark)
-    assert isinstance(problem, opfunu.name_based.Benchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -86,7 +81,6 @@ def test_F62020_results():
     result = problem.evaluate(x)
     assert type(result) == np.float64
     assert isinstance(problem, opfunu.cec_based.CecBenchmark)
-    assert isinstance(problem, opfunu.name_based.Benchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -100,7 +94,6 @@ def test_F72020_results():
     result = problem.evaluate(x)
     assert type(result) == np.float64
     assert isinstance(problem, opfunu.cec_based.CecBenchmark)
-    assert isinstance(problem, opfunu.name_based.Benchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -114,7 +107,6 @@ def test_F82020_results():
     result = problem.evaluate(x)
     assert type(result) == np.float64
     assert isinstance(problem, opfunu.cec_based.CecBenchmark)
-    assert isinstance(problem, opfunu.name_based.Benchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -128,7 +120,6 @@ def test_F92020_results():
     result = problem.evaluate(x)
     assert type(result) == np.float64
     assert isinstance(problem, opfunu.cec_based.CecBenchmark)
-    assert isinstance(problem, opfunu.name_based.Benchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -142,7 +133,6 @@ def test_F102020_results():
     result = problem.evaluate(x)
     assert type(result) == np.float64
     assert isinstance(problem, opfunu.cec_based.CecBenchmark)
-    assert isinstance(problem, opfunu.name_based.Benchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim

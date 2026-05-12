@@ -15,7 +15,7 @@ def test_Damavandi_results():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -28,7 +28,7 @@ def test_Deb01_results():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -41,7 +41,7 @@ def test_Deb03_results():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -54,7 +54,7 @@ def test_Decanomial_results():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -67,7 +67,7 @@ def test_Deceptive_results():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -80,7 +80,7 @@ def test_DeckkersAarts_results():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -93,7 +93,7 @@ def test_DeflectedCorrugatedSpring_results():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -106,7 +106,7 @@ def test_DeVilliersGlasser01_results():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -119,7 +119,7 @@ def test_DeVilliersGlasser02_results():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -132,7 +132,7 @@ def test_DixonPrice():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -145,7 +145,7 @@ def test_Dolan():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -158,7 +158,7 @@ def test_DropWave():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim

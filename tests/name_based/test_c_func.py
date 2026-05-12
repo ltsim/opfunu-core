@@ -15,7 +15,7 @@ def test_CamelThreeHump_results():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -28,7 +28,7 @@ def test_CamelSixHump_results():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -41,7 +41,7 @@ def test_ChenBird_results():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -54,7 +54,7 @@ def test_ChenV_results():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -67,7 +67,7 @@ def test_Chichinadze_results():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -80,7 +80,7 @@ def test_ChungReynolds_results():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -93,7 +93,7 @@ def test_Cigar_results():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -106,7 +106,7 @@ def test_Cola_results():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -119,7 +119,7 @@ def test_Colville_results():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -132,7 +132,7 @@ def test_Corana_results():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -145,7 +145,7 @@ def test_CosineMixture_results():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -158,7 +158,7 @@ def test_CrossInTray_results():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -171,7 +171,7 @@ def test_CrossLegTable_results():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -184,7 +184,7 @@ def test_CrownedCross_results():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -197,7 +197,7 @@ def test_Cube_results():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
