@@ -44,6 +44,7 @@ class CecBenchmark(Benchmark):
     latex_formula_dimension = r'd \in \mathbb{N}_{+}^{*}'
     latex_formula_bounds = r'x_i \in [-2\pi, 2\pi], \forall i \in \llbracket 1, d\rrbracket'
     latex_formula_global_optimum = r'f(0, ..., 0)=-1, \text{ for}, m=5, \beta=15'
+    
     continuous = True
     linear = False
     convex = True
@@ -82,7 +83,7 @@ class CecBenchmark(Benchmark):
         self.support_path = None
         self.verbose = False
 
-    def make_support_data_path(self, data_name):
+    def make_support_data_path(self, data_name: str):
         self.support_path = importlib.resources.files("opfunu").joinpath(f"cec_based/{data_name}")
 
     def check_shift_data(self, f_shift):
