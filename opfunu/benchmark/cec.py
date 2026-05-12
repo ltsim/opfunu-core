@@ -4,7 +4,6 @@
 #       Github: https://github.com/thieu1995        %                         
 # --------------------------------------------------%
 
-import abc
 import importlib.resources
 
 import numpy as np
@@ -12,7 +11,7 @@ import numpy as np
 from opfunu.benchmark import Benchmark
 
 
-class CecBenchmark(Benchmark, abc.ABC):
+class CecBenchmark(Benchmark):
     """
     Defines an abstract class for optimization benchmark problem.
 
@@ -68,8 +67,9 @@ class CecBenchmark(Benchmark, abc.ABC):
     def __init__(self):
         super().__init__()
 
-        self._bounds = None
-        self._ndim = None
+        self.__ndim = None
+        self.__bounds = None
+
         self.dim_changeable = True
         self.dim_default = 30
         self.dim_max = 100
@@ -81,6 +81,7 @@ class CecBenchmark(Benchmark, abc.ABC):
         self.f_bias = None
         self.support_path = None
         self.verbose = False
+        self.epsilon = 1e-8
 
     def make_support_data_path(self, data_name):
         self.support_path = importlib.resources.files("opfunu").joinpath(f"cec_based/{data_name}")
@@ -179,15 +180,42 @@ class CecBenchmark(Benchmark, abc.ABC):
 
         # if not self.dim_changeable and (len(x) != self._ndim):
 
-        if len(x) != self._ndim:
+        if len(x) != self.__ndim:
             raise ValueError(
-                f"{self.__class__.__name__} problem, the length of solution should have {self._ndim} variables!")
+                f"{self.__class__.__name__} problem, the length of solution should have {self.__ndim} variables!")
 
         if (dim_max is not None) and (len(x) > dim_max):
             raise ValueError(f"{self.__class__.__name__} problem is not supported ndim > {dim_max}!")
 
         if (dim_support is not None) and (len(x) not in dim_support):
             raise ValueError(f"{self.__class__.__name__} problem is only supported ndim in {dim_support}!")
+
+    def evaluate(self, x):
+        raise NotImplementedError
+
+    def is_ndim_compatible(self, ndim):
+        assert (ndim is None) or (
+                isinstance(ndim, int) and (not ndim < 0)), "The dimension ndim must be None or a positive integer"
+        if ndim is None:
+            return True
+        else:
+            if self.dim_changeable:
+                return ndim > 0
+            else:
+                return ndim == self.ndim
+
+    def is_succeed(self, x, tol=1.e-5):
+        if np.any(x > self.ub) or np.any(x < self.lb):
+            return False
+
+        val = self.evaluate(np.squeeze(x))
+        if np.abs(val - self.f_global) < tol:
+            return True
+
+        # you found a lower global minimum.  This shouldn't happen.
+        if val < self.f_global:
+            raise ValueError("Found a lower global minimum", x, val, self.f_global)
+        return False
 
     def check_ndim_and_bounds(self, ndim=None, dim_max=None, bounds=None, default_bounds=None):
         """
@@ -206,10 +234,10 @@ class CecBenchmark(Benchmark, abc.ABC):
         """
 
         if ndim is None:
-            self._bounds = default_bounds if bounds is None else np.array(bounds).T
-            self._ndim = self._bounds.shape[0]
+            self.__bounds = default_bounds if bounds is None else np.array(bounds).T
+            self.__ndim = self.__bounds.shape[0]
 
-            if dim_max is not None and self._ndim > dim_max:
+            if dim_max is not None and self.__ndim > dim_max:
                 raise ValueError(f"{self.__class__.__name__} problem supports maximum {dim_max} variables!")
         else:
             if bounds is None:
@@ -220,29 +248,73 @@ class CecBenchmark(Benchmark, abc.ABC):
                             # if self.dim_supported is not None and ndim not in self.dim_supported:
                             #     raise ValueError(f'{self.__class__.__name__} ndim not in supported dimensions '
                             #                      f'{self.dim_supported}')
-                            self._ndim = int(ndim)
-                            self._bounds = np.array([default_bounds[0] for _ in range(self._ndim)])
+                            self.__ndim = int(ndim)
+                            self.__bounds = np.array([default_bounds[0] for _ in range(self.__ndim)])
                         else:
                             raise ValueError(f"{self.__class__.__name__} problem supports maximum {dim_max} variables!")
                     else:
                         raise ValueError('ndim must be an integer and > 1!')
                 else:
-                    self._ndim = self.dim_default
-                    self._bounds = default_bounds
+                    self.__ndim = self.dim_default
+                    self.__bounds = default_bounds
                     if self.verbose:
                         print(f"{self.__class__.__name__} is fixed problem with {self.dim_default} variables!")
             else:
                 if self.dim_changeable:
-                    self._bounds = np.array(bounds).T
-                    self._ndim = self._bounds.shape[0]
-                    if self._ndim > dim_max:
+                    self.__bounds = np.array(bounds).T
+                    self.__ndim = self.__bounds.shape[0]
+                    if self.__ndim > dim_max:
                         raise ValueError(f"{self.__class__.__name__} problem supports maximum {dim_max} variables!")
                     else:
-                        print(f"{self.__class__.__name__} problem is set with {self._ndim} variables!")
+                        print(f"{self.__class__.__name__} problem is set with {self.__ndim} variables!")
                 else:
-                    self._bounds = np.array(bounds).T
-                    if self._bounds.shape[0] == self.dim_default:
-                        self._ndim = self.dim_default
+                    self.__bounds = np.array(bounds).T
+                    if self.__bounds.shape[0] == self.dim_default:
+                        self.__ndim = self.dim_default
                     else:
                         raise ValueError(
-                            f"{self.__class__.__name__} is fixed problem with {self._ndim} variables. Please setup the correct bounds!")
+                            f"{self.__class__.__name__} is fixed problem with {self.__ndim} variables. Please setup the correct bounds!")
+
+    @property
+    def bounds(self):
+        """
+        The lower/upper bounds to be used for optimization problem. This a 2D-matrix of [lower, upper] array that contain the lower and upper
+        bounds for the problem. The problem should not be asked for evaluation outside these bounds. ``len(bounds) == ndim``.
+        """
+        return self.__bounds
+
+    @property
+    def ndim(self):
+        """
+        The dimensionality of the problem.
+
+        Returns
+        -------
+        ndim : int
+            The dimensionality of the problem
+        """
+        return self.__ndim
+
+    @property
+    def lb(self):
+        """
+        The lower bounds for the problem
+
+        Returns
+        -------
+        lb : 1D-vector
+            The lower bounds for the problem
+        """
+        return np.array([x[0] for x in self.bounds])
+
+    @property
+    def ub(self):
+        """
+        The upper bounds for the problem
+
+        Returns
+        -------
+        ub : 1D-vector
+            The upper bounds for the problem
+        """
+        return np.array([x[1] for x in self.bounds])

@@ -6,8 +6,10 @@
 
 import numpy as np
 
+from opfunu.benchmark import Benchmark
 
-class Benchmark:
+
+class FuncBenchmark(Benchmark):
     """
     Defines an abstract class for optimization benchmark problem.
 
@@ -57,15 +59,17 @@ class Benchmark:
     # n_valleys = 1
 
     def __init__(self):
-        self._bounds = None
-        self._ndim = None
+        super().__init__()
+
+        self.__ndim = None
+        self.__bounds = None
+
         self.dim_changeable = False
         self.dim_default = 2
         self.dim_supported = []
         self.f_global = None
         self.x_global = None
         self.n_fe = 0
-        self.paras = {}
         self.epsilon = 1e-8
 
     def check_ndim_and_bounds(self, ndim=None, bounds=None, default_bounds=None):
@@ -82,32 +86,32 @@ class Benchmark:
             List of initial lower bound and upper bound values
         """
         if ndim is None:
-            self._bounds = default_bounds if bounds is None else np.array(bounds).T
-            self._ndim = self._bounds.shape[0]
+            self.__bounds = default_bounds if bounds is None else np.array(bounds).T
+            self.__ndim = self._bounds.shape[0]
         else:
             if bounds is None:
                 if self.dim_changeable:
                     if type(ndim) is int and ndim > 1:
-                        self._ndim = int(ndim)
-                        self._bounds = np.array([default_bounds[0] for _ in range(self._ndim)])
+                        self.__ndim = int(ndim)
+                        self.__bounds = np.array([default_bounds[0] for _ in range(self.__ndim)])
                     else:
                         raise ValueError('ndim must be an integer and > 1!')
                 else:
-                    self._ndim = self.dim_default
-                    self._bounds = default_bounds
+                    self.__ndim = self.dim_default
+                    self.__bounds = default_bounds
                     print(f"{self.__class__.__name__} is fixed problem with {self.dim_default} variables!")
             else:
                 if self.dim_changeable:
-                    self._bounds = np.array(bounds).T
-                    self._ndim = self._bounds.shape[0]
-                    print(f"{self.__class__.__name__} problem is set with {self._ndim} variables!")
+                    self.__bounds = np.array(bounds).T
+                    self.__ndim = self.__bounds.shape[0]
+                    print(f"{self.__class__.__name__} problem is set with {self.__ndim} variables!")
                 else:
-                    self._bounds = np.array(bounds).T
-                    if self._bounds.shape[0] != self.dim_default:
+                    self.__bounds = np.array(bounds).T
+                    if self.__bounds.shape[0] != self.dim_default:
                         raise ValueError(
-                            f"{self.__class__.__name__} is fixed problem with {self._ndim} variables. Please setup the correct bounds!")
+                            f"{self.__class__.__name__} is fixed problem with {self.__ndim} variables. Please setup the correct bounds!")
                     else:
-                        self._ndim = self.dim_default
+                        self.__ndim = self.dim_default
 
     def check_solution(self, x):
         """
@@ -118,15 +122,8 @@ class Benchmark:
         x : np.ndarray
             The solution
         """
-        if not self.dim_changeable and (len(x) != self._ndim):
-            raise ValueError(f"The length of solution should have {self._ndim} variables!")
-
-    def get_paras(self):
-        """
-        Return the parameters of the problem. Depended on function
-        """
-        default = {"bounds": self._bounds, "ndim": self._ndim, }
-        return {**default, **self.paras}
+        if not self.dim_changeable and (len(x) != self.__ndim):
+            raise ValueError(f"The length of solution should have {self.__ndim} variables!")
 
     def evaluate(self, x):
         """
@@ -205,7 +202,7 @@ class Benchmark:
         The lower/upper bounds to be used for optimization problem. This a 2D-matrix of [lower, upper] array that contain the lower and upper
         bounds for the problem. The problem should not be asked for evaluation outside these bounds. ``len(bounds) == ndim``.
         """
-        return self._bounds
+        return self.__bounds
 
     @property
     def ndim(self):
@@ -217,7 +214,7 @@ class Benchmark:
         ndim : int
             The dimensionality of the problem
         """
-        return self._ndim
+        return self.__ndim
 
     @property
     def lb(self):
@@ -243,7 +240,7 @@ class Benchmark:
         """
         return np.array([x[1] for x in self.bounds])
 
-    def create_solution(self) -> np.ndarray:
+    def create_solution(self):
         """
         Create a random solution for the current problem
 
