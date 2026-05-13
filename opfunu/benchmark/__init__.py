@@ -2,6 +2,7 @@
 #       Email: tsim@cucei.udg.mx                    %
 #       Github: https://github.com/ltsim            %
 # --------------------------------------------------%
+import typing
 
 import abc
 
@@ -9,12 +10,10 @@ import numpy as np
 
 
 class Benchmark(abc.ABC):
+    epsilon: typing.Final[float] = 1e-8
+
     def __init__(self):
         self.paras = {}
-
-    @property
-    def epsilon(self):
-        return 1e-8
 
     @abc.abstractmethod
     def check_ndim_and_bounds(self, ndim=None, bounds=None, default_bounds=None):
@@ -42,7 +41,6 @@ class Benchmark(abc.ABC):
         x : np.ndarray
             The solution
         """
-
     ...
 
     def get_paras(self):
