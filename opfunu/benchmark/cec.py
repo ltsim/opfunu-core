@@ -65,23 +65,58 @@ class CecBenchmark(Benchmark):
     # n_basins = 1
     # n_valleys = 1
 
-    def __init__(self):
+    def __init__(
+            self,
+            ndim=None,
+            dim_max=100,
+            f_shift=None,
+            bounds=None,
+            data_name=None,
+            f_bias=None
+    ):
         super().__init__()
 
-        self.__ndim = None
-        self.__bounds = None
+        self.__ndim = ndim
+        self.__bounds = bounds
 
-        self.dim_changeable = True
-        self.dim_default = 30
-        self.dim_max = 100
-        self.dim_supported = None
-        self.f_global = None
-        self.x_global = None
-        self.n_fe = 0
-        self.f_shift = None
-        self.f_bias = None
-        self.support_path = None
-        self.verbose = False
+        self.__dim_changeable = True
+        self.__dim_default = 30
+        self.__dim_max = dim_max
+        self.__dim_supported = None
+
+        self.check_ndim_and_bounds(ndim, dim_max, bounds)
+        self.make_support_data_path(data_name)
+
+        self.__f_global = None
+        self.__x_global = None
+        self.__n_fe = 0
+        self.__f_shift = self.check_shift_data(f_shift)[:self.__ndim]
+        self.__f_bias = f_bias
+
+
+    @property
+    def dim_max (self):
+        return self.__dim_max
+
+    @property
+    def f_global(self):
+        return self.__f_global
+
+    @property
+    def x_global(self):
+        return self.__f_bias
+
+    @property
+    def n_fe(self):
+        return self.__n_fe
+
+    @property
+    def f_shift(self):
+        return self.__f_shift
+
+    @property
+    def f_bias(self):
+        return self.__f_bias
 
     def make_support_data_path(self, data_name: str):
         self.support_path = importlib.resources.files("opfunu").joinpath(f"cec_based/{data_name}")
@@ -150,7 +185,7 @@ class CecBenchmark(Benchmark):
             return data
         except FileNotFoundError:
             print(f'The file named: {filename}.txt is not found.')
-            print(f"{self.__class__.__name__} problem is only supported ndim in {self.dim_supported}!")
+            print(f"{self.__class__.__name__} problem is only supported ndim in {self.__dim_supported}!")
             exit(1)
 
     def load_shift_and_matrix_data(self, filename=None):
@@ -199,7 +234,7 @@ class CecBenchmark(Benchmark):
         if ndim is None:
             return True
         else:
-            if self.dim_changeable:
+            if self.__dim_changeable:
                 return ndim > 0
             else:
                 return ndim == self.ndim
@@ -233,6 +268,9 @@ class CecBenchmark(Benchmark):
             List of initial lower bound and upper bound values
         """
 
+        if default_bounds is None:
+            default_bounds = np.array([[-100., 100.] for _ in range(self.__dim_default)])
+
         if ndim is None:
             self.__bounds = default_bounds if bounds is None else np.array(bounds).T
             self.__ndim = self.__bounds.shape[0]
@@ -241,7 +279,7 @@ class CecBenchmark(Benchmark):
                 raise ValueError(f"{self.__class__.__name__} problem supports maximum {dim_max} variables!")
         else:
             if bounds is None:
-                if self.dim_changeable:
+                if self.__dim_changeable:
                     if type(ndim) is int and ndim > 1:
                         if dim_max is None or ndim <= dim_max:
                             # # Check if ndim in supported dimensions
@@ -255,12 +293,12 @@ class CecBenchmark(Benchmark):
                     else:
                         raise ValueError('ndim must be an integer and > 1!')
                 else:
-                    self.__ndim = self.dim_default
+                    self.__ndim = self.__dim_default
                     self.__bounds = default_bounds
                     if self.verbose:
-                        print(f"{self.__class__.__name__} is fixed problem with {self.dim_default} variables!")
+                        print(f"{self.__class__.__name__} is fixed problem with {self.__dim_default} variables!")
             else:
-                if self.dim_changeable:
+                if self.__dim_changeable:
                     self.__bounds = np.array(bounds).T
                     self.__ndim = self.__bounds.shape[0]
                     if self.__ndim > dim_max:
@@ -269,8 +307,8 @@ class CecBenchmark(Benchmark):
                         print(f"{self.__class__.__name__} problem is set with {self.__ndim} variables!")
                 else:
                     self.__bounds = np.array(bounds).T
-                    if self.__bounds.shape[0] == self.dim_default:
-                        self.__ndim = self.dim_default
+                    if self.__bounds.shape[0] == self.__dim_default:
+                        self.__ndim = self.__dim_default
                     else:
                         raise ValueError(
                             f"{self.__class__.__name__} is fixed problem with {self.__ndim} variables. Please setup the correct bounds!")

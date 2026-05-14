@@ -55,7 +55,7 @@ class F12008(CecBenchmark):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         return operator.sphere_func(x - self.f_shift) + self.f_bias
 
 
@@ -104,7 +104,7 @@ class F22008(CecBenchmark):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         return np.max(np.abs(x - self.f_shift)) + self.f_bias
 
 
@@ -153,7 +153,7 @@ class F32008(CecBenchmark):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         return operator.rosenbrock_func(x - self.f_shift, shift=1.0) + self.f_bias
 
 
@@ -201,7 +201,7 @@ class F42008(CecBenchmark):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         z = x - self.f_shift
         return operator.rastrigin_func(z) + self.f_bias
 
@@ -251,7 +251,7 @@ class F52008(CecBenchmark):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         z = x - self.f_shift
         return operator.griewank_func(z) + self.f_bias
 
@@ -300,7 +300,7 @@ class F62008(CecBenchmark):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         z = x - self.f_shift
         return operator.ackley_func(z) + self.f_bias
 
@@ -350,7 +350,7 @@ class F72008(CecBenchmark):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         ndim = len(x)
         results = [operator.fractal_1d_func(x[idx] + operator.twist_func(x[idx + 1])) for idx in range(0, ndim - 1)]
         return np.sum(results) + operator.fractal_1d_func(x[-1] + operator.twist_func(x[0])) + self.f_bias

@@ -40,22 +40,20 @@ class F12005(CecBenchmark):
     # n_valleys = 1
 
     def __init__(self, ndim=None, bounds=None, f_shift="data_sphere", f_bias=-450.):
-        super().__init__()
-        self.dim_changeable = True
-        self.dim_default = 30
-        self.dim_max = 100
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
-                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
-        self.make_support_data_path("data_2005")
-        self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
-        self.f_bias = f_bias
-        self.f_global = f_bias
-        self.x_global = self.f_shift
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias}
+        super().__init__(
+            ndim=ndim,
+            bounds=bounds,
+            f_shift=f_shift,
+            f_bias=f_bias,
+        )
+
+        self.paras = {
+            "f_shift": self.f_shift,
+            "f_bias": self.f_bias
+        }
 
     def evaluate(self, x, *args):
-        self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         return np.sum((x - self.f_shift) ** 2) + self.f_bias
 
 
@@ -104,7 +102,7 @@ class F22005(CecBenchmark):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         ndim = len(x)
         results = [np.sum(x[:idx] - self.f_shift[:idx]) ** 2 for idx in range(0, ndim)]
         return np.sum(results) + self.f_bias
@@ -210,7 +208,7 @@ class F42005(CecBenchmark):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         ndim = len(x)
         results = [np.sum(x[:idx] - self.f_shift[:idx]) ** 2 for idx in range(0, ndim)]
         return np.sum(results) * (1 + 0.4 * np.abs(np.random.normal(0, 1))) + self.f_bias
@@ -269,7 +267,7 @@ class F52005(CecBenchmark):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         ndim = len(x)
         results = [np.abs(np.dot(self.f_matrix[idx], x) - np.dot(self.f_matrix[idx], self.f_shift)) for idx in
                    range(0, ndim)]
@@ -322,7 +320,7 @@ class F62005(CecBenchmark):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         return operator.rosenbrock_func(x - self.f_shift, shift=1.0) + self.f_bias
 
 
@@ -481,7 +479,7 @@ class F92005(CecBenchmark):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         z = x - self.f_shift
         return operator.rastrigin_func(z) + self.f_bias
 
@@ -645,7 +643,7 @@ class F122005(CecBenchmark):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         ndim = len(x)
         result = 0.0
         for idx in range(0, ndim):
@@ -705,7 +703,7 @@ class F132005(CecBenchmark):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         return operator.grie_rosen_cec_func(x - self.f_shift) + self.f_bias
 
 
@@ -827,7 +825,7 @@ class F152005(CecBenchmark):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         ndim = len(x)
         weights = np.ones(self.n_funcs)
         fits = np.ones(self.n_funcs)

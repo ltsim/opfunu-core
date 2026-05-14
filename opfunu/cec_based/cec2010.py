@@ -53,7 +53,7 @@ class F12010(CecBenchmark):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         return operator.elliptic_func(x - self.f_shift)
 
 
@@ -75,7 +75,7 @@ class F22010(F12010):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         return operator.rastrigin_func(x - self.f_shift)
 
 
@@ -97,7 +97,7 @@ class F32010(F12010):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         return operator.ackley_func(x - self.f_shift)
 
 
@@ -152,7 +152,7 @@ class F42010(CecBenchmark):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         z = x - self.f_shift
         idx1 = self.P[:self.m_group]
         idx2 = self.P[self.m_group:]
@@ -179,7 +179,7 @@ class F52010(F42010):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         z = x - self.f_shift
         idx1 = self.P[:self.m_group]
         idx2 = self.P[self.m_group:]
@@ -206,7 +206,7 @@ class F62010(F42010):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         z = x - self.f_shift
         idx1 = self.P[:self.m_group]
         idx2 = self.P[self.m_group:]
@@ -265,7 +265,7 @@ class F72010(CecBenchmark):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         z = x - self.f_shift
         z_schwefel = z[self.P[:self.m_group]]
         z_sphere = z[self.P[self.m_group:]]
@@ -292,7 +292,7 @@ class F82010(F72010):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         z = x - self.f_shift
         z_rosen = z[self.P[:self.m_group]]
         z_sphere = z[self.P[self.m_group:]]
@@ -351,7 +351,7 @@ class F92010(CecBenchmark):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         z = x - self.f_shift
         result = 0.0
         for k in range(0, self.count_up):
@@ -380,7 +380,7 @@ class F102010(F92010):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         z = x - self.f_shift
         result = 0.0
         for k in range(0, self.count_up):
@@ -409,7 +409,7 @@ class F112010(F92010):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         z = x - self.f_shift
         result = 0.0
         for k in range(0, self.count_up):
@@ -436,7 +436,7 @@ class F122010(F72010):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         z = x - self.f_shift
         result = 0.0
         for k in range(0, self.count_up):
@@ -466,7 +466,7 @@ class F132010(F72010):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         z = x - self.f_shift
         result = 0.0
         for k in range(0, self.count_up):
@@ -492,7 +492,7 @@ class F142010(F92010):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         z = x - self.f_shift
         result = 0.0
         for k in range(0, self.count_up):
@@ -521,7 +521,7 @@ class F152010(F92010):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         z = x - self.f_shift
         result = 0.0
         for k in range(0, self.count_up):
@@ -550,7 +550,7 @@ class F162010(F92010):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         z = x - self.f_shift
         result = 0.0
         for k in range(0, self.count_up):
@@ -578,7 +578,7 @@ class F172010(F72010):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         z = x - self.f_shift
         result = 0.0
         for k in range(0, self.count_up):
@@ -606,7 +606,7 @@ class F182010(F72010):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         z = x - self.f_shift
         result = 0.0
         for k in range(0, self.count_up):
@@ -632,7 +632,7 @@ class F192010(F12010):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         return operator.schwefel_12_func(x - self.f_shift)
 
 
@@ -655,5 +655,5 @@ class F202010(F12010):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         return operator.rosenbrock_func(x - self.f_shift)

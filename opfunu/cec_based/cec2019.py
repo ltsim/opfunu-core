@@ -56,7 +56,7 @@ class F12019(CecBenchmark):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         return operator.chebyshev_func(x) + self.f_bias
 
 
@@ -107,7 +107,7 @@ class F22019(CecBenchmark):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         return operator.inverse_hilbert_func(x) + self.f_bias
 
 
@@ -159,7 +159,7 @@ class F32019(CecBenchmark):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
+        self.check_solution(x, self.dim_max, self.__dim_supported)
         return operator.lennard_jones_func(x) + self.f_bias
 
 
