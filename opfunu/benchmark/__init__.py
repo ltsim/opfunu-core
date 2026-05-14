@@ -13,6 +13,8 @@ class Benchmark(abc.ABC):
     epsilon: typing.Final[float] = 1e-8
 
     def __init__(self):
+        self.support_path = None
+        self.verbose = False
         self.paras = {}
 
     @abc.abstractmethod
