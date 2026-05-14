@@ -84,7 +84,7 @@ def get_functions_by_ndim(ndim=None):
     """
     functions = [cls for classname, cls in ALL_DATABASE if classname not in EXCLUDES]
     if type(ndim) is int and ndim > 1:
-        return list(filter(lambda f: (f().dim_default == ndim and f().dim_changeable == False), functions))
+        return list(filter(lambda f: (f().__dim_default == ndim and f().__dim_changeable == False), functions))
     return functions
 
 
@@ -100,7 +100,7 @@ def get_functions_based_ndim(ndim=None):
     """
     functions = [cls for classname, cls in ALL_DATABASE if classname not in EXCLUDES]
     if type(ndim) is int and ndim > 1:
-        return list(filter(lambda f: (f().dim_default == ndim or f().dim_changeable == True), functions))
+        return list(filter(lambda f: (f().__dim_default == ndim or f().__dim_changeable == True), functions))
     return functions
 
 
