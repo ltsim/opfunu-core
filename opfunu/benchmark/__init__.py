@@ -3,19 +3,51 @@
 #       Github: https://github.com/ltsim            %
 # --------------------------------------------------%
 import typing
-
+import dataclasses
 import abc
 
 import numpy as np
 
 
+@dataclasses.dataclass
+class Formula:
+    latex: str
+
+    def _repr_latex_(self):
+        return f"$${self.latex}$$"
+
+
 class Benchmark(abc.ABC):
+    latex_formula = r'f(\mathbf{x})'
+    latex_formula_dimension = r'd \in \mathbb{N}_{+}^{*}'
+    latex_formula_bounds = r'x_i \in [-2\pi, 2\pi], \forall i \in \llbracket 1, d\rrbracket'
+    latex_formula_global_optimum = r'f(0, ..., 0)=-1, \text{ for}, m=5, \beta=15'
+
     epsilon: typing.Final[float] = 1e-8
 
     def __init__(self):
         self.support_path = None
         self.verbose = False
         self.paras = {}
+
+    def _repr_latex_(self):
+        return f"$${self.latex_formula}$$"
+
+    @property
+    def formula(self):
+        return Formula(self.latex_formula)
+
+    @property
+    def formula_dimension(self):
+        return Formula(self.latex_formula_dimension)
+
+    @property
+    def formula_bounds(self):
+        return Formula(self.latex_formula_bounds)
+
+    @property
+    def formula_global_optimum(self):
+        return Formula(self.latex_formula_global_optimum)
 
     @abc.abstractmethod
     def check_ndim_and_bounds(self, ndim=None, bounds=None, default_bounds=None):
