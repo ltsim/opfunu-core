@@ -6,10 +6,10 @@
 
 import numpy as np
 
-from opfunu.benchmark import Benchmark
+from opfunu.benchmark.func import FuncBenchmark
 
 
-class Hansen(Benchmark):
+class Hansen(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -49,7 +49,7 @@ class Hansen(Benchmark):
         return np.sum(a) * np.sum(b)
 
 
-class Hartmann3(Benchmark):
+class Hartmann3(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -97,7 +97,7 @@ class Hartmann3(Benchmark):
         return -np.sum(self.c * np.exp(-d))
 
 
-class Hartmann6(Benchmark):
+class Hartmann6(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -145,7 +145,7 @@ class Hartmann6(Benchmark):
         return -np.sum(self.c * np.exp(-d))
 
 
-class HelicalValley(Benchmark):
+class HelicalValley(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -184,7 +184,7 @@ class HelicalValley(Benchmark):
         return x[2] ** 2 + 100 * ((x[2] - 10 * theta) ** 2 + (r - 1) ** 2)
 
 
-class Himmelblau(Benchmark):
+class Himmelblau(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -221,7 +221,7 @@ class Himmelblau(Benchmark):
         return (x[0] ** 2 + x[1] - 11) ** 2 + (x[0] + x[1] ** 2 - 7) ** 2
 
 
-class Hosaki(Benchmark):
+class Hosaki(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -259,7 +259,7 @@ class Hosaki(Benchmark):
         return val * x[1] ** 2 * np.exp(-x[1])
 
 
-class HolderTable(Benchmark):
+class HolderTable(FuncBenchmark):
     """
     .. [1] Gavana, A. Global Optimization Benchmarks and AMPGO retrieved 2015
     """

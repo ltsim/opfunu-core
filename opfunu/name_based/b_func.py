@@ -6,10 +6,10 @@
 
 import numpy as np
 
-from opfunu.benchmark import Benchmark
+from opfunu.benchmark.func import FuncBenchmark
 
 
-class BartelsConn(Benchmark):
+class BartelsConn(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -46,7 +46,7 @@ class BartelsConn(Benchmark):
         return np.abs(x[0] ** 2 + x[1] ** 2 + x[0] * x[1]) + np.abs(np.sin(x[0])) + np.abs(np.cos(x[1]))
 
 
-class Beale(Benchmark):
+class Beale(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -85,7 +85,7 @@ class Beale(Benchmark):
                 2.625 - x[0] + x[0] * x[1] ** 3) ** 2
 
 
-class BiggsExp02(Benchmark):
+class BiggsExp02(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -125,7 +125,7 @@ class BiggsExp02(Benchmark):
         return np.sum((np.exp(-t * x[0]) - 5 * np.exp(-t * x[1]) - y) ** 2)
 
 
-class BiggsExp03(Benchmark):
+class BiggsExp03(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -165,7 +165,7 @@ class BiggsExp03(Benchmark):
         return np.sum((np.exp(-t * x[0]) - x[2] * np.exp(-t * x[1]) - y) ** 2)
 
 
-class BiggsExp04(Benchmark):
+class BiggsExp04(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -205,7 +205,7 @@ class BiggsExp04(Benchmark):
         return np.sum((x[2] * np.exp(-t * x[0]) - x[3] * np.exp(-t * x[1]) - y) ** 2)
 
 
-class BiggsExp05(Benchmark):
+class BiggsExp05(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -245,7 +245,7 @@ class BiggsExp05(Benchmark):
         return np.sum((x[2] * np.exp(-t * x[0]) - x[3] * np.exp(-t * x[1]) + 3 * np.exp(-t * x[4]) - y) ** 2)
 
 
-class Bird(Benchmark):
+class Bird(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -285,7 +285,7 @@ class Bird(Benchmark):
                 x[0] - x[1]) ** 2)
 
 
-class Bohachevsky1(Benchmark):
+class Bohachevsky1(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -322,7 +322,7 @@ class Bohachevsky1(Benchmark):
         return (x[0] ** 2 + 2 * x[1] ** 2 - 0.3 * np.cos(3 * np.pi * x[0]) - 0.4 * np.cos(4 * np.pi * x[1]) + 0.7)
 
 
-class Bohachevsky2(Benchmark):
+class Bohachevsky2(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -359,7 +359,7 @@ class Bohachevsky2(Benchmark):
         return (x[0] ** 2 + 2 * x[1] ** 2 - 0.3 * np.cos(3 * np.pi * x[0]) * np.cos(4 * np.pi * x[1]) + 0.3)
 
 
-class Bohachevsky3(Benchmark):
+class Bohachevsky3(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -396,7 +396,7 @@ class Bohachevsky3(Benchmark):
         return (x[0] ** 2 + 2 * x[1] ** 2 - 0.3 * np.cos(3 * np.pi * x[0] + 4 * np.pi * x[1]) + 0.3)
 
 
-class Booth(Benchmark):
+class Booth(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -433,7 +433,7 @@ class Booth(Benchmark):
         return (x[0] + 2 * x[1] - 7) ** 2 + (2 * x[0] + x[1] - 5) ** 2
 
 
-class BoxBetts(Benchmark):
+class BoxBetts(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -472,7 +472,7 @@ class BoxBetts(Benchmark):
         return np.sum(g ** 2)
 
 
-class Branin01(Benchmark):
+class Branin01(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -512,7 +512,7 @@ class Branin01(Benchmark):
                 1 - 1 / (8 * np.pi)) * np.cos(x[0]) + 10)
 
 
-class Branin02(Benchmark):
+class Branin02(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -552,7 +552,7 @@ class Branin02(Benchmark):
                     x[0] ** 2.0 + x[1] ** 2.0 + 1.0) + 10)
 
 
-class Brent(Benchmark):
+class Brent(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -589,7 +589,7 @@ class Brent(Benchmark):
         return (x[0] + 10.0) ** 2.0 + (x[1] + 10.0) ** 2.0 + np.exp(-x[0] ** 2.0 - x[1] ** 2.0)
 
 
-class Brown(Benchmark):
+class Brown(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -628,7 +628,7 @@ class Brown(Benchmark):
         return np.sum((x0 ** 2.0) ** (x1 ** 2.0 + 1.0) + (x1 ** 2.0) ** (x0 ** 2.0 + 1.0))
 
 
-class Bukin02(Benchmark):
+class Bukin02(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -665,7 +665,7 @@ class Bukin02(Benchmark):
         return 100 * (x[1] ** 2 - 0.01 * x[0] ** 2 + 1.0) + 0.01 * (x[0] + 10.0) ** 2.0
 
 
-class Bukin04(Benchmark):
+class Bukin04(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -702,7 +702,7 @@ class Bukin04(Benchmark):
         return 100 * x[1] ** 2 + 0.01 * abs(x[0] + 10)
 
 
-class Bukin06(Benchmark):
+class Bukin06(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.

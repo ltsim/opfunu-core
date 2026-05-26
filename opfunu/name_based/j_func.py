@@ -6,10 +6,10 @@
 
 import numpy as np
 
-from opfunu.benchmark import Benchmark
+from opfunu.benchmark.func import FuncBenchmark
 
 
-class JennrichSampson(Benchmark):
+class JennrichSampson(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -47,7 +47,7 @@ class JennrichSampson(Benchmark):
         return np.sum((2 + 2 * idx - (np.exp(idx * x[0]) + np.exp(idx * x[1]))) ** 2)
 
 
-class Judge(Benchmark):
+class Judge(FuncBenchmark):
     """
     .. [1] Gavana, A. Global Optimization Benchmarks and AMPGO retrieved 2015
 

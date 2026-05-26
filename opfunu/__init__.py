@@ -28,14 +28,13 @@
 # >>> f2.plot_2d(selected_dims=(2, 3), n_points=300)
 # >>> f2.plot_3d(selected_dims=(1, 4), n_points=300)
 
-__version__ = "2.0.0"
+__version__ = "1.0.6"
 
 import inspect
 import re
 
 from . import cec_based
 from . import name_based
-from .utils.visualize import draw_2d, draw_3d, draw_latex
 
 FUNC_DATABASE = inspect.getmembers(name_based, inspect.isclass)
 CEC_DATABASE = inspect.getmembers(cec_based, inspect.isclass)

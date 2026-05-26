@@ -6,10 +6,10 @@
 
 import numpy as np
 
-from opfunu.benchmark import Benchmark
+from opfunu.benchmark.func import FuncBenchmark
 
 
-class Matyas(Benchmark):
+class Matyas(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -52,7 +52,7 @@ class Matyas(Benchmark):
         return 0.26 * (x[0] ** 2 + x[1] ** 2) - 0.48 * x[0] * x[1]
 
 
-class McCormick(Benchmark):
+class McCormick(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -95,7 +95,7 @@ class McCormick(Benchmark):
         return (np.sin(x[0] + x[1]) + (x[0] - x[1]) ** 2 - 1.5 * x[0] + 2.5 * x[1] + 1)
 
 
-class Meyer(Benchmark):
+class Meyer(FuncBenchmark):
     """
     .. [1] https://www.itl.nist.gov/div898/strd/nls/data/mgh10.shtml
     """
@@ -138,7 +138,7 @@ class Meyer(Benchmark):
         return np.sum((self.a - vec) ** 2)
 
 
-class Michalewicz(Benchmark):
+class Michalewicz(FuncBenchmark):
     """
     .. [1] Adorio, E. MVF - "Multivariate Test Functions Library in C for
     Unconstrained Global Optimization", 2005
@@ -183,7 +183,7 @@ class Michalewicz(Benchmark):
         return -np.sum(np.sin(x) * np.sin(idx * x ** 2 / np.pi) ** (2 * m))
 
 
-class MieleCantrell(Benchmark):
+class MieleCantrell(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -226,7 +226,7 @@ class MieleCantrell(Benchmark):
         return (np.exp(-x[0]) - x[1]) ** 4 + 100 * (x[1] - x[2]) ** 6 + np.tan(x[2] - x[3]) ** 4 + x[0] ** 8
 
 
-class Mishra01(Benchmark):
+class Mishra01(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -271,7 +271,7 @@ class Mishra01(Benchmark):
         return (1 + xn) ** xn
 
 
-class Mishra02(Benchmark):
+class Mishra02(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -316,7 +316,7 @@ class Mishra02(Benchmark):
         return (1 + xn) ** xn
 
 
-class Mishra03(Benchmark):
+class Mishra03(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -359,7 +359,7 @@ class Mishra03(Benchmark):
         return 0.01 * (x[0] + x[1]) + np.sqrt(np.abs(np.cos(np.sqrt(np.abs(x[0] ** 2 + x[1] ** 2)))))
 
 
-class Mishra04(Benchmark):
+class Mishra04(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -402,7 +402,7 @@ class Mishra04(Benchmark):
         return 0.01 * (x[0] + x[1]) + np.sqrt(np.abs(np.sin(np.sqrt(abs(x[0] ** 2 + x[1] ** 2)))))
 
 
-class Mishra05(Benchmark):
+class Mishra05(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -447,7 +447,7 @@ class Mishra05(Benchmark):
                    x[0]) ** 2)
 
 
-class Mishra06(Benchmark):
+class Mishra06(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -493,7 +493,7 @@ class Mishra06(Benchmark):
         return a - np.log((np.sin(u) ** 2 - np.cos(v) ** 2 + x[0]) ** 2)
 
 
-class Mishra07(Benchmark):
+class Mishra07(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -536,7 +536,7 @@ class Mishra07(Benchmark):
         return (np.prod(x) - np.math.factorial(self.ndim)) ** 2.0
 
 
-class Mishra08(Benchmark):
+class Mishra08(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -584,7 +584,7 @@ class Mishra08(Benchmark):
         return 0.001 * val ** 2
 
 
-class Mishra09(Benchmark):
+class Mishra09(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -638,7 +638,7 @@ class Mishra09(Benchmark):
         return (a * c * b ** 2 + a * b * c ** 2 + b ** 2 + (x[0] + x[1] - x[2]) ** 2) ** 2
 
 
-class Mishra10(Benchmark):
+class Mishra10(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -682,7 +682,7 @@ class Mishra10(Benchmark):
         return ((x_int[0] + x_int[1]) - (x_int[0] * x_int[1])) ** 2.0
 
 
-class Mishra11(Benchmark):
+class Mishra11(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -725,7 +725,7 @@ class Mishra11(Benchmark):
         return ((1.0 / self.ndim) * np.sum(np.abs(x)) - (np.prod(np.abs(x))) ** 1.0 / self.ndim) ** 2.0
 
 
-class MultiModal(Benchmark):
+class MultiModal(FuncBenchmark):
     """
     .. [1] Gavana, A. Global Optimization Benchmarks and AMPGO retrieved 2015
 
