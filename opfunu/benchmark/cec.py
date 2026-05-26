@@ -67,56 +67,70 @@ class CecBenchmark(Benchmark):
 
     def __init__(
             self,
-            ndim=None,
+            ndim=0,
             dim_max=100,
             f_shift=None,
+            f_matrix=None,
             bounds=None,
-            data_name=None,
-            f_bias=None
+            default_bounds=None,
+            dim_changeable=True,
+            dim_default=30,
+            dim_supported=None,
+            data_name="",
+            load_tow_matrix=False,
     ):
         super().__init__()
 
         self.__ndim = ndim
         self.__bounds = bounds
 
-        self.__dim_changeable = True
-        self.__dim_default = 30
+        self.__dim_changeable = dim_changeable
+        self.__dim_default = dim_default
         self.__dim_max = dim_max
-        self.__dim_supported = None
+        self.__dim_supported = dim_supported
 
         self.check_ndim_and_bounds(ndim, dim_max, bounds)
         self.make_support_data_path(data_name)
 
-        self.__f_global = None
-        self.__x_global = None
-        self.__n_fe = 0
-        self.__f_shift = self.check_shift_data(f_shift)[:self.__ndim]
-        self.__f_bias = f_bias
+        self.__f_matrix = None
 
+        if load_tow_matrix:
+            shift_data, a_matrix, b_matrix = self.load_two_matrix_and_shift_data(f_shift)
+
+            self.__f_shift = shift_data
+            self.f_matrix_a = a_matrix[:ndim, :ndim]
+            self.f_matrix_b = b_matrix[:ndim, :ndim]
+        else:
+            self.__f_shift = self.check_shift_data(f_shift)[:ndim]
+            self.__f_matrix = self.check_matrix_data(f_matrix)
+
+        self.__x_global = self.__f_shift
+
+        self.n_fe = 0
 
     @property
     def dim_max (self):
         return self.__dim_max
 
     @property
-    def f_global(self):
-        return self.__f_global
+    def dim_supported(self):
+        return self.__dim_supported
+
+    @property
+    def dim_default(self):
+        return self.__dim_default
 
     @property
     def x_global(self):
-        return self.__f_bias
-
-    @property
-    def n_fe(self):
-        return self.__n_fe
+        return self.__x_global
 
     @property
     def f_shift(self):
         return self.__f_shift
 
     @property
-    def f_bias(self):
-        return self.__f_bias
+    def f_matrix(self):
+        return self.__f_matrix
 
     def make_support_data_path(self, data_name: str):
         self.support_path = importlib.resources.files("opfunu").joinpath(f"cec_based/{data_name}")

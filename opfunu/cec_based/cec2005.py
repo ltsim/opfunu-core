@@ -44,8 +44,9 @@ class F12005(CecBenchmark):
             ndim=ndim,
             bounds=bounds,
             f_shift=f_shift,
-            f_bias=f_bias,
         )
+
+        self.f_bias = f_bias
 
         self.paras = {
             "f_shift": self.f_shift,
@@ -53,7 +54,7 @@ class F12005(CecBenchmark):
         }
 
     def evaluate(self, x, *args):
-        self.check_solution(x, self.dim_max, self.__dim_supported)
+        self.check_solution(x, self.dim_max, self.dim_supported)
         return np.sum((x - self.f_shift) ** 2) + self.f_bias
 
 
@@ -87,22 +88,19 @@ class F22005(CecBenchmark):
     # n_valleys = 1
 
     def __init__(self, ndim=None, bounds=None, f_shift="data_schwefel_102", f_bias=-450.):
-        super().__init__()
-        self.dim_changeable = True
-        self.dim_default = 30
-        self.dim_max = 100
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
-                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
-        self.make_support_data_path("data_2005")
-        self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
+        super().__init__(
+            ndim=ndim,
+            bounds=bounds,
+            f_shift=f_shift,
+        )
+
         self.f_bias = f_bias
         self.f_global = f_bias
-        self.x_global = self.f_shift
+
         self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias}
 
     def evaluate(self, x, *args):
-        self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.__dim_supported)
+        self.check_solution(x, self.dim_max, self.dim_supported)
         ndim = len(x)
         results = [np.sum(x[:idx] - self.f_shift[:idx]) ** 2 for idx in range(0, ndim)]
         return np.sum(results) + self.f_bias
@@ -140,23 +138,14 @@ class F32005(CecBenchmark):
 
     def __init__(self, ndim=None, bounds=None, f_shift="data_high_cond_elliptic_rot", f_matrix="elliptic_M_D",
                  f_bias=-450.):
-        super().__init__()
-        self.dim_changeable = True
-        self.dim_default = 30
-        self.dim_max = 100
-        self.dim_supported = [10, 30, 50]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
-                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
-        self.make_support_data_path("data_2005")
-        self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
-        self.f_matrix = self.check_matrix_data(f_matrix)
+        super().__init__(ndim=ndim, f_shift=f_shift, f_matrix=f_matrix, data_name="data_2005", dim_supported=[10, 30, 50])
+
         self.f_bias = f_bias
         self.f_global = f_bias
-        self.x_global = self.f_shift
+
         self.paras = {"f_shift": self.f_shift, "f_matrix": self.f_matrix, "f_bias": self.f_bias}
 
     def evaluate(self, x, *args):
-        self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         z = (np.dot((x - self.f_shift), self.f_matrix))
         return operator.elliptic_func(z) + self.f_bias
@@ -193,17 +182,15 @@ class F42005(CecBenchmark):
     # n_valleys = 1
 
     def __init__(self, ndim=None, bounds=None, f_shift="data_schwefel_102", f_bias=-450.):
-        super().__init__()
-        self.dim_changeable = True
-        self.dim_default = 30
-        self.dim_max = 100
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
-                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
-        self.make_support_data_path("data_2005")
-        self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
+        super().__init__(
+            ndim=ndim,
+            bounds=bounds,
+            f_shift=f_shift,
+        )
+
         self.f_bias = f_bias
         self.f_global = f_bias
-        self.x_global = self.f_shift
+
         self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias}
 
     def evaluate(self, x, *args):
@@ -305,17 +292,15 @@ class F62005(CecBenchmark):
     # n_valleys = 1
 
     def __init__(self, ndim=None, bounds=None, f_shift="data_rosenbrock", f_bias=390.):
-        super().__init__()
-        self.dim_changeable = True
-        self.dim_default = 30
-        self.dim_max = 100
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
-                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
-        self.make_support_data_path("data_2005")
-        self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
+        super().__init__(
+            ndim=ndim,
+            bounds=bounds,
+            f_shift=f_shift,
+        )
+
         self.f_bias = f_bias
         self.f_global = f_bias
-        self.x_global = self.f_shift
+
         self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias}
 
     def evaluate(self, x, *args):
@@ -355,22 +340,18 @@ class F72005(CecBenchmark):
     # n_valleys = 1
 
     def __init__(self, ndim=None, bounds=None, f_shift="data_griewank", f_matrix="griewank_M_D", f_bias=-180.):
-        super().__init__()
-        self.dim_changeable = True
-        self.dim_default = 30
-        self.dim_max = 100
-        self.dim_supported = [10, 30, 50]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[0., 600.] for _ in range(self.dim_default)]))
-        self.make_support_data_path("data_2005")
-        self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
-        self.f_matrix = self.check_matrix_data(f_matrix)
+        super().__init__(
+            ndim=ndim,
+            bounds=bounds,
+            f_shift=f_shift,
+        )
+
         self.f_bias = f_bias
         self.f_global = f_bias
-        self.x_global = self.f_shift
+
         self.paras = {"f_shift": self.f_shift, "f_matrix": self.f_matrix, "f_bias": self.f_bias}
 
     def evaluate(self, x, *args):
-        self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         z = np.dot((x - self.f_shift), self.f_matrix)
         return operator.griewank_func(z) + self.f_bias
@@ -407,25 +388,23 @@ class F82005(CecBenchmark):
     # n_valleys = 1
 
     def __init__(self, ndim=None, bounds=None, f_shift="data_ackley", f_matrix="ackley_M_D", f_bias=-140.):
-        super().__init__()
-        self.dim_changeable = True
-        self.dim_default = 30
-        self.dim_max = 100
-        self.dim_supported = [10, 30, 50]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-32., 32.] for _ in range(self.dim_default)]))
-        self.make_support_data_path("data_2005")
-        self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
-        self.f_matrix = self.check_matrix_data(f_matrix)
+        super().__init__(
+            ndim=ndim,
+            bounds=bounds,
+            f_shift=f_shift,
+            dim_supported=[10, 30, 50]
+        )
+
         self.f_bias = f_bias
         self.f_global = f_bias
-        self.x_global = self.f_shift
+
         self.paras = {"f_shift": self.f_shift, "f_matrix": self.f_matrix, "f_bias": self.f_bias}
+
         a = np.arange(0, self.ndim)
         self.f_shift[a % 2 == 0] = -32
         self.f_shift[a % 2 == 1] = np.random.uniform(-32., 32., int(self.ndim / 2))
 
     def evaluate(self, x, *args):
-        self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         z = np.dot((x - self.f_shift), self.f_matrix)
         return operator.ackley_func(z) + self.f_bias
@@ -465,16 +444,15 @@ class F92005(CecBenchmark):
     # n_valleys = 1
 
     def __init__(self, ndim=None, bounds=None, f_shift="data_rastrigin", f_bias=-330.):
-        super().__init__()
-        self.dim_changeable = True
-        self.dim_default = 30
-        self.dim_max = 100
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-5., 5.] for _ in range(self.dim_default)]))
-        self.make_support_data_path("data_2005")
-        self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
+        super().__init__(
+            ndim=ndim,
+            bounds=bounds,
+            f_shift=f_shift,
+        )
+
         self.f_bias = f_bias
         self.f_global = f_bias
-        self.x_global = self.f_shift
+
         self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias}
 
     def evaluate(self, x, *args):
@@ -515,22 +493,20 @@ class F102005(CecBenchmark):
     # n_valleys = 1
 
     def __init__(self, ndim=None, bounds=None, f_shift="data_rastrigin", f_matrix="rastrigin_M_D", f_bias=-330.):
-        super().__init__()
-        self.dim_changeable = True
-        self.dim_default = 30
-        self.dim_max = 100
-        self.dim_supported = [10, 30, 50]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-5., 5.] for _ in range(self.dim_default)]))
-        self.make_support_data_path("data_2005")
-        self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
-        self.f_matrix = self.check_matrix_data(f_matrix)
+        super().__init__(
+            ndim=ndim,
+            bounds=bounds,
+            f_shift=f_shift,
+            dim_supported=[10, 30, 50],
+            f_matrix=f_matrix
+        )
+
         self.f_bias = f_bias
         self.f_global = f_bias
-        self.x_global = self.f_shift
+
         self.paras = {"f_shift": self.f_shift, "f_matrix": self.f_matrix, "f_bias": self.f_bias}
 
     def evaluate(self, x, *args):
-        self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
         z = np.dot((x - self.f_shift), self.f_matrix)
         return operator.rastrigin_func(z) + self.f_bias
@@ -568,18 +544,16 @@ class F112005(CecBenchmark):
 
     def __init__(self, ndim=None, bounds=None, f_shift="data_weierstrass", f_matrix="weierstrass_M_D", f_bias=90.,
                  a=0.5, b=3, k_max=20):
-        super().__init__()
-        self.dim_changeable = True
-        self.dim_default = 30
-        self.dim_max = 100
-        self.dim_supported = [10, 30, 50]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-0.5, 0.5] for _ in range(self.dim_default)]))
-        self.make_support_data_path("data_2005")
-        self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
-        self.f_matrix = self.check_matrix_data(f_matrix)
+        super().__init__(
+            ndim=ndim,
+            bounds=bounds,
+            f_shift=f_shift,
+            dim_supported=[10, 30, 50],
+            f_matrix=f_matrix
+        )
         self.f_bias = f_bias
         self.f_global = f_bias
-        self.x_global = self.f_shift
+
         self.a = a
         self.b = b
         self.k_max = k_max
@@ -624,32 +598,31 @@ class F122005(CecBenchmark):
     # n_valleys = 1
 
     def __init__(self, ndim=None, bounds=None, f_shift="data_schwefel_213", f_bias=-460.):
-        super().__init__()
-        self.dim_changeable = True
-        self.dim_default = 30
-        self.dim_max = 100
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
-                                   np.array([[-np.pi, np.pi] for _ in range(self.dim_default)]))
-        self.make_support_data_path("data_2005")
-        shift_data, a_matrix, b_matrix = self.load_two_matrix_and_shift_data(f_shift)
-        self.f_shift = shift_data[:self.ndim]
-        self.f_matrix_a = a_matrix[:self.ndim, :self.ndim]
-        self.f_matrix_b = b_matrix[:self.ndim, :self.ndim]
+        super().__init__(
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[-np.pi, np.pi] for _ in range(self.dim_default)]),
+            f_shift=f_shift,
+            load_tow_matrix=True
+        )
+
         self.f_bias = f_bias
         self.f_global = f_bias
-        self.x_global = self.f_shift
+
         self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix_a": self.f_matrix_a,
                       "f_matrix_b": self.f_matrix_b}
 
     def evaluate(self, x, *args):
-        self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.__dim_supported)
+        self.check_solution(x, self.dim_max, self.dim_supported)
+
         ndim = len(x)
         result = 0.0
+
         for idx in range(0, ndim):
             t1 = np.sum(self.f_matrix_a[idx] * np.sin(self.f_shift) + self.f_matrix_b[idx] * np.cos(self.f_shift))
             t2 = np.sum(self.f_matrix_a[idx] * np.sin(x) + self.f_matrix_b[idx] * np.cos(x))
             result += (t1 - t2) ** 2
+
         return result + self.f_bias
 
 
@@ -687,23 +660,22 @@ class F132005(CecBenchmark):
     # n_valleys = 1
 
     def __init__(self, ndim=None, bounds=None, f_shift="data_EF8F2", f_bias=-130.):
-        super().__init__()
-        self.dim_changeable = True
-        self.dim_default = 30
-        self.dim_max = 100
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-3., 1.] for _ in range(self.dim_default)]))
-        self.make_support_data_path("data_2005")
-        self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
+        super().__init__(
+            ndim=ndim,
+            bounds=bounds,
+            f_shift=f_shift,
+            default_bounds=np.array([[-3., 1.] for _ in range(self.dim_default)])
+        )
+
         self.f_bias = f_bias
         self.f_global = f_bias
-        self.x_global = self.f_shift
+
         self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias}
         self.f8__ = operator.griewank_func
         self.f2__ = operator.rosenbrock_func
 
     def evaluate(self, x, *args):
-        self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.__dim_supported)
+        self.check_solution(x, self.dim_max, self.dim_supported)
         return operator.grie_rosen_cec_func(x - self.f_shift) + self.f_bias
 
 
@@ -1127,14 +1099,12 @@ class F212005(CecBenchmark):
     # n_valleys = 1
 
     def __init__(self, ndim=None, bounds=None, f_shift="data_hybrid_func3", f_matrix="hybrid_func3_M_D", f_bias=360.):
-        super().__init__()
-        self.dim_changeable = True
-        self.dim_default = 30
-        self.dim_max = 100
-        self.dim_supported = [10, 30, 50]
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-5., 5.] for _ in range(self.dim_default)]))
-        self.make_support_data_path("data_2005")
-        self.f_shift = self.load_matrix_data(f_shift)[:, :self.ndim]  # This shift as matrix for M functions
+        super().__init__(
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[-5., 5.] for _ in range(self.dim_default)]),
+            f_shift=f_shift
+        )
         self.M = self.check_matrix_data(f_matrix)
         self.lamdas = np.array(
             [5.0 * 5.0 / 100.0, 5.0 / 100.0, 5.0 * 1.0, 1.0, 5.0 * 1.0, 1.0, 5.0 * 10.0, 10.0, 5.0 * 5.0 / 200.0,
@@ -1163,11 +1133,12 @@ class F212005(CecBenchmark):
             return operator.griewank_func(x)
 
     def evaluate(self, x, *args):
-        self.n_fe += 1
         self.check_solution(x, self.dim_max, self.dim_supported)
+
         ndim = len(x)
         weights = np.ones(self.n_funcs)
         fits = np.ones(self.n_funcs)
+
         for idx in range(0, self.n_funcs):
             w_i = np.exp(-np.sum((x - self.f_shift[idx]) ** 2) / (2 * ndim * self.xichmas[idx] ** 2))
             z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx * ndim:(idx + 1) * ndim, :])
