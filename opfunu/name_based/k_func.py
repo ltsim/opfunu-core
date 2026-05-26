@@ -6,10 +6,10 @@
 
 import numpy as np
 
-from opfunu.benchmark import Benchmark
+from opfunu.benchmark.func import FuncBenchmark
 
 
-class Katsuura(Benchmark):
+class Katsuura(FuncBenchmark):
     """
     .. [1] Adorio, E. MVF - "Multivariate Test Functions Library in C for
     Unconstrained Global Optimization", 2005
@@ -63,7 +63,7 @@ class Katsuura(Benchmark):
         return np.prod(np.sum(inner, axis=0) * (idx + 1) + 1)
 
 
-class Keane(Benchmark):
+class Keane(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -107,7 +107,7 @@ class Keane(Benchmark):
         return val / np.sqrt(x[0] ** 2 + x[1] ** 2)
 
 
-class Kowalik(Benchmark):
+class Kowalik(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.

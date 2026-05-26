@@ -6,10 +6,10 @@
 
 import numpy as np
 
-from opfunu.benchmark import Benchmark
+from opfunu.benchmark.func import FuncBenchmark
 
 
-class Qing(Benchmark):
+class Qing(FuncBenchmark):
     """
     .. [1]  Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization Problems
     Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -55,7 +55,7 @@ class Qing(Benchmark):
         return np.sum((x ** 2.0 - i) ** 2.0)
 
 
-class Quadratic(Benchmark):
+class Quadratic(FuncBenchmark):
     """
     .. [1]  Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization Problems
     Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -101,7 +101,7 @@ class Quadratic(Benchmark):
                 + 203.64 * x[1] ** 2.0 + 182.25 * x[0] * x[1])
 
 
-class Quartic(Benchmark):
+class Quartic(FuncBenchmark):
     """
     .. [1]  Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization Problems
     Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -147,7 +147,7 @@ class Quartic(Benchmark):
         return np.sum(i * x ** 4.) + np.random.rand()
 
 
-class Quintic(Benchmark):
+class Quintic(FuncBenchmark):
     """
     .. [1]  Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization Problems
     Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.

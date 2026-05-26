@@ -12,7 +12,7 @@ def test_whenNdimNone_thenDefaultNdimUsed():
     allFunctions = get_all_cec_based_functions()
     for f in allFunctions:
         f_default = f()
-        assert f_default.ndim == f_default.dim_default, f'{f.__name__} failed to have ndim == dim_default'
+        assert f_default.ndim == f_default.__dim_default, f'{f.__name__} failed to have ndim == dim_default'
 
 
 def test_whenEvaulateDefaultNdim_thenHasResult():
@@ -21,11 +21,11 @@ def test_whenEvaulateDefaultNdim_thenHasResult():
     failing = []
     for f in all_functions:
         f_default = f()
-        x = np.random.rand(f_default.dim_default)
+        x = np.random.rand(f_default.__dim_default)
         try:
             f_default.evaluate(x)
         except x:
-            print(f'{f_default.__name__}:{f_default.dim_default}:{x}')
+            print(f'{f_default.__name__}:{f_default.__dim_default}:{x}')
             failing.append(f.__name__)
 
     assert len(failing) == 0, f'{failing} failed to have x_global result in f_global'

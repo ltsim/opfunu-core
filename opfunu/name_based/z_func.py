@@ -6,10 +6,10 @@
 
 import numpy as np
 
-from opfunu.benchmark import Benchmark
+from opfunu.benchmark.func import FuncBenchmark
 
 
-class Zacharov(Benchmark):
+class Zacharov(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -56,7 +56,7 @@ class Zacharov(Benchmark):
         return u + (0.5 * v) ** 2 + (0.5 * v) ** 4
 
 
-class ZeroSum(Benchmark):
+class ZeroSum(FuncBenchmark):
     """
     .. [1] Gavana, A. Global Optimization Benchmarks and AMPGO retrieved 2015
 
@@ -101,7 +101,7 @@ class ZeroSum(Benchmark):
         return 1.0 + (10000.0 * np.abs(np.sum(x))) ** 0.5
 
 
-class Zettl(Benchmark):
+class Zettl(FuncBenchmark):
     """
     .. [1] Gavana, A. Global Optimization Benchmarks and AMPGO retrieved 2015
 
@@ -144,7 +144,7 @@ class Zettl(Benchmark):
         return (x[0] ** 2 + x[1] ** 2 - 2 * x[0]) ** 2 + 0.25 * x[0]
 
 
-class Zimmerman(Benchmark):
+class Zimmerman(FuncBenchmark):
     """
     .. [1] Gavana, A. Global Optimization Benchmarks and AMPGO retrieved 2015
 
@@ -203,7 +203,7 @@ class Zimmerman(Benchmark):
                    Zp(-x[1]) * np.sign(x[1]))
 
 
-class Zirilli(Benchmark):
+class Zirilli(FuncBenchmark):
     """
     .. [1] Gavana, A. Global Optimization Benchmarks and AMPGO retrieved 2015
 

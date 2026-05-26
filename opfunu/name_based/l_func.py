@@ -6,10 +6,10 @@
 
 import numpy as np
 
-from opfunu.benchmark import Benchmark
+from opfunu.benchmark.func import FuncBenchmark
 
 
-class Langermann(Benchmark):
+class Langermann(FuncBenchmark):
     """
     .. [1] Gavana, A. Global Optimization Benchmarks and AMPGO retrieved 2015
 
@@ -66,7 +66,7 @@ class Langermann(Benchmark):
             np.pi * ((x[0] - self.a) ** 2 + (x[1] - self.b) ** 2))))
 
 
-class LennardJones(Benchmark):
+class LennardJones(FuncBenchmark):
     """
     .. [1] http://www-wales.ch.cam.ac.uk/~jon/structures/LJ/tables.150.html
 
@@ -142,7 +142,7 @@ class LennardJones(Benchmark):
         return s
 
 
-class Leon(Benchmark):
+class Leon(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -187,7 +187,7 @@ class Leon(Benchmark):
         return 100. * (x[1] - x[0] ** 2.0) ** 2.0 + (1 - x[0]) ** 2.0
 
 
-class Levy03(Benchmark):
+class Levy03(FuncBenchmark):
     """
     .. [1] Mishra, S. Global Optimization by Differential Evolution and Particle Swarm Methods: Evaluation
     on Some Benchmark Functions. Munich Personal RePEc Archive, 2006, 1005
@@ -235,7 +235,7 @@ class Levy03(Benchmark):
         return np.sin(np.pi * y[0]) ** 2 + v + z
 
 
-class Levy05(Benchmark):
+class Levy05(FuncBenchmark):
     """
     .. [1] Mishra, S. Global Optimization by Differential Evolution and Particle Swarm Methods: Evaluation
     on Some Benchmark Functions. Munich Personal RePEc Archive, 2006, 1005
@@ -280,7 +280,7 @@ class Levy05(Benchmark):
         return np.sum(a) * np.sum(b) + (x[0] + 1.42513) ** 2 + (x[1] + 0.80032) ** 2
 
 
-class Levy13(Benchmark):
+class Levy13(FuncBenchmark):
     """
     .. [1] Mishra, S. Global Optimization by Differential Evolution and Particle Swarm Methods: Evaluation
     on Some Benchmark Functions. Munich Personal RePEc Archive, 2006, 1005

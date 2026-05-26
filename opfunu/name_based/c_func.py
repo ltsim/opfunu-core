@@ -6,10 +6,10 @@
 
 import numpy as np
 
-from opfunu.benchmark import Benchmark
+from opfunu.benchmark.func import FuncBenchmark
 
 
-class CamelThreeHump(Benchmark):
+class CamelThreeHump(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -46,7 +46,7 @@ class CamelThreeHump(Benchmark):
         return 2 * x[0] ** 2 - 1.05 * x[0] ** 4 + x[0] ** 6 / 6 + x[0] * x[1] + x[1] ** 2
 
 
-class CamelSixHump(Benchmark):
+class CamelSixHump(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -84,7 +84,7 @@ class CamelSixHump(Benchmark):
         return (4 - 2.1 * x[0] ** 2 + x[0] ** 4 / 3) * x[0] ** 2 + x[0] * x[1] + (4 * x[1] ** 2 - 4) * x[1] ** 2
 
 
-class ChenBird(Benchmark):
+class ChenBird(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -122,7 +122,7 @@ class ChenBird(Benchmark):
                 0.001 ** 2 + (2 * x[0] + x[1] - 1.5) ** 2)
 
 
-class ChenV(Benchmark):
+class ChenV(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -165,7 +165,7 @@ class ChenV(Benchmark):
                 0.001 ** 2 + (x[0] ** 2 - x[1] ** 2) ** 2)
 
 
-class Chichinadze(Benchmark):
+class Chichinadze(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -204,7 +204,7 @@ class Chichinadze(Benchmark):
                 + 8 * np.sin(5 * np.pi * x[0] / 2) - 1.0 / np.sqrt(5) * np.exp(-((x[1] - 0.5) ** 2) / 2))
 
 
-class ChungReynolds(Benchmark):
+class ChungReynolds(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -241,7 +241,7 @@ class ChungReynolds(Benchmark):
         return np.sum(x ** 2) ** 2
 
 
-class Cigar(Benchmark):
+class Cigar(FuncBenchmark):
     """
     .. [1] Gavana, A. Global Optimization Benchmarks and AMPGO retrieved 2022
     """
@@ -277,7 +277,7 @@ class Cigar(Benchmark):
         return x[0] ** 2 + 1e6 * np.sum(x[1:] ** 2)
 
 
-class Cola(Benchmark):
+class Cola(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -337,7 +337,7 @@ class Cola(Benchmark):
         return np.sum(np.sum(inner, axis=1))
 
 
-class Colville(Benchmark):
+class Colville(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -376,7 +376,7 @@ class Colville(Benchmark):
                 10.1 * ((x[1] - 1) ** 2 + (x[3] - 1) ** 2) + 19.8 * (x[1] - 1) * (x[3] - 1))
 
 
-class Corana(Benchmark):
+class Corana(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -421,7 +421,7 @@ class Corana(Benchmark):
         return r
 
 
-class CosineMixture(Benchmark):
+class CosineMixture(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -458,7 +458,7 @@ class CosineMixture(Benchmark):
         return -0.1 * np.sum(np.cos(5.0 * np.pi * x)) - np.sum(x ** 2.0)
 
 
-class CrossInTray(Benchmark):
+class CrossInTray(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
     Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
@@ -501,7 +501,7 @@ class CrossInTray(Benchmark):
             np.sin(x[0]) * np.sin(x[1]) * np.exp(abs(100 - np.sqrt(x[0] ** 2 + x[1] ** 2) / np.pi))) + 1) ** (0.1))
 
 
-class CrossLegTable(Benchmark):
+class CrossLegTable(FuncBenchmark):
     """
     .. [1] Mishra, S. Global Optimization by Differential Evolution and Particle Swarm Methods:
     Evaluation on Some Benchmark Functions Munich University, 2006
@@ -541,7 +541,7 @@ class CrossLegTable(Benchmark):
         return -(np.abs(v * np.exp(np.abs(u))) + 1) ** (-0.1)
 
 
-class CrownedCross(Benchmark):
+class CrownedCross(FuncBenchmark):
     """
     .. [1] Mishra, S. Global Optimization by Differential Evolution and Particle Swarm Methods:
     Evaluation on Some Benchmark Functions Munich University, 2006
@@ -581,7 +581,7 @@ class CrownedCross(Benchmark):
         return 0.0001 * (np.abs(v * np.exp(np.abs(u))) + 1) ** (0.1)
 
 
-class Csendes(Benchmark):
+class Csendes(FuncBenchmark):
     """
     .. [1] Mishra, S. Global Optimization by Differential Evolution and Particle Swarm Methods:
     Evaluation on Some Benchmark Functions Munich University, 2006
@@ -618,7 +618,7 @@ class Csendes(Benchmark):
         return np.sum((x ** 6.0) * (2.0 + np.sin(1.0 / (x + self.epsilon))))
 
 
-class Cube(Benchmark):
+class Cube(FuncBenchmark):
     """
     .. [1] Mishra, S. Global Optimization by Differential Evolution and Particle Swarm Methods:
     Evaluation on Some Benchmark Functions Munich University, 2006
