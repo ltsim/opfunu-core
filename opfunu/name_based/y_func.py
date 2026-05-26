@@ -6,10 +6,10 @@
 
 import numpy as np
 
-from opfunu.benchmark import Benchmark
+from opfunu.benchmark.func import FuncBenchmark
 
 
-class YaoLiu04(Benchmark):
+class YaoLiu04(FuncBenchmark):
     """
     .. [1]  Yao X., Liu Y. (1997) Fast evolution strategies. In: Angeline P.J., Reynolds R.G., McDonnell J.R., Eberhart R. (eds)
     Evolutionary Programming VI. EP 1997. Lecture Notes in Computer Science, vol 1213. Springer, Berlin, Heidelberg

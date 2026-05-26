@@ -15,7 +15,7 @@ def test_Ackley01_results():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -28,7 +28,7 @@ def test_Ackley02_results():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -41,7 +41,7 @@ def test_Ackley03_results():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -54,7 +54,7 @@ def test_Adjiman_results():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -67,7 +67,7 @@ def test_Alpine01_results():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -80,7 +80,7 @@ def test_Alpine02_results():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
@@ -93,7 +93,7 @@ def test_AMGM_results():
     x = np.ones(ndim)
     result = problem.evaluate(x)
     assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.Benchmark)
+    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert problem.bounds.shape[0] == ndim
