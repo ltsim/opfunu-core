@@ -1,10 +1,11 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 06:43, 30/06/2022 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 06:43, 30/06/2022 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
 import importlib.resources
+import typing
 
 import numpy as np
 
@@ -20,7 +21,8 @@ class CecBenchmark(Benchmark):
     Attributes
     ----------
     bounds : list
-        The lower/upper bounds of the problem. This a 2D-matrix of [lower, upper] array that contain the lower and upper bounds.
+        The lower/upper bounds of the problem. This a 2D-matrix of [lower, upper] array that contain the lower and
+        upper bounds.
         By default, each problem has its own bounds. But user can try to put different bounds to test the problem.
     ndim : int
         The dimensionality of the problem. It is calculated from bounds
@@ -39,53 +41,73 @@ class CecBenchmark(Benchmark):
         Whether we can change the benchmark function `x` variable length (i.e., the dimensionality of the problem)
     """
 
-    name = "Benchmark name"
-    latex_formula = r'f(\mathbf{x})'
-    latex_formula_dimension = r'd \in \mathbb{N}_{+}^{*}'
-    latex_formula_bounds = r'x_i \in [-2\pi, 2\pi], \forall i \in \llbracket 1, d\rrbracket'
-    latex_formula_global_optimum = r'f(0, ..., 0)=-1, \text{ for}, m=5, \beta=15'
-    
-    continuous = True
-    linear = False
-    convex = True
-    unimodal = False
-    separable = False
+    name: str = "Benchmark name"
+    latex_formula: str = r'f(\mathbf{x})'
+    latex_formula_dimension: str = r'd \in \mathbb{N}_{+}^{*}'
+    latex_formula_bounds: str = r'x_i \in [-2\pi, 2\pi], \forall i \in \llbracket 1, d\rrbracket'
+    latex_formula_global_optimum: str = r'f(0, ..., 0)=-1, \text{ for}, m=5, \beta=15'
 
-    differentiable = True
-    scalable = True
-    randomized_term = False
-    parametric = True
-    shifted = True
-    rotated = False
+    continuous: bool = True
+    linear: bool = False
+    convex: bool = True
+    unimodal: bool = False
+    separable: bool = False
 
-    modality = True  # Number of ambiguous peaks, unknown # peaks
+    differentiable: bool = True
+    scalable: bool = True
+    randomized_term: bool = False
+    parametric: bool = True
+    shifted: bool = True
+    rotated: bool = False
 
-    characteristics: list[str]
+    modality: bool = True  # Number of ambiguous peaks, unknown # peaks
+
+    characteristics: typing.ClassVar[list[str]]
 
     # n_basins = 1
     # n_valleys = 1
 
+    f_shift: np.ndarray
+    f_shuffle: np.ndarray
+    f_matrix: np.ndarray
+    f_matrix_a: np.ndarray
+    f_matrix_b: np.ndarray
+    f_bias: float
+    f_global: float
+    x_global: np.ndarray
+    n_fe: int
+
+    _ndim: int
+    _bounds: np.ndarray
+    _dim_changeable: bool
+    _dim_default: int
+    _dim_max: int
+    _dim_supported: list[int] | None
+
+    g0: typing.Any
+    g1: typing.Any
+    g2: typing.Any
+    g3: typing.Any
+    g4: typing.Any
+
     def __init__(
             self,
-            ndim=None,
-            bounds=None,
-            f_shift=None,
-            f_matrix=None,
-            f_shuffle=None,
-            f_bias=None,
-            default_bounds=None,
-            dim_changeable=True,
-            dim_default=30,
-            dim_max=100,
-            dim_supported=None,
-            data_name="",
-            load_two_matrix=False,
-            load_tow_matrix=False,
-    ):
+            ndim: int | None = None,
+            bounds: typing.Any = None,
+            f_shift: str | np.ndarray | None = None,
+            f_matrix: str | np.ndarray | None = None,
+            f_shuffle: str | np.ndarray | None = None,
+            f_bias: float | None = None,
+            default_bounds: typing.Any = None,
+            dim_changeable: bool = True,
+            dim_default: int = 30,
+            dim_max: int = 100,
+            dim_supported: list[int] | None = None,
+            data_name: str = "",
+            load_two_matrix: bool = False,
+            load_tow_matrix: bool = False,
+    ) -> None:
         super().__init__()
-
-        self._ndim = ndim
-        self._bounds = bounds
 
         self._dim_changeable = dim_changeable
         self._dim_default = dim_default
@@ -105,11 +127,15 @@ class CecBenchmark(Benchmark):
         if data_name:
             self.make_support_data_path(data_name)
 
-        self.f_matrix = None
-        self.f_shuffle = None
-        self.f_shift = None
+        self.f_matrix = np.array([])
+        self.f_shuffle = np.array([])
+        self.f_shift = np.array([])
+        self.f_matrix_a = np.array([])
+        self.f_matrix_b = np.array([])
 
         if load_two_matrix or load_tow_matrix:
+            if not isinstance(f_shift, str):
+                raise ValueError("The shift data should be a file name when loading two matrices!")
             shift_data, a_matrix, b_matrix = self.load_two_matrix_and_shift_data(f_shift)
             self.f_shift = shift_data[:self.ndim]
             self.f_matrix_a = a_matrix[:self.ndim, :self.ndim]
@@ -122,102 +148,107 @@ class CecBenchmark(Benchmark):
             if f_shuffle is not None:
                 self.f_shuffle = self.check_shuffle_data(f_shuffle)
 
-        self.f_bias = f_bias
+        self.f_bias = f_bias if f_bias is not None else 0.0
         self.f_global = f_bias if f_bias is not None else 0.0
         self.x_global = self.f_shift
 
         self.n_fe = 0
 
     @property
-    def dim_max(self):
+    def dim_max(self) -> int:
         return self._dim_max
 
     @dim_max.setter
-    def dim_max(self, value):
+    def dim_max(self, value: int) -> None:
         self._dim_max = value
 
     @property
-    def dim_supported(self):
+    def dim_supported(self) -> list[int] | None:
         return self._dim_supported
 
     @dim_supported.setter
-    def dim_supported(self, value):
+    def dim_supported(self, value: list[int] | None) -> None:
         self._dim_supported = value
 
     @property
-    def dim_default(self):
+    def dim_default(self) -> int:
         return self._dim_default
 
     @dim_default.setter
-    def dim_default(self, value):
+    def dim_default(self, value: int) -> None:
         self._dim_default = value
 
     @property
-    def dim_changeable(self):
+    def dim_changeable(self) -> bool:
         return self._dim_changeable
 
     @dim_changeable.setter
-    def dim_changeable(self, value):
+    def dim_changeable(self, value: bool) -> None:
         self._dim_changeable = value
 
-    def make_support_data_path(self, data_name: str):
+    def make_support_data_path(self, data_name: str) -> None:
         self.support_path = importlib.resources.files("opfunu").joinpath(f"cec_based/{data_name}")
 
-    def check_shift_data(self, f_shift):
-        if type(f_shift) is str:
+    def check_shift_data(self, f_shift: str | list | tuple | np.ndarray) -> np.ndarray:
+        if isinstance(f_shift, str):
             return self.load_shift_data(f_shift)
         else:
-            if type(f_shift) in [list, tuple, np.ndarray]:
+            if isinstance(f_shift, (list, tuple, np.ndarray)):
                 return np.squeeze(f_shift)
             else:
-                raise ValueError(f"The shift data should be a list/tuple or np.array!")
+                raise ValueError("The shift data should be a list/tuple or np.array!")
 
-    def check_shift_matrix(self, f_shift, selected_idx=None):
-        if type(f_shift) is str:
+    def check_shift_matrix(
+            self,
+            f_shift: str | list | tuple | np.ndarray,
+            selected_idx: int | None = None,
+    ) -> np.ndarray:
+        if isinstance(f_shift, str):
             if selected_idx is None:
                 return self.load_matrix_data(f_shift)
             else:
                 return self.load_matrix_data(f_shift)[selected_idx, :self.ndim]
         else:
-            if type(f_shift) in [list, tuple, np.ndarray]:
+            if isinstance(f_shift, (list, tuple, np.ndarray)):
                 return np.squeeze(f_shift)
             else:
-                raise ValueError(f"The shift data should be a list/tuple or np.array!")
+                raise ValueError("The shift data should be a list/tuple or np.array!")
 
-    def check_matrix_data(self, f_matrix, needed_dim=True):
-        if type(f_matrix) is str:
+    def check_matrix_data(self, f_matrix: str | np.ndarray, needed_dim: bool = True) -> np.ndarray:
+        if isinstance(f_matrix, str):
             if needed_dim:
                 return self.load_matrix_data(f"{f_matrix}{self.ndim}")
             else:
                 return self.load_matrix_data(f_matrix)
         else:
-            if type(f_matrix) is np.ndarray:
+            if isinstance(f_matrix, np.ndarray):
                 return np.squeeze(f_matrix)
             else:
-                raise ValueError(f"The matrix data should be an orthogonal matrix (2D np.array)!")
+                raise ValueError("The matrix data should be an orthogonal matrix (2D np.array)!")
 
-    def check_shuffle_data(self, f_shuffle, needed_dim=True):
-        if type(f_shuffle) is str:
+    def check_shuffle_data(self, f_shuffle: str | list | tuple | np.ndarray, needed_dim: bool = True) -> np.ndarray:
+        if isinstance(f_shuffle, str):
             if needed_dim:
                 return self.load_shift_data(f"{f_shuffle}{self.ndim}")
             else:
                 return self.load_shift_data(f_shuffle)
         else:
-            if type(f_shuffle) in [list, tuple, np.ndarray]:
+            if isinstance(f_shuffle, (list, tuple, np.ndarray)):
                 return np.squeeze(f_shuffle)
             else:
-                raise ValueError(f"The shuffle data should be a list/tuple or np.array!")
+                raise ValueError("The shuffle data should be a list/tuple or np.array!")
 
-    def check_m_group(self, m_group=None):
-        if type(m_group) is int:
+    def check_m_group(self, m_group: int | None = None) -> int:
+        if isinstance(m_group, int):
             if int(self.ndim / m_group) > 1:
                 return m_group
             else:
-                raise ValueError(f"ndim is too small or m_group is too large!")
+                raise ValueError("ndim is too small or m_group is too large!")
         else:
-            raise ValueError(f"m_group is positive integer!")
+            raise ValueError("m_group is positive integer!")
 
-    def load_shift_data(self, filename):
+    def load_shift_data(self, filename: str) -> np.ndarray:
+        assert self.support_path is not None
         fname = filename if filename.endswith('.txt') else f"{filename}.txt"
         filepath = self.support_path.joinpath(fname)
         if hasattr(filepath, "open"):
@@ -227,7 +258,8 @@ class CecBenchmark(Benchmark):
             data = np.genfromtxt(f"{self.support_path}/{fname}", dtype=float)
         return data.reshape((-1))
 
-    def load_matrix_data(self, filename=None):
+    def load_matrix_data(self, filename: str) -> np.ndarray:
+        assert self.support_path is not None
         fname = filename if filename.endswith('.txt') else f"{filename}.txt"
         filepath = self.support_path.joinpath(fname)
         try:
@@ -242,7 +274,8 @@ class CecBenchmark(Benchmark):
             print(f"{self.__class__.__name__} problem is only supported ndim in {self.dim_supported}!")
             exit(1)
 
-    def load_shift_and_matrix_data(self, filename=None):
+    def load_shift_and_matrix_data(self, filename: str) -> tuple[np.ndarray, np.ndarray]:
+        assert self.support_path is not None
         fname = filename if filename.endswith('.txt') else f"{filename}.txt"
         filepath = self.support_path.joinpath(fname)
         if hasattr(filepath, "open"):
@@ -254,7 +287,8 @@ class CecBenchmark(Benchmark):
         matrix_data = data[1:, :]
         return shift_data, matrix_data
 
-    def load_two_matrix_and_shift_data(self, filename=None):
+    def load_two_matrix_and_shift_data(self, filename: str) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+        assert self.support_path is not None
         fname = filename if filename.endswith('.txt') else f"{filename}.txt"
         filepath = self.support_path.joinpath(fname)
         if hasattr(filepath, "open"):
@@ -267,7 +301,7 @@ class CecBenchmark(Benchmark):
         shift_data = data[200:, :].ravel()
         return shift_data, a_matrix, b_matrix
 
-    def check_solution(self, x, dim_max=None, dim_support=None):
+    def check_solution(self, x: np.ndarray, dim_max: int | None = None, dim_support: list[int] | None = None) -> None:
         """
         Raise the error if the problem size is not equal to the solution length
 
@@ -289,10 +323,10 @@ class CecBenchmark(Benchmark):
         if (dim_support is not None) and (len(x) not in dim_support):
             raise ValueError(f"{self.__class__.__name__} problem is only supported ndim in {dim_support}!")
 
-    def evaluate(self, x):
+    def evaluate(self, x: np.ndarray) -> float:
         raise NotImplementedError
 
-    def is_ndim_compatible(self, ndim):
+    def is_ndim_compatible(self, ndim: int | None) -> bool:
         assert (ndim is None) or (
                 isinstance(ndim, int) and (not ndim < 0)), "The dimension ndim must be None or a positive integer"
         if ndim is None:
@@ -303,7 +337,7 @@ class CecBenchmark(Benchmark):
             else:
                 return ndim == self.ndim
 
-    def is_succeed(self, x, tol=1.e-5):
+    def is_succeed(self, x: np.ndarray, tol: float = 1.e-5) -> bool:
         if np.any(x > self.ub) or np.any(x < self.lb):
             return False
 
@@ -316,7 +350,8 @@ class CecBenchmark(Benchmark):
             raise ValueError("Found a lower global minimum", x, val, self.f_global)
         return False
 
-    def check_ndim_and_bounds(self, ndim=None, dim_max=None, bounds=None, default_bounds=None):
+    def check_ndim_and_bounds(self, ndim: int | None = None, dim_max: int | None = None, bounds: typing.Any = None,
+                              default_bounds: typing.Any = None) -> None:
         """
         Check the bounds when initializing the object.
 
@@ -350,7 +385,7 @@ class CecBenchmark(Benchmark):
         else:
             if bounds is None:
                 if self.dim_changeable:
-                    if type(ndim) is int and ndim > 1:
+                    if isinstance(ndim, int) and ndim > 1:
                         if dim_max is None or ndim <= dim_max:
                             self._ndim = int(ndim)
                             self._bounds = np.array([default_bounds[0] for _ in range(self._ndim)])
@@ -367,7 +402,7 @@ class CecBenchmark(Benchmark):
                 if self.dim_changeable:
                     self._bounds = np.array(bounds).T
                     self._ndim = self._bounds.shape[0]
-                    if self._ndim > dim_max:
+                    if dim_max is not None and self._ndim > dim_max:
                         raise ValueError(f"{self.__class__.__name__} problem supports maximum {dim_max} variables!")
                     else:
                         print(f"{self.__class__.__name__} problem is set with {self._ndim} variables!")
@@ -377,18 +412,21 @@ class CecBenchmark(Benchmark):
                         self._ndim = self.dim_default
                     else:
                         raise ValueError(
-                            f"{self.__class__.__name__} is fixed problem with {self._ndim} variables. Please setup the correct bounds!")
+                            f"{self.__class__.__name__} is fixed problem with {self._ndim} variables. "
+                            "Please setup the correct bounds!")
+        return
 
     @property
-    def bounds(self):
+    def bounds(self) -> np.ndarray:
         """
-        The lower/upper bounds to be used for optimization problem. This a 2D-matrix of [lower, upper] array that contain the lower and upper
-        bounds for the problem. The problem should not be asked for evaluation outside these bounds. ``len(bounds) == ndim``.
+        The lower/upper bounds to be used for optimization problem. This a 2D-matrix of [lower, upper] array that
+        contain the lower and upper bounds for the problem. The problem should not be asked for evaluation outside
+        these bounds. ``len(bounds) == ndim``.
         """
         return self._bounds
 
     @property
-    def ndim(self):
+    def ndim(self) -> int:
         """
         The dimensionality of the problem.
 
@@ -400,7 +438,7 @@ class CecBenchmark(Benchmark):
         return self._ndim
 
     @property
-    def lb(self):
+    def lb(self) -> np.ndarray:
         """
         The lower bounds for the problem
 
@@ -412,7 +450,7 @@ class CecBenchmark(Benchmark):
         return np.array([x[0] for x in self.bounds])
 
     @property
-    def ub(self):
+    def ub(self) -> np.ndarray:
         """
         The upper bounds for the problem
 

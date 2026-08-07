@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 18:47, 29/06/2022 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 18:47, 29/06/2022 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
 import numpy as np
@@ -53,7 +53,7 @@ class Beale(FuncBenchmark):
     """
     name = "Beale Function"
     latex_formula = r'f_{\text{Beale}}(x) = \left(x_1 x_2 - x_1 + 1.5\right)^{2} +' + \
-                    '\left(x_1 x_2^{2} - x_1 + 2.25\right)^{2} + \left(x_1 x_2^{3} - x_1 + 2.625\right)^{2}'
+                    '\\left(x_1 x_2^{2} - x_1 + 2.25\right)^{2} + \\left(x_1 x_2^{3} - x_1 + 2.625\right)^{2}'
     latex_formula_dimension = r'd = 2'
     latex_formula_bounds = r'x_i \in [-4.5, 4.5], \forall i \in \llbracket 1, d\rrbracket'
     latex_formula_global_optimum = r'f(3.0, 0.5) = 0.0'

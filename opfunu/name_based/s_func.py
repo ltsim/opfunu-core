@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 17:31, 30/07/2022 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 17:31, 30/07/2022 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
 import numpy as np
@@ -16,10 +16,10 @@ class Salomon(FuncBenchmark):
 
     .. math::
 
-        f_{\text{Salomon}}(x) = 1 - \cos \left (2 \pi \sqrt{\sum_{i=1}^{n} x_i^2} \right) + 0.1 \sqrt{\sum_{i=1}^n x_i^2}
+        f_{\text{Salomon}}(x) = 1 - \\cos \\left (2 \\pi \\sqrt{\\sum_{i=1}^{n} x_i^2} \right) + 0.1 \\sqrt{\\sum_{i=1}^n x_i^2}
 
 
-    Here, :math:`n` represents the number of dimensions and :math:`x_i \in [-100, 100]` for :math:`i = 1, ..., n`.
+    Here, :math:`n` represents the number of dimensions and :math:`x_i \\in [-100, 100]` for :math:`i = 1, ..., n`.
 
     *Global optimum*: :math:`f(x) = 0` for :math:`x_i = 0` for :math:`i = 1, ..., n`
     """

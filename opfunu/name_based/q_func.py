@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 17:31, 30/07/2022 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 17:31, 30/07/2022 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
 import numpy as np
@@ -16,11 +16,11 @@ class Qing(FuncBenchmark):
 
     .. math::
 
-        f_{\text{Qing}}(x) = \sum_{i=1}^{n} (x_i^2 - i)^2
+        f_{\text{Qing}}(x) = \\sum_{i=1}^{n} (x_i^2 - i)^2
 
-    Here, :math:`n` represents the number of dimensions and :math:`x_i \in [-500, 500]` for :math:`i = 1, ..., n`.
+    Here, :math:`n` represents the number of dimensions and :math:`x_i \\in [-500, 500]` for :math:`i = 1, ..., n`.
 
-    *Global optimum*: :math:`f(x) = 0` for :math:`x_i = \pm \sqrt(i)` for :math:`i = 1, ..., n`
+    *Global optimum*: :math:`f(x) = 0` for :math:`x_i = \\pm \\sqrt(i)` for :math:`i = 1, ..., n`
     """
     name = "Qing Function"
     latex_formula = r'f_{\text{Qing}}(x) = \sum_{i=1}^{n} (x_i^2 - i)^2'
@@ -64,7 +64,7 @@ class Quadratic(FuncBenchmark):
 
         f_{\text{Quadratic}}(x) = -3803.84 - 138.08x_1 - 232.92x_2 + 128.08x_1^2+ 203.64x_2^2 + 182.25x_1x_2
 
-    Here, :math:`n` represents the number of dimensions and :math:`x_i \in [-10, 10]` for :math:`i = 1, 2`.
+    Here, :math:`n` represents the number of dimensions and :math:`x_i \\in [-10, 10]` for :math:`i = 1, 2`.
 
     *Global optimum*: :math:`f(x) = -3873.72418` for :math:`x = [0.19388, 0.48513]`
     """
@@ -110,7 +110,7 @@ class Quartic(FuncBenchmark):
 
         f_{\text{Quartic}}(x) =
 
-    Here, :math:`n` represents the number of dimensions and :math:`x_i \in [-10, 10]` for :math:`i = 1, 2`.
+    Here, :math:`n` represents the number of dimensions and :math:`x_i \\in [-10, 10]` for :math:`i = 1, 2`.
 
     *Global optimum*: :math:`f(x) = -3873.72418` for :math:`x = [0.19388, 0.48513]`
     """
@@ -154,9 +154,9 @@ class Quintic(FuncBenchmark):
 
     .. math::
 
-        f_{\text{Quintic}}(x) = \sum_{i=1}^{n} \left|{x_{i}^{5} - 3 x_{i}^{4}+ 4 x_{i}^{3} + 2 x_{i}^{2} - 10 x_{i} -4}\right|
+        f_{\text{Quintic}}(x) = \\sum_{i=1}^{n} \\left|{x_{i}^{5} - 3 x_{i}^{4}+ 4 x_{i}^{3} + 2 x_{i}^{2} - 10 x_{i} -4}\right|
 
-    Here, :math:`n` represents the number of dimensions and :math:`x_i \in [-10, 10]` for :math:`i = 1, ..., n`.
+    Here, :math:`n` represents the number of dimensions and :math:`x_i \\in [-10, 10]` for :math:`i = 1, ..., n`.
 
     *Global optimum*: :math:`f(x_i) = 0` for :math:`x_i = -1` for :math:`i = 1, ..., n`
     """

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 17:31, 30/07/2022 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 17:31, 30/07/2022 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
 import numpy as np
@@ -16,9 +16,9 @@ class Ursem01(FuncBenchmark):
 
     .. math::
 
-         f_{\text{Ursem01}}(x) = - \sin(2x_1 - 0.5 \pi) - 3 \cos(x_2) - 0.5 x_1
+         f_{\text{Ursem01}}(x) = - \\sin(2x_1 - 0.5 \\pi) - 3 \\cos(x_2) - 0.5 x_1
 
-    with :math:`x_1 \in [-2.5, 3]` and :math:`x_2 \in [-2, 2]`.
+    with :math:`x_1 \\in [-2.5, 3]` and :math:`x_2 \\in [-2, 2]`.
 
     *Global optimum*: :math:`f(x) = -4.81681406371` for :math:`x = [1.69714, 0.0]`
     """

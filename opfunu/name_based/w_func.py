@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 17:32, 30/07/2022 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 17:32, 30/07/2022 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
 import numpy as np
@@ -16,9 +16,9 @@ class Watson(FuncBenchmark):
 
     .. math::
 
-         f(x) = \sum_{i=0}^{29} \left\{\sum_{j=0}^4 ((j + 1)a_i^j x_{j+1}) - \left[ \sum_{j=0}^5 a_i^j x_{j+1} \right ]^2 - 1 \right\}^2 + x_1^2
+         f(x) = \\sum_{i=0}^{29} \\left\\{\\sum_{j=0}^4 ((j + 1)a_i^j x_{j+1}) - \\left[ \\sum_{j=0}^5 a_i^j x_{j+1} \right ]^2 - 1 \right\\}^2 + x_1^2
 
-    Where, in this exercise, :math:`a_i = i/29`. with :math:`x_i \in [-5, 5]` for :math:`i = 1, ..., 6`.
+    Where, in this exercise, :math:`a_i = i/29`. with :math:`x_i \\in [-5, 5]` for :math:`i = 1, ..., 6`.
 
     *Global optimum*: :math:`f(x) = 0.002288` for :math:`x = [-0.0158, 1.012, -0.2329, 1.260, -1.513, 0.9928]`
     """

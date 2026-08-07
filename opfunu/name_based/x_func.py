@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 17:32, 30/07/2022 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 17:32, 30/07/2022 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
 import numpy as np
@@ -16,11 +16,11 @@ class XinSheYang01(FuncBenchmark):
 
     .. math::
 
-         f(x) = \sum_{i=1}^{n} \epsilon_i \lvert x_i \rvert^i
+         f(x) = \\sum_{i=1}^{n} \\epsilon_i \\lvert x_i \rvert^i
 
-    The variable :math:`\epsilon_i, (i = 1, ..., n)` is a random variable uniformly distributed in :math:`[0, 1]`.
+    The variable :math:`\\epsilon_i, (i = 1, ..., n)` is a random variable uniformly distributed in :math:`[0, 1]`.
 
-    Here, :math:`n` represents the number of dimensions and :math:`x_i \in [-5, 5]` for :math:`i = 1, ..., n`.
+    Here, :math:`n` represents the number of dimensions and :math:`x_i \\in [-5, 5]` for :math:`i = 1, ..., n`.
 
     *Global optimum*: :math:`f(x) = 0` for :math:`x_i = 0` for :math:`i = 1, ..., n`
     """

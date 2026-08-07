@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 17:31, 30/07/2022 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 17:31, 30/07/2022 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
 import numpy as np
@@ -16,12 +16,12 @@ class TestTubeHolder(FuncBenchmark):
 
     .. math::
 
-        f_{\text{TestTubeHolder}}(x) = - 4 \left | {e^{\left|{\cos \left(\frac{1}{200} x_{1}^{2} +
-        \frac{1}{200} x_{2}^{2}\right)} \right|}\sin\left(x_{1}\right) \cos\left(x_{2}\right)}\right|
+        f_{\text{TestTubeHolder}}(x) = - 4 \\left | {e^{\\left|{\\cos \\left(\frac{1}{200} x_{1}^{2} +
+        \frac{1}{200} x_{2}^{2}\right)} \right|}\\sin\\left(x_{1}\right) \\cos\\left(x_{2}\right)}\right|
 
-    with :math:`x_i \in [-10, 10]` for :math:`i = 1, 2`.
+    with :math:`x_i \\in [-10, 10]` for :math:`i = 1, 2`.
 
-    *Global optimum*: :math:`f(x) = -10.872299901558` for :math:`x= [-\pi/2, 0]`
+    *Global optimum*: :math:`f(x) = -10.872299901558` for :math:`x= [-\\pi/2, 0]`
     """
     name = "Qing Function"
     latex_formula = r'f_{\text{TestTubeHolder}}(x)='

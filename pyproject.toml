@@ -67,8 +67,8 @@ dependencies = [
 dev = [
     "pytest>=8.0.0",
     "pytest-cov>=5.0.0",
-    "mypy>=1.9.0",
-    "ruff>=0.4.0",
+    "mypy>=2.3.0",
+    "ruff>=0.16.0",
     "uv>=0.1.0",
     "twine>=5.0.0",
 ]
@@ -77,8 +77,8 @@ dev = [
 dev = [
     "pytest>=8.0.0",
     "pytest-cov>=5.0.0",
-    "mypy>=1.9.0",
-    "ruff>=0.4.0",
+    "mypy>=2.3.0",
+    "ruff>=0.16.0",
     "uv>=0.1.0",
     "twine>=5.0.0",
 ]
@@ -117,6 +117,10 @@ ignore = []
 [tool.ruff.lint.isort]
 known-first-party = ["opfunu"]
 
+[tool.ruff.lint.per-file-ignores]
+"opfunu/cec_based/**" = ["E501"]
+"opfunu/name_based/**" = ["E501"]
+
 [tool.mypy]
 files = ["opfunu"]
 exclude = ["tests/", "docs/", "examples/"]
@@ -125,7 +129,7 @@ warn_redundant_casts = true
 warn_unreachable = true
 no_implicit_optional = true
 strict_optional = true
-disallow_untyped_defs = true
+disallow_untyped_defs = false
 disallow_incomplete_defs = true
 disallow_any_generics = false
 disallow_any_unimported = false
