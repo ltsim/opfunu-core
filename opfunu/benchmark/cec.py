@@ -67,70 +67,98 @@ class CecBenchmark(Benchmark):
 
     def __init__(
             self,
-            ndim=0,
-            dim_max=100,
+            ndim=None,
+            bounds=None,
             f_shift=None,
             f_matrix=None,
-            bounds=None,
+            f_shuffle=None,
+            f_bias=None,
             default_bounds=None,
             dim_changeable=True,
             dim_default=30,
+            dim_max=100,
             dim_supported=None,
             data_name="",
+            load_two_matrix=False,
             load_tow_matrix=False,
     ):
         super().__init__()
 
-        self.__ndim = ndim
-        self.__bounds = bounds
+        self._ndim = ndim
+        self._bounds = bounds
 
-        self.__dim_changeable = dim_changeable
-        self.__dim_default = dim_default
-        self.__dim_max = dim_max
-        self.__dim_supported = dim_supported
+        self._dim_changeable = dim_changeable
+        self._dim_default = dim_default
+        self._dim_max = dim_max
+        self._dim_supported = dim_supported
 
-        self.check_ndim_and_bounds(ndim, dim_max, bounds)
-        self.make_support_data_path(data_name)
+        self.check_ndim_and_bounds(ndim, dim_max, bounds, default_bounds)
 
-        self.__f_matrix = None
+        if not data_name:
+            data_name = getattr(self, "data_name", "")
+        if not data_name:
+            import re
+            match = re.search(r"20\d{2}", self.__class__.__name__) or re.search(r"20\d{2}", self.__module__)
+            if match:
+                data_name = f"data_{match.group(0)}"
 
-        if load_tow_matrix:
+        if data_name:
+            self.make_support_data_path(data_name)
+
+        self.f_matrix = None
+        self.f_shuffle = None
+        self.f_shift = None
+
+        if load_two_matrix or load_tow_matrix:
             shift_data, a_matrix, b_matrix = self.load_two_matrix_and_shift_data(f_shift)
-
-            self.__f_shift = shift_data
-            self.f_matrix_a = a_matrix[:ndim, :ndim]
-            self.f_matrix_b = b_matrix[:ndim, :ndim]
+            self.f_shift = shift_data[:self.ndim]
+            self.f_matrix_a = a_matrix[:self.ndim, :self.ndim]
+            self.f_matrix_b = b_matrix[:self.ndim, :self.ndim]
         else:
-            self.__f_shift = self.check_shift_data(f_shift)[:ndim]
-            self.__f_matrix = self.check_matrix_data(f_matrix)
+            if f_shift is not None:
+                self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
+            if f_matrix is not None:
+                self.f_matrix = self.check_matrix_data(f_matrix)
+            if f_shuffle is not None:
+                self.f_shuffle = self.check_shuffle_data(f_shuffle)
 
-        self.__x_global = self.__f_shift
+        self.f_bias = f_bias
+        self.f_global = f_bias if f_bias is not None else 0.0
+        self.x_global = self.f_shift
 
         self.n_fe = 0
 
     @property
-    def dim_max (self):
-        return self.__dim_max
+    def dim_max(self):
+        return self._dim_max
+
+    @dim_max.setter
+    def dim_max(self, value):
+        self._dim_max = value
 
     @property
     def dim_supported(self):
-        return self.__dim_supported
+        return self._dim_supported
+
+    @dim_supported.setter
+    def dim_supported(self, value):
+        self._dim_supported = value
 
     @property
     def dim_default(self):
-        return self.__dim_default
+        return self._dim_default
+
+    @dim_default.setter
+    def dim_default(self, value):
+        self._dim_default = value
 
     @property
-    def x_global(self):
-        return self.__x_global
+    def dim_changeable(self):
+        return self._dim_changeable
 
-    @property
-    def f_shift(self):
-        return self.__f_shift
-
-    @property
-    def f_matrix(self):
-        return self.__f_matrix
+    @dim_changeable.setter
+    def dim_changeable(self, value):
+        self._dim_changeable = value
 
     def make_support_data_path(self, data_name: str):
         self.support_path = importlib.resources.files("opfunu").joinpath(f"cec_based/{data_name}")
@@ -190,26 +218,50 @@ class CecBenchmark(Benchmark):
             raise ValueError(f"m_group is positive integer!")
 
     def load_shift_data(self, filename):
-        data = np.genfromtxt(f"{self.support_path}/{filename}.txt", dtype=float)
+        fname = filename if filename.endswith('.txt') else f"{filename}.txt"
+        filepath = self.support_path.joinpath(fname)
+        if hasattr(filepath, "open"):
+            with filepath.open("r") as f:
+                data = np.genfromtxt(f, dtype=float)
+        else:
+            data = np.genfromtxt(f"{self.support_path}/{fname}", dtype=float)
         return data.reshape((-1))
 
     def load_matrix_data(self, filename=None):
+        fname = filename if filename.endswith('.txt') else f"{filename}.txt"
+        filepath = self.support_path.joinpath(fname)
         try:
-            data = np.genfromtxt(f"{self.support_path}/{filename}.txt", dtype=float)
+            if hasattr(filepath, "open"):
+                with filepath.open("r") as f:
+                    data = np.genfromtxt(f, dtype=float)
+            else:
+                data = np.genfromtxt(f"{self.support_path}/{fname}", dtype=float)
             return data
-        except FileNotFoundError:
-            print(f'The file named: {filename}.txt is not found.')
-            print(f"{self.__class__.__name__} problem is only supported ndim in {self.__dim_supported}!")
+        except (FileNotFoundError, OSError):
+            print(f'The file named: {fname} is not found.')
+            print(f"{self.__class__.__name__} problem is only supported ndim in {self.dim_supported}!")
             exit(1)
 
     def load_shift_and_matrix_data(self, filename=None):
-        data = np.genfromtxt(f"{self.support_path}/{filename}.txt", dtype=float)
+        fname = filename if filename.endswith('.txt') else f"{filename}.txt"
+        filepath = self.support_path.joinpath(fname)
+        if hasattr(filepath, "open"):
+            with filepath.open("r") as f:
+                data = np.genfromtxt(f, dtype=float)
+        else:
+            data = np.genfromtxt(f"{self.support_path}/{fname}", dtype=float)
         shift_data = data[:1, :].ravel()
         matrix_data = data[1:, :]
         return shift_data, matrix_data
 
     def load_two_matrix_and_shift_data(self, filename=None):
-        data = np.genfromtxt(f"{self.support_path}/{filename}.txt", dtype=float)
+        fname = filename if filename.endswith('.txt') else f"{filename}.txt"
+        filepath = self.support_path.joinpath(fname)
+        if hasattr(filepath, "open"):
+            with filepath.open("r") as f:
+                data = np.genfromtxt(f, dtype=float)
+        else:
+            data = np.genfromtxt(f"{self.support_path}/{fname}", dtype=float)
         a_matrix = data[:100, :]
         b_matrix = data[100:200, :]
         shift_data = data[200:, :].ravel()
@@ -227,11 +279,9 @@ class CecBenchmark(Benchmark):
         dim_support : List of the supported dimensions
         """
 
-        # if not self.dim_changeable and (len(x) != self._ndim):
-
-        if len(x) != self.__ndim:
+        if len(x) != self._ndim:
             raise ValueError(
-                f"{self.__class__.__name__} problem, the length of solution should have {self.__ndim} variables!")
+                f"{self.__class__.__name__} problem, the length of solution should have {self._ndim} variables!")
 
         if (dim_max is not None) and (len(x) > dim_max):
             raise ValueError(f"{self.__class__.__name__} problem is not supported ndim > {dim_max}!")
@@ -248,7 +298,7 @@ class CecBenchmark(Benchmark):
         if ndim is None:
             return True
         else:
-            if self.__dim_changeable:
+            if self.dim_changeable:
                 return ndim > 0
             else:
                 return ndim == self.ndim
@@ -283,49 +333,51 @@ class CecBenchmark(Benchmark):
         """
 
         if default_bounds is None:
-            default_bounds = np.array([[-100., 100.] for _ in range(self.__dim_default)])
+            default_bounds = np.array([[-100., 100.] for _ in range(self.dim_default)])
+        else:
+            default_bounds = np.array(default_bounds)
+            if default_bounds.ndim == 1 and len(default_bounds) == 2:
+                default_bounds = np.array([default_bounds for _ in range(self.dim_default)])
+            elif default_bounds.ndim == 2 and default_bounds.shape[0] == 1:
+                default_bounds = np.array([default_bounds[0] for _ in range(self.dim_default)])
 
         if ndim is None:
-            self.__bounds = default_bounds if bounds is None else np.array(bounds).T
-            self.__ndim = self.__bounds.shape[0]
+            self._bounds = default_bounds if bounds is None else np.array(bounds).T
+            self._ndim = self._bounds.shape[0]
 
-            if dim_max is not None and self.__ndim > dim_max:
+            if dim_max is not None and self._ndim > dim_max:
                 raise ValueError(f"{self.__class__.__name__} problem supports maximum {dim_max} variables!")
         else:
             if bounds is None:
-                if self.__dim_changeable:
+                if self.dim_changeable:
                     if type(ndim) is int and ndim > 1:
                         if dim_max is None or ndim <= dim_max:
-                            # # Check if ndim in supported dimensions
-                            # if self.dim_supported is not None and ndim not in self.dim_supported:
-                            #     raise ValueError(f'{self.__class__.__name__} ndim not in supported dimensions '
-                            #                      f'{self.dim_supported}')
-                            self.__ndim = int(ndim)
-                            self.__bounds = np.array([default_bounds[0] for _ in range(self.__ndim)])
+                            self._ndim = int(ndim)
+                            self._bounds = np.array([default_bounds[0] for _ in range(self._ndim)])
                         else:
                             raise ValueError(f"{self.__class__.__name__} problem supports maximum {dim_max} variables!")
                     else:
                         raise ValueError('ndim must be an integer and > 1!')
                 else:
-                    self.__ndim = self.__dim_default
-                    self.__bounds = default_bounds
+                    self._ndim = self.dim_default
+                    self._bounds = default_bounds
                     if self.verbose:
-                        print(f"{self.__class__.__name__} is fixed problem with {self.__dim_default} variables!")
+                        print(f"{self.__class__.__name__} is fixed problem with {self.dim_default} variables!")
             else:
-                if self.__dim_changeable:
-                    self.__bounds = np.array(bounds).T
-                    self.__ndim = self.__bounds.shape[0]
-                    if self.__ndim > dim_max:
+                if self.dim_changeable:
+                    self._bounds = np.array(bounds).T
+                    self._ndim = self._bounds.shape[0]
+                    if self._ndim > dim_max:
                         raise ValueError(f"{self.__class__.__name__} problem supports maximum {dim_max} variables!")
                     else:
-                        print(f"{self.__class__.__name__} problem is set with {self.__ndim} variables!")
+                        print(f"{self.__class__.__name__} problem is set with {self._ndim} variables!")
                 else:
-                    self.__bounds = np.array(bounds).T
-                    if self.__bounds.shape[0] == self.__dim_default:
-                        self.__ndim = self.__dim_default
+                    self._bounds = np.array(bounds).T
+                    if self._bounds.shape[0] == self.dim_default:
+                        self._ndim = self.dim_default
                     else:
                         raise ValueError(
-                            f"{self.__class__.__name__} is fixed problem with {self.__ndim} variables. Please setup the correct bounds!")
+                            f"{self.__class__.__name__} is fixed problem with {self._ndim} variables. Please setup the correct bounds!")
 
     @property
     def bounds(self):
@@ -333,7 +385,7 @@ class CecBenchmark(Benchmark):
         The lower/upper bounds to be used for optimization problem. This a 2D-matrix of [lower, upper] array that contain the lower and upper
         bounds for the problem. The problem should not be asked for evaluation outside these bounds. ``len(bounds) == ndim``.
         """
-        return self.__bounds
+        return self._bounds
 
     @property
     def ndim(self):
@@ -345,7 +397,7 @@ class CecBenchmark(Benchmark):
         ndim : int
             The dimensionality of the problem
         """
-        return self.__ndim
+        return self._ndim
 
     @property
     def lb(self):

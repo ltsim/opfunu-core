@@ -44,6 +44,7 @@ class F12005(CecBenchmark):
             ndim=ndim,
             bounds=bounds,
             f_shift=f_shift,
+            f_bias=f_bias,
         )
 
         self.f_bias = f_bias
@@ -195,7 +196,7 @@ class F42005(CecBenchmark):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.__dim_supported)
+        self.check_solution(x, self.dim_max, self.dim_supported)
         ndim = len(x)
         results = [np.sum(x[:idx] - self.f_shift[:idx]) ** 2 for idx in range(0, ndim)]
         return np.sum(results) * (1 + 0.4 * np.abs(np.random.normal(0, 1))) + self.f_bias
@@ -254,7 +255,7 @@ class F52005(CecBenchmark):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.__dim_supported)
+        self.check_solution(x, self.dim_max, self.dim_supported)
         ndim = len(x)
         results = [np.abs(np.dot(self.f_matrix[idx], x) - np.dot(self.f_matrix[idx], self.f_shift)) for idx in
                    range(0, ndim)]
@@ -305,7 +306,7 @@ class F62005(CecBenchmark):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.__dim_supported)
+        self.check_solution(x, self.dim_max, self.dim_supported)
         return operator.rosenbrock_func(x - self.f_shift, shift=1.0) + self.f_bias
 
 
@@ -344,10 +345,10 @@ class F72005(CecBenchmark):
             ndim=ndim,
             bounds=bounds,
             f_shift=f_shift,
+            f_matrix=f_matrix,
+            dim_supported=[10, 30, 50],
+            f_bias=f_bias
         )
-
-        self.f_bias = f_bias
-        self.f_global = f_bias
 
         self.paras = {"f_shift": self.f_shift, "f_matrix": self.f_matrix, "f_bias": self.f_bias}
 
@@ -364,11 +365,10 @@ class F82005(CecBenchmark):
     KanGAL report, 2005005(2005), p.2005.
     """
     name = "F8: Shifted Rotated Ackley’s Function with Global Optimum on Bounds"
-    latex_formula = r'F_6(x) = \sum_{i=1}^D \Big(100(z_i^2 - z_{i+1})^2 + (z_i-1)^2 \Big) + bias; z=x-o+1;' + \
-                    '\\x=[x_1, ..., x_D]; o=[o_1, ..., o_D]: \text{the shifted global optimum}'
+    latex_formula = r'F_8(x) = -20 \exp \left( -0.2 \sqrt{\frac{1}{D} \sum_{i=1}^D z_i^2} \right) - \exp \left( \frac{1}{D} \sum_{i=1}^D \cos(2\pi z_i) \right) + 20 + e + bias, \\ z=(x-o) \times M, x=[x_1, ..., x_D]; o=[o_1, ..., o_D]: \text{the shifted global optimum}; M: \text{rotation matrix}'
     latex_formula_dimension = r'2 <= D <= 100'
-    latex_formula_bounds = r"x_i \in [-100.0, 100.0], \forall i \in [1, D]"
-    latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_6(x^*) = bias = 390.0'
+    latex_formula_bounds = r"x_i \in [-32.0, 32.0], \forall i \in [1, D]"
+    latex_formula_global_optimum = r'\text{Global optimum: } x^* = o, F_8(x^*) = bias = -140.0'
     continuous = True
     linear = False
     convex = False
@@ -392,7 +392,9 @@ class F82005(CecBenchmark):
             ndim=ndim,
             bounds=bounds,
             f_shift=f_shift,
-            dim_supported=[10, 30, 50]
+            f_matrix=f_matrix,
+            dim_supported=[10, 30, 50],
+            f_bias=f_bias
         )
 
         self.f_bias = f_bias
@@ -457,7 +459,7 @@ class F92005(CecBenchmark):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.__dim_supported)
+        self.check_solution(x, self.dim_max, self.dim_supported)
         z = x - self.f_shift
         return operator.rastrigin_func(z) + self.f_bias
 
@@ -601,9 +603,9 @@ class F122005(CecBenchmark):
         super().__init__(
             ndim=ndim,
             bounds=bounds,
-            default_bounds=np.array([[-np.pi, np.pi] for _ in range(self.dim_default)]),
+            default_bounds=[[-np.pi, np.pi]],
             f_shift=f_shift,
-            load_tow_matrix=True
+            load_two_matrix=True
         )
 
         self.f_bias = f_bias
@@ -664,7 +666,7 @@ class F132005(CecBenchmark):
             ndim=ndim,
             bounds=bounds,
             f_shift=f_shift,
-            default_bounds=np.array([[-3., 1.] for _ in range(self.dim_default)])
+            default_bounds=[[-3., 1.]]
         )
 
         self.f_bias = f_bias
@@ -797,7 +799,7 @@ class F152005(CecBenchmark):
 
     def evaluate(self, x, *args):
         self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.__dim_supported)
+        self.check_solution(x, self.dim_max, self.dim_supported)
         ndim = len(x)
         weights = np.ones(self.n_funcs)
         fits = np.ones(self.n_funcs)
@@ -1102,9 +1104,10 @@ class F212005(CecBenchmark):
         super().__init__(
             ndim=ndim,
             bounds=bounds,
-            default_bounds=np.array([[-5., 5.] for _ in range(self.dim_default)]),
-            f_shift=f_shift
+            default_bounds=[[-5., 5.]],
         )
+        self.f_shift = self.load_matrix_data(f_shift)[:, :self.ndim]
+        self.x_global = self.f_shift[0]
         self.M = self.check_matrix_data(f_matrix)
         self.lamdas = np.array(
             [5.0 * 5.0 / 100.0, 5.0 / 100.0, 5.0 * 1.0, 1.0, 5.0 * 1.0, 1.0, 5.0 * 10.0, 10.0, 5.0 * 5.0 / 200.0,
