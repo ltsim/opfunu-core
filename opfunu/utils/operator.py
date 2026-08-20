@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 10:49, 01/07/2022 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 10:49, 01/07/2022 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
 import numpy as np
@@ -376,7 +376,7 @@ def chebyshev_func(x):
 
     dy = 2.0 / sample
 
-    px, y, sum_val = 0, -1, 0
+    px, y, sum_val = 0, -1.0, 0.0
     for i in range(sample + 1):
         px = x[0]
         for j in range(1, ndim):
@@ -430,7 +430,7 @@ def lennard_jones_func(x):
                        -97.348815, -102.372663])
 
     k = ndim // 3
-    sum_val = 0
+    sum_val = 0.0
 
     x_matrix = x.reshape((k, 3))
     for i in range(k - 1):

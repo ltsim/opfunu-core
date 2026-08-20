@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 17:31, 30/07/2022 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 17:31, 30/07/2022 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
 import numpy as np
@@ -16,11 +16,11 @@ class Rana(FuncBenchmark):
 
     .. math::
 
-        f_{\text{Rana}}(x) = \sum_{i=1}^{n} \left[x_{i} \sin\left(\sqrt{\lvert{x_{1} - x_{i} + 1}\rvert}\right)
-        \cos\left(\sqrt{\lvert{x_{1} + x_{i} + 1}\rvert}\right) + \left(x_{1} + 1\right) \sin\left(\sqrt{\lvert{x_{1} + x_{i} +
-        1}\rvert}\right) \cos\left(\sqrt{\lvert{x_{1} - x_{i} +1}\rvert}\right)\right]
+        f_{\text{Rana}}(x) = \\sum_{i=1}^{n} \\left[x_{i} \\sin\\left(\\sqrt{\\lvert{x_{1} - x_{i} + 1}\rvert}\right)
+        \\cos\\left(\\sqrt{\\lvert{x_{1} + x_{i} + 1}\rvert}\right) + \\left(x_{1} + 1\right) \\sin\\left(\\sqrt{\\lvert{x_{1} + x_{i} +
+        1}\rvert}\right) \\cos\\left(\\sqrt{\\lvert{x_{1} - x_{i} +1}\rvert}\right)\right]
 
-    Here, :math:`n` represents the number of dimensions and :math:`x_i \in [-500.0, 500.0]` for :math:`i = 1, ..., n`.
+    Here, :math:`n` represents the number of dimensions and :math:`x_i \\in [-500.0, 500.0]` for :math:`i = 1, ..., n`.
 
     *Global optimum*: :math:`f(x_i) = -928.5478` for :math:`x = [-300.3376, 500]`.
     """

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 22:19, 01/07/2022 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 22:19, 01/07/2022 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
 import numpy as np
@@ -40,17 +40,15 @@ class F12008(CecBenchmark):
     # n_valleys = 1
 
     def __init__(self, ndim=None, bounds=None, f_shift="sphere_shift_func_data", f_bias=-450.):
-        super().__init__()
-        self.dim_changeable = True
-        self.dim_default = 500
-        self.dim_max = 1000
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
-                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
-        self.make_support_data_path("data_2008")
-        self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
-        self.f_bias = f_bias
-        self.f_global = f_bias
-        self.x_global = self.f_shift
+        super().__init__(
+            ndim=ndim,
+            bounds=bounds,
+            f_shift=f_shift,
+            f_bias=f_bias,
+            dim_default=500,
+            dim_max=1000,
+            data_name="data_2008"
+        )
         self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias}
 
     def evaluate(self, x, *args):
@@ -89,17 +87,15 @@ class F22008(CecBenchmark):
     # n_valleys = 1
 
     def __init__(self, ndim=None, bounds=None, f_shift="schwefel_shift_func_data", f_bias=-450.):
-        super().__init__()
-        self.dim_changeable = True
-        self.dim_default = 500
-        self.dim_max = 1000
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
-                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
-        self.make_support_data_path("data_2008")
-        self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
-        self.f_bias = f_bias
-        self.f_global = f_bias
-        self.x_global = self.f_shift
+        super().__init__(
+            ndim=ndim,
+            bounds=bounds,
+            f_shift=f_shift,
+            f_bias=f_bias,
+            dim_default=500,
+            dim_max=1000,
+            data_name="data_2008"
+        )
         self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias}
 
     def evaluate(self, x, *args):
@@ -138,17 +134,15 @@ class F32008(CecBenchmark):
     # n_valleys = 1
 
     def __init__(self, ndim=None, bounds=None, f_shift="rosenbrock_shift_func_data", f_bias=-390.):
-        super().__init__()
-        self.dim_changeable = True
-        self.dim_default = 500
-        self.dim_max = 1000
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
-                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
-        self.make_support_data_path("data_2008")
-        self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
-        self.f_bias = f_bias
-        self.f_global = f_bias
-        self.x_global = self.f_shift
+        super().__init__(
+            ndim=ndim,
+            bounds=bounds,
+            f_shift=f_shift,
+            f_bias=f_bias,
+            dim_default=500,
+            dim_max=1000,
+            data_name="data_2008"
+        )
         self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias}
 
     def evaluate(self, x, *args):
@@ -187,16 +181,16 @@ class F42008(CecBenchmark):
     # n_valleys = 1
 
     def __init__(self, ndim=None, bounds=None, f_shift="rastrigin_shift_func_data", f_bias=-330.):
-        super().__init__()
-        self.dim_changeable = True
-        self.dim_default = 500
-        self.dim_max = 1000
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-5., 5.] for _ in range(self.dim_default)]))
-        self.make_support_data_path("data_2008")
-        self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
-        self.f_bias = f_bias
-        self.f_global = f_bias
-        self.x_global = self.f_shift
+        super().__init__(
+            ndim=ndim,
+            bounds=bounds,
+            f_shift=f_shift,
+            f_bias=f_bias,
+            default_bounds=[[-5., 5.]],
+            dim_default=500,
+            dim_max=1000,
+            data_name="data_2008"
+        )
         self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias}
 
     def evaluate(self, x, *args):
@@ -236,17 +230,16 @@ class F52008(CecBenchmark):
     # n_valleys = 1
 
     def __init__(self, ndim=None, bounds=None, f_shift="griewank_shift_func_data", f_bias=-180.):
-        super().__init__()
-        self.dim_changeable = True
-        self.dim_default = 500
-        self.dim_max = 1000
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
-                                   np.array([[-600., 600.] for _ in range(self.dim_default)]))
-        self.make_support_data_path("data_2008")
-        self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
-        self.f_bias = f_bias
-        self.f_global = f_bias
-        self.x_global = self.f_shift
+        super().__init__(
+            ndim=ndim,
+            bounds=bounds,
+            f_shift=f_shift,
+            f_bias=f_bias,
+            default_bounds=[[-600., 600.]],
+            dim_default=500,
+            dim_max=1000,
+            data_name="data_2008"
+        )
         self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias}
 
     def evaluate(self, x, *args):
@@ -286,16 +279,16 @@ class F62008(CecBenchmark):
     # n_valleys = 1
 
     def __init__(self, ndim=None, bounds=None, f_shift="ackley_shift_func_data", f_bias=-140.):
-        super().__init__()
-        self.dim_changeable = True
-        self.dim_default = 500
-        self.dim_max = 1000
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-32., 32.] for _ in range(self.dim_default)]))
-        self.make_support_data_path("data_2008")
-        self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
-        self.f_bias = f_bias
-        self.f_global = f_bias
-        self.x_global = self.f_shift
+        super().__init__(
+            ndim=ndim,
+            bounds=bounds,
+            f_shift=f_shift,
+            f_bias=f_bias,
+            default_bounds=[[-32., 32.]],
+            dim_default=500,
+            dim_max=1000,
+            data_name="data_2008"
+        )
         self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias}
 
     def evaluate(self, x, *args):
@@ -335,15 +328,17 @@ class F72008(CecBenchmark):
     # n_valleys = 1
 
     def __init__(self, ndim=None, bounds=None, f_shift="rastrigin_shift_func_data", f_bias=0.):
-        super().__init__()
-        self.dim_changeable = True
-        self.dim_default = 500
-        self.dim_max = 1000
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-1., 1.] for _ in range(self.dim_default)]))
-        self.make_support_data_path("data_2008")
-        self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
+        super().__init__(
+            ndim=ndim,
+            bounds=bounds,
+            f_shift=f_shift,
+            f_bias=f_bias,
+            default_bounds=[[-1., 1.]],
+            dim_default=500,
+            dim_max=1000,
+            data_name="data_2008"
+        )
         self.f_shift = self.f_shift / np.max(self.f_shift)
-        self.f_bias = f_bias
         self.f_global = -1e32
         self.x_global = self.f_shift
         self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias}

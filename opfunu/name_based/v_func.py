@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 17:32, 30/07/2022 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 17:32, 30/07/2022 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
 import numpy as np
@@ -10,7 +10,7 @@ from opfunu.benchmark.func import FuncBenchmark
 
 
 class VenterSobiezcczanskiSobieski(FuncBenchmark):
-    """
+    r"""
     .. [1]  Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization Problems
     Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 09:55, 02/07/2022 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 09:55, 02/07/2022 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
 import numpy as np
@@ -39,17 +39,15 @@ class F12010(CecBenchmark):
     # n_valleys = 1
 
     def __init__(self, ndim=None, bounds=None, f_shift="f01_o"):
-        super().__init__()
-        self.dim_changeable = True
-        self.dim_default = 1000
-        self.dim_max = 1000
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds,
-                                   np.array([[-100., 100.] for _ in range(self.dim_default)]))
-        self.make_support_data_path("data_2010")
-        self.f_shift = self.check_shift_data(f_shift)[:self.ndim]
-        self.f_global = 0
-        self.x_global = self.f_shift
-        self.paras = {"f_shift": self.f_shift, }
+        super().__init__(
+            ndim=ndim,
+            bounds=bounds,
+            f_shift=f_shift,
+            dim_default=1000,
+            dim_max=1000,
+            data_name="data_2010"
+        )
+        self.paras = {"f_shift": self.f_shift}
 
     def evaluate(self, x, *args):
         self.n_fe += 1
@@ -70,7 +68,7 @@ class F22010(F12010):
     unimodal = False
 
     def __init__(self, ndim=None, bounds=None, f_shift="f02_o"):
-        super().__init__(ndim, bounds, f_shift)
+        super().__init__(ndim=ndim, bounds=bounds, f_shift=f_shift)
         self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-5., 5.] for _ in range(self.dim_default)]))
 
     def evaluate(self, x, *args):
@@ -92,7 +90,7 @@ class F32010(F12010):
     unimodal = False
 
     def __init__(self, ndim=None, bounds=None, f_shift="f03_o"):
-        super().__init__(ndim, bounds, f_shift)
+        super().__init__(ndim=ndim, bounds=bounds, f_shift=f_shift)
         self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-32., 32.] for _ in range(self.dim_default)]))
 
     def evaluate(self, x, *args):

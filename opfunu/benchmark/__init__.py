@@ -2,9 +2,10 @@
 #       Email: tsim@cucei.udg.mx                    %
 #       Github: https://github.com/ltsim            %
 # --------------------------------------------------%
-import typing
-import dataclasses
 import abc
+import dataclasses
+import typing
+from importlib.resources.abc import Traversable
 
 import numpy as np
 
@@ -13,44 +14,44 @@ import numpy as np
 class Formula:
     latex: str
 
-    def _repr_latex_(self):
+    def _repr_latex_(self) -> str:
         return f"$${self.latex}$$"
 
 
 class Benchmark(abc.ABC):
-    latex_formula = r'f(\mathbf{x})'
-    latex_formula_dimension = r'd \in \mathbb{N}_{+}^{*}'
-    latex_formula_bounds = r'x_i \in [-2\pi, 2\pi], \forall i \in \llbracket 1, d\rrbracket'
-    latex_formula_global_optimum = r'f(0, ..., 0)=-1, \text{ for}, m=5, \beta=15'
+    latex_formula: str = r'f(\mathbf{x})'
+    latex_formula_dimension: str = r'd \in \mathbb{N}_{+}^{*}'
+    latex_formula_bounds: str = r'x_i \in [-2\pi, 2\pi], \forall i \in \llbracket 1, d\rrbracket'
+    latex_formula_global_optimum: str = r'f(0, ..., 0)=-1, \text{ for}, m=5, \beta=15'
 
     epsilon: typing.Final[float] = 1e-8
 
-    def __init__(self):
-        self.support_path = None
-        self.verbose = False
-        self.paras = {}
+    def __init__(self) -> None:
+        self.support_path: Traversable | None = None
+        self.verbose: bool = False
+        self.paras: dict[str, typing.Any] = {}
 
-    def _repr_latex_(self):
+    def _repr_latex_(self) -> str:
         return f"$${self.latex_formula}$$"
 
     @property
-    def formula(self):
+    def formula(self) -> Formula:
         return Formula(self.latex_formula)
 
     @property
-    def formula_dimension(self):
+    def formula_dimension(self) -> Formula:
         return Formula(self.latex_formula_dimension)
 
     @property
-    def formula_bounds(self):
+    def formula_bounds(self) -> Formula:
         return Formula(self.latex_formula_bounds)
 
     @property
-    def formula_global_optimum(self):
+    def formula_global_optimum(self) -> Formula:
         return Formula(self.latex_formula_global_optimum)
 
     @abc.abstractmethod
-    def check_ndim_and_bounds(self, ndim=None, bounds=None, default_bounds=None):
+    def check_ndim_and_bounds(self, *args: typing.Any, **kwargs: typing.Any) -> None:
         """
         Check the bounds when initializing the object.
 
@@ -66,7 +67,7 @@ class Benchmark(abc.ABC):
         ...
 
     @abc.abstractmethod
-    def check_solution(self, x):
+    def check_solution(self, x: np.ndarray) -> None:
         """
         Raise the error if the problem size is not equal to the solution length
 
@@ -75,17 +76,17 @@ class Benchmark(abc.ABC):
         x : np.ndarray
             The solution
         """
-    ...
+        ...
 
-    def get_paras(self):
+    def get_paras(self) -> dict[str, typing.Any]:
         """
         Return the parameters of the problem. Depended on function
         """
-        default = {"bounds": self.bounds, "ndim": self.ndim, }
+        default = {"bounds": self.bounds, "ndim": self.ndim}
         return {**default, **self.paras}
 
     @abc.abstractmethod
-    def evaluate(self, x):
+    def evaluate(self, x: np.ndarray) -> float:
         """
         Evaluation of the benchmark function.
 
@@ -102,11 +103,11 @@ class Benchmark(abc.ABC):
         ...
 
     @abc.abstractmethod
-    def is_ndim_compatible(self, ndim):
+    def is_ndim_compatible(self, ndim: int | None) -> bool:
         ...
 
     @abc.abstractmethod
-    def is_succeed(self, x, tol=1.e-5):
+    def is_succeed(self, x: np.ndarray, tol: float = 1.e-5) -> bool:
         """
         Check if a candidate solution at the global minimum.
 
@@ -115,7 +116,8 @@ class Benchmark(abc.ABC):
         x : np.ndarray
             The candidate vector for testing if the global minimum has been reached. Must have ``len(x) == self.ndim``
         tol : float
-            The evaluated function and known global minimum must differ by less than this amount to be at a global minimum.
+            The evaluated function and known global minimum must differ by less than this amount to be at a
+            global minimum.
 
         Returns
         -------
@@ -126,16 +128,17 @@ class Benchmark(abc.ABC):
 
     @property
     @abc.abstractmethod
-    def bounds(self):
+    def bounds(self) -> np.ndarray:
         """
-        The lower/upper bounds to be used for optimization problem. This a 2D-matrix of [lower, upper] array that contain the lower and upper
-        bounds for the problem. The problem should not be asked for evaluation outside these bounds. ``len(bounds) == ndim``.
+        The lower/upper bounds to be used for optimization problem. This a 2D-matrix of [lower, upper] array that
+        contain the lower and upper bounds for the problem. The problem should not be asked for evaluation outside
+        these bounds. ``len(bounds) == ndim``.
         """
         ...
 
     @property
     @abc.abstractmethod
-    def ndim(self):
+    def ndim(self) -> int:
         """
         The dimensionality of the problem.
 
@@ -148,7 +151,7 @@ class Benchmark(abc.ABC):
 
     @property
     @abc.abstractmethod
-    def lb(self):
+    def lb(self) -> np.ndarray:
         """
         The lower bounds for the problem
 
@@ -161,7 +164,7 @@ class Benchmark(abc.ABC):
 
     @property
     @abc.abstractmethod
-    def ub(self):
+    def ub(self) -> np.ndarray:
         """
         The upper bounds for the problem
 
@@ -172,7 +175,7 @@ class Benchmark(abc.ABC):
         """
         ...
 
-    def create_solution(self):
+    def create_solution(self) -> np.ndarray:
         """
         Create a random solution for the current problem
 

@@ -4,7 +4,7 @@
 
 ---------------------------------------------------------------------
 
-# Version 1.0.5.1.2
+# Version 1.0.6
 
 + Remove visualize (Matplotlib and Pillow)
 

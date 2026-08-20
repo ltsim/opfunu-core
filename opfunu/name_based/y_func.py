@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 17:32, 30/07/2022 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 17:32, 30/07/2022 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
 import numpy as np
@@ -19,9 +19,9 @@ class YaoLiu04(FuncBenchmark):
 
     .. math::
 
-         f(x) = {max}_i \left\{ \left | x_i \right | , 1 \leq i \leq n \right\}
+         f(x) = {max}_i \\left\\{ \\left | x_i \right | , 1 \\leq i \\leq n \right\\}
 
-    Here, :math:`n` represents the number of dimensions and :math:`x_i \in [-10, 10]` for :math:`i = 1, ..., n`.
+    Here, :math:`n` represents the number of dimensions and :math:`x_i \\in [-10, 10]` for :math:`i = 1, ..., n`.
 
     *Global optimum*: :math:`f(x) = 0` for :math:`x_i = 0` for :math:`i = 1, ..., n`
     """

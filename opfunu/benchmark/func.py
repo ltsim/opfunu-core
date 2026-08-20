@@ -1,8 +1,10 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 16:47, 28/06/2022 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 16:47, 28/06/2022 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
+
+import typing
 
 import numpy as np
 
@@ -18,7 +20,8 @@ class FuncBenchmark(Benchmark):
     Attributes
     ----------
     bounds : list
-        The lower/upper bounds of the problem. This a 2D-matrix of [lower, upper] array that contain the lower and upper bounds.
+        The lower/upper bounds of the problem. This a 2D-matrix of [lower, upper] array that contain the lower and
+        upper bounds.
         By default, each problem has its own bounds. But user can try to put different bounds to test the problem.
     ndim : int
         The dimensionality of the problem. It is calculated from bounds
@@ -37,42 +40,53 @@ class FuncBenchmark(Benchmark):
         Whether we can change the benchmark function `x` variable length (i.e., the dimensionality of the problem)
     """
 
-    name = "Benchmark name"
-    latex_formula = r'f(\mathbf{x})'
-    latex_formula_dimension = r'd \in \mathbb{N}_{+}^{*}'
-    latex_formula_bounds = r'x_i \in [-2\pi, 2\pi], \forall i \in \llbracket 1, d\rrbracket'
-    latex_formula_global_optimum = r'f(0, ..., 0)=-1, \text{ for}, m=5, \beta=15'
+    name: str = "Benchmark name"
+    latex_formula: str = r'f(\mathbf{x})'
+    latex_formula_dimension: str = r'd \in \mathbb{N}_{+}^{*}'
+    latex_formula_bounds: str = r'x_i \in [-2\pi, 2\pi], \forall i \in \llbracket 1, d\rrbracket'
+    latex_formula_global_optimum: str = r'f(0, ..., 0)=-1, \text{ for}, m=5, \beta=15'
 
-    continuous = True
-    linear = False
-    convex = True
-    unimodal = False
-    separable = False
+    continuous: bool = True
+    linear: bool = False
+    convex: bool = True
+    unimodal: bool = False
+    separable: bool = False
 
-    differentiable = True
-    scalable = True
-    randomized_term = False
-    parametric = True
+    differentiable: bool = True
+    scalable: bool = True
+    randomized_term: bool = False
+    parametric: bool = True
 
-    modality = True  # Number of ambiguous peaks, unknown # peaks
+    modality: bool = True  # Number of ambiguous peaks, unknown # peaks
 
     # n_basins = 1
     # n_valleys = 1
 
-    def __init__(self):
+    dim_changeable: bool
+    dim_default: int
+    dim_supported: list[int]
+    f_global: float
+    x_global: np.ndarray
+    n_fe: int
+
+    __ndim: int
+    __bounds: np.ndarray
+
+    def __init__(self) -> None:
         super().__init__()
 
-        self.__ndim = None
-        self.__bounds = None
+        self.__ndim = 0
+        self.__bounds = np.array([])
 
         self.dim_changeable = False
         self.dim_default = 2
-        self.dim_supported = []
-        self.f_global = None
-        self.x_global = None
+        self.dim_supported: list[int] = []
+        self.f_global = 0.0
+        self.x_global = np.array([])
         self.n_fe = 0
 
-    def check_ndim_and_bounds(self, ndim=None, bounds=None, default_bounds=None):
+    def check_ndim_and_bounds(self, ndim: int | None = None, bounds: typing.Any = None,
+                              default_bounds: typing.Any = None) -> None:
         """
         Check the bounds when initializing the object.
 
@@ -91,7 +105,7 @@ class FuncBenchmark(Benchmark):
         else:
             if bounds is None:
                 if self.dim_changeable:
-                    if type(ndim) is int and ndim > 1:
+                    if isinstance(ndim, int) and ndim > 1:
                         self.__ndim = int(ndim)
                         self.__bounds = np.array([default_bounds[0] for _ in range(self.__ndim)])
                     else:
@@ -109,11 +123,12 @@ class FuncBenchmark(Benchmark):
                     self.__bounds = np.array(bounds).T
                     if self.__bounds.shape[0] != self.dim_default:
                         raise ValueError(
-                            f"{self.__class__.__name__} is fixed problem with {self.__ndim} variables. Please setup the correct bounds!")
+                            f"{self.__class__.__name__} is fixed problem with {self.__ndim} variables. "
+                            "Please setup the correct bounds!")
                     else:
                         self.__ndim = self.dim_default
 
-    def check_solution(self, x):
+    def check_solution(self, x: np.ndarray) -> None:
         """
         Raise the error if the problem size is not equal to the solution length
 
@@ -125,7 +140,7 @@ class FuncBenchmark(Benchmark):
         if not self.dim_changeable and (len(x) != self.__ndim):
             raise ValueError(f"The length of solution should have {self.__ndim} variables!")
 
-    def evaluate(self, x):
+    def evaluate(self, x: np.ndarray) -> float:
         """
         Evaluation of the benchmark function.
 
@@ -142,7 +157,7 @@ class FuncBenchmark(Benchmark):
 
         raise NotImplementedError
 
-    def is_ndim_compatible(self, ndim):
+    def is_ndim_compatible(self, ndim: int | None) -> bool:
         """
         Method to support searching the functions with input ndim
 
@@ -166,7 +181,7 @@ class FuncBenchmark(Benchmark):
             else:
                 return ndim == self.ndim
 
-    def is_succeed(self, x, tol=1.e-5):
+    def is_succeed(self, x: np.ndarray, tol: float = 1.e-5) -> bool:
         """
         Check if a candidate solution at the global minimum.
 
@@ -175,7 +190,8 @@ class FuncBenchmark(Benchmark):
         x : np.ndarray
             The candidate vector for testing if the global minimum has been reached. Must have ``len(x) == self.ndim``
         tol : float
-            The evaluated function and known global minimum must differ by less than this amount to be at a global minimum.
+            The evaluated function and known global minimum must differ by less than this amount to be at a
+            global minimum.
 
         Returns
         -------
@@ -197,15 +213,16 @@ class FuncBenchmark(Benchmark):
         return False
 
     @property
-    def bounds(self):
+    def bounds(self) -> np.ndarray:
         """
-        The lower/upper bounds to be used for optimization problem. This a 2D-matrix of [lower, upper] array that contain the lower and upper
-        bounds for the problem. The problem should not be asked for evaluation outside these bounds. ``len(bounds) == ndim``.
+        The lower/upper bounds to be used for optimization problem. This a 2D-matrix of [lower, upper] array that
+        contain the lower and upper bounds for the problem. The problem should not be asked for evaluation outside
+        these bounds. ``len(bounds) == ndim``.
         """
         return self.__bounds
 
     @property
-    def ndim(self):
+    def ndim(self) -> int:
         """
         The dimensionality of the problem.
 
@@ -217,7 +234,7 @@ class FuncBenchmark(Benchmark):
         return self.__ndim
 
     @property
-    def lb(self):
+    def lb(self) -> np.ndarray:
         """
         The lower bounds for the problem
 
@@ -229,7 +246,7 @@ class FuncBenchmark(Benchmark):
         return np.array([x[0] for x in self.bounds])
 
     @property
-    def ub(self):
+    def ub(self) -> np.ndarray:
         """
         The upper bounds for the problem
 
@@ -240,7 +257,7 @@ class FuncBenchmark(Benchmark):
         """
         return np.array([x[1] for x in self.bounds])
 
-    def create_solution(self):
+    def create_solution(self) -> np.ndarray:
         """
         Create a random solution for the current problem
 
