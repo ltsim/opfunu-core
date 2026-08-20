@@ -3,7 +3,7 @@
 #       Email: nguyenthieu2102@gmail.com            %                                                    
 #       Github: https://github.com/thieu1995        %                         
 # --------------------------------------------------%
-## Examples with Mealpy >= 3.0.0
+## Examples with mealpy-lts
 
 from opfunu.cec_based import cec2017
 f3 = cec2017.F32017(ndim=30)
