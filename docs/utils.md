@@ -6,4 +6,5 @@ The `opfunu.utils.operator` module provides the low-level mathematical operators
 ::: opfunu.utils.operator
     options:
       members_order: alphabetical
+      show_if_no_docstring: true
       filters: ["!^_", "!^np$"]

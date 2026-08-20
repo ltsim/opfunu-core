@@ -145,7 +145,8 @@ $ uv run ruff format --check .   # verify formatting
 Mypy (type-checking):
 
 ```sh
-$ uv run mypy   # type-check the package (config in pyproject.toml)
+$ uv run mypy          # type-check the package (config in pyproject.toml)
+$ uv run mypy-coverage # report type-annotation coverage
 ```
 
 MkDocs (documentation, Material theme):

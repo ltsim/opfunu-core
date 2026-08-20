@@ -1065,6 +1065,15 @@ wheels = [
 ]
 
 [[package]]
+name = "mypy-coverage"
+version = "0.2.4"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/e5/e2/5d79ff37205caf9325093564404f243b91c5e65d9a9e014cdc692d1cc7d4/mypy_coverage-0.2.4.tar.gz", hash = "sha256:fb54046d1541ea50b71c7aa700b2fd895127561238b99dfb247cfce473d73eac", size = 32930, upload-time = "2026-06-23T11:43:06.095Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/59/ba/48db2a0f200eafa737bc0f1a0e23d5cfc6b857cc30133a96c8a3f12c5683/mypy_coverage-0.2.4-py3-none-any.whl", hash = "sha256:f5f34038ae83f6873d19dfb57ffd6413f4eeb7fae2f251376f14541f3e56d427", size = 36212, upload-time = "2026-06-23T11:43:04.939Z" },
+]
+
+[[package]]
 name = "mypy-extensions"
 version = "1.1.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1321,6 +1330,7 @@ dependencies = [
 [package.dev-dependencies]
 dev = [
     { name = "mypy" },
+    { name = "mypy-coverage", marker = "python_full_version >= '3.11'" },
     { name = "pytest" },
     { name = "pytest-cov" },
     { name = "ruff" },
@@ -1340,6 +1350,7 @@ requires-dist = [{ name = "numpy", specifier = ">=2.0.2" }]
 [package.metadata.requires-dev]
 dev = [
     { name = "mypy", specifier = ">=2.3.0" },
+    { name = "mypy-coverage", marker = "python_full_version >= '3.11'", specifier = ">=0.2.4" },
     { name = "pytest", specifier = ">=8.0.0" },
     { name = "pytest-cov", specifier = ">=5.0.0" },
     { name = "ruff", specifier = ">=0.16.0" },

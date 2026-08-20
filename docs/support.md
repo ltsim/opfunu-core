@@ -35,7 +35,8 @@ $ uv run ruff format --check .   # verify formatting
 under `[tool.mypy]` and checks the `src/` package.
 
 ```sh
-$ uv run mypy
+$ uv run mypy           # type-check the package
+$ uv run mypy-coverage  # report type-annotation coverage
 ```
 
 ### MkDocs
