@@ -1,3 +1,14 @@
+# Version 2026a
+
++ Migrated the project to a `src/` layout and to the `uv` package manager
++ Added `ruff` (lint + format) and `mypy` (type-check) as the default tooling
++ Refactored the pytest test suite around shared fixtures in `tests/conftest.py`
++ Refactored the examples and the `EXAMPLES.md` guide for the current API
++ Added MkDocs documentation with the Material theme, published on GitHub Pages
++ Dropped the legacy ReadTheDocs/Sphinx configuration
+
+---------------------------------------------------------------------
+
 # Version 2.0.0
 
 + ...

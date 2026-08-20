@@ -15,7 +15,7 @@ This library is a maintenance version, a fork of [OPFUNU (Optimization Reference
 
 * **Free software:** GNU General Public License (GPL) V3 license
 * **Total problems**: > 500 problems
-* **Documentation:** https://opfunu.readthedocs.io
+* **Documentation:** https://ltsim.github.io/opfunu-core/
 
 # Citation Request 
 
@@ -50,6 +50,11 @@ $ pip install opfunu-core
 Install from Github:
 ```sh
 $ pip install git+https://github.com/ltsim/opfunu-core
+```
+
+Or, if you manage the project with [uv](https://github.com/astral-sh/uv):
+```sh
+$ uv add opfunu-core
 ```
 
 After installation, you can import and check version of Opfunu:
@@ -116,14 +121,51 @@ For more usage examples please look at [examples](/examples) folder.
 
 # Contributing
 
-There are lots of ways how you can contribute to Permetrics's development, and you are welcome to join in! For example, 
+There are lots of ways how you can contribute to opfunu-core's development, and you are welcome to join in! For example, 
 you can report problems or make feature requests on the [issues](/issues) pages. To facilitate contributions, 
 please check for the guidelines in the [CONTRIBUTING.md](/CONTRIBUTING.md) file.
+
+# Development
+
+The project is managed with [uv](https://github.com/astral-sh/uv):
+
+```sh
+$ uv sync                # install runtime + dev dependencies
+$ uv sync --group docs   # additionally install the docs tooling
+```
+
+Ruff (lint and format):
+
+```sh
+$ uv run ruff check .            # lint
+$ uv run ruff format .           # format
+$ uv run ruff format --check .   # verify formatting
+```
+
+Mypy (type-checking):
+
+```sh
+$ uv run mypy   # type-check the package (config in pyproject.toml)
+```
+
+MkDocs (documentation, Material theme):
+
+```sh
+$ uv run mkdocs serve                # live preview at http://127.0.0.1:8000
+$ uv run mkdocs build                # build the static site into site/
+$ uv run mkdocs gh-deploy --force    # publish to GitHub Pages
+```
+
+Run the test suite with:
+
+```sh
+$ uv run pytest
+```
 
 # Official channels 
 
 * [Official source code repository](https://github.com/ltsim/opfunu-core)
-* [Official document](https://opfunu.readthedocs.io/)
+* [Official document](https://ltsim.github.io/opfunu-core/)
 * [Download releases](https://pypi.org/project/opfunu-core/) 
 * [Issue tracker](https://github.com/ltsim/opfunu-core/issues) 
 * [Notable changes log](/CHANGELOG.md)

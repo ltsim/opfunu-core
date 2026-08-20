@@ -12,14 +12,25 @@ from opfunu.benchmark.func import FuncBenchmark
 
 def test_Benchmark_class():
     ndim = 10
-    default_bounds = np.array([[-15, ] * ndim, [15, ] * ndim]).T
+    default_bounds = np.array(
+        [
+            [
+                -15,
+            ]
+            * ndim,
+            [
+                15,
+            ]
+            * ndim,
+        ]
+    ).T
     x = np.random.uniform(-15, 15, ndim)
     problem = FuncBenchmark()
     problem.check_ndim_and_bounds(ndim, None, default_bounds)
 
-    assert len(problem.lb) == ndim
     assert isinstance(problem.lb, np.ndarray)
-    assert type(problem.bounds) == np.ndarray
+    assert len(problem.lb) == ndim
+    assert isinstance(problem.bounds, np.ndarray)
     assert problem.bounds.shape[0] == ndim
     with pytest.raises(NotImplementedError):
         problem.evaluate(x)

@@ -1,237 +1,132 @@
+# Examples
 
-## Example for version >= 1.0.0
+This page shows how to use **opfunu-core** (version `2026a`). More runnable scripts live in the
+[examples](https://github.com/ltsim/opfunu-core/tree/master/examples) folder.
+
+## Import and version
 
 ```python
-
 import opfunu
 import numpy as np
 
-# get all the available functions accepting ANY dimension
-any_dim_cec = opfunu.get_cec_based_functions(None)
-print(any_dim_cec)
+print(opfunu.__version__)
 
-# get all the available separable functions accepting 2D
-separable_2d_cec = opfunu.get_cec_based_functions(
-    ndim=2,  # dimension
-    separable=True,
-)
-print(separable_2d_cec)
+# List all functions grouped by database
+opfunu.FUNC_DATABASE  # all name_based functions
+opfunu.CEC_DATABASE  # all cec_based functions
+opfunu.ALL_DATABASE  # all functions in this library
+```
 
-# Import specific function
+## Querying the databases
+
+```python
+# Exact class name (case-insensitive)
+funcs = opfunu.get_functions_by_classname("MiShra04")
+
+# Substring of the class name, e.g. every CEC-2014 function
+all_2014 = opfunu.get_functions_based_classname("2014")
+
+# Exact / supported number of dimensions
+opfunu.get_functions_by_ndim(2)
+opfunu.get_functions_based_ndim(50)
+
+# Filter by mathematical properties
+opfunu.get_name_based_functions(ndim=10, continuous=True)
+opfunu.get_cec_based_functions(ndim=2, rotated=True)
+opfunu.get_cec_based_functions(randomized_term=True)
+```
+
+## Evaluating a function
+
+```python
+# 1st way: import the class directly
+from opfunu.cec_based.cec2014 import F12014
+
+func = F12014(ndim=30)
+func.evaluate(func.create_solution())
+
+# or through the package namespace
+from opfunu.cec_based import F102014
+
+func = F102014(ndim=50)
+func.evaluate(func.create_solution())
+
+# 2nd way: look the function up from the database
+funcs = opfunu.get_functions_by_classname("F12014")
+func = funcs[0](ndim=10)
+func.evaluate(func.create_solution())
+```
+
+## Function object API
+
+```python
 f12005 = opfunu.cec_based.F12005()
-print(f12005.evaluate(np.array([5, 4, 5])))      # get results
-print(f12005.bounds)
-print(f12005.lb)
-print(f12005.ub)
+print(f12005.evaluate(np.array([5, 4, 5])))  # evaluate a solution
+print(f12005.bounds)  # [lower, upper] bounds matrix
+print(f12005.lb, f12005.ub)  # lower and upper bound arrays
 
-# f12005 = opfunu.cec_based.F12005(ndim=1010)
-# print(f12005.lb)
-
-lb = [-10, ] * 15
-ub = [10, ] * 15
-bounds = [lb, ub]
+# Custom bounds
+bounds = [[-10.0] * 15, [10.0] * 15]
 f12005 = opfunu.cec_based.F12005(bounds=bounds)
 print(f12005.lb)
 
-# bounds = [[-10,] * 101, [10, ] * 101]
-# f12005 = opfunu.cec_based.F12005(bounds=bounds)
-# print(f12005.lb)
-
-
-# Plot 2d or plot 3d contours
-# Warning ! Only working on 2d functions objects !
-# Warning 2! change n_space to reduce the computing time
+# Access/change the parameters of parametric functions
 f22005 = opfunu.cec_based.F22005(ndim=2)
-# opfunu.plot_2d(f22005, n_space=1000, ax=None)
-# opfunu.plot_3d(f22005, n_space=1000, ax=None)
-
-# Access/change the parameters of parametrics functions
 print(f22005.get_paras())
 
-# Get the global minimum for a specific dimension
+# Global minimum value and location
 print(f22005.f_global)
 print(f22005.x_global)
 
-# Acces/plot the latex formulas
-latex = f22005.latex_formula
-latex = f22005.latex_formula_dimension
-latex = f22005.latex_formula_bounds
-latex = f22005.latex_formula_global_optimum
-print(latex)  # --> f(\mathbf{x}) = exp(-\sum_{i=1}^{d}(x_i / \beta)^{2m}) - 2exp(-\prod_{i=1}^{d}x_i^2) \prod_{i=1}^{d}cos^ 2(x_i)
-opfunu.plot_latex_formula(latex)
+# LaTeX formulas of the function
+print(f22005.latex_formula)
+print(f22005.latex_formula_dimension)
+print(f22005.latex_formula_bounds)
+print(f22005.latex_formula_global_optimum)
+```
 
+## CEC data file usage
 
-## Test read file matrix
+Some CEC functions read shift/rotation matrices from bundled data files.
+
+```python
 f32005 = opfunu.cec_based.F32005(ndim=10)
 x = np.ones(10)
 print(f32005.evaluate(x))
-print(f32005.f_matrix)
+print(f32005.f_matrix)  # the loaded matrix
 print(f32005.x_global)
 
 problem = opfunu.cec_based.F212005(ndim=10)
-x = np.ones(10)
 print(problem.evaluate(x))
 print(problem.x_global)
 print(problem.is_succeed(problem.x_global))
-
-# # get all the available separable functions accepting 2D
-my_list = opfunu.get_cec_based_functions(
-    ndim=2,  # dimension
-    rotated=True
-)
-print(my_list)  # --> 41
-
-## Get all noise function
-my_list = opfunu.get_cec_based_functions(
-    randomized_term=True
-)
-print(my_list)
-
 ```
 
+## Name-based functions
 
-## Example for version <= 0.8.0
+```python
+problem = opfunu.name_based.Ackley01(ndim=25)
+x = np.ones(25)
+print(problem.evaluate(x))
+print(problem.evaluate(problem.x_global))
+print(problem.is_succeed(problem.x_global))
+```
 
-+ All you need to do is: (Make sure your solution is a numpy 1-D array)
+## Optimizing with another library (mealpy)
 
-```python 
-## For dimension_based
+```python
+from mealpy import GA, FloatVar
 
-from opfunu.dimension_based.benchmark2d import Functions        # import 2-d benchmark functions
-import numpy as np
+from opfunu.cec_based import cec2017
 
-solution2d = np.array([-0.1, 1.5])                              # Solution for 2-d benchmark
-func2d = Functions()                                            # create an object
+f3 = cec2017.F32017(ndim=30)
 
-print(func2d._bartels_conn__(solution2d))                       # using function in above object
-print(func2d._bird__(solution2d))
-
-## For type_based (same as dimension_based)
-
-from opfunu.type_based.multi_modal import Functions             # import 2-d benchmark functions
-import numpy as np
-
-
-## For CEC
-
-from opfunu.cec.cec2014 import Functions                        # import cec2014 functions
-import numpy as np
-
-cec_sol = np.array([-0.1, 1.5])                              # Solution for 2-d benchmark
-cec_func = Functions()                                            # create an object
-
-print(cec_func.C1(cec_sol))                                  # using function in above object from C1, ..., C30
-print(cec_func.C30(cec_sol))
-
-
-## CEC-2005 or CEC-2008
-
-import numpy as np
-from opfunu.cec.cec2005.F1 import Model as f1
-from opfunu.cec.cec2008.F7 import Model as f7
-
-solution = np.array([0.5, 1, 1.5, 2, 3, 0.9, 1.2, 2, 1, 5])
-
-t1 = f1()
-result = t1._main__(temp)
-print(result)
-
-t2 = f7()
-result = t2._main__(temp)
-print(result)
-
-
-
-## CEC-2010 
-
-import numpy as np
-from opfunu.cec.cec2010.function import F1, F2, ..., F12,..
-
-solution = np.random.uniform(0, 1, 1000)
-result = F12(temp)
-print(result)
-
-
-## CEC-2013 (2 ways to use depend on your purpose)
-
-import numpy as np
-from opfunu.cec.cec2013.unconstraint import Model as M13
-from opfunu.cec.cec2014.unconstraint2 import Model as MD2
-
-problem_size = 10
-solution = np.random.uniform(0, 1, problem_size)
-
-
-obj = MD2(problem_size)             # Object style solve different problems with different functions
-print(obj.F1(solution))
-print(obj.F2(solution))
-
-obj = M13(solution)                 # Object style solve same problem with every functions
-print(obj.F1())
-print(obj.F2())
-
-
-## CEC-2014 (3 ways to use depend on your purpose)
-
-import numpy as np
-from opfunu.cec.cec2014.function import F1, F2, ...
-from opfunu.cec.cec2014.unconstraint2 import Model as MD2
-from opfunu.cec.cec2014.unconstraint import Model as MD
-
-problem_size = 10
-solution = np.random.uniform(0, 1, problem_size)
-
-
-print(F1(solution))             # Function style
-
-func = MD(problem_size)         # Object style solve different problems with different functions
-print(func.F1(solution))
-print(func.F2(solution))
-
-obj = MD2(solution)             # Object style solve same problem with every functions
-print(obj.F1())
-print(obj.F2())
-
-
-## CEC-2015 
-import numpy as np
-from opfunu.cec.cec2015.function import F1, F2,...
-
-temp = np.random.uniform(0, 1, 10)
-
-result = F1(temp)
-print(result)
-
-
-## CEC basic 
-import numpy as np
-from opfunu.cec_basic.cec2014 import *
-
-problem_size = 20
-sol = np.random.uniform(0, 1, 20)
-
-print(F30(sol))
-
-### CEC 2020 - engineering problem 
-
-from opfunu.cec.cec2020.constant import benchmark_function as BF
-from opfunu.cec.cec2020 import engineering
-from numpy.random import uniform
-
-for i in range(1, 26):
-    out = BF(i)         # Get object contain information about problems
-    D, g, h, xmin, xmax = out["D"], out["g"], out["h"], out["xmin"], out["xmax"]
-
-    solution = uniform(xmin, xmax)                              ## Create solution based on information above
-    problem = "p" + str(i)                                      ## Choice the problem
-    fx, gx, hx = getattr(engineering, problem)(solution)        ## Fitness function, constraint
-    print("\n==============" + problem + "=================")
-    print("fx:", fx)
-    print("gx:", gx)
-    print("hx:", hx)
-
--- The problem 1-23 and 25 is DONE, the problem 24th is not DONE yet.
-...
-
-
+problem = {
+    "obj_func": f3.evaluate,
+    "bounds": FloatVar(lb=f3.lb, ub=f3.ub),
+    "minmax": "min",
+}
+model = GA.BaseGA(epoch=100, pop_size=50)
+gbest = model.solve(problem)
+print(f"Solution: {gbest.solution}, Fit: {gbest.target.fitness}")
 ```

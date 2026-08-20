@@ -1,0 +1,57 @@
+site_name: opfunu-core
+site_description: An Open-source Python Library for Optimization Benchmark Functions
+site_url: https://ltsim.github.io/opfunu-core/
+repo_url: https://github.com/ltsim/opfunu-core
+repo_name: ltsim/opfunu-core
+copyright: Copyright &copy; 2026 LTSIM
+
+strict: true
+
+theme:
+  name: material
+  palette:
+    scheme: default
+  features:
+    - navigation.sections
+    - navigation.top
+
+nav:
+  - Home: index.md
+  - Quick Start: quick_start.md
+  - Function Categories: categories.md
+  - Examples: examples.md
+  - API Reference:
+      - Benchmark Base Classes: benchmark.md
+      - Name-based Functions: name_based.md
+      - CEC-based Functions: cec_based.md
+      - Package-level API: integrated.md
+      - Utilities: utils.md
+  - Support: support.md
+  - License: license.md
+  - Changelog: changelog.md
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            show_root_heading: true
+            show_root_toc_entry: true
+            show_source: false
+            show_bases: false
+            show_if_no_docstring: false
+            separate_signature: true
+            heading_level: 2
+  - bibtex:
+      bib_file: docs/references.bib
+      bib_by_default: false
+
+markdown_extensions:
+  - admonition
+  - codehilite:
+      guess_lang: false
+  - footnotes
+  - tables
+  - toc:
+      permalink: true
