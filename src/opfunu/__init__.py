@@ -25,6 +25,23 @@ import re
 from typing import Any
 
 from . import cec_based, name_based
+from .utils.numba_compat import HAS_NUMBA
+
+__all__ = [
+    "FUNC_DATABASE",
+    "CEC_DATABASE",
+    "ALL_DATABASE",
+    "EXCLUDES",
+    "HAS_NUMBA",
+    "get_functions_by_classname",
+    "get_functions_based_classname",
+    "get_functions_by_ndim",
+    "get_functions_based_ndim",
+    "get_all_name_based_functions",
+    "get_all_cec_based_functions",
+    "get_name_based_functions",
+    "get_cec_based_functions",
+]
 
 FUNC_DATABASE: list[tuple[str, Any]] = inspect.getmembers(name_based, inspect.isclass)
 CEC_DATABASE: list[tuple[str, Any]] = inspect.getmembers(cec_based, inspect.isclass)

@@ -7,8 +7,9 @@ import dataclasses
 import typing
 from importlib.resources.abc import Traversable
 
-import numba as nb
 import numpy as np
+
+from opfunu.utils import numba_compat
 
 
 @dataclasses.dataclass
@@ -221,12 +222,14 @@ class Benchmark(abc.ABC):
         """
         Install ``compute`` and bind it for execution.
 
-        The only sanctioned caller of the private ``__build_compute`` /
-        ``__use_plain_compute`` helpers. ``params`` sets extra attributes
-        before binding; ``param_names`` lists the kernel parameters in call
-        order (defaults to ``params`` keys); ``paras`` is display metadata
+        The only sanctioned caller of the private ``__build_compute``
+        helper. ``params`` sets extra attributes before binding;
+        ``param_names`` lists the kernel parameters in call order
+        (defaults to ``params`` keys); ``paras`` is display metadata
         (a dict, or a list of attribute names resolved against ``self``;
         defaults to ``{name: getattr(self, name)}`` for ``param_names``).
+        With ``plain=True`` the kernel is bound uncompiled (no Numba
+        attempt); otherwise it is compiled via ``__build_compute``.
         """
         if compute is not None:
             self._kernel = compute
@@ -249,7 +252,9 @@ class Benchmark(abc.ABC):
         if self._kernel is None:
             raise RuntimeError(f"{type(self).__name__} has no kernel; pass compute= to _bind_kernel first.")
         if plain:
-            self.__use_plain_compute(names)
+            self._compute = self.__resolve_kernel()
+            self.numba_compiled = False
+            self._compile_error = None
         else:
             self._compute = self.__build_compute(names)
 
@@ -260,47 +265,49 @@ class Benchmark(abc.ABC):
             raise RuntimeError(f"{type(self).__name__} has no kernel; call _bind_kernel first.")
         return kernel
 
-    def _normalize_kernel_param(self, value: typing.Any) -> tuple[typing.Any, typing.Any, int]:
+    def _normalize_kernel_param(self, value: typing.Any) -> tuple[typing.Any, typing.Any]:
         """
-        Map a runtime attribute value to ``(call_value, numba_type, array_ndim)``.
+        Map a runtime attribute value to ``(call_value, numpy_dtype)``.
 
-        Float arrays are cast to ``self.dtype``; integer/bool arrays keep
-        their dtype (index arrays must stay integer); int scalars become
-        ``int64``; float scalars become ``self.dtype``; numeric Python
-        lists (including nested lists / matrices) are converted to arrays.
-        A zero-dimensional array is treated as a scalar. Anything else
-        raises ``TypeError`` so the caller can fall back to pure Python.
+        Float arrays are cast to ``self.dtype``; integer arrays are cast
+        to ``int64`` (index arrays must stay integer); int scalars become
+        ``int64``; float scalars become ``self.dtype``; bool scalars become
+        ``bool``; numeric Python lists (including nested lists / matrices)
+        are converted to arrays. A zero-dimensional array unwraps to a scalar.
+        Anything else raises ``TypeError``.
+
+        The returned dtype is a plain ``numpy.dtype`` so this method works
+        without Numba installed; ``__build_compute`` converts it with
+        ``numba.from_dtype`` when compiling.
         """
         if isinstance(value, np.ndarray) and value.ndim == 0:
             value = value.item()
         if isinstance(value, list):
-            if not value:
-                raise TypeError("Unsupported kernel parameter: empty list")
             try:
                 value = np.asarray(value)
             except (TypeError, ValueError) as exc:
                 raise TypeError(f"Unsupported kernel parameter: {exc}") from exc
         if isinstance(value, np.ndarray):
-            if value.dtype.kind in ("i", "u"):
+            kind = value.dtype.kind
+            arr: np.ndarray
+            npdtype: np.dtype
+            if kind in ("i", "u"):
                 arr = np.ascontiguousarray(value, dtype=np.int64)
-                nbdtype: typing.Any = nb.int64
-            elif value.dtype.kind == "b":
-                arr = np.ascontiguousarray(value, dtype=np.bool_)
-                nbdtype = nb.boolean
-            elif value.dtype.kind == "f":
+                npdtype = np.dtype(np.int64)
+            elif kind == "f":
                 arr = np.ascontiguousarray(value, dtype=self.dtype)
-                nbdtype = nb.from_dtype(self.dtype)
+                npdtype = self.dtype
             else:
                 raise TypeError(f"Unsupported kernel array dtype: {value.dtype}")
             if arr.ndim not in (1, 2):
                 raise TypeError(f"Unsupported kernel array with ndim={arr.ndim}")
-            return arr, nbdtype, arr.ndim
+            return arr, npdtype
         if isinstance(value, (bool, np.bool_)):
-            raise TypeError(f"Unsupported kernel parameter type: {type(value)}")
+            return bool(value), np.dtype(bool)
         if isinstance(value, (int, np.integer)):
-            return int(value), nb.int64, 0
+            return int(value), np.dtype(np.int64)
         if isinstance(value, (float, np.floating)):
-            return self.dtype.type(value), nb.from_dtype(self.dtype), 0
+            return self.dtype.type(value), self.dtype
         raise TypeError(f"Unsupported kernel parameter type: {type(value)}")
 
     def __build_compute(self, param_names: list[str]) -> typing.Callable[..., None]:
@@ -308,53 +315,73 @@ class Benchmark(abc.ABC):
         Compile the bound kernel into a ``guvectorize`` gufunc.
 
         ``param_names`` lists the instance attributes the kernel needs
-        (in call order, after ``x`` and before ``out``). On any failure
-        the plain Python kernel is returned instead, keeping the same
-        ``(x, *params, out)`` calling convention. Compilation (plus a
-        warmup call) happens here, i.e. at instantiation, never on
-        first ``evaluate``. On failure the raised exception is stored in
-        ``_compile_error`` (useful for diagnosing silent fallbacks).
+        (in call order, after ``x`` and before ``out``). Attribute lookup
+        and normalization errors propagate; only Numba compilation/warmup
+        failures fall back to the plain Python kernel, keeping the same
+        ``(x, *params, out)`` calling convention. When Numba is not installed
+        (PyPy, minimal installs) the plain kernel is used directly without
+        attempting compilation. Compilation (plus a warmup call) happens here,
+        i.e. at instantiation, never on first ``evaluate``. On fallback the
+        raised exception is stored in ``_compile_error`` (useful for diagnosing
+        silent fallbacks; ``None`` when Numba is simply absent).
         """
         kernel = self.__resolve_kernel()
+        if not numba_compat.HAS_NUMBA:
+            self.numba_compiled = False
+            self._compile_error = None
+            # Validate eagerly so mistyped params fail fast, exactly as in the
+            # compiled path (lookup/normalization errors propagate; only
+            # compile/warmup failures fall back).
+            for name in param_names:
+                self._normalize_kernel_param(getattr(self, name))
+            return kernel
+        import numba as nb
+
+        # Let AttributeError/TypeError/ValueError propagate: a mistyped name
+        # or an un-normalizable value is a bug, not a compile failure.
+        normed = [self._normalize_kernel_param(getattr(self, name)) for name in param_names]
+        ndims = [call.ndim if isinstance(call, np.ndarray) else 0 for call, _ in normed]
+        # `n` is reserved for the input vector `x` with layout `(n)`.
+        alphabet = "abcdefghijklmopqrstuvwxyz"
+        needed = sum(2 if d == 2 else (1 if d == 1 else 0) for d in ndims)
+        if needed > len(alphabet):
+            raise TypeError(f"Too many kernel dimensions for a gufunc signature: {needed} > {len(alphabet)}")
+        letters = iter(alphabet)
+        nb_float = nb.from_dtype(self.dtype)
+        layouts = ["(n)"]
+        nbtypes: list[typing.Any] = [nb_float[:]]
+        for (_, npdtype), ndim in zip(normed, ndims):
+            nbdtype: typing.Any = nb.from_dtype(np.dtype(npdtype))
+            if ndim == 0:
+                layouts.append("()")
+                nbtypes.append(nbdtype)
+            elif ndim == 1:
+                layouts.append(f"({next(letters)})")
+                nbtypes.append(nbdtype[:])
+            else:
+                layouts.append(f"({next(letters)},{next(letters)})")
+                nbtypes.append(nbdtype[:, :])
+        nbtypes.append(nb_float[:])
+        sig = ",".join(layouts) + "->()"
+        # Key on the kernel's code object: stable across instances of the same
+        # class, yet distinct between a parent and a child that define their own
+        # (otherwise identically signed) kernels. Requires kernels to be
+        # self-contained, i.e. not to close over per-instance values.
+        key = (getattr(kernel, "__code__", kernel), sig, str(self.dtype), self.parallel, self.fastmath)
         self._compile_error = None
         try:
-            values = [getattr(self, name) for name in param_names]
-            normed = [self._normalize_kernel_param(v) for v in values]
-            alphabet = "abcdefghijklmopqrstuvwxyz"
-            needed = sum(2 if ndim == 2 else (1 if ndim == 1 else 0) for _, _, ndim in normed)
-            if needed > len(alphabet):
-                raise TypeError(f"Too many kernel dimensions for a gufunc signature: {needed} > {len(alphabet)}")
-            letters = iter(alphabet)
-            layouts = ["(n)"]
-            nbtypes: list[typing.Any] = [nb.from_dtype(self.dtype)[:]]
-            for _, nbdtype, ndim in normed:
-                if ndim == 0:
-                    layouts.append("()")
-                    nbtypes.append(nbdtype)
-                elif ndim == 1:
-                    layouts.append(f"({next(letters)})")
-                    nbtypes.append(nbdtype[:])
-                else:
-                    layouts.append(f"({next(letters)},{next(letters)})")
-                    nbtypes.append(nbdtype[:, :])
-            layouts.append("()")
-            nbtypes.append(nb.from_dtype(self.dtype)[:])
-            sig = ",".join(layouts[:-1]) + "->()"
-            # Key on the kernel's code object: stable across instances of the same
-            # class, yet distinct between a parent and a child that define their own
-            # (otherwise identically signed) kernels. Requires kernels to be
-            # self-contained, i.e. not to close over per-instance values.
-            key = (getattr(kernel, "__code__", kernel), sig, str(self.dtype), self.parallel, self.fastmath)
             gufunc = Benchmark._gufunc_cache.get(key)
             if gufunc is None:
                 target = "parallel" if self.parallel else "cpu"
-                gufunc = nb.guvectorize(  # type: ignore[no-untyped-call]
-                    [tuple(nbtypes)], sig, nopython=True, target=target, fastmath=self.fastmath
-                )(kernel)
+                guvectorize: typing.Any = nb.guvectorize
+                gufunc = guvectorize([tuple(nbtypes)], sig, nopython=True, target=target, fastmath=self.fastmath)(
+                    kernel
+                )
                 Benchmark._gufunc_cache[key] = gufunc
             x0 = np.zeros(self.ndim, dtype=self.dtype)
-            out0 = np.empty(1, dtype=self.dtype)
-            gufunc(x0, *[v for v, _, _ in normed], out0)
+            if self._out.dtype != self.dtype:
+                self._out = np.empty(1, dtype=self.dtype)
+            gufunc(x0, *[v for v, _ in normed], self._out)
             self.numba_compiled = True
             return typing.cast(typing.Callable[..., None], gufunc)
         except Exception as exc:
@@ -369,29 +396,16 @@ class Benchmark(abc.ABC):
         Cast a runtime attribute value to the exact object the kernel expects.
 
         Total: values that ``_normalize_kernel_param`` rejects (sub-instances,
-        bound methods, ...) are passed through unchanged — they only ever
-        reach the plain-Python fallback kernel, which handles them natively.
+        bound methods, ...) are passed through unchanged — they only occur for
+        plain kernels bound with ``plain=True``, which handle them natively.
         (If ``__build_compute`` succeeded, every value normalizes cleanly, so
         the gufunc path always sees normalized values.)
         """
         try:
-            call_value, _, _ = self._normalize_kernel_param(value)
+            call_value, _ = self._normalize_kernel_param(value)
             return call_value
         except (TypeError, ValueError):
             return value
-
-    def __use_plain_compute(self, param_names: list[str]) -> None:
-        """
-        Bind the un-jitted kernel for bodies Numba cannot compile in nopython mode.
-
-        Keeps the same ``(x, *params, out)`` calling convention as a compiled
-        kernel, without paying a failed compilation attempt at instantiation.
-        ``param_names`` are read from ``self`` at every ``evaluate`` call.
-        """
-        del param_names
-        self._compute = self.__resolve_kernel()
-        self.numba_compiled = False
-        self._compile_error = None
 
     def __cast_result(self, value: typing.Any) -> np.floating | np.integer:
         """Cast the raw kernel output to the scalar type configured by ``dtype``."""

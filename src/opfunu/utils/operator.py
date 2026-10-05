@@ -4,11 +4,12 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
-import numba as nb
 import numpy as np
 
+from opfunu.utils.numba_compat import njit
 
-@nb.njit(fastmath=True)
+
+@njit(fastmath=True)
 def dot_vv(a: np.ndarray, b: np.ndarray) -> float:
     """Numba-compatible replacement for ``np.dot`` of two 1-D vectors."""
     s = 0.0
@@ -17,7 +18,7 @@ def dot_vv(a: np.ndarray, b: np.ndarray) -> float:
     return s
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def dot_mv(A: np.ndarray, x: np.ndarray) -> np.ndarray:
     """Numba-compatible replacement for ``np.dot`` of a 2-D matrix and a 1-D vector."""
     out = np.empty(A.shape[0], dtype=A.dtype)
@@ -29,7 +30,7 @@ def dot_mv(A: np.ndarray, x: np.ndarray) -> np.ndarray:
     return out
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def dot_vm(x: np.ndarray, A: np.ndarray) -> np.ndarray:
     """Numba-compatible replacement for ``np.dot`` of a 1-D vector and a 2-D matrix."""
     out = np.empty(A.shape[1], dtype=A.dtype)
@@ -41,7 +42,7 @@ def dot_vm(x: np.ndarray, A: np.ndarray) -> np.ndarray:
     return out
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def dot_mm(A: np.ndarray, B: np.ndarray) -> np.ndarray:
     """Numba-compatible replacement for ``np.matmul``/``np.dot`` of two 2-D matrices."""
     out = np.empty((A.shape[0], B.shape[1]), dtype=A.dtype)
@@ -54,7 +55,7 @@ def dot_mm(A: np.ndarray, B: np.ndarray) -> np.ndarray:
     return out
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def rounder(x: np.ndarray, condition: np.ndarray) -> np.ndarray:
     temp_2x = 2 * x
     inter = np.trunc(temp_2x)
@@ -65,7 +66,7 @@ def rounder(x: np.ndarray, condition: np.ndarray) -> np.ndarray:
     return np.where(condition < 0.5, x, temp_2x / 2)
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def griewank_func(x: np.ndarray) -> float:
     x = np.asarray(x).ravel()
     idx = np.arange(1, len(x) + 1)
@@ -74,7 +75,7 @@ def griewank_func(x: np.ndarray) -> float:
     return float(t1 - t2 + 1)
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def rosenbrock_func(x: np.ndarray, shift: float = 0.0) -> float:
     x = np.asarray(x).ravel() + shift
     term1 = 100 * (x[:-1] ** 2 - x[1:]) ** 2
@@ -82,19 +83,19 @@ def rosenbrock_func(x: np.ndarray, shift: float = 0.0) -> float:
     return np.sum(term1 + term2)
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def scaffer_func(x: np.ndarray) -> float:
     x = np.asarray(x).ravel()
     return float(0.5 + (np.sin(np.sqrt(np.sum(x**2))) ** 2 - 0.5) / (1 + 0.001 * np.sum(x**2)) ** 2)
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def rastrigin_func(x: np.ndarray) -> float:
     x = np.asarray(x).ravel()
     return float(np.sum(x**2 - 10 * np.cos(2 * np.pi * x) + 10))
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def weierstrass_func(x: np.ndarray, a: float = 0.5, b: float = 3.0, k_max: int = 20) -> float:
     x = np.asarray(x).ravel()
     ndim = len(x)
@@ -105,7 +106,7 @@ def weierstrass_func(x: np.ndarray, a: float = 0.5, b: float = 3.0, k_max: int =
     return float(result - ndim * np.sum(a**k * np.cos(np.pi * b**k)))
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def weierstrass_norm_func(x: np.ndarray, a: float = 0.5, b: float = 3.0, k_max: int = 20) -> float:
     """
     This function matches CEC2005 description of F11 except for addition of the bias and follows the C implementation
@@ -113,7 +114,7 @@ def weierstrass_norm_func(x: np.ndarray, a: float = 0.5, b: float = 3.0, k_max: 
     return weierstrass_func(x, a, b, k_max) - weierstrass_func(np.zeros(len(x)), a, b, k_max)
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def ackley_func(x: np.ndarray) -> float:
     x = np.asarray(x).ravel()
     ndim = len(x)
@@ -122,13 +123,13 @@ def ackley_func(x: np.ndarray) -> float:
     return float(-20 * np.exp(-0.2 * np.sqrt(t1 / ndim)) - np.exp(t2 / ndim) + 20 + np.e)
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def sphere_func(x: np.ndarray) -> float:
     x = np.asarray(x).ravel()
     return float(np.sum(x**2))
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def rotated_expanded_schaffer_func(x: np.ndarray) -> float:
     x = np.asarray(x).ravel()
     x_pairs = np.column_stack((x, np.roll(x, -1)))
@@ -138,7 +139,7 @@ def rotated_expanded_schaffer_func(x: np.ndarray) -> float:
     return float(np.sum(schaffer_values))
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def rotated_expanded_scaffer_func(x: np.ndarray) -> float:
     x = np.asarray(x).ravel()
     ndim = len(x)
@@ -151,7 +152,7 @@ def rotated_expanded_scaffer_func(x: np.ndarray) -> float:
     return result + scaffer_func(pair)
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def grie_rosen_cec_func(x: np.ndarray) -> float:
     """This is based on the CEC version which unrolls the griewank and rosenbrock functions for better performance"""
     z = np.asarray(x).ravel()
@@ -170,7 +171,7 @@ def grie_rosen_cec_func(x: np.ndarray) -> float:
     return float(f)
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def f8f2_func(x: np.ndarray) -> float:
     x = np.asarray(x).ravel()
     ndim = len(x)
@@ -188,7 +189,7 @@ def f8f2_func(x: np.ndarray) -> float:
     return result + griewank_func(single)
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def non_continuous_expanded_scaffer_func(x: np.ndarray) -> float:
     x = np.asarray(x).ravel()
     ndim = len(x)
@@ -202,7 +203,7 @@ def non_continuous_expanded_scaffer_func(x: np.ndarray) -> float:
     return result + scaffer_func(pair)
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def non_continuous_rastrigin_func(x: np.ndarray) -> float:
     x = np.asarray(x).ravel()
     y = rounder(x, np.abs(x))
@@ -210,7 +211,7 @@ def non_continuous_rastrigin_func(x: np.ndarray) -> float:
     return rastrigin_func(np.concatenate((y, shifted_y)))
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def elliptic_func(x: np.ndarray) -> float:
     x = np.asarray(x).ravel()
     ndim = len(x)
@@ -223,13 +224,13 @@ def sphere_noise_func(x: np.ndarray) -> float:
     return float(np.sum(x**2) * (1 + 0.1 * np.abs(np.random.normal(0, 1))))
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def twist_func(x: np.ndarray) -> np.ndarray:
     # This function in CEC-2008 F7
     return np.asarray(4 * (x**4 - 2 * x**3 + x**2))
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def doubledip(x: float, c: float, s: float) -> float:
     # This function in CEC-2008 F7
     if -0.5 < x < 0.5:
@@ -257,7 +258,7 @@ def fractal_1d_func(x: float) -> float:
     return result1
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def schwefel_12_func(x: np.ndarray) -> float:
     x = np.asarray(x).ravel()
     ndim = len(x)
@@ -270,7 +271,7 @@ def schwefel_12_func(x: np.ndarray) -> float:
     return result
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def tosz_func(x: np.ndarray) -> np.ndarray:
     def transform(xi: float) -> float:
         if xi > 0:
@@ -289,7 +290,7 @@ def tosz_func(x: np.ndarray) -> np.ndarray:
     return x
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def tasy_func(x: np.ndarray, beta: float = 0.5) -> np.ndarray:
     x = np.asarray(x).ravel()
     ndim = len(x)
@@ -299,19 +300,19 @@ def tasy_func(x: np.ndarray, beta: float = 0.5) -> np.ndarray:
     return np.where(x > 0, x_temp, x)
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def bent_cigar_func(x: np.ndarray) -> float:
     x = np.asarray(x).ravel()
     return float(x[0] ** 2 + 10**6 * np.sum(x[1:] ** 2))
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def discus_func(x: np.ndarray) -> float:
     x = np.asarray(x).ravel()
     return float(1e6 * x[0] ** 2 + np.sum(x[1:] ** 2))
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def different_powers_func(x: np.ndarray) -> float:
     x = np.asarray(x).ravel()
     ndim = len(x)
@@ -320,7 +321,7 @@ def different_powers_func(x: np.ndarray) -> float:
     return float(np.sqrt(np.sum(np.abs(x) ** up)))
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def generate_diagonal_matrix(size: int, alpha: float = 10) -> np.ndarray:
     idx = np.arange(0, size)
     diagonal = alpha ** (idx / (2 * (size - 1)))
@@ -329,7 +330,7 @@ def generate_diagonal_matrix(size: int, alpha: float = 10) -> np.ndarray:
     return matrix
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def gz_func(x: np.ndarray) -> np.ndarray:
     x = np.asarray(x).ravel()
     ndim = len(x)
@@ -344,7 +345,7 @@ def gz_func(x: np.ndarray) -> np.ndarray:
     return np.asarray(y)
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def katsuura_func(x: np.ndarray) -> float:
     # TODO: New function failed to pass 5 test cases.
     # powers_of_two = 2 ** np.arange(1, 34)
@@ -366,7 +367,7 @@ def katsuura_func(x: np.ndarray) -> float:
     return (result - 1) * 10 / ndim**2
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def lunacek_bi_rastrigin_func(x: np.ndarray, miu0: float = 2.5, d: float = 1, shift: float = 0.0) -> float:
     x = np.asarray(x).ravel() + shift
     ndim = len(x)
@@ -379,7 +380,7 @@ def lunacek_bi_rastrigin_func(x: np.ndarray, miu0: float = 2.5, d: float = 1, sh
     return float(result)
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def calculate_weight(x: np.ndarray, delta: float = 1.0) -> float:
     ndim = len(x)
     temp = np.sum(x**2)
@@ -391,7 +392,7 @@ def calculate_weight(x: np.ndarray, delta: float = 1.0) -> float:
     return float(weight)
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def modified_schwefel_func(x: np.ndarray) -> float:
     """
     This is a direct conversion of the CEC2021 C-Code for the Modified Schwefel F11 Function
@@ -414,7 +415,7 @@ def modified_schwefel_func(x: np.ndarray) -> float:
     return np.sum(fx) + 4.189828872724338e002 * nx
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def happy_cat_func(x: np.ndarray, shift: float = 0.0) -> float:
     z = np.asarray(x).ravel() + shift
     ndim = len(z)
@@ -423,7 +424,7 @@ def happy_cat_func(x: np.ndarray, shift: float = 0.0) -> float:
     return float(np.abs(t2 - ndim) ** 0.25 + (0.5 * t2 + t1) / ndim + 0.5)
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def hgbat_func(x: np.ndarray, shift: float = 0.0) -> float:
     x = np.asarray(x).ravel() + shift
     ndim = len(x)
@@ -432,14 +433,14 @@ def hgbat_func(x: np.ndarray, shift: float = 0.0) -> float:
     return float(np.abs(t2**2 - t1**2) ** 0.5 + (0.5 * t2 + t1) / ndim + 0.5)
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def zakharov_func(x: np.ndarray) -> float:
     x = np.asarray(x).ravel()
     temp = np.sum(0.5 * x)
     return float(np.sum(x**2) + temp**2 + temp**4)
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def levy_func(x: np.ndarray, shift: float = 0.0) -> float:
     x = np.asarray(x).ravel() + shift
     w = 1.0 + (x - 1.0) / 4
@@ -448,7 +449,7 @@ def levy_func(x: np.ndarray, shift: float = 0.0) -> float:
     return float(t1 + t2)
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def expanded_schaffer_f6_func(x: np.ndarray) -> float:
     """
     This is a direct conversion of the CEC2021 C-Code for the Expanded Schaffer F6 Function
@@ -468,7 +469,7 @@ def expanded_schaffer_f6_func(x: np.ndarray) -> float:
     return float(f)
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def schaffer_f7_func(x: np.ndarray) -> float:
     x = np.asarray(x).ravel()
     ndim = len(x)
@@ -479,7 +480,7 @@ def schaffer_f7_func(x: np.ndarray) -> float:
     return (result / (ndim - 1)) ** 2
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def chebyshev_func(x: np.ndarray) -> float:
     """
     The following was converted from the cec2019 C code
@@ -515,7 +516,7 @@ def chebyshev_func(x: np.ndarray) -> float:
     return sum_val
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def inverse_hilbert_func(x: np.ndarray) -> float:
     """
     This is a direct conversion of the cec2019 C code for python optimized to use numpy
@@ -556,7 +557,7 @@ def inverse_hilbert_func(x: np.ndarray) -> float:
     return result
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def lennard_jones_func(x: np.ndarray) -> float:
     """
     This version is a direct python conversion from the C-Code of CEC2019 implementation.
