@@ -1410,10 +1410,14 @@ wheels = [
 name = "opfunu-core"
 source = { editable = "." }
 dependencies = [
-    { name = "numba" },
     { name = "numpy", version = "2.2.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.11.*'" },
     { name = "numpy", version = "2.5.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
+]
+
+[package.optional-dependencies]
+numba = [
+    { name = "numba", marker = "implementation_name == 'cpython'" },
 ]
 
 [package.dev-dependencies]
@@ -1432,12 +1436,16 @@ docs = [
     { name = "mkdocstrings", extra = ["python"] },
     { name = "pypandoc-binary" },
 ]
+numba = [
+    { name = "numba", marker = "implementation_name == 'cpython'" },
+]
 
 [package.metadata]
 requires-dist = [
-    { name = "numba", specifier = ">=0.68.0" },
+    { name = "numba", marker = "implementation_name == 'cpython' and extra == 'numba'", specifier = ">=0.68.0" },
     { name = "numpy", specifier = ">=2.0.2" },
 ]
+provides-extras = ["numba"]
 
 [package.metadata.requires-dev]
 dev = [
@@ -1455,6 +1463,7 @@ docs = [
     { name = "mkdocstrings", extras = ["python"], specifier = ">=0.27.0" },
     { name = "pypandoc-binary", specifier = ">=1.15" },
 ]
+numba = [{ name = "numba", marker = "implementation_name == 'cpython'", specifier = ">=0.68.0" }]
 
 [[package]]
 name = "packaging"

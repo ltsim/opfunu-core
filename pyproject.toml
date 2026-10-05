@@ -59,9 +59,11 @@ classifiers = [
 ]
 requires-python = ">=3.10"
 dependencies = [
-    "numba>=0.68.0",
     "numpy>=2.0.2",
 ]
+
+[project.optional-dependencies]
+numba = ["numba>=0.68.0; implementation_name == 'cpython'"]
 
 [dependency-groups]
 dev = [
@@ -71,6 +73,9 @@ dev = [
     "mypy-coverage>=0.2.4; python_version >= '3.11'",
     "ruff>=0.16.0",
     "twine>=5.0.0",
+]
+numba = [
+    "numba>=0.68.0; implementation_name == 'cpython'",
 ]
 
 docs = [
@@ -142,6 +147,8 @@ error_summary = true
 
 [[tool.mypy.overrides]]
 module = [
+    "numba",
+    "numba.*",
     "numpy",
     "numpy.*"
 ]
