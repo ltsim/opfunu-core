@@ -119,6 +119,19 @@ def test_F282013_results(assert_problem):
     assert_problem(opfunu.cec_based.F282013(ndim=50), 50, opfunu.cec_based.CecBenchmark)
 
 
+def test_composite_functions_use_plain_compute_without_failed_compile():
+    """Composite F21-F24 pass sub-instances as params: bind the plain kernel directly."""
+    for cls in [
+        opfunu.cec_based.F212013,
+        opfunu.cec_based.F222013,
+        opfunu.cec_based.F232013,
+        opfunu.cec_based.F242013,
+    ]:
+        problem = cls(ndim=10)
+        assert problem.numba_compiled is False
+        assert problem._compile_error is None
+
+
 def test_all_optimal_results(assert_problem):
     ndim = 30
     known_failing = []

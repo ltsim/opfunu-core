@@ -4,33 +4,189 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
+import numba as nb
 import numpy as np
 import pytest
 
+from opfunu.benchmark import Benchmark
 from opfunu.benchmark.func import FuncBenchmark
+
+
+class _DummyProblem(FuncBenchmark):
+    """Minimal concrete subclass using the declarative kernel + metadata style."""
+
+    def __init__(self, ndim=None, bounds=None, **kwargs):
+        def compute(x, out):
+            out[0] = float(np.sum(x**2))
+
+        super().__init__(
+            compute=compute,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[-15.0, 15.0] for _ in range(2)]),
+            f_global=0.0,
+            x_global=lambda n: np.zeros(n),
+            dim_changeable=True,
+            dim_default=2,
+            **kwargs,
+        )
+
+
+class _InlineProblem(FuncBenchmark):
+    """Compact declaration style: kernel and metadata are passed to ``super().__init__``."""
+
+    def __init__(self, ndim=None, bounds=None, parallel=False, fastmath=True, dtype=np.float64):
+        def compute(x, out):
+            out[0] = float(np.sum(x**2))
+
+        super().__init__(
+            compute=compute,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[-15.0, 15.0]] * 2),
+            f_global=0.0,
+            x_global=lambda n: np.zeros(n),
+            dim_changeable=True,
+            dim_default=2,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+        )
 
 
 def test_Benchmark_class():
     ndim = 10
-    default_bounds = np.array(
-        [
-            [
-                -15,
-            ]
-            * ndim,
-            [
-                15,
-            ]
-            * ndim,
-        ]
-    ).T
     x = np.random.uniform(-15, 15, ndim)
-    problem = FuncBenchmark()
-    problem.check_ndim_and_bounds(ndim, None, default_bounds)
+    problem = _DummyProblem(ndim=ndim)
 
     assert isinstance(problem.lb, np.ndarray)
     assert len(problem.lb) == ndim
     assert isinstance(problem.bounds, np.ndarray)
     assert problem.bounds.shape[0] == ndim
-    with pytest.raises(NotImplementedError):
-        problem.evaluate(x)
+    assert isinstance(problem.evaluate(x), np.float64)
+
+
+def test_inline_compute_declaration_style():
+    ndim = 5
+    problem = _InlineProblem(ndim=ndim)
+    x = np.random.uniform(-5, 5, ndim)
+    assert problem.evaluate(x) == np.float64(np.sum(x**2))
+    assert problem.dim_changeable is True
+    assert problem.dim_default == 2
+    assert len(problem.x_global) == ndim
+    assert problem.x_global.tolist() == [0.0] * ndim
+
+
+def test_metadata_are_private_properties():
+    problem = _DummyProblem(ndim=2)
+    problem.f_global = 1.5
+    problem.x_global = [1.0, 2.0]
+    problem.dim_default = 4
+    problem.dim_changeable = False
+    assert problem.f_global == 1.5
+    assert np.array_equal(problem.x_global, np.array([1.0, 2.0]))
+    assert problem.dim_default == 4
+    assert problem.dim_changeable is False
+    # The storage lives in name-mangled attributes on the base class.
+    assert "_Benchmark__f_global" in vars(problem)
+    assert "_Benchmark__x_global" in vars(problem)
+    assert "_Benchmark__dim_default" in vars(problem)
+    assert "_Benchmark__dim_changeable" in vars(problem)
+
+
+def test_kernel_state_is_encapsulated():
+    problem = _DummyProblem(ndim=2)
+    assert callable(problem.compute)
+    assert problem.compute is problem._kernel
+    assert "_Benchmark__kernel" in vars(problem)
+    assert "_Benchmark__param_names" in vars(problem)
+    assert "_Benchmark__compute" in vars(problem)
+    assert "_Benchmark__paras" in vars(problem)
+    with pytest.raises(AttributeError):
+        problem.compute = problem.compute
+
+
+def test_evaluate_is_inherited_not_reimplemented():
+    """The base class provides ``evaluate``; subclasses only supply ``compute``."""
+    assert "evaluate" in vars(Benchmark)
+    assert "evaluate" not in vars(FuncBenchmark)
+    assert "evaluate" not in vars(_DummyProblem)
+
+
+def test_evaluate_casts_to_configured_dtype():
+    ndim = 6
+    x = np.linspace(-2.0, 2.0, ndim)
+    f64 = _DummyProblem(ndim=ndim)
+    f32 = _DummyProblem(ndim=ndim, dtype=np.float32)
+    r64, r32 = f64.evaluate(x), f32.evaluate(x)
+    assert isinstance(r64, np.float64)
+    assert isinstance(r32, np.float32)
+    assert np.isclose(float(r64), float(r32), rtol=1e-4, atol=1e-4)
+
+
+def test_evaluate_batch_matches_elementwise():
+    ndim = 4
+    problem = _DummyProblem(ndim=ndim)
+    X = np.random.uniform(-3, 3, (7, ndim))
+    batch = problem._evaluate_batch(X)
+    assert batch.shape == (7,)
+    assert batch.dtype == problem.dtype
+    for i, row in enumerate(X):
+        assert batch[i] == problem.evaluate(row)
+
+
+def test_evaluate_batch_matches_elementwise_without_numba():
+    """Plain-Python fallback kernels are scalar writers; the batch path must loop."""
+    ndim = 4
+    problem = _DummyProblem(ndim=ndim)
+    problem._bind_kernel(problem.compute, [], plain=True)
+    assert problem.numba_compiled is False
+    X = np.random.uniform(-3, 3, (7, ndim))
+    batch = problem._evaluate_batch(X)
+    assert batch.shape == (7,)
+    assert batch.dtype == problem.dtype
+    for i, row in enumerate(X):
+        assert batch[i] == problem.evaluate(row)
+
+
+def test_normalize_kernel_param_accepts_nested_list():
+    problem = _DummyProblem(ndim=2)
+    call_value, nbdtype, ndim = problem._normalize_kernel_param([[1.0, 2.0], [3.0, 4.0]])
+    assert ndim == 2
+    assert call_value.shape == (2, 2)
+    assert nbdtype == nb.float64
+
+
+def test_normalize_kernel_param_unwraps_zero_dim_array():
+    problem = _DummyProblem(ndim=2)
+    call_value, _, ndim = problem._normalize_kernel_param(np.array(5.0))
+    assert ndim == 0
+    assert float(call_value) == 5.0
+
+
+def test_normalize_kernel_param_rejects_empty_list_and_bool_scalar():
+    problem = _DummyProblem(ndim=2)
+    with pytest.raises(TypeError):
+        problem._normalize_kernel_param([])
+    with pytest.raises(TypeError):
+        problem._normalize_kernel_param(True)
+
+
+def test_build_compute_fallback_records_error():
+    problem = _DummyProblem(ndim=2)
+    problem.bad_param = object()
+    problem._bind_kernel(None, ["bad_param"])
+    assert problem.numba_compiled is False
+    assert problem._compile_error is not None
+    assert problem._compute is problem.compute
+
+
+def test_gufunc_cache_key_tracks_kernel_code():
+    problem = _DummyProblem(ndim=3)
+    assert problem.compute is not None
+    assert any(key[0] is problem.compute.__code__ for key in Benchmark._gufunc_cache)
+
+
+def test_abstract_func_benchmark_cannot_instantiate():
+    with pytest.raises(TypeError):
+        FuncBenchmark()  # abstract: compute() is mandatory since the Numba migration
