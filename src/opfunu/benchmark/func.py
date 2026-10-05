@@ -34,7 +34,6 @@ class FuncBenchmark(Benchmark):
     x_global : np.ndarray
         A list of vectors that provide the locations of the global minimum.
         Note that some problems have multiple global minima, not all of which may be listed.
-    n_fe : int
         The number of function evaluations that the object has been asked to calculate.
     dim_changeable : bool
         Whether we can change the benchmark function `x` variable length (i.e., the dimensionality of the problem)
@@ -62,28 +61,70 @@ class FuncBenchmark(Benchmark):
     # n_basins = 1
     # n_valleys = 1
 
-    dim_changeable: bool
-    dim_default: int
-    dim_supported: list[int]
-    f_global: float
-    x_global: np.ndarray
-    n_fe: int
-
     __ndim: int
     __bounds: np.ndarray
+    __dim_supported: list[int]
 
-    def __init__(self) -> None:
-        super().__init__()
+    def __init__(
+        self,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+        compute: typing.Callable[..., None] | None = None,
+        *,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        default_bounds: typing.Any = None,
+        f_global: float | typing.Callable[[int], float] = 0.0,
+        x_global: typing.Any = None,
+        dim_changeable: bool | None = None,
+        dim_default: int | None = None,
+        dim_supported: list[int] | None = None,
+        param_names: list[str] | None = None,
+        plain: bool = False,
+        params: dict[str, typing.Any] | None = None,
+        paras: dict[str, typing.Any] | list[str] | tuple[str, ...] | None = None,
+    ) -> None:
+        super().__init__(
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            compute=compute,
+            dim_changeable=dim_changeable if dim_changeable is not None else False,
+            dim_default=dim_default if dim_default is not None else 2,
+        )
 
         self.__ndim = 0
         self.__bounds = np.array([])
+        self.__dim_supported: list[int] = list(dim_supported) if dim_supported is not None else []
 
-        self.dim_changeable = False
-        self.dim_default = 2
-        self.dim_supported: list[int] = []
-        self.f_global = 0.0
-        self.x_global = np.array([])
-        self.n_fe = 0
+        if type(self) is FuncBenchmark:
+            raise TypeError("FuncBenchmark is abstract; subclass it and provide compute()")
+        if default_bounds is None:
+            raise TypeError("FuncBenchmark requires default_bounds; pass it to super().__init__()")
+
+        if dim_changeable is not None:
+            self.dim_changeable = dim_changeable
+        if dim_default is not None:
+            self.dim_default = dim_default
+        self.check_ndim_and_bounds(ndim, bounds, default_bounds)
+        self.f_global = f_global(self.ndim) if callable(f_global) else f_global
+        if callable(x_global):
+            self.x_global = x_global(self.ndim)
+        elif x_global is None:
+            self.x_global = np.zeros(self.ndim)
+        else:
+            self.x_global = x_global
+        self._bind_kernel(compute, param_names or [], plain=plain, params=params, paras=paras)
+
+    @property
+    def dim_supported(self) -> list[int]:
+        """The list of supported dimensionalities (empty means any ``ndim > 1``)."""
+        return self.__dim_supported
+
+    @dim_supported.setter
+    def dim_supported(self, value: list[int]) -> None:
+        self.__dim_supported = list(value)
 
     def check_ndim_and_bounds(
         self, ndim: int | None = None, bounds: typing.Any = None, default_bounds: typing.Any = None
@@ -142,23 +183,6 @@ class FuncBenchmark(Benchmark):
         if not self.dim_changeable and (len(x) != self.__ndim):
             raise ValueError(f"The length of solution should have {self.__ndim} variables!")
 
-    def evaluate(self, x: np.ndarray) -> float:
-        """
-        Evaluation of the benchmark function.
-
-        Parameters
-        ----------
-        x : np.ndarray
-            The candidate vector for evaluating the benchmark problem. Must have ``len(x) == self.ndim``.
-
-        Returns
-        -------
-        val : float
-              the evaluated benchmark function
-        """
-
-        raise NotImplementedError
-
     def is_ndim_compatible(self, ndim: int | None) -> bool:
         """
         Method to support searching the functions with input ndim
@@ -206,7 +230,7 @@ class FuncBenchmark(Benchmark):
         if np.any(x > self.ub) or np.any(x < self.lb):
             return False
 
-        val = self.evaluate(np.squeeze(x))
+        val = float(self.evaluate(np.squeeze(x)))
         if np.abs(val - self.f_global) < tol:
             return True
 
