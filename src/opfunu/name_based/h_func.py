@@ -4,6 +4,8 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
+import typing
+
 import numpy as np
 
 from opfunu.benchmark.func import FuncBenchmark
@@ -35,21 +37,33 @@ class Hansen(FuncBenchmark):
 
     modality = False  # Number of ambiguous peaks, unknown # peaks
 
-    def __init__(self, ndim=None, bounds=None):
-        super().__init__()
-        self.dim_changeable = False
-        self.dim_default = 2
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[-10.0, 10.0] for _ in range(self.dim_default)]))
-        self.f_global = -176.54179
-        self.x_global = np.array([-7.58989583, -7.70831466])
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, out: np.ndarray) -> None:
+            i = np.arange(5.0)
+            a = (i + 1) * np.cos(i * x[0] + i + 1)
+            b = (i + 1) * np.cos((i + 2) * x[1] + i + 1)
+            out[0] = np.sum(a) * np.sum(b)
 
-    def evaluate(self, x, *args):
-        self.check_solution(x)
-        self.n_fe += 1
-        i = np.arange(5.0)
-        a = (i + 1) * np.cos(i * x[0] + i + 1)
-        b = (i + 1) * np.cos((i + 2) * x[1] + i + 1)
-        return np.sum(a) * np.sum(b)
+        super().__init__(
+            compute=compute,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[-10.0, 10.0] for _ in range(2)]),
+            f_global=-176.54179,
+            x_global=np.array([-7.58989583, -7.70831466]),
+            dim_changeable=False,
+            dim_default=2,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+        )
 
 
 class Hartmann3(FuncBenchmark):
@@ -76,25 +90,39 @@ class Hartmann3(FuncBenchmark):
 
     modality = False  # Number of ambiguous peaks, unknown # peaks
 
-    def __init__(self, ndim=None, bounds=None):
-        super().__init__()
-        self.dim_changeable = False
-        self.dim_default = 3
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[0.0, 1.0] for _ in range(self.dim_default)]))
-        self.f_global = -3.8627821478
-        self.x_global = np.array([0.11461292, 0.55564907, 0.85254697])
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, a: np.ndarray, p: np.ndarray, c: np.ndarray, out: np.ndarray) -> None:
+            XX = np.atleast_2d(x)
+            d = np.sum(a * (XX - p) ** 2, axis=1)
+            out[0] = -np.sum(c * np.exp(-d))
+
         self.a = np.asarray([[3.0, 10.0, 30.0], [0.1, 10.0, 35.0], [3.0, 10.0, 30.0], [0.1, 10.0, 35.0]])
         self.p = np.asarray(
-            [[0.3689, 0.1170, 0.2673], [0.4699, 0.4387, 0.7470], [0.1091, 0.8732, 0.5547], [0.03815, 0.5743, 0.8828]]
+            [[0.3689, 0.117, 0.2673], [0.4699, 0.4387, 0.747], [0.1091, 0.8732, 0.5547], [0.03815, 0.5743, 0.8828]]
         )
         self.c = np.asarray([1.0, 1.2, 3.0, 3.2])
 
-    def evaluate(self, x, *args):
-        self.check_solution(x)
-        self.n_fe += 1
-        XX = np.atleast_2d(x)
-        d = np.sum(self.a * (XX - self.p) ** 2, axis=1)
-        return -np.sum(self.c * np.exp(-d))
+        super().__init__(
+            compute=compute,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[0.0, 1.0] for _ in range(3)]),
+            f_global=-3.8627821478,
+            x_global=np.array([0.11461292, 0.55564907, 0.85254697]),
+            dim_changeable=False,
+            dim_default=3,
+            param_names=["a", "p", "c"],
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+        )
 
 
 class Hartmann6(FuncBenchmark):
@@ -123,13 +151,19 @@ class Hartmann6(FuncBenchmark):
 
     modality = False  # Number of ambiguous peaks, unknown # peaks
 
-    def __init__(self, ndim=None, bounds=None):
-        super().__init__()
-        self.dim_changeable = False
-        self.dim_default = 6
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[0.0, 1.0] for _ in range(self.dim_default)]))
-        self.f_global = -3.32236801141551
-        self.x_global = np.array([0.20168952, 0.15001069, 0.47687398, 0.27533243, 0.31165162, 0.65730054])
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, a: np.ndarray, p: np.ndarray, c: np.ndarray, out: np.ndarray) -> None:
+            XX = np.atleast_2d(x)
+            d = np.sum(a * (XX - p) ** 2, axis=1)
+            out[0] = -np.sum(c * np.exp(-d))
+
         self.a = np.asarray(
             [
                 [10.0, 3.0, 17.0, 3.5, 1.7, 8.0],
@@ -148,12 +182,20 @@ class Hartmann6(FuncBenchmark):
         )
         self.c = np.asarray([1.0, 1.2, 3.0, 3.2])
 
-    def evaluate(self, x, *args):
-        self.check_solution(x)
-        self.n_fe += 1
-        XX = np.atleast_2d(x)
-        d = np.sum(self.a * (XX - self.p) ** 2, axis=1)
-        return -np.sum(self.c * np.exp(-d))
+        super().__init__(
+            compute=compute,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[0.0, 1.0] for _ in range(6)]),
+            f_global=-3.32236801141551,
+            x_global=np.array([0.20168952, 0.15001069, 0.47687398, 0.27533243, 0.31165162, 0.65730054]),
+            dim_changeable=False,
+            dim_default=6,
+            param_names=["a", "p", "c"],
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+        )
 
 
 class HelicalValley(FuncBenchmark):
@@ -180,20 +222,32 @@ class HelicalValley(FuncBenchmark):
 
     modality = False  # Number of ambiguous peaks, unknown # peaks
 
-    def __init__(self, ndim=None, bounds=None):
-        super().__init__()
-        self.dim_changeable = False
-        self.dim_default = 3
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[-10.0, 10.0] for _ in range(self.dim_default)]))
-        self.f_global = 0.0
-        self.x_global = np.array([1.0, 0.0, 0.0])
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, out: np.ndarray) -> None:
+            r = np.sqrt(x[0] ** 2 + x[1] ** 2)
+            theta = 1 / (2.0 * np.pi) * np.arctan2(x[1], x[0])
+            out[0] = x[2] ** 2 + 100 * ((x[2] - 10 * theta) ** 2 + (r - 1) ** 2)
 
-    def evaluate(self, x, *args):
-        self.check_solution(x)
-        self.n_fe += 1
-        r = np.sqrt(x[0] ** 2 + x[1] ** 2)
-        theta = 1 / (2.0 * np.pi) * np.arctan2(x[1], x[0])
-        return x[2] ** 2 + 100 * ((x[2] - 10 * theta) ** 2 + (r - 1) ** 2)
+        super().__init__(
+            compute=compute,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[-10.0, 10.0] for _ in range(3)]),
+            f_global=0.0,
+            x_global=np.array([1.0, 0.0, 0.0]),
+            dim_changeable=False,
+            dim_default=3,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+        )
 
 
 class Himmelblau(FuncBenchmark):
@@ -220,18 +274,30 @@ class Himmelblau(FuncBenchmark):
 
     modality = False  # Number of ambiguous peaks, unknown # peaks
 
-    def __init__(self, ndim=None, bounds=None):
-        super().__init__()
-        self.dim_changeable = False
-        self.dim_default = 2
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[-5.0, 5.0] for _ in range(self.dim_default)]))
-        self.f_global = 0.0
-        self.x_global = np.array([3.0, 2.0])
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, out: np.ndarray) -> None:
+            out[0] = (x[0] ** 2 + x[1] - 11) ** 2 + (x[0] + x[1] ** 2 - 7) ** 2
 
-    def evaluate(self, x, *args):
-        self.check_solution(x)
-        self.n_fe += 1
-        return (x[0] ** 2 + x[1] - 11) ** 2 + (x[0] + x[1] ** 2 - 7) ** 2
+        super().__init__(
+            compute=compute,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[-5.0, 5.0] for _ in range(2)]),
+            f_global=0.0,
+            x_global=np.array([3.0, 2.0]),
+            dim_changeable=False,
+            dim_default=2,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+        )
 
 
 class Hosaki(FuncBenchmark):
@@ -260,19 +326,31 @@ class Hosaki(FuncBenchmark):
 
     modality = False  # Number of ambiguous peaks, unknown # peaks
 
-    def __init__(self, ndim=None, bounds=None):
-        super().__init__()
-        self.dim_changeable = False
-        self.dim_default = 2
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[0.0, 5.0], [0.0, 6.0]]))
-        self.f_global = -2.345811576101292
-        self.x_global = np.array([4.0, 2.0])
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, out: np.ndarray) -> None:
+            val = 1 - 8 * x[0] + 7 * x[0] ** 2 - 7 / 3.0 * x[0] ** 3 + 0.25 * x[0] ** 4
+            out[0] = val * x[1] ** 2 * np.exp(-x[1])
 
-    def evaluate(self, x, *args):
-        self.check_solution(x)
-        self.n_fe += 1
-        val = 1 - 8 * x[0] + 7 * x[0] ** 2 - 7 / 3.0 * x[0] ** 3 + 0.25 * x[0] ** 4
-        return val * x[1] ** 2 * np.exp(-x[1])
+        super().__init__(
+            compute=compute,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[0.0, 5.0], [0.0, 6.0]]),
+            f_global=-2.345811576101292,
+            x_global=np.array([4.0, 2.0]),
+            dim_changeable=False,
+            dim_default=2,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+        )
 
 
 class HolderTable(FuncBenchmark):
@@ -301,13 +379,30 @@ class HolderTable(FuncBenchmark):
 
     modality = False  # Number of ambiguous peaks, unknown # peaks
 
-    def __init__(self, ndim=None, bounds=None):
-        super().__init__()
-        self.dim_changeable = False
-        self.dim_default = 2
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[-10.0, 10.0] for _ in range(self.dim_default)]))
-        self.f_global = -19.20850256788675
-        self.x_global = np.array([8.055023472141116, 9.664590028909654])
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, out: np.ndarray) -> None:
+            out[0] = -np.abs(np.sin(x[0]) * np.cos(x[1]) * np.exp(np.abs(1 - np.sqrt(x[0] ** 2 + x[1] ** 2) / np.pi)))
+
+        super().__init__(
+            compute=compute,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[-10.0, 10.0] for _ in range(2)]),
+            f_global=-19.20850256788675,
+            x_global=np.array([8.055023472141116, 9.664590028909654]),
+            dim_changeable=False,
+            dim_default=2,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+        )
         self.x_globals = np.array(
             [
                 [8.055023472141116, 9.664590028909654],
@@ -316,8 +411,3 @@ class HolderTable(FuncBenchmark):
                 [-8.055023472141116, -9.664590028909654],
             ]
         )
-
-    def evaluate(self, x, *args):
-        self.check_solution(x)
-        self.n_fe += 1
-        return -np.abs(np.sin(x[0]) * np.cos(x[1]) * np.exp(np.abs(1 - np.sqrt(x[0] ** 2 + x[1] ** 2) / np.pi)))

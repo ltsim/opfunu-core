@@ -4,6 +4,8 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
+import typing
+
 import numpy as np
 
 from opfunu.benchmark.func import FuncBenchmark
@@ -36,17 +38,29 @@ class FreudensteinRoth(FuncBenchmark):
 
     modality = False  # Number of ambiguous peaks, unknown # peaks
 
-    def __init__(self, ndim=None, bounds=None):
-        super().__init__()
-        self.dim_changeable = False
-        self.dim_default = 2
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[-10.0, 10.0] for _ in range(self.dim_default)]))
-        self.f_global = 0.0
-        self.x_global = np.array([5.0, 4.0])
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, out: np.ndarray) -> None:
+            f1 = (-13.0 + x[0] + ((5.0 - x[1]) * x[1] - 2.0) * x[1]) ** 2
+            f2 = (-29.0 + x[0] + ((x[1] + 1.0) * x[1] - 14.0) * x[1]) ** 2
+            out[0] = f1 + f2
 
-    def evaluate(self, x, *args):
-        self.check_solution(x)
-        self.n_fe += 1
-        f1 = (-13.0 + x[0] + ((5.0 - x[1]) * x[1] - 2.0) * x[1]) ** 2
-        f2 = (-29.0 + x[0] + ((x[1] + 1.0) * x[1] - 14.0) * x[1]) ** 2
-        return f1 + f2
+        super().__init__(
+            compute=compute,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[-10.0, 10.0] for _ in range(2)]),
+            f_global=0.0,
+            x_global=np.array([5.0, 4.0]),
+            dim_changeable=False,
+            dim_default=2,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+        )

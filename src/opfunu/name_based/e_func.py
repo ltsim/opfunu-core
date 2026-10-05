@@ -5,6 +5,8 @@
 # --------------------------------------------------%
 
 
+import typing
+
 import numpy as np
 
 from opfunu.benchmark.func import FuncBenchmark
@@ -37,19 +39,31 @@ class Easom(FuncBenchmark):
 
     modality = False  # Number of ambiguous peaks, unknown # peaks
 
-    def __init__(self, ndim=None, bounds=None):
-        super().__init__()
-        self.dim_changeable = False
-        self.dim_default = 2
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)]))
-        self.f_global = -1.0
-        self.x_global = np.pi * np.ones(self.ndim)
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, out: np.ndarray) -> None:
+            a = (x[0] - np.pi) ** 2 + (x[1] - np.pi) ** 2
+            out[0] = -np.cos(x[0]) * np.cos(x[1]) * np.exp(-a)
 
-    def evaluate(self, x, *args):
-        self.check_solution(x)
-        self.n_fe += 1
-        a = (x[0] - np.pi) ** 2 + (x[1] - np.pi) ** 2
-        return -np.cos(x[0]) * np.cos(x[1]) * np.exp(-a)
+        super().__init__(
+            compute=compute,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[-100.0, 100.0] for _ in range(2)]),
+            f_global=-1.0,
+            x_global=lambda nd: np.pi * np.ones(nd),
+            dim_changeable=False,
+            dim_default=2,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+        )
 
 
 class ElAttarVidyasagarDutta(FuncBenchmark):
@@ -76,18 +90,30 @@ class ElAttarVidyasagarDutta(FuncBenchmark):
 
     modality = False  # Number of ambiguous peaks, unknown # peaks
 
-    def __init__(self, ndim=None, bounds=None):
-        super().__init__()
-        self.dim_changeable = False
-        self.dim_default = 2
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[-500.0, 500.0] for _ in range(self.dim_default)]))
-        self.f_global = 1.712780354
-        self.x_global = np.array([3.40918683, -2.17143304])
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, out: np.ndarray) -> None:
+            out[0] = (x[0] ** 2 + x[1] - 10) ** 2 + (x[0] + x[1] ** 2 - 7) ** 2 + (x[0] ** 2 + x[1] ** 3 - 1) ** 2
 
-    def evaluate(self, x, *args):
-        self.check_solution(x)
-        self.n_fe += 1
-        return (x[0] ** 2 + x[1] - 10) ** 2 + (x[0] + x[1] ** 2 - 7) ** 2 + (x[0] ** 2 + x[1] ** 3 - 1) ** 2
+        super().__init__(
+            compute=compute,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[-500.0, 500.0] for _ in range(2)]),
+            f_global=1.712780354,
+            x_global=np.array([3.40918683, -2.17143304]),
+            dim_changeable=False,
+            dim_default=2,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+        )
 
 
 class EggCrate(FuncBenchmark):
@@ -114,18 +140,30 @@ class EggCrate(FuncBenchmark):
 
     modality = False  # Number of ambiguous peaks, unknown # peaks
 
-    def __init__(self, ndim=None, bounds=None):
-        super().__init__()
-        self.dim_changeable = False
-        self.dim_default = 2
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[-500.0, 500.0] for _ in range(self.dim_default)]))
-        self.f_global = 0.0
-        self.x_global = np.array([0.0, 0.0])
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, out: np.ndarray) -> None:
+            out[0] = x[0] ** 2 + x[1] ** 2 + 25 * (np.sin(x[0]) ** 2 + np.sin(x[1]) ** 2)
 
-    def evaluate(self, x, *args):
-        self.check_solution(x)
-        self.n_fe += 1
-        return x[0] ** 2 + x[1] ** 2 + 25 * (np.sin(x[0]) ** 2 + np.sin(x[1]) ** 2)
+        super().__init__(
+            compute=compute,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[-500.0, 500.0] for _ in range(2)]),
+            f_global=0.0,
+            x_global=np.array([0.0, 0.0]),
+            dim_changeable=False,
+            dim_default=2,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+        )
 
 
 class EggHolder(FuncBenchmark):
@@ -155,21 +193,33 @@ class EggHolder(FuncBenchmark):
 
     modality = False  # Number of ambiguous peaks, unknown # peaks
 
-    def __init__(self, ndim=None, bounds=None):
-        super().__init__()
-        self.dim_changeable = True
-        self.dim_default = 2
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[-512.0, 512.0] for _ in range(self.dim_default)]))
-        self.f_global = -959.640662711
-        self.x_global = np.zeros(self.ndim)
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, out: np.ndarray) -> None:
+            vec = -(x[1:] + 47) * np.sin(np.sqrt(np.abs(x[1:] + x[:-1] / 2.0 + 47))) - x[:-1] * np.sin(
+                np.sqrt(np.abs(x[:-1] - (x[1:] + 47)))
+            )
+            out[0] = np.sum(vec)
 
-    def evaluate(self, x, *args):
-        self.check_solution(x)
-        self.n_fe += 1
-        vec = -(x[1:] + 47) * np.sin(np.sqrt(abs(x[1:] + x[:-1] / 2.0 + 47))) - x[:-1] * np.sin(
-            np.sqrt(np.abs(x[:-1] - (x[1:] + 47)))
+        super().__init__(
+            compute=compute,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[-512.0, 512.0] for _ in range(2)]),
+            f_global=-959.640662711,
+            x_global=lambda nd: np.zeros(nd),
+            dim_changeable=True,
+            dim_default=2,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
         )
-        return np.sum(vec)
 
 
 class Exponential(FuncBenchmark):
@@ -196,18 +246,30 @@ class Exponential(FuncBenchmark):
 
     modality = False  # Number of ambiguous peaks, unknown # peaks
 
-    def __init__(self, ndim=None, bounds=None):
-        super().__init__()
-        self.dim_changeable = True
-        self.dim_default = 2
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[-1.0, 1.0] for _ in range(self.dim_default)]))
-        self.f_global = -1
-        self.x_global = np.zeros(self.ndim)
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, out: np.ndarray) -> None:
+            out[0] = -np.exp(-0.5 * np.sum(x**2.0))
 
-    def evaluate(self, x, *args):
-        self.check_solution(x)
-        self.n_fe += 1
-        return -np.exp(-0.5 * np.sum(x**2.0))
+        super().__init__(
+            compute=compute,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[-1.0, 1.0] for _ in range(2)]),
+            f_global=-1,
+            x_global=lambda nd: np.zeros(nd),
+            dim_changeable=True,
+            dim_default=2,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+        )
 
 
 class Exp2(FuncBenchmark):
@@ -234,20 +296,32 @@ class Exp2(FuncBenchmark):
 
     modality = False  # Number of ambiguous peaks, unknown # peaks
 
-    def __init__(self, ndim=None, bounds=None):
-        super().__init__()
-        self.dim_changeable = False
-        self.dim_default = 2
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[0.0, 20.0] for _ in range(self.dim_default)]))
-        self.f_global = 0.0
-        self.x_global = np.array([1.0, 10.0])
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, out: np.ndarray) -> None:
+            i = np.arange(10.0)
+            vec = (np.exp(-i * x[0] / 10.0) - 5 * np.exp(-i * x[1] / 10.0) - np.exp(-i / 10.0) + 5 * np.exp(-i)) ** 2
+            out[0] = np.sum(vec)
 
-    def evaluate(self, x, *args):
-        self.check_solution(x)
-        self.n_fe += 1
-        i = np.arange(10.0)
-        vec = (np.exp(-i * x[0] / 10.0) - 5 * np.exp(-i * x[1] / 10.0) - np.exp(-i / 10.0) + 5 * np.exp(-i)) ** 2
-        return np.sum(vec)
+        super().__init__(
+            compute=compute,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[0.0, 20.0] for _ in range(2)]),
+            f_global=0.0,
+            x_global=np.array([1.0, 10.0]),
+            dim_changeable=False,
+            dim_default=2,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+        )
 
 
 class Eckerle4(FuncBenchmark):
@@ -274,94 +348,108 @@ class Eckerle4(FuncBenchmark):
 
     modality = False  # Number of ambiguous peaks, unknown # peaks
 
-    def __init__(self, ndim=None, bounds=None):
-        super().__init__()
-        self.dim_changeable = False
-        self.dim_default = 3
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[0.0, 20.0], [1.0, 20.0], [10.0, 600.0]]))
-        self.f_global = 1.4635887487e-03
-        self.x_global = np.array([1.5543827178, 4.0888321754, 4.5154121844e2])
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, b: np.ndarray, a: np.ndarray, out: np.ndarray) -> None:
+            vec = x[0] / x[1] * np.exp(-((b - x[2]) ** 2) / (2 * x[1] ** 2))
+            out[0] = np.sum((a - vec) ** 2)
+
         self.a = np.asarray(
             [
-                1.5750000e-04,
-                1.6990000e-04,
-                2.3500000e-04,
-                3.1020000e-04,
-                4.9170000e-04,
-                8.7100000e-04,
-                1.7418000e-03,
-                4.6400000e-03,
-                6.5895000e-03,
-                9.7302000e-03,
-                1.4900200e-02,
-                2.3731000e-02,
-                4.0168300e-02,
-                7.1255900e-02,
-                1.2644580e-01,
-                2.0734130e-01,
-                2.9023660e-01,
-                3.4456230e-01,
-                3.6980490e-01,
-                3.6685340e-01,
-                3.1067270e-01,
-                2.0781540e-01,
-                1.1643540e-01,
-                6.1676400e-02,
-                3.3720000e-02,
-                1.9402300e-02,
-                1.1783100e-02,
-                7.4357000e-03,
-                2.2732000e-03,
-                8.8000000e-04,
-                4.5790000e-04,
-                2.3450000e-04,
-                1.5860000e-04,
-                1.1430000e-04,
-                7.1000000e-05,
+                0.0001575,
+                0.0001699,
+                0.000235,
+                0.0003102,
+                0.0004917,
+                0.000871,
+                0.0017418,
+                0.00464,
+                0.0065895,
+                0.0097302,
+                0.0149002,
+                0.023731,
+                0.0401683,
+                0.0712559,
+                0.1264458,
+                0.2073413,
+                0.2902366,
+                0.3445623,
+                0.3698049,
+                0.3668534,
+                0.3106727,
+                0.2078154,
+                0.1164354,
+                0.0616764,
+                0.03372,
+                0.0194023,
+                0.0117831,
+                0.0074357,
+                0.0022732,
+                0.00088,
+                0.0004579,
+                0.0002345,
+                0.0001586,
+                0.0001143,
+                7.1e-05,
             ]
         )
         self.b = np.asarray(
             [
-                4.0000000e02,
-                4.0500000e02,
-                4.1000000e02,
-                4.1500000e02,
-                4.2000000e02,
-                4.2500000e02,
-                4.3000000e02,
-                4.3500000e02,
-                4.3650000e02,
-                4.3800000e02,
-                4.3950000e02,
-                4.4100000e02,
-                4.4250000e02,
-                4.4400000e02,
-                4.4550000e02,
-                4.4700000e02,
-                4.4850000e02,
-                4.5000000e02,
-                4.5150000e02,
-                4.5300000e02,
-                4.5450000e02,
-                4.5600000e02,
-                4.5750000e02,
-                4.5900000e02,
-                4.6050000e02,
-                4.6200000e02,
-                4.6350000e02,
-                4.6500000e02,
-                4.7000000e02,
-                4.7500000e02,
-                4.8000000e02,
-                4.8500000e02,
-                4.9000000e02,
-                4.9500000e02,
-                5.0000000e02,
+                400.0,
+                405.0,
+                410.0,
+                415.0,
+                420.0,
+                425.0,
+                430.0,
+                435.0,
+                436.5,
+                438.0,
+                439.5,
+                441.0,
+                442.5,
+                444.0,
+                445.5,
+                447.0,
+                448.5,
+                450.0,
+                451.5,
+                453.0,
+                454.5,
+                456.0,
+                457.5,
+                459.0,
+                460.5,
+                462.0,
+                463.5,
+                465.0,
+                470.0,
+                475.0,
+                480.0,
+                485.0,
+                490.0,
+                495.0,
+                500.0,
             ]
         )
 
-    def evaluate(self, x, *args):
-        self.check_solution(x)
-        self.n_fe += 1
-        vec = x[0] / x[1] * np.exp(-((self.b - x[2]) ** 2) / (2 * x[1] ** 2))
-        return np.sum((self.a - vec) ** 2)
+        super().__init__(
+            compute=compute,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[0.0, 20.0], [1.0, 20.0], [10.0, 600.0]]),
+            f_global=0.0014635887487,
+            x_global=np.array([1.5543827178, 4.0888321754, 451.54121844]),
+            dim_changeable=False,
+            dim_default=3,
+            param_names=["b", "a"],
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+        )

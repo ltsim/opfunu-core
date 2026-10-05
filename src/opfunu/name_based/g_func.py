@@ -4,6 +4,8 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
+import typing
+
 import numpy as np
 
 from opfunu.benchmark.func import FuncBenchmark
@@ -36,19 +38,31 @@ class Giunta(FuncBenchmark):
 
     modality = False  # Number of ambiguous peaks, unknown # peaks
 
-    def __init__(self, ndim=None, bounds=None):
-        super().__init__()
-        self.dim_changeable = False
-        self.dim_default = 2
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[-1.0, 1.0] for _ in range(self.dim_default)]))
-        self.f_global = 0.06447042053690566
-        self.x_global = np.array([0.4673200277395354, 0.4673200169591304])
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, out: np.ndarray) -> None:
+            arg = 16 * x / 15.0 - 1
+            out[0] = 0.6 + np.sum(np.sin(arg) + np.sin(arg) ** 2 + np.sin(4 * arg) / 50.0)
 
-    def evaluate(self, x, *args):
-        self.check_solution(x)
-        self.n_fe += 1
-        arg = 16 * x / 15.0 - 1
-        return 0.6 + np.sum(np.sin(arg) + np.sin(arg) ** 2 + np.sin(4 * arg) / 50.0)
+        super().__init__(
+            compute=compute,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[-1.0, 1.0] for _ in range(2)]),
+            f_global=0.06447042053690566,
+            x_global=np.array([0.4673200277395354, 0.4673200169591304]),
+            dim_changeable=False,
+            dim_default=2,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+        )
 
 
 class GoldsteinPrice(FuncBenchmark):
@@ -78,22 +92,36 @@ class GoldsteinPrice(FuncBenchmark):
 
     modality = False  # Number of ambiguous peaks, unknown # peaks
 
-    def __init__(self, ndim=None, bounds=None):
-        super().__init__()
-        self.dim_changeable = False
-        self.dim_default = 2
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[-2.0, 2.0] for _ in range(self.dim_default)]))
-        self.f_global = 3.0
-        self.x_global = np.array([0.0, -1.0])
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, out: np.ndarray) -> None:
+            a = 1 + (x[0] + x[1] + 1) ** 2 * (
+                19 - 14 * x[0] + 3 * x[0] ** 2 - 14 * x[1] + 6 * x[0] * x[1] + 3 * x[1] ** 2
+            )
+            b = 30 + (2 * x[0] - 3 * x[1]) ** 2 * (
+                18 - 32 * x[0] + 12 * x[0] ** 2 + 48 * x[1] - 36 * x[0] * x[1] + 27 * x[1] ** 2
+            )
+            out[0] = a * b
 
-    def evaluate(self, x, *args):
-        self.check_solution(x)
-        self.n_fe += 1
-        a = 1 + (x[0] + x[1] + 1) ** 2 * (19 - 14 * x[0] + 3 * x[0] ** 2 - 14 * x[1] + 6 * x[0] * x[1] + 3 * x[1] ** 2)
-        b = 30 + (2 * x[0] - 3 * x[1]) ** 2 * (
-            18 - 32 * x[0] + 12 * x[0] ** 2 + 48 * x[1] - 36 * x[0] * x[1] + 27 * x[1] ** 2
+        super().__init__(
+            compute=compute,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[-2.0, 2.0] for _ in range(2)]),
+            f_global=3.0,
+            x_global=np.array([0.0, -1.0]),
+            dim_changeable=False,
+            dim_default=2,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
         )
-        return a * b
 
 
 class Griewank(FuncBenchmark):
@@ -120,19 +148,31 @@ class Griewank(FuncBenchmark):
 
     modality = False  # Number of ambiguous peaks, unknown # peaks
 
-    def __init__(self, ndim=None, bounds=None):
-        super().__init__()
-        self.dim_changeable = True
-        self.dim_default = 2
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)]))
-        self.f_global = 0.0
-        self.x_global = np.zeros(self.ndim)
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, out: np.ndarray) -> None:
+            i = np.arange(1.0, np.size(x) + 1.0)
+            out[0] = np.sum(x**2 / 4000) - np.prod(np.cos(x / np.sqrt(i))) + 1
 
-    def evaluate(self, x, *args):
-        self.check_solution(x)
-        self.n_fe += 1
-        i = np.arange(1.0, np.size(x) + 1.0)
-        return np.sum(x**2 / 4000) - np.prod(np.cos(x / np.sqrt(i))) + 1
+        super().__init__(
+            compute=compute,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[-100.0, 100.0] for _ in range(2)]),
+            f_global=0.0,
+            x_global=lambda nd: np.zeros(nd),
+            dim_changeable=True,
+            dim_default=2,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+        )
 
 
 class Gulf(FuncBenchmark):
@@ -159,22 +199,34 @@ class Gulf(FuncBenchmark):
 
     modality = False  # Number of ambiguous peaks, unknown # peaks
 
-    def __init__(self, ndim=None, bounds=None):
-        super().__init__()
-        self.dim_changeable = False
-        self.dim_default = 3
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[0.0, 50.0] for _ in range(self.dim_default)]))
-        self.f_global = 0.0
-        self.x_global = np.array([50.0, 25.0, 1.5])
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, out: np.ndarray) -> None:
+            m = 99.0
+            i = np.arange(1.0, m + 1)
+            u = 25 + (-50 * np.log(i / 100.0)) ** (2 / 3.0)
+            vec = np.exp(-((np.abs(u - x[1])) ** x[2] / x[0])) - i / 100.0
+            out[0] = np.sum(vec**2)
 
-    def evaluate(self, x, *args):
-        self.check_solution(x)
-        self.n_fe += 1
-        m = 99.0
-        i = np.arange(1.0, m + 1)
-        u = 25 + (-50 * np.log(i / 100.0)) ** (2 / 3.0)
-        vec = np.exp(-((np.abs(u - x[1])) ** x[2] / x[0])) - i / 100.0
-        return np.sum(vec**2)
+        super().__init__(
+            compute=compute,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[0.0, 50.0] for _ in range(3)]),
+            f_global=0.0,
+            x_global=np.array([50.0, 25.0, 1.5]),
+            dim_changeable=False,
+            dim_default=3,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+        )
 
 
 class Gear(FuncBenchmark):
@@ -203,15 +255,27 @@ class Gear(FuncBenchmark):
 
     modality = False  # Number of ambiguous peaks, unknown # peaks
 
-    def __init__(self, ndim=None, bounds=None):
-        super().__init__()
-        self.dim_changeable = False
-        self.dim_default = 4
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[12.0, 60.0] for _ in range(self.dim_default)]))
-        self.f_global = 2.7e-12
-        self.x_global = np.array([16, 19, 43, 49])
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, out: np.ndarray) -> None:
+            out[0] = (1.0 / 6.931 - np.floor(x[0]) * np.floor(x[1]) / np.floor(x[2]) / np.floor(x[3])) ** 2
 
-    def evaluate(self, x, *args):
-        self.check_solution(x)
-        self.n_fe += 1
-        return (1.0 / 6.931 - np.floor(x[0]) * np.floor(x[1]) / np.floor(x[2]) / np.floor(x[3])) ** 2
+        super().__init__(
+            compute=compute,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[12.0, 60.0] for _ in range(4)]),
+            f_global=2.7e-12,
+            x_global=np.array([16, 19, 43, 49]),
+            dim_changeable=False,
+            dim_default=4,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+        )

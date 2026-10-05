@@ -4,6 +4,8 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
+import typing
+
 import numpy as np
 
 from opfunu.benchmark.func import FuncBenchmark
@@ -41,20 +43,32 @@ class Zacharov(FuncBenchmark):
 
     modality = False  # Number of ambiguous peaks, unknown # peaks
 
-    def __init__(self, ndim=None, bounds=None):
-        super().__init__()
-        self.dim_changeable = True
-        self.dim_default = 2
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[-5.0, 10.0] for _ in range(self.dim_default)]))
-        self.f_global = 0.0
-        self.x_global = np.zeros(self.ndim)
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, out: np.ndarray) -> None:
+            u = np.sum(x**2)
+            v = np.sum(np.arange(1, x.shape[0] + 1) * x)
+            out[0] = u + (0.5 * v) ** 2 + (0.5 * v) ** 4
 
-    def evaluate(self, x, *args):
-        self.check_solution(x)
-        self.n_fe += 1
-        u = np.sum(x**2)
-        v = np.sum(np.arange(1, self.ndim + 1) * x)
-        return u + (0.5 * v) ** 2 + (0.5 * v) ** 4
+        super().__init__(
+            compute=compute,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[-5.0, 10.0] for _ in range(2)]),
+            f_global=0.0,
+            x_global=lambda nd: np.zeros(nd),
+            dim_changeable=True,
+            dim_default=2,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+        )
 
 
 class ZeroSum(FuncBenchmark):
@@ -87,20 +101,33 @@ class ZeroSum(FuncBenchmark):
     parametric = False
     modality = False  # Number of ambiguous peaks, unknown # peaks
 
-    def __init__(self, ndim=None, bounds=None):
-        super().__init__()
-        self.dim_changeable = True
-        self.dim_default = 2
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[-10.0, 10.0] for _ in range(self.dim_default)]))
-        self.f_global = 0.0
-        self.x_global = np.zeros(self.ndim)
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, out: np.ndarray) -> None:
+            if np.abs(np.sum(x)) < 3e-16:
+                out[0] = 0.0
+            else:
+                out[0] = 1.0 + (10000.0 * np.abs(np.sum(x))) ** 0.5
 
-    def evaluate(self, x, *args):
-        self.check_solution(x)
-        self.n_fe += 1
-        if np.abs(np.sum(x)) < 3e-16:
-            return 0.0
-        return 1.0 + (10000.0 * np.abs(np.sum(x))) ** 0.5
+        super().__init__(
+            compute=compute,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[-10.0, 10.0] for _ in range(2)]),
+            f_global=0.0,
+            x_global=lambda nd: np.zeros(nd),
+            dim_changeable=True,
+            dim_default=2,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+        )
 
 
 class Zettl(FuncBenchmark):
@@ -133,18 +160,30 @@ class Zettl(FuncBenchmark):
     parametric = False
     modality = False  # Number of ambiguous peaks, unknown # peaks
 
-    def __init__(self, ndim=None, bounds=None):
-        super().__init__()
-        self.dim_changeable = False
-        self.dim_default = 2
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[-1.0, 5.0] for _ in range(self.dim_default)]))
-        self.f_global = -0.0037912
-        self.x_global = np.array([-0.029896, 0.0])
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, out: np.ndarray) -> None:
+            out[0] = (x[0] ** 2 + x[1] ** 2 - 2 * x[0]) ** 2 + 0.25 * x[0]
 
-    def evaluate(self, x, *args):
-        self.check_solution(x)
-        self.n_fe += 1
-        return (x[0] ** 2 + x[1] ** 2 - 2 * x[0]) ** 2 + 0.25 * x[0]
+        super().__init__(
+            compute=compute,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[-1.0, 5.0] for _ in range(2)]),
+            f_global=-0.0037912,
+            x_global=np.array([-0.029896, 0.0]),
+            dim_changeable=False,
+            dim_default=2,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+        )
 
 
 class Zimmerman(FuncBenchmark):
@@ -190,36 +229,47 @@ class Zimmerman(FuncBenchmark):
     parametric = False
     modality = False  # Number of ambiguous peaks, unknown # peaks
 
-    def __init__(self, ndim=None, bounds=None):
-        super().__init__()
-        self.dim_changeable = False
-        self.dim_default = 2
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[0, 100] for _ in range(self.dim_default)]))
-        self.f_global = 0.0
-        self.x_global = np.array([7.0, 2.0])
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, out: np.ndarray) -> None:
+            def Zh1(x: typing.Any) -> typing.Any:
+                return 9.0 - x[0] - x[1]
 
-    def evaluate(self, x, *args):
-        self.check_solution(x)
-        self.n_fe += 1
+            def Zh2(x: typing.Any) -> typing.Any:
+                return (x[0] - 3.0) ** 2.0 + (x[1] - 2.0) ** 2.0 - 16.0
 
-        def Zh1(x):
-            return 9.0 - x[0] - x[1]
+            def Zh3(x: typing.Any) -> typing.Any:
+                return x[0] * x[1] - 14.0
 
-        def Zh2(x):
-            return (x[0] - 3.0) ** 2.0 + (x[1] - 2.0) ** 2.0 - 16.0
+            def Zp(x: typing.Any) -> typing.Any:
+                return 100.0 * (1.0 + x)
 
-        def Zh3(x):
-            return x[0] * x[1] - 14.0
+            out[0] = max(
+                Zh1(x),
+                Zp(Zh2(x)) * np.sign(Zh2(x)),
+                Zp(Zh3(x)) * np.sign(Zh3(x)),
+                Zp(-x[0]) * np.sign(x[0]),
+                Zp(-x[1]) * np.sign(x[1]),
+            )
 
-        def Zp(x):
-            return 100.0 * (1.0 + x)
-
-        return max(
-            Zh1(x),
-            Zp(Zh2(x)) * np.sign(Zh2(x)),
-            Zp(Zh3(x)) * np.sign(Zh3(x)),
-            Zp(-x[0]) * np.sign(x[0]),
-            Zp(-x[1]) * np.sign(x[1]),
+        super().__init__(
+            compute=compute,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[0, 100] for _ in range(2)]),
+            f_global=0.0,
+            x_global=np.array([7.0, 2.0]),
+            dim_changeable=False,
+            dim_default=2,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
         )
 
 
@@ -262,15 +312,27 @@ class Zirilli(FuncBenchmark):
     parametric = False
     modality = False  # Number of ambiguous peaks, unknown # peaks
 
-    def __init__(self, ndim=None, bounds=None):
-        super().__init__()
-        self.dim_changeable = False
-        self.dim_default = 2
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[-10, 10] for _ in range(self.dim_default)]))
-        self.f_global = -0.3523
-        self.x_global = np.array([-1.0465, 0])
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, out: np.ndarray) -> None:
+            out[0] = 0.25 * x[0] ** 4 - 0.5 * x[0] ** 2 + 0.1 * x[0] + 0.5 * x[1] ** 2
 
-    def evaluate(self, x, *args):
-        self.check_solution(x)
-        self.n_fe += 1
-        return 0.25 * x[0] ** 4 - 0.5 * x[0] ** 2 + 0.1 * x[0] + 0.5 * x[1] ** 2
+        super().__init__(
+            compute=compute,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[-10, 10] for _ in range(2)]),
+            f_global=-0.3523,
+            x_global=np.array([-1.0465, 0]),
+            dim_changeable=False,
+            dim_default=2,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+        )

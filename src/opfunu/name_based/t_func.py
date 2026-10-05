@@ -4,6 +4,8 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
+import typing
+
 import numpy as np
 
 from opfunu.benchmark.func import FuncBenchmark
@@ -42,17 +44,29 @@ class TestTubeHolder(FuncBenchmark):
 
     modality = True  # Number of ambiguous peaks, unknown # peaks
 
-    def __init__(self, ndim=None, bounds=None):
-        super().__init__()
-        self.dim_changeable = False
-        self.dim_default = 2
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[-10.0, 10.0] for _ in range(self.dim_default)]))
-        self.f_global = -10.87229990155800
-        self.x_global = np.array([-np.pi / 2, 0.0])
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, out: np.ndarray) -> None:
+            u = np.sin(x[0]) * np.cos(x[1])
+            v = (x[0] ** 2 + x[1] ** 2) / 200
+            out[0] = -4 * np.abs(u * np.exp(np.abs(np.cos(v))))
 
-    def evaluate(self, x, *args):
-        self.check_solution(x)
-        self.n_fe += 1
-        u = np.sin(x[0]) * np.cos(x[1])
-        v = (x[0] ** 2 + x[1] ** 2) / 200
-        return -4 * np.abs(u * np.exp(np.abs(np.cos(v))))
+        super().__init__(
+            compute=compute,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[-10.0, 10.0] for _ in range(2)]),
+            f_global=-10.872299901558,
+            x_global=np.array([-np.pi / 2, 0.0]),
+            dim_changeable=False,
+            dim_default=2,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+        )
