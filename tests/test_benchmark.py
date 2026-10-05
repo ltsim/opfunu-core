@@ -4,12 +4,14 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
-import numba as nb
 import numpy as np
 import pytest
 
 from opfunu.benchmark import Benchmark
 from opfunu.benchmark.func import FuncBenchmark
+from opfunu.utils.numba_compat import HAS_NUMBA
+
+needs_numba = pytest.mark.skipif(not HAS_NUMBA, reason="requires numba")
 
 
 class _DummyProblem(FuncBenchmark):
@@ -70,7 +72,8 @@ def test_inline_compute_declaration_style():
     ndim = 5
     problem = _InlineProblem(ndim=ndim)
     x = np.random.uniform(-5, 5, ndim)
-    assert problem.evaluate(x) == np.float64(np.sum(x**2))
+    # fastmath allows ~1ulp reassociation vs NumPy; compare with the documented tolerance.
+    assert np.isclose(float(problem.evaluate(x)), float(np.sum(x**2)), rtol=1e-9, atol=1e-12)
     assert problem.dim_changeable is True
     assert problem.dim_default == 2
     assert len(problem.x_global) == ndim
@@ -151,36 +154,74 @@ def test_evaluate_batch_matches_elementwise_without_numba():
 
 def test_normalize_kernel_param_accepts_nested_list():
     problem = _DummyProblem(ndim=2)
-    call_value, nbdtype, ndim = problem._normalize_kernel_param([[1.0, 2.0], [3.0, 4.0]])
-    assert ndim == 2
+    call_value, npdtype = problem._normalize_kernel_param([[1.0, 2.0], [3.0, 4.0]])
+    assert call_value.ndim == 2
     assert call_value.shape == (2, 2)
-    assert nbdtype == nb.float64
+    assert np.dtype(npdtype) == np.dtype(np.float64)
 
 
 def test_normalize_kernel_param_unwraps_zero_dim_array():
     problem = _DummyProblem(ndim=2)
-    call_value, _, ndim = problem._normalize_kernel_param(np.array(5.0))
-    assert ndim == 0
+    call_value, _ = problem._normalize_kernel_param(np.array(5.0))
     assert float(call_value) == 5.0
 
 
-def test_normalize_kernel_param_rejects_empty_list_and_bool_scalar():
+def test_normalize_kernel_param_accepts_empty_list_and_bool_scalar():
+    problem = _DummyProblem(ndim=2)
+    call_value, npdtype = problem._normalize_kernel_param([])
+    assert call_value.shape == (0,)
+    assert np.dtype(npdtype) == np.dtype(np.float64)
+    call_value, npdtype = problem._normalize_kernel_param(True)
+    assert call_value is True
+    assert np.dtype(npdtype) == np.dtype(bool)
+
+
+def test_normalize_kernel_param_rejects_unsupported_types():
     problem = _DummyProblem(ndim=2)
     with pytest.raises(TypeError):
-        problem._normalize_kernel_param([])
+        problem._normalize_kernel_param(object())
     with pytest.raises(TypeError):
-        problem._normalize_kernel_param(True)
+        problem._normalize_kernel_param(np.array([1j, 2j]))
+    with pytest.raises(TypeError):
+        problem._normalize_kernel_param(np.ones((2, 2, 2)))
 
 
+@needs_numba
 def test_build_compute_fallback_records_error():
+    def bad_compute(x, out):
+        out[0] = float(object())  # Numba cannot type this: forces a nopython failure
+
     problem = _DummyProblem(ndim=2)
-    problem.bad_param = object()
-    problem._bind_kernel(None, ["bad_param"])
+    problem._bind_kernel(bad_compute, [])
     assert problem.numba_compiled is False
     assert problem._compile_error is not None
-    assert problem._compute is problem.compute
+    assert problem._compute is bad_compute
 
 
+def test_bind_kernel_bad_param_name_raises():
+    problem = _DummyProblem(ndim=2)
+    with pytest.raises(AttributeError):
+        problem._bind_kernel(None, ["no_such_attr"])
+
+
+def test_bind_kernel_unsupported_param_type_raises():
+    problem = _DummyProblem(ndim=2)
+    problem.bad_param = object()
+    with pytest.raises(TypeError):
+        problem._bind_kernel(None, ["bad_param"])
+
+
+def test_bind_kernel_without_numba_uses_plain_python(monkeypatch):
+    """With Numba absent every kernel binds plain Python and still evaluates."""
+    monkeypatch.setattr("opfunu.utils.numba_compat.HAS_NUMBA", False)
+    problem = _DummyProblem(ndim=2)
+    assert problem.numba_compiled is False
+    assert problem._compile_error is None
+    x = np.array([1.0, 2.0])
+    assert problem.evaluate(x) == np.float64(np.sum(x**2))
+
+
+@needs_numba
 def test_gufunc_cache_key_tracks_kernel_code():
     problem = _DummyProblem(ndim=3)
     assert problem.compute is not None
