@@ -9,15 +9,16 @@ hide:
 
 opfunu-core is a maintenance version, a fork of
 [OPFUNU (Optimization Reference Functions in NumPy)](https://github.com/thieu1995/opfunu). It bundles every function
-from the CEC competitions of 2005–2022 together with over 300 traditional functions — all behind a single, NumPy-based
-API for benchmarking your optimization algorithms.
+from the CEC competitions of 2005–2022 (around 190 problems) together with 125 traditional functions — all behind a
+single API for benchmarking your optimization algorithms. The base dependency is NumPy only; opt-in
+Numba vectorization (`pip install opfunu-core[numba]`, CPython) compiles every function for batch evaluation.
 
 <div class="grid cards" markdown>
 
--   :material-function-variant: **500+ problems**
+-   :material-function-variant: **300+ problems**
 
-    All CEC competition functions (2005, 2008, 2010, 2013, 2014, 2015, 2017, 2019, 2020, 2021, 2022) and over
-    300 traditional test functions with varying dimensions.
+    All CEC competition functions (2005, 2008, 2010, 2013, 2014, 2015, 2017, 2019, 2020, 2021, 2022) and 125
+    traditional test functions with varying dimensions.
 
 -   :material-cube-outline: **NumPy-first**
 
@@ -41,6 +42,15 @@ Install from PyPI:
 ```bash
 pip install opfunu-core
 ```
+
+For Numba-based vectorization (CPython only):
+
+```bash
+pip install opfunu-core[numba]
+```
+
+Without the `[numba]` extra the library runs in pure-Python/NumPy mode, which also
+works on PyPy.
 
 Evaluate your first function:
 

@@ -13,12 +13,17 @@
   (e.g. `F12014(ndim=30, parallel=True, dtype=np.float32)`); guvectorized kernels also evaluate
   whole populations in one call (up to ~55x on 256-vector batches; ~2-8x on single evaluations)
 + Functions whose bodies cannot compile in nopython mode (stochastic terms, hybrid compositions
-  holding sub-instances) bind via `_use_plain_compute([...])` and keep their exact NumPy bodies
-  behind the same interface (`numba_compiled=False`); verified value-identical against the
-  pre-migration code
+  holding sub-instances, `Cola`, 2005 `F232005`, 2008 `F72008`) bind with `plain=True` and keep
+  their exact NumPy bodies behind the same interface (`numba_compiled=False`); verified
+  value-identical against the pre-migration code
 + Removed the `n_fe` evaluation counter from all classes
-+ Added `numba>=0.68.0` as a runtime dependency; `FuncBenchmark` joined `EXCLUDES` in the
-  function registry (its `compute` is now abstract)
++ Made Numba an opt-in extra: the base dependency is now NumPy only, `pip install
++   opfunu-core[numba]` (CPython) enables `guvectorize` vectorization, and without it
++   every kernel binds as plain Python automatically so the library stays fully usable
++   on CPython and PyPy (`opfunu.HAS_NUMBA`, per-instance `numba_compiled`); shared
++   operators and CEC2005 helpers use a `numba_compat.njit` pass-through shim
++ Added `numba>=0.68.0` as an optional dependency (`[numba]` extra, CPython-only marker);
++   `FuncBenchmark` joined `EXCLUDES` in the function registry (its `compute` is now abstract)
 + Migrated the project to a `src/` layout and to the `uv` package manager
 + Added `ruff` (lint + format) and `mypy` (type-check) as the default tooling; `mypy` now runs in
   strict mode across `src/`
@@ -35,15 +40,16 @@
   identically-signed kernel
 + Encapsulated all kernel/config state behind properties: `compute` is now a read-only
   property (the class-level `compute` fallback is gone) and `paras`, `numba_compiled`,
-  `f_bias`, `f_shift`, `f_matrix`, `dim_max`, … live in private storage; the compile
-  helpers are private (`__build_compute`/`__use_plain_compute`) and reachable only through
-  the protected `_bind_kernel` bridge
+  `f_bias`, `f_shift`, `f_matrix`, `dim_max`, … live in private storage; compilation
+  goes through the private `__build_compute` helper, reachable only through
+  the protected `_bind_kernel` bridge (`plain=True` binds the Python kernel directly)
 + Hardened the Numba kernel layer: `_evaluate_batch` loops the scalar kernel for plain-Python
-  fallbacks, `_normalize_kernel_param` accepts nested lists and unwraps zero-dimensional arrays,
-  the gufunc cache is keyed on the kernel's `__code__`, and compilation failures are recorded
-  on `Benchmark._compile_error` instead of being silently swallowed
-+ Composite CEC functions that hold sub-instances (2013 F21-F24, 2014 F26-F30, 2017 F27-F28) now
-  bind via `_use_plain_compute`, avoiding a guaranteed failed compilation attempt
+  fallbacks, `_normalize_kernel_param` returns `(call_value, numpy_dtype)` (Numba-free;
+  bool scalars map to `bool`; anything else raises `TypeError`), the gufunc cache is keyed on the kernel's
+  `__code__`, attribute/normalization errors propagate while only compilation/warmup
+  failures fall back and are recorded on `Benchmark._compile_error`
++ Composite CEC functions that hold sub-instances (2013 F21-F24, 2014 F26-F30, 2017 F27-F28,
+  plus 2005 `F232005`) now bind with `plain=True`, avoiding a guaranteed failed compilation attempt
 + Refactored the pytest test suite around shared fixtures in `tests/conftest.py`
 + Refactored the examples and the `EXAMPLES.md` guide for the current API
 + Added MkDocs documentation with the Material theme, published on GitHub Pages
