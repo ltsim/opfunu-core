@@ -59,6 +59,7 @@ classifiers = [
 ]
 requires-python = ">=3.10"
 dependencies = [
+    "numba>=0.68.0",
     "numpy>=2.0.2",
 ]
 
@@ -127,19 +128,13 @@ indent-style = "space"
 [tool.mypy]
 files = ["src"]
 exclude = ["tests/", "docs/", "examples/"]
+strict = true
 warn_unused_ignores = true
 warn_redundant_casts = true
 warn_unreachable = true
 no_implicit_optional = true
 strict_optional = true
-disallow_untyped_defs = false
-disallow_incomplete_defs = true
-disallow_any_generics = false
 disallow_any_unimported = false
-disallow_subclassing_any = false
-disallow_untyped_decorators = false
-check_untyped_defs = true
-warn_return_any = false
 show_error_codes = true
 show_column_numbers = true
 pretty = true
