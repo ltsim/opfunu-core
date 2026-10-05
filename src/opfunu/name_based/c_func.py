@@ -470,6 +470,7 @@ class Cola(FuncBenchmark):
             dim_changeable=False,
             dim_default=17,
             param_names=["d"],
+            plain=True,
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,

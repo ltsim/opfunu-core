@@ -6,11 +6,11 @@
 
 import typing
 
-import numba as nb
 import numpy as np
 
 from opfunu.benchmark.cec import CecBenchmark
 from opfunu.utils import operator
+from opfunu.utils.numba_compat import njit
 
 
 class F12005(CecBenchmark):
@@ -973,7 +973,7 @@ class F142005(CecBenchmark):
         )
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def _F152005_fi__(x: np.ndarray, idx: int) -> float:
     if idx == 0 or idx == 1:
         return operator.rastrigin_func(x)
@@ -1105,7 +1105,7 @@ class F152005(CecBenchmark):
             return operator.sphere_func(x)
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def _F162005_fi__(x: np.ndarray, idx: int) -> float:
     if idx == 0 or idx == 1:
         return operator.rastrigin_func(x)
@@ -1307,7 +1307,7 @@ class F172005(F162005):
         )
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def _F182005_fi__(x: np.ndarray, idx: int) -> float:
     if idx == 0 or idx == 1:
         return operator.ackley_func(x)
@@ -1529,7 +1529,7 @@ class F202005(F182005):
         }
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def _F212005_fi__(x: np.ndarray, idx: int) -> float:
     if idx == 0 or idx == 1:
         return operator.rotated_expanded_schaffer_func(x)
@@ -1766,10 +1766,12 @@ class F232005(F212005):
             out[0] = np.sum(operator.dot_vv(weights, (fits + bias))) + f_bias
 
         super().__init__(ndim, bounds, f_shift, f_matrix, f_bias, parallel=parallel, fastmath=fastmath, dtype=dtype)
-        self._bind_kernel(compute, ["f_shift", "n_funcs", "xichmas", "lamdas", "M", "fi__", "y", "C", "bias", "f_bias"])
+        self._bind_kernel(
+            compute, ["f_shift", "n_funcs", "xichmas", "lamdas", "M", "fi__", "y", "C", "bias", "f_bias"], plain=True
+        )
 
 
-@nb.njit(fastmath=True)
+@njit(fastmath=True)
 def _F242005_fi__(x: np.ndarray, idx: int) -> float:
     if idx == 0:
         return operator.weierstrass_norm_func(x)

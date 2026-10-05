@@ -433,4 +433,4 @@ class F72008(CecBenchmark):
         self.f_shift = self.f_shift / np.max(self.f_shift)
         self.f_global = -1e32
         self.x_global = self.f_shift
-        self._bind_kernel(compute, ["f_bias"], paras={"f_shift": self.f_shift, "f_bias": self.f_bias})
+        self._bind_kernel(compute, ["f_bias"], plain=True, paras={"f_shift": self.f_shift, "f_bias": self.f_bias})
