@@ -7,7 +7,7 @@ on:
 
 jobs:
   test-cpython:
-    name: pytest / ${{ matrix.python-version }} / ${{ matrix.os }}
+    name: pytest / ${{ matrix.python-version }} / ${{ matrix.os }} (numba)
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -32,6 +32,48 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Install dependencies
+        run: uv sync --group numba
+
+      - name: Run pytest
+        run: uv run pytest
+
+  test-cpython-no-numba:
+    name: pytest / no-numba / ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version:
+          - "3.10"
+          - "3.14"
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies (no numba)
+        run: uv sync
+
+      - name: Run pytest
+        run: uv run pytest
+
+  test-pypy:
+    name: pytest / pypy3.10 / ubuntu (no numba)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          python-version: pypy3.10
+
+      - name: Install dependencies (no numba)
         run: uv sync
 
       - name: Run pytest
