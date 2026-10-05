@@ -1,7 +1,49 @@
 # Version 2026a
 
++ Migrated all benchmark functions to Numba: every problem class now implements its math in a
+  mandatory `compute(x, *params, out)` kernel (a nested closure or a `@staticmethod`), compiled
+  at instantiation with `numba.guvectorize` (`nopython=True`, `fastmath=True` by default,
+  `parallel` opt-in)
++ `evaluate` is now implemented once on the `Benchmark` base class and inherited by every problem:
+  subclasses only supply `compute`, and no longer build an output vector. The shared implementation
+  reuses a per-instance output buffer and returns the result cast to the problem's `dtype`
+  (`np.float32` with `dtype=np.float32`, `np.float64` by default)
++ Added `_evaluate_batch(x)` on the base to evaluate a whole `(N, ndim)` population in one gufunc call
++ Added `parallel`, `fastmath` and `dtype` constructor flags to all problems
+  (e.g. `F12014(ndim=30, parallel=True, dtype=np.float32)`); guvectorized kernels also evaluate
+  whole populations in one call (up to ~55x on 256-vector batches; ~2-8x on single evaluations)
++ Functions whose bodies cannot compile in nopython mode (stochastic terms, hybrid compositions
+  holding sub-instances) bind via `_use_plain_compute([...])` and keep their exact NumPy bodies
+  behind the same interface (`numba_compiled=False`); verified value-identical against the
+  pre-migration code
++ Removed the `n_fe` evaluation counter from all classes
++ Added `numba>=0.68.0` as a runtime dependency; `FuncBenchmark` joined `EXCLUDES` in the
+  function registry (its `compute` is now abstract)
 + Migrated the project to a `src/` layout and to the `uv` package manager
-+ Added `ruff` (lint + format) and `mypy` (type-check) as the default tooling
++ Added `ruff` (lint + format) and `mypy` (type-check) as the default tooling; `mypy` now runs in
+  strict mode across `src/`
++ `dim_changeable`, `dim_default`, `f_global` and `x_global` are now private attributes exposed
+  through read/write properties on `Benchmark`
++ `Benchmark` accepts an instance-level `compute` callable; `FuncBenchmark` gained a compact
+  declarative constructor and the 125 name-based problems now define their kernel inline in
+  `__init__` and pass the metadata straight to `super().__init__(...)`
++ All 191 CEC problem kernels are likewise defined inline in `__init__`: simple classes
+  pass `compute=...`/`param_names=[...]` straight to `super().__init__(...)` (which binds
+  after loading the shift/rotation data), while classes with extra computed parameters bind
+  explicitly with `self._bind_kernel(compute, [...], paras=..., plain=...)`; the gufunc cache
+  is keyed on the kernel's `__code__` so a parent build cannot shadow a child's
+  identically-signed kernel
++ Encapsulated all kernel/config state behind properties: `compute` is now a read-only
+  property (the class-level `compute` fallback is gone) and `paras`, `numba_compiled`,
+  `f_bias`, `f_shift`, `f_matrix`, `dim_max`, … live in private storage; the compile
+  helpers are private (`__build_compute`/`__use_plain_compute`) and reachable only through
+  the protected `_bind_kernel` bridge
++ Hardened the Numba kernel layer: `_evaluate_batch` loops the scalar kernel for plain-Python
+  fallbacks, `_normalize_kernel_param` accepts nested lists and unwraps zero-dimensional arrays,
+  the gufunc cache is keyed on the kernel's `__code__`, and compilation failures are recorded
+  on `Benchmark._compile_error` instead of being silently swallowed
++ Composite CEC functions that hold sub-instances (2013 F21-F24, 2014 F26-F30, 2017 F27-F28) now
+  bind via `_use_plain_compute`, avoiding a guaranteed failed compilation attempt
 + Refactored the pytest test suite around shared fixtures in `tests/conftest.py`
 + Refactored the examples and the `EXAMPLES.md` guide for the current API
 + Added MkDocs documentation with the Material theme, published on GitHub Pages
