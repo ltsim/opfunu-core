@@ -4,6 +4,9 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
+import typing
+
+import numba as nb
 import numpy as np
 
 from opfunu.benchmark.cec import CecBenchmark
@@ -40,21 +43,30 @@ class F12005(CecBenchmark):
     # n_basins = 1
     # n_valleys = 1
 
-    def __init__(self, ndim=None, bounds=None, f_shift="data_sphere", f_bias=-450.0):
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "data_sphere",
+        f_bias: float = -450.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+            out[0] = np.sum((x - f_shift) ** 2) + f_bias
+
         super().__init__(
             ndim=ndim,
             bounds=bounds,
             f_shift=f_shift,
             f_bias=f_bias,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            compute=compute,
+            param_names=["f_shift", "f_bias"],
         )
-
-        self.f_bias = f_bias
-
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias}
-
-    def evaluate(self, x, *args):
-        self.check_solution(x, self.dim_max, self.dim_supported)
-        return np.sum((x - self.f_shift) ** 2) + self.f_bias
 
 
 class F22005(CecBenchmark):
@@ -87,23 +99,37 @@ class F22005(CecBenchmark):
     # n_basins = 1
     # n_valleys = 1
 
-    def __init__(self, ndim=None, bounds=None, f_shift="data_schwefel_102", f_bias=-450.0):
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "data_schwefel_102",
+        f_bias: float = -450.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+            ndim = x.shape[0]
+            total = 0.0
+            for idx in range(0, ndim):
+                partial = 0.0
+                for jdx in range(0, idx):
+                    partial += x[jdx] - f_shift[jdx]
+                total += partial * partial
+            out[0] = total + f_bias
+
         super().__init__(
             ndim=ndim,
             bounds=bounds,
             f_shift=f_shift,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            f_bias=f_bias,
+            compute=compute,
+            param_names=["f_shift", "f_bias"],
         )
-
-        self.f_bias = f_bias
-        self.f_global = f_bias
-
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias}
-
-    def evaluate(self, x, *args):
-        self.check_solution(x, self.dim_max, self.dim_supported)
-        ndim = len(x)
-        results = [np.sum(x[:idx] - self.f_shift[:idx]) ** 2 for idx in range(0, ndim)]
-        return np.sum(results) + self.f_bias
 
 
 class F32005(CecBenchmark):
@@ -140,21 +166,35 @@ class F32005(CecBenchmark):
     # n_valleys = 1
 
     def __init__(
-        self, ndim=None, bounds=None, f_shift="data_high_cond_elliptic_rot", f_matrix="elliptic_M_D", f_bias=-450.0
-    ):
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "data_high_cond_elliptic_rot",
+        f_matrix: typing.Any = "elliptic_M_D",
+        f_bias: float = -450.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(
+            x: np.ndarray, f_shift: typing.Any, f_matrix: typing.Any, f_bias: typing.Any, out: np.ndarray
+        ) -> None:
+            z = operator.dot_vm((x - f_shift), f_matrix)
+            out[0] = operator.elliptic_func(z) + f_bias
+
         super().__init__(
-            ndim=ndim, f_shift=f_shift, f_matrix=f_matrix, data_name="data_2005", dim_supported=[10, 30, 50]
+            ndim=ndim,
+            f_shift=f_shift,
+            f_matrix=f_matrix,
+            data_name="data_2005",
+            dim_supported=[10, 30, 50],
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            f_bias=f_bias,
+            compute=compute,
+            param_names=["f_shift", "f_matrix", "f_bias"],
         )
-
-        self.f_bias = f_bias
-        self.f_global = f_bias
-
-        self.paras = {"f_shift": self.f_shift, "f_matrix": self.f_matrix, "f_bias": self.f_bias}
-
-    def evaluate(self, x, *args):
-        self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot((x - self.f_shift), self.f_matrix)
-        return operator.elliptic_func(z) + self.f_bias
 
 
 class F42005(CecBenchmark):
@@ -190,24 +230,35 @@ class F42005(CecBenchmark):
     # n_basins = 1
     # n_valleys = 1
 
-    def __init__(self, ndim=None, bounds=None, f_shift="data_schwefel_102", f_bias=-450.0):
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "data_schwefel_102",
+        f_bias: float = -450.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+            ndim = len(x)
+            results = [np.sum(x[:idx] - f_shift[:idx]) ** 2 for idx in range(0, ndim)]
+            out[0] = np.sum(results) * (1 + 0.4 * np.abs(np.random.normal(0, 1))) + f_bias
+
         super().__init__(
             ndim=ndim,
             bounds=bounds,
             f_shift=f_shift,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            f_bias=f_bias,
+            compute=compute,
+            param_names=["f_shift", "f_bias"],
+            plain=True,
         )
 
-        self.f_bias = f_bias
-        self.f_global = f_bias
-
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias}
-
-    def evaluate(self, x, *args):
-        self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
-        ndim = len(x)
-        results = [np.sum(x[:idx] - self.f_shift[:idx]) ** 2 for idx in range(0, ndim)]
-        return np.sum(results) * (1 + 0.4 * np.abs(np.random.normal(0, 1))) + self.f_bias
+        # Numba-incompatible body: plain-Python kernel
 
 
 class F52005(CecBenchmark):
@@ -246,8 +297,32 @@ class F52005(CecBenchmark):
     # n_basins = 1
     # n_valleys = 1
 
-    def __init__(self, ndim=None, bounds=None, f_shift="data_schwefel_206", f_bias=-310.0):
-        super().__init__()
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "data_schwefel_206",
+        f_bias: float = -310.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(
+            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+        ) -> None:
+            ndim = x.shape[0]
+            best = 0.0
+            for idx in range(0, ndim):
+                diff = 0.0
+                for jdx in range(0, ndim):
+                    diff += f_matrix[idx, jdx] * (x[jdx] - f_shift[jdx])
+                if diff < 0.0:
+                    diff = -diff
+                if diff > best:
+                    best = diff
+            out[0] = best + f_bias
+
+        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
         self.dim_changeable = True
         self.dim_default = 30
         self.dim_max = 100
@@ -261,18 +336,13 @@ class F52005(CecBenchmark):
         self.f_bias = f_bias
         self.f_global = f_bias
         self.x_global = self.f_shift
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix}
         self.f_shift[: int(0.25 * self.ndim) + 1] = -100
         self.f_shift[int(0.75 * self.ndim) :] = 100
-
-    def evaluate(self, x, *args):
-        self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
-        ndim = len(x)
-        results = [
-            np.abs(np.dot(self.f_matrix[idx], x) - np.dot(self.f_matrix[idx], self.f_shift)) for idx in range(0, ndim)
-        ]
-        return np.max(results) + self.f_bias
+        self._bind_kernel(
+            compute,
+            ["f_matrix", "f_shift", "f_bias"],
+            paras={"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix},
+        )
 
 
 class F62005(CecBenchmark):
@@ -308,22 +378,30 @@ class F62005(CecBenchmark):
     # n_basins = 1
     # n_valleys = 1
 
-    def __init__(self, ndim=None, bounds=None, f_shift="data_rosenbrock", f_bias=390.0):
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "data_rosenbrock",
+        f_bias: float = 390.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+            out[0] = operator.rosenbrock_func(x - f_shift, shift=1.0) + f_bias
+
         super().__init__(
             ndim=ndim,
             bounds=bounds,
             f_shift=f_shift,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            f_bias=f_bias,
+            compute=compute,
+            param_names=["f_shift", "f_bias"],
         )
-
-        self.f_bias = f_bias
-        self.f_global = f_bias
-
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias}
-
-    def evaluate(self, x, *args):
-        self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
-        return operator.rosenbrock_func(x - self.f_shift, shift=1.0) + self.f_bias
 
 
 class F72005(CecBenchmark):
@@ -359,17 +437,36 @@ class F72005(CecBenchmark):
     # n_basins = 1
     # n_valleys = 1
 
-    def __init__(self, ndim=None, bounds=None, f_shift="data_griewank", f_matrix="griewank_M_D", f_bias=-180.0):
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "data_griewank",
+        f_matrix: typing.Any = "griewank_M_D",
+        f_bias: float = -180.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(
+            x: np.ndarray, f_shift: typing.Any, f_matrix: typing.Any, f_bias: typing.Any, out: np.ndarray
+        ) -> None:
+            z = operator.dot_vm((x - f_shift), f_matrix)
+            out[0] = operator.griewank_func(z) + f_bias
+
         super().__init__(
-            ndim=ndim, bounds=bounds, f_shift=f_shift, f_matrix=f_matrix, dim_supported=[10, 30, 50], f_bias=f_bias
+            ndim=ndim,
+            bounds=bounds,
+            f_shift=f_shift,
+            f_matrix=f_matrix,
+            dim_supported=[10, 30, 50],
+            f_bias=f_bias,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            compute=compute,
+            param_names=["f_shift", "f_matrix", "f_bias"],
         )
-
-        self.paras = {"f_shift": self.f_shift, "f_matrix": self.f_matrix, "f_bias": self.f_bias}
-
-    def evaluate(self, x, *args):
-        self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot((x - self.f_shift), self.f_matrix)
-        return operator.griewank_func(z) + self.f_bias
 
 
 class F82005(CecBenchmark):
@@ -402,24 +499,46 @@ class F82005(CecBenchmark):
     # n_basins = 1
     # n_valleys = 1
 
-    def __init__(self, ndim=None, bounds=None, f_shift="data_ackley", f_matrix="ackley_M_D", f_bias=-140.0):
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "data_ackley",
+        f_matrix: typing.Any = "ackley_M_D",
+        f_bias: float = -140.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(
+            x: np.ndarray, f_shift: typing.Any, f_matrix: typing.Any, f_bias: typing.Any, out: np.ndarray
+        ) -> None:
+            z = operator.dot_vm((x - f_shift), f_matrix)
+            out[0] = operator.ackley_func(z) + f_bias
+
         super().__init__(
-            ndim=ndim, bounds=bounds, f_shift=f_shift, f_matrix=f_matrix, dim_supported=[10, 30, 50], f_bias=f_bias
+            ndim=ndim,
+            bounds=bounds,
+            f_shift=f_shift,
+            f_matrix=f_matrix,
+            dim_supported=[10, 30, 50],
+            f_bias=f_bias,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
         )
 
         self.f_bias = f_bias
         self.f_global = f_bias
 
-        self.paras = {"f_shift": self.f_shift, "f_matrix": self.f_matrix, "f_bias": self.f_bias}
-
         a = np.arange(0, self.ndim)
         self.f_shift[a % 2 == 0] = -32
         self.f_shift[a % 2 == 1] = np.random.uniform(-32.0, 32.0, int(self.ndim / 2))
-
-    def evaluate(self, x, *args):
-        self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot((x - self.f_shift), self.f_matrix)
-        return operator.ackley_func(z) + self.f_bias
+        self._bind_kernel(
+            compute,
+            ["f_shift", "f_matrix", "f_bias"],
+            paras={"f_shift": self.f_shift, "f_matrix": self.f_matrix, "f_bias": self.f_bias},
+        )
 
 
 class F92005(CecBenchmark):
@@ -458,23 +577,31 @@ class F92005(CecBenchmark):
     # n_basins = 1
     # n_valleys = 1
 
-    def __init__(self, ndim=None, bounds=None, f_shift="data_rastrigin", f_bias=-330.0):
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "data_rastrigin",
+        f_bias: float = -330.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+            z = x - f_shift
+            out[0] = operator.rastrigin_func(z) + f_bias
+
         super().__init__(
             ndim=ndim,
             bounds=bounds,
             f_shift=f_shift,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            f_bias=f_bias,
+            compute=compute,
+            param_names=["f_shift", "f_bias"],
         )
-
-        self.f_bias = f_bias
-        self.f_global = f_bias
-
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias}
-
-    def evaluate(self, x, *args):
-        self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
-        z = x - self.f_shift
-        return operator.rastrigin_func(z) + self.f_bias
 
 
 class F102005(CecBenchmark):
@@ -510,18 +637,36 @@ class F102005(CecBenchmark):
     # n_basins = 1
     # n_valleys = 1
 
-    def __init__(self, ndim=None, bounds=None, f_shift="data_rastrigin", f_matrix="rastrigin_M_D", f_bias=-330.0):
-        super().__init__(ndim=ndim, bounds=bounds, f_shift=f_shift, dim_supported=[10, 30, 50], f_matrix=f_matrix)
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "data_rastrigin",
+        f_matrix: typing.Any = "rastrigin_M_D",
+        f_bias: float = -330.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(
+            x: np.ndarray, f_shift: typing.Any, f_matrix: typing.Any, f_bias: typing.Any, out: np.ndarray
+        ) -> None:
+            z = operator.dot_vm((x - f_shift), f_matrix)
+            out[0] = operator.rastrigin_func(z) + f_bias
 
-        self.f_bias = f_bias
-        self.f_global = f_bias
-
-        self.paras = {"f_shift": self.f_shift, "f_matrix": self.f_matrix, "f_bias": self.f_bias}
-
-    def evaluate(self, x, *args):
-        self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot((x - self.f_shift), self.f_matrix)
-        return operator.rastrigin_func(z) + self.f_bias
+        super().__init__(
+            ndim=ndim,
+            bounds=bounds,
+            f_shift=f_shift,
+            dim_supported=[10, 30, 50],
+            f_matrix=f_matrix,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            f_bias=f_bias,
+            compute=compute,
+            param_names=["f_shift", "f_matrix", "f_bias"],
+        )
 
 
 class F112005(CecBenchmark):
@@ -559,36 +704,59 @@ class F112005(CecBenchmark):
 
     def __init__(
         self,
-        ndim=None,
-        bounds=None,
-        f_shift="data_weierstrass",
-        f_matrix="weierstrass_M_D",
-        f_bias=90.0,
-        a=0.5,
-        b=3,
-        k_max=20,
-    ):
-        super().__init__(ndim=ndim, bounds=bounds, f_shift=f_shift, dim_supported=[10, 30, 50], f_matrix=f_matrix)
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "data_weierstrass",
+        f_matrix: typing.Any = "weierstrass_M_D",
+        f_bias: float = 90.0,
+        a: float = 0.5,
+        b: int = 3,
+        k_max: int = 20,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(
+            x: np.ndarray,
+            f_shift: typing.Any,
+            f_matrix: typing.Any,
+            a: typing.Any,
+            b: typing.Any,
+            k_max: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
+        ) -> None:
+            z = operator.dot_vm((x - f_shift), f_matrix)
+            out[0] = operator.weierstrass_norm_func(z, a, b, k_max) + f_bias
+
+        super().__init__(
+            ndim=ndim,
+            bounds=bounds,
+            f_shift=f_shift,
+            dim_supported=[10, 30, 50],
+            f_matrix=f_matrix,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+        )
         self.f_bias = f_bias
         self.f_global = f_bias
 
         self.a = a
         self.b = b
         self.k_max = k_max
-        self.paras = {
-            "f_shift": self.f_shift,
-            "f_matrix": self.f_matrix,
-            "f_bias": self.f_bias,
-            "a": self.a,
-            "b": self.b,
-            "k_max": self.k_max,
-        }
-
-    def evaluate(self, x, *args):
-        self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot((x - self.f_shift), self.f_matrix)
-        return operator.weierstrass_norm_func(z, self.a, self.b, self.k_max) + self.f_bias
+        self._bind_kernel(
+            compute,
+            ["f_shift", "f_matrix", "a", "b", "k_max", "f_bias"],
+            paras={
+                "f_shift": self.f_shift,
+                "f_matrix": self.f_matrix,
+                "f_bias": self.f_bias,
+                "a": self.a,
+                "b": self.b,
+                "k_max": self.k_max,
+            },
+        )
 
 
 class F122005(CecBenchmark):
@@ -624,33 +792,47 @@ class F122005(CecBenchmark):
     # n_basins = 1
     # n_valleys = 1
 
-    def __init__(self, ndim=None, bounds=None, f_shift="data_schwefel_213", f_bias=-460.0):
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "data_schwefel_213",
+        f_bias: float = -460.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(
+            x: np.ndarray,
+            f_matrix_a: typing.Any,
+            f_shift: typing.Any,
+            f_matrix_b: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
+        ) -> None:
+            ndim = len(x)
+            result = 0.0
+
+            for idx in range(0, ndim):
+                t1 = np.sum(f_matrix_a[idx] * np.sin(f_shift) + f_matrix_b[idx] * np.cos(f_shift))
+                t2 = np.sum(f_matrix_a[idx] * np.sin(x) + f_matrix_b[idx] * np.cos(x))
+                result += (t1 - t2) ** 2
+
+            out[0] = result + f_bias
+
         super().__init__(
-            ndim=ndim, bounds=bounds, default_bounds=[[-np.pi, np.pi]], f_shift=f_shift, load_two_matrix=True
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=[[-np.pi, np.pi]],
+            f_shift=f_shift,
+            load_two_matrix=True,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            f_bias=f_bias,
+            compute=compute,
+            param_names=["f_matrix_a", "f_shift", "f_matrix_b", "f_bias"],
         )
-
-        self.f_bias = f_bias
-        self.f_global = f_bias
-
-        self.paras = {
-            "f_shift": self.f_shift,
-            "f_bias": self.f_bias,
-            "f_matrix_a": self.f_matrix_a,
-            "f_matrix_b": self.f_matrix_b,
-        }
-
-    def evaluate(self, x, *args):
-        self.check_solution(x, self.dim_max, self.dim_supported)
-
-        ndim = len(x)
-        result = 0.0
-
-        for idx in range(0, ndim):
-            t1 = np.sum(self.f_matrix_a[idx] * np.sin(self.f_shift) + self.f_matrix_b[idx] * np.cos(self.f_shift))
-            t2 = np.sum(self.f_matrix_a[idx] * np.sin(x) + self.f_matrix_b[idx] * np.cos(x))
-            result += (t1 - t2) ** 2
-
-        return result + self.f_bias
 
 
 class F132005(CecBenchmark):
@@ -689,19 +871,35 @@ class F132005(CecBenchmark):
     # n_basins = 1
     # n_valleys = 1
 
-    def __init__(self, ndim=None, bounds=None, f_shift="data_EF8F2", f_bias=-130.0):
-        super().__init__(ndim=ndim, bounds=bounds, f_shift=f_shift, default_bounds=[[-3.0, 1.0]])
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "data_EF8F2",
+        f_bias: float = -130.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+            out[0] = operator.grie_rosen_cec_func(x - f_shift) + f_bias
+
+        super().__init__(
+            ndim=ndim,
+            bounds=bounds,
+            f_shift=f_shift,
+            default_bounds=[[-3.0, 1.0]],
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+        )
 
         self.f_bias = f_bias
         self.f_global = f_bias
 
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias}
         self.f8__ = operator.griewank_func
         self.f2__ = operator.rosenbrock_func
-
-    def evaluate(self, x, *args):
-        self.check_solution(x, self.dim_max, self.dim_supported)
-        return operator.grie_rosen_cec_func(x - self.f_shift) + self.f_bias
+        self._bind_kernel(compute, ["f_shift", "f_bias"], paras={"f_shift": self.f_shift, "f_bias": self.f_bias})
 
 
 class F142005(CecBenchmark):
@@ -737,8 +935,24 @@ class F142005(CecBenchmark):
     # n_basins = 1
     # n_valleys = 1
 
-    def __init__(self, ndim=None, bounds=None, f_shift="data_E_ScafferF6", f_matrix="E_ScafferF6_M_D", f_bias=-300.0):
-        super().__init__()
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "data_E_ScafferF6",
+        f_matrix: typing.Any = "E_ScafferF6_M_D",
+        f_bias: float = -300.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(
+            x: np.ndarray, f_shift: typing.Any, f_matrix: typing.Any, f_bias: typing.Any, out: np.ndarray
+        ) -> None:
+            z = operator.dot_vm((x - f_shift), f_matrix)
+            out[0] = operator.expanded_schaffer_f6_func(z) + f_bias
+
+        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
         self.dim_changeable = True
         self.dim_default = 30
         self.dim_max = 100
@@ -752,13 +966,25 @@ class F142005(CecBenchmark):
         self.f_bias = f_bias
         self.f_global = f_bias
         self.x_global = self.f_shift
-        self.paras = {"f_shift": self.f_shift, "f_matrix": self.f_matrix, "f_bias": self.f_bias}
+        self._bind_kernel(
+            compute,
+            ["f_shift", "f_matrix", "f_bias"],
+            paras={"f_shift": self.f_shift, "f_matrix": self.f_matrix, "f_bias": self.f_bias},
+        )
 
-    def evaluate(self, x, *args):
-        self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot((x - self.f_shift), self.f_matrix)
-        return operator.expanded_schaffer_f6_func(z) + self.f_bias
+
+@nb.njit(fastmath=True)
+def _F152005_fi__(x: np.ndarray, idx: int) -> float:
+    if idx == 0 or idx == 1:
+        return operator.rastrigin_func(x)
+    elif idx == 2 or idx == 3:
+        return operator.weierstrass_norm_func(x)
+    elif idx == 4 or idx == 5:
+        return operator.griewank_func(x)
+    elif idx == 6 or idx == 7:
+        return operator.ackley_func(x)
+    else:
+        return operator.sphere_func(x)
 
 
 class F152005(CecBenchmark):
@@ -794,8 +1020,47 @@ class F152005(CecBenchmark):
     # n_basins = 1
     # n_valleys = 1
 
-    def __init__(self, ndim=None, bounds=None, f_shift="data_hybrid_func1", f_bias=120.0):
-        super().__init__()
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "data_hybrid_func1",
+        f_bias: float = 120.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(
+            x: np.ndarray,
+            n_funcs: int,
+            f_shift: typing.Any,
+            xichmas: np.ndarray,
+            lamdas: np.ndarray,
+            M: np.ndarray,
+            y: typing.Any,
+            C: int,
+            bias: np.ndarray,
+            f_bias: typing.Any,
+            out: np.ndarray,
+        ) -> None:
+            ndim = len(x)
+            weights = np.ones(n_funcs)
+            fits = np.ones(n_funcs)
+            for idx in range(0, n_funcs):
+                w_i = np.exp(-np.sum((x - f_shift[idx]) ** 2) / (2 * ndim * xichmas[idx] ** 2))
+                z = operator.dot_vm((x - f_shift[idx]) / lamdas[idx], M)
+                fit_i = _F152005_fi__(z, idx)
+                f_max_i = _F152005_fi__(operator.dot_vm((y / lamdas[idx]), M), idx)
+                fit_i = C * fit_i / f_max_i
+                weights[idx] = w_i
+                fits[idx] = fit_i
+
+            maxw = np.max(weights)
+            weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)
+            weights = weights / np.sum(weights)
+            out[0] = np.sum(operator.dot_vv(weights, (fits + bias))) + f_bias
+
+        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
         self.dim_changeable = True
         self.dim_default = 30
         self.dim_max = 100
@@ -812,18 +1077,22 @@ class F152005(CecBenchmark):
         self.f_bias = f_bias
         self.f_global = f_bias
         self.x_global = self.f_shift[0]
-        self.paras = {
-            "f_shift": self.f_shift,
-            "f_bias": self.f_bias,
-            "lambda": self.lamdas,
-            "bias": self.bias,
-            "n_funcs": self.n_funcs,
-            "C": self.C,
-            "M": self.M,
-            "y": self.y,
-        }
+        self._bind_kernel(
+            compute,
+            ["n_funcs", "f_shift", "xichmas", "lamdas", "M", "y", "C", "bias", "f_bias"],
+            paras={
+                "f_shift": self.f_shift,
+                "f_bias": self.f_bias,
+                "lambda": self.lamdas,
+                "bias": self.bias,
+                "n_funcs": self.n_funcs,
+                "C": self.C,
+                "M": self.M,
+                "y": self.y,
+            },
+        )
 
-    def fi__(self, x, idx):
+    def fi__(self, x: typing.Any, idx: int) -> typing.Any:
         if idx == 0 or idx == 1:
             return operator.rastrigin_func(x)
         elif idx == 2 or idx == 3:
@@ -835,25 +1104,19 @@ class F152005(CecBenchmark):
         else:
             return operator.sphere_func(x)
 
-    def evaluate(self, x, *args):
-        self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
-        ndim = len(x)
-        weights = np.ones(self.n_funcs)
-        fits = np.ones(self.n_funcs)
-        for idx in range(0, self.n_funcs):
-            w_i = np.exp(-np.sum((x - self.f_shift[idx]) ** 2) / (2 * ndim * self.xichmas[idx] ** 2))
-            z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M)
-            fit_i = self.fi__(z, idx)
-            f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M), idx)
-            fit_i = self.C * fit_i / f_max_i
-            weights[idx] = w_i
-            fits[idx] = fit_i
 
-        maxw = np.max(weights)
-        weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)
-        weights = weights / np.sum(weights)
-        return np.sum(np.dot(weights, (fits + self.bias))) + self.f_bias
+@nb.njit(fastmath=True)
+def _F162005_fi__(x: np.ndarray, idx: int) -> float:
+    if idx == 0 or idx == 1:
+        return operator.rastrigin_func(x)
+    elif idx == 2 or idx == 3:
+        return operator.weierstrass_norm_func(x)
+    elif idx == 4 or idx == 5:
+        return operator.griewank_func(x)
+    elif idx == 6 or idx == 7:
+        return operator.ackley_func(x)
+    else:
+        return operator.sphere_func(x)
 
 
 class F162005(CecBenchmark):
@@ -889,8 +1152,48 @@ class F162005(CecBenchmark):
     # n_basins = 1
     # n_valleys = 1
 
-    def __init__(self, ndim=None, bounds=None, f_shift="data_hybrid_func1", f_matrix="hybrid_func1_M_D", f_bias=120.0):
-        super().__init__()
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "data_hybrid_func1",
+        f_matrix: typing.Any = "hybrid_func1_M_D",
+        f_bias: float = 120.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(
+            x: np.ndarray,
+            n_funcs: int,
+            f_shift: typing.Any,
+            xichmas: np.ndarray,
+            lamdas: np.ndarray,
+            M: typing.Any,
+            y: typing.Any,
+            C: int,
+            bias: np.ndarray,
+            f_bias: typing.Any,
+            out: np.ndarray,
+        ) -> None:
+            ndim = len(x)
+            weights = np.ones(n_funcs)
+            fits = np.ones(n_funcs)
+            for idx in range(0, n_funcs):
+                w_i = np.exp(-np.sum((x - f_shift[idx]) ** 2) / (2 * ndim * xichmas[idx] ** 2))
+                z = operator.dot_vm((x - f_shift[idx]) / lamdas[idx], M[idx * ndim : (idx + 1) * ndim, :])
+                fit_i = _F162005_fi__(z, idx)
+                f_max_i = _F162005_fi__(operator.dot_vm((y / lamdas[idx]), M[idx * ndim : (idx + 1) * ndim, :]), idx)
+                fit_i = C * fit_i / f_max_i
+                weights[idx] = w_i
+                fits[idx] = fit_i
+
+            maxw = np.max(weights)
+            weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)
+            weights = weights / np.sum(weights)
+            out[0] = np.sum(operator.dot_vv(weights, (fits + bias))) + f_bias
+
+        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
         self.dim_changeable = True
         self.dim_default = 30
         self.dim_max = 100
@@ -908,18 +1211,22 @@ class F162005(CecBenchmark):
         self.f_bias = f_bias
         self.f_global = f_bias
         self.x_global = self.f_shift[0]
-        self.paras = {
-            "f_shift": self.f_shift,
-            "f_bias": self.f_bias,
-            "lambda": self.lamdas,
-            "bias": self.bias,
-            "n_funcs": self.n_funcs,
-            "C": self.C,
-            "M": self.M,
-            "y": self.y,
-        }
+        self._bind_kernel(
+            compute,
+            ["n_funcs", "f_shift", "xichmas", "lamdas", "M", "y", "C", "bias", "f_bias"],
+            paras={
+                "f_shift": self.f_shift,
+                "f_bias": self.f_bias,
+                "lambda": self.lamdas,
+                "bias": self.bias,
+                "n_funcs": self.n_funcs,
+                "C": self.C,
+                "M": self.M,
+                "y": self.y,
+            },
+        )
 
-    def fi__(self, x, idx):
+    def fi__(self, x: typing.Any, idx: int) -> typing.Any:
         if idx == 0 or idx == 1:
             return operator.rastrigin_func(x)
         elif idx == 2 or idx == 3:
@@ -930,26 +1237,6 @@ class F162005(CecBenchmark):
             return operator.ackley_func(x)
         else:
             return operator.sphere_func(x)
-
-    def evaluate(self, x, *args):
-        self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
-        ndim = len(x)
-        weights = np.ones(self.n_funcs)
-        fits = np.ones(self.n_funcs)
-        for idx in range(0, self.n_funcs):
-            w_i = np.exp(-np.sum((x - self.f_shift[idx]) ** 2) / (2 * ndim * self.xichmas[idx] ** 2))
-            z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx * ndim : (idx + 1) * ndim, :])
-            fit_i = self.fi__(z, idx)
-            f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx * ndim : (idx + 1) * ndim, :]), idx)
-            fit_i = self.C * fit_i / f_max_i
-            weights[idx] = w_i
-            fits[idx] = fit_i
-
-        maxw = np.max(weights)
-        weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)
-        weights = weights / np.sum(weights)
-        return np.sum(np.dot(weights, (fits + self.bias))) + self.f_bias
 
 
 class F172005(F162005):
@@ -969,28 +1256,69 @@ class F172005(F162005):
     latex_formula_global_optimum = r"\text{Global optimum: } x^* = o, F_6(x^*) = bias = 390.0"
     randomized_term = True
 
-    def __init__(self, ndim=None, bounds=None, f_shift="data_hybrid_func1", f_matrix="hybrid_func1_M_D", f_bias=120.0):
-        super().__init__(ndim, bounds, f_shift, f_matrix, f_bias)
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "data_hybrid_func1",
+        f_matrix: typing.Any = "hybrid_func1_M_D",
+        f_bias: float = 120.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(
+            x: np.ndarray,
+            n_funcs: typing.Any,
+            f_shift: typing.Any,
+            xichmas: typing.Any,
+            lamdas: typing.Any,
+            M: typing.Any,
+            fi__: typing.Any,
+            y: typing.Any,
+            C: typing.Any,
+            bias: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
+        ) -> None:
+            ndim = len(x)
+            weights = np.ones(n_funcs)
+            fits = np.ones(n_funcs)
+            for idx in range(0, n_funcs):
+                w_i = np.exp(-np.sum((x - f_shift[idx]) ** 2) / (2 * ndim * xichmas[idx] ** 2))
+                z = operator.dot_vm((x - f_shift[idx]) / lamdas[idx], M[idx * ndim : (idx + 1) * ndim, :])
+                fit_i = fi__(z, idx)
+                f_max_i = fi__(operator.dot_vm((y / lamdas[idx]), M[idx * ndim : (idx + 1) * ndim, :]), idx)
+                fit_i = C * fit_i / f_max_i
+                weights[idx] = w_i
+                fits[idx] = fit_i
 
-    def evaluate(self, x, *args):
-        self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
-        ndim = len(x)
-        weights = np.ones(self.n_funcs)
-        fits = np.ones(self.n_funcs)
-        for idx in range(0, self.n_funcs):
-            w_i = np.exp(-np.sum((x - self.f_shift[idx]) ** 2) / (2 * ndim * self.xichmas[idx] ** 2))
-            z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx * ndim : (idx + 1) * ndim, :])
-            fit_i = self.fi__(z, idx)
-            f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx * ndim : (idx + 1) * ndim, :]), idx)
-            fit_i = self.C * fit_i / f_max_i
-            weights[idx] = w_i
-            fits[idx] = fit_i
+            maxw = np.max(weights)
+            weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)
+            weights = weights / np.sum(weights)
+            out[0] = (
+                np.sum(operator.dot_vv(weights, (fits + bias))) * (1 + 0.2 * np.abs(np.random.normal(0, 1))) + f_bias
+            )
 
-        maxw = np.max(weights)
-        weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)
-        weights = weights / np.sum(weights)
-        return np.sum(np.dot(weights, (fits + self.bias))) * (1 + 0.2 * np.abs(np.random.normal(0, 1))) + self.f_bias
+        super().__init__(ndim, bounds, f_shift, f_matrix, f_bias, parallel=parallel, fastmath=fastmath, dtype=dtype)
+        # Numba-incompatible body: plain-Python kernel
+        self._bind_kernel(
+            compute, ["n_funcs", "f_shift", "xichmas", "lamdas", "M", "fi__", "y", "C", "bias", "f_bias"], plain=True
+        )
+
+
+@nb.njit(fastmath=True)
+def _F182005_fi__(x: np.ndarray, idx: int) -> float:
+    if idx == 0 or idx == 1:
+        return operator.ackley_func(x)
+    elif idx == 2 or idx == 3:
+        return operator.rastrigin_func(x)
+    elif idx == 4 or idx == 5:
+        return operator.sphere_func(x)
+    elif idx == 6 or idx == 7:
+        return operator.weierstrass_norm_func(x)
+    else:
+        return operator.griewank_func(x)
 
 
 class F182005(CecBenchmark):
@@ -1026,8 +1354,48 @@ class F182005(CecBenchmark):
     # n_basins = 1
     # n_valleys = 1
 
-    def __init__(self, ndim=None, bounds=None, f_shift="data_hybrid_func2", f_matrix="hybrid_func2_M_D", f_bias=10.0):
-        super().__init__()
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "data_hybrid_func2",
+        f_matrix: typing.Any = "hybrid_func2_M_D",
+        f_bias: float = 10.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(
+            x: np.ndarray,
+            n_funcs: int,
+            f_shift: typing.Any,
+            xichmas: np.ndarray,
+            lamdas: np.ndarray,
+            M: typing.Any,
+            y: typing.Any,
+            C: int,
+            bias: np.ndarray,
+            f_bias: typing.Any,
+            out: np.ndarray,
+        ) -> None:
+            ndim = len(x)
+            weights = np.ones(n_funcs)
+            fits = np.ones(n_funcs)
+            for idx in range(0, n_funcs):
+                w_i = np.exp(-np.sum((x - f_shift[idx]) ** 2) / (2 * ndim * xichmas[idx] ** 2))
+                z = operator.dot_vm((x - f_shift[idx]) / lamdas[idx], M[idx * ndim : (idx + 1) * ndim, :])
+                fit_i = _F182005_fi__(z, idx)
+                f_max_i = _F182005_fi__(operator.dot_vm((y / lamdas[idx]), M[idx * ndim : (idx + 1) * ndim, :]), idx)
+                fit_i = C * fit_i / f_max_i
+                weights[idx] = w_i
+                fits[idx] = fit_i
+
+            maxw = np.max(weights)
+            weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)
+            weights = weights / np.sum(weights)
+            out[0] = np.sum(operator.dot_vv(weights, (fits + bias))) + f_bias
+
+        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
         self.dim_changeable = True
         self.dim_default = 30
         self.dim_max = 100
@@ -1047,18 +1415,22 @@ class F182005(CecBenchmark):
         self.f_bias = f_bias
         self.f_global = f_bias
         self.x_global = self.f_shift[0]
-        self.paras = {
-            "f_shift": self.f_shift,
-            "f_bias": self.f_bias,
-            "lambda": self.lamdas,
-            "bias": self.bias,
-            "n_funcs": self.n_funcs,
-            "C": self.C,
-            "M": self.M,
-            "y": self.y,
-        }
+        self._bind_kernel(
+            compute,
+            ["n_funcs", "f_shift", "xichmas", "lamdas", "M", "y", "C", "bias", "f_bias"],
+            paras={
+                "f_shift": self.f_shift,
+                "f_bias": self.f_bias,
+                "lambda": self.lamdas,
+                "bias": self.bias,
+                "n_funcs": self.n_funcs,
+                "C": self.C,
+                "M": self.M,
+                "y": self.y,
+            },
+        )
 
-    def fi__(self, x, idx):
+    def fi__(self, x: typing.Any, idx: int) -> typing.Any:
         if idx == 0 or idx == 1:
             return operator.ackley_func(x)
         elif idx == 2 or idx == 3:
@@ -1069,26 +1441,6 @@ class F182005(CecBenchmark):
             return operator.weierstrass_norm_func(x)
         else:
             return operator.griewank_func(x)
-
-    def evaluate(self, x, *args):
-        self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
-        ndim = len(x)
-        weights = np.ones(self.n_funcs)
-        fits = np.ones(self.n_funcs)
-        for idx in range(0, self.n_funcs):
-            w_i = np.exp(-np.sum((x - self.f_shift[idx]) ** 2) / (2 * ndim * self.xichmas[idx] ** 2))
-            z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx * ndim : (idx + 1) * ndim, :])
-            fit_i = self.fi__(z, idx)
-            f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx * ndim : (idx + 1) * ndim, :]), idx)
-            fit_i = self.C * fit_i / f_max_i
-            weights[idx] = w_i
-            fits[idx] = fit_i
-
-        maxw = np.max(weights)
-        weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)
-        weights = weights / np.sum(weights)
-        return np.sum(np.dot(weights, (fits + self.bias))) + self.f_bias
 
 
 class F192005(F182005):
@@ -1107,8 +1459,18 @@ class F192005(F182005):
     latex_formula_bounds = r"x_i \in [-100.0, 100.0], \forall i \in [1, D]"
     latex_formula_global_optimum = r"\text{Global optimum: } x^* = o, F_6(x^*) = bias = 390.0"
 
-    def __init__(self, ndim=None, bounds=None, f_shift="data_hybrid_func2", f_matrix="hybrid_func2_M_D", f_bias=10.0):
-        super().__init__(ndim, bounds, f_shift, f_matrix, f_bias)
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "data_hybrid_func2",
+        f_matrix: typing.Any = "hybrid_func2_M_D",
+        f_bias: float = 10.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        super().__init__(ndim, bounds, f_shift, f_matrix, f_bias, parallel=parallel, fastmath=fastmath, dtype=dtype)
         self.lamdas = np.array(
             [0.1 * 5 / 32, 5.0 / 32, 2 * 1, 1, 2 * 5.0 / 100, 5.0 / 100, 2.0 * 10, 10, 2 * 5.0 / 60, 5.0 / 60]
         )
@@ -1141,8 +1503,18 @@ class F202005(F182005):
     latex_formula_bounds = r"x_i \in [-100.0, 100.0], \forall i \in [1, D]"
     latex_formula_global_optimum = r"\text{Global optimum: } x^* = o, F_6(x^*) = bias = 390.0"
 
-    def __init__(self, ndim=None, bounds=None, f_shift="data_hybrid_func2", f_matrix="hybrid_func2_M_D", f_bias=10.0):
-        super().__init__(ndim, bounds, f_shift, f_matrix, f_bias)
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "data_hybrid_func2",
+        f_matrix: typing.Any = "hybrid_func2_M_D",
+        f_bias: float = 10.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        super().__init__(ndim, bounds, f_shift, f_matrix, f_bias, parallel=parallel, fastmath=fastmath, dtype=dtype)
         self.f_shift[0, 1::2] = 5
         self.x_global = self.f_shift[0]
         self.paras = {
@@ -1155,6 +1527,20 @@ class F202005(F182005):
             "M": self.M,
             "y": self.y,
         }
+
+
+@nb.njit(fastmath=True)
+def _F212005_fi__(x: np.ndarray, idx: int) -> float:
+    if idx == 0 or idx == 1:
+        return operator.rotated_expanded_schaffer_func(x)
+    elif idx == 2 or idx == 3:
+        return operator.rastrigin_func(x)
+    elif idx == 4 or idx == 5:
+        return operator.grie_rosen_cec_func(x)
+    elif idx == 6 or idx == 7:
+        return operator.weierstrass_norm_func(x)
+    else:
+        return operator.griewank_func(x)
 
 
 class F212005(CecBenchmark):
@@ -1190,11 +1576,50 @@ class F212005(CecBenchmark):
     # n_basins = 1
     # n_valleys = 1
 
-    def __init__(self, ndim=None, bounds=None, f_shift="data_hybrid_func3", f_matrix="hybrid_func3_M_D", f_bias=360.0):
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "data_hybrid_func3",
+        f_matrix: typing.Any = "hybrid_func3_M_D",
+        f_bias: float = 360.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(
+            x: np.ndarray,
+            n_funcs: int,
+            f_shift: typing.Any,
+            xichmas: np.ndarray,
+            lamdas: np.ndarray,
+            M: typing.Any,
+            y: typing.Any,
+            C: int,
+            bias: np.ndarray,
+            f_bias: typing.Any,
+            out: np.ndarray,
+        ) -> None:
+            ndim = len(x)
+            weights = np.ones(n_funcs)
+            fits = np.ones(n_funcs)
+
+            for idx in range(0, n_funcs):
+                w_i = np.exp(-np.sum((x - f_shift[idx]) ** 2) / (2 * ndim * xichmas[idx] ** 2))
+                z = operator.dot_vm((x - f_shift[idx]) / lamdas[idx], M[idx * ndim : (idx + 1) * ndim, :])
+                fit_i = _F212005_fi__(z, idx)
+                f_max_i = _F212005_fi__(operator.dot_vm((y / lamdas[idx]), M[idx * ndim : (idx + 1) * ndim, :]), idx)
+                fit_i = C * fit_i / f_max_i
+                weights[idx] = w_i
+                fits[idx] = fit_i
+
+            maxw = np.max(weights)
+            weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)
+            weights = weights / np.sum(weights)
+            out[0] = np.sum(operator.dot_vv(weights, (fits + bias))) + f_bias
+
         super().__init__(
-            ndim=ndim,
-            bounds=bounds,
-            default_bounds=[[-5.0, 5.0]],
+            ndim=ndim, bounds=bounds, default_bounds=[[-5.0, 5.0]], parallel=parallel, fastmath=fastmath, dtype=dtype
         )
         self.f_shift = self.load_matrix_data(f_shift)[:, : self.ndim]
         self.x_global = self.f_shift[0]
@@ -1221,18 +1646,22 @@ class F212005(CecBenchmark):
         self.f_bias = f_bias
         self.f_global = f_bias
         self.x_global = self.f_shift[0]
-        self.paras = {
-            "f_shift": self.f_shift,
-            "f_bias": self.f_bias,
-            "lambda": self.lamdas,
-            "bias": self.bias,
-            "n_funcs": self.n_funcs,
-            "C": self.C,
-            "M": self.M,
-            "y": self.y,
-        }
+        self._bind_kernel(
+            compute,
+            ["n_funcs", "f_shift", "xichmas", "lamdas", "M", "y", "C", "bias", "f_bias"],
+            paras={
+                "f_shift": self.f_shift,
+                "f_bias": self.f_bias,
+                "lambda": self.lamdas,
+                "bias": self.bias,
+                "n_funcs": self.n_funcs,
+                "C": self.C,
+                "M": self.M,
+                "y": self.y,
+            },
+        )
 
-    def fi__(self, x, idx):
+    def fi__(self, x: typing.Any, idx: int) -> typing.Any:
         if idx == 0 or idx == 1:
             return operator.rotated_expanded_schaffer_func(x)
         elif idx == 2 or idx == 3:
@@ -1243,27 +1672,6 @@ class F212005(CecBenchmark):
             return operator.weierstrass_norm_func(x)
         else:
             return operator.griewank_func(x)
-
-    def evaluate(self, x, *args):
-        self.check_solution(x, self.dim_max, self.dim_supported)
-
-        ndim = len(x)
-        weights = np.ones(self.n_funcs)
-        fits = np.ones(self.n_funcs)
-
-        for idx in range(0, self.n_funcs):
-            w_i = np.exp(-np.sum((x - self.f_shift[idx]) ** 2) / (2 * ndim * self.xichmas[idx] ** 2))
-            z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx * ndim : (idx + 1) * ndim, :])
-            fit_i = self.fi__(z, idx)
-            f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx * ndim : (idx + 1) * ndim, :]), idx)
-            fit_i = self.C * fit_i / f_max_i
-            weights[idx] = w_i
-            fits[idx] = fit_i
-
-        maxw = np.max(weights)
-        weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)
-        weights = weights / np.sum(weights)
-        return np.sum(np.dot(weights, (fits + self.bias))) + self.f_bias
 
 
 class F222005(F212005):
@@ -1282,8 +1690,18 @@ class F222005(F212005):
     latex_formula_bounds = r"x_i \in [-100.0, 100.0], \forall i \in [1, D]"
     latex_formula_global_optimum = r"\text{Global optimum: } x^* = o, F_6(x^*) = bias = 390.0"
 
-    def __init__(self, ndim=None, bounds=None, f_shift="data_hybrid_func3", f_matrix="hybrid_func3_HM_D", f_bias=360.0):
-        super().__init__(ndim, bounds, f_shift, f_matrix, f_bias)
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "data_hybrid_func3",
+        f_matrix: typing.Any = "hybrid_func3_HM_D",
+        f_bias: float = 360.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        super().__init__(ndim, bounds, f_shift, f_matrix, f_bias, parallel=parallel, fastmath=fastmath, dtype=dtype)
 
 
 class F232005(F212005):
@@ -1304,29 +1722,75 @@ class F232005(F212005):
     continuous = False
     differentiable = False
 
-    def __init__(self, ndim=None, bounds=None, f_shift="data_hybrid_func3", f_matrix="hybrid_func3_M_D", f_bias=360.0):
-        super().__init__(ndim, bounds, f_shift, f_matrix, f_bias)
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "data_hybrid_func3",
+        f_matrix: typing.Any = "hybrid_func3_M_D",
+        f_bias: float = 360.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(
+            x: np.ndarray,
+            f_shift: typing.Any,
+            n_funcs: typing.Any,
+            xichmas: typing.Any,
+            lamdas: typing.Any,
+            M: typing.Any,
+            fi__: typing.Any,
+            y: typing.Any,
+            C: typing.Any,
+            bias: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
+        ) -> None:
+            ndim = len(x)
+            x = operator.rounder(x, np.abs(x - f_shift[0]))
+            weights = np.ones(n_funcs)
+            fits = np.ones(n_funcs)
+            for idx in range(0, n_funcs):
+                w_i = np.exp(-np.sum((x - f_shift[idx]) ** 2) / (2 * ndim * xichmas[idx] ** 2))
+                z = operator.dot_vm((x - f_shift[idx]) / lamdas[idx], M[idx * ndim : (idx + 1) * ndim, :])
+                fit_i = fi__(z, idx)
+                f_max_i = fi__(operator.dot_vm((y / lamdas[idx]), M[idx * ndim : (idx + 1) * ndim, :]), idx)
+                fit_i = C * fit_i / f_max_i
+                weights[idx] = w_i
+                fits[idx] = fit_i
 
-    def evaluate(self, x, *args):
-        self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
-        ndim = len(x)
-        x = operator.rounder(x, np.abs(x - self.f_shift[0]))
-        weights = np.ones(self.n_funcs)
-        fits = np.ones(self.n_funcs)
-        for idx in range(0, self.n_funcs):
-            w_i = np.exp(-np.sum((x - self.f_shift[idx]) ** 2) / (2 * ndim * self.xichmas[idx] ** 2))
-            z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx * ndim : (idx + 1) * ndim, :])
-            fit_i = self.fi__(z, idx)
-            f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx * ndim : (idx + 1) * ndim, :]), idx)
-            fit_i = self.C * fit_i / f_max_i
-            weights[idx] = w_i
-            fits[idx] = fit_i
+            maxw = np.max(weights)
+            weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)
+            weights = weights / np.sum(weights)
+            out[0] = np.sum(operator.dot_vv(weights, (fits + bias))) + f_bias
 
-        maxw = np.max(weights)
-        weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)
-        weights = weights / np.sum(weights)
-        return np.sum(np.dot(weights, (fits + self.bias))) + self.f_bias
+        super().__init__(ndim, bounds, f_shift, f_matrix, f_bias, parallel=parallel, fastmath=fastmath, dtype=dtype)
+        self._bind_kernel(compute, ["f_shift", "n_funcs", "xichmas", "lamdas", "M", "fi__", "y", "C", "bias", "f_bias"])
+
+
+@nb.njit(fastmath=True)
+def _F242005_fi__(x: np.ndarray, idx: int) -> float:
+    if idx == 0:
+        return operator.weierstrass_norm_func(x)
+    elif idx == 1:
+        return operator.rotated_expanded_schaffer_func(x)
+    elif idx == 2:
+        return operator.grie_rosen_cec_func(x)
+    elif idx == 3:
+        return operator.ackley_func(x)
+    elif idx == 4:
+        return operator.rastrigin_func(x)
+    elif idx == 5:
+        return operator.griewank_func(x)
+    elif idx == 6:
+        return operator.non_continuous_expanded_scaffer_func(x)
+    elif idx == 7:
+        return operator.non_continuous_rastrigin_func(x)
+    elif idx == 8:
+        return operator.elliptic_func(x)
+    else:
+        return operator.sphere_func(x)
 
 
 class F242005(CecBenchmark):
@@ -1362,8 +1826,48 @@ class F242005(CecBenchmark):
     # n_basins = 1
     # n_valleys = 1
 
-    def __init__(self, ndim=None, bounds=None, f_shift="data_hybrid_func4", f_matrix="hybrid_func4_M_D", f_bias=260.0):
-        super().__init__()
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "data_hybrid_func4",
+        f_matrix: typing.Any = "hybrid_func4_M_D",
+        f_bias: float = 260.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(
+            x: np.ndarray,
+            n_funcs: int,
+            f_shift: typing.Any,
+            xichmas: typing.Any,
+            lamdas: np.ndarray,
+            M: typing.Any,
+            y: typing.Any,
+            C: int,
+            bias: np.ndarray,
+            f_bias: typing.Any,
+            out: np.ndarray,
+        ) -> None:
+            ndim = len(x)
+            weights = np.ones(n_funcs)
+            fits = np.ones(n_funcs)
+            for idx in range(0, n_funcs):
+                w_i = np.exp(-np.sum((x - f_shift[idx]) ** 2) / (2 * ndim * xichmas[idx] ** 2))
+                z = operator.dot_vm((x - f_shift[idx]) / lamdas[idx], M[idx * ndim : (idx + 1) * ndim, :])
+                fit_i = _F242005_fi__(z, idx)
+                f_max_i = _F242005_fi__(operator.dot_vm((y / lamdas[idx]), M[idx * ndim : (idx + 1) * ndim, :]), idx)
+                fit_i = C * fit_i / f_max_i
+                weights[idx] = w_i
+                fits[idx] = fit_i
+
+            maxw = np.max(weights)
+            weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)
+            weights = weights / np.sum(weights)
+            out[0] = np.sum(operator.dot_vv(weights, (fits + bias))) + f_bias
+
+        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
         self.dim_changeable = True
         self.dim_default = 30
         self.dim_max = 100
@@ -1383,18 +1887,22 @@ class F242005(CecBenchmark):
         self.f_bias = f_bias
         self.f_global = f_bias
         self.x_global = self.f_shift[0]
-        self.paras = {
-            "f_shift": self.f_shift,
-            "f_bias": self.f_bias,
-            "lambda": self.lamdas,
-            "bias": self.bias,
-            "n_funcs": self.n_funcs,
-            "C": self.C,
-            "M": self.M,
-            "y": self.y,
-        }
+        self._bind_kernel(
+            compute,
+            ["n_funcs", "f_shift", "xichmas", "lamdas", "M", "y", "C", "bias", "f_bias"],
+            paras={
+                "f_shift": self.f_shift,
+                "f_bias": self.f_bias,
+                "lambda": self.lamdas,
+                "bias": self.bias,
+                "n_funcs": self.n_funcs,
+                "C": self.C,
+                "M": self.M,
+                "y": self.y,
+            },
+        )
 
-    def fi__(self, x, idx):
+    def fi__(self, x: typing.Any, idx: int) -> typing.Any:
         if idx == 0:
             return operator.weierstrass_norm_func(x)
         elif idx == 1:
@@ -1416,26 +1924,6 @@ class F242005(CecBenchmark):
         else:
             return operator.sphere_func(x)
 
-    def evaluate(self, x, *args):
-        self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
-        ndim = len(x)
-        weights = np.ones(self.n_funcs)
-        fits = np.ones(self.n_funcs)
-        for idx in range(0, self.n_funcs):
-            w_i = np.exp(-np.sum((x - self.f_shift[idx]) ** 2) / (2 * ndim * self.xichmas[idx] ** 2))
-            z = np.dot((x - self.f_shift[idx]) / self.lamdas[idx], self.M[idx * ndim : (idx + 1) * ndim, :])
-            fit_i = self.fi__(z, idx)
-            f_max_i = self.fi__(np.dot((self.y / self.lamdas[idx]), self.M[idx * ndim : (idx + 1) * ndim, :]), idx)
-            fit_i = self.C * fit_i / f_max_i
-            weights[idx] = w_i
-            fits[idx] = fit_i
-
-        maxw = np.max(weights)
-        weights = np.where(weights != maxw, weights * (1 - maxw**10), weights)
-        weights = weights / np.sum(weights)
-        return np.sum(np.dot(weights, (fits + self.bias))) + self.f_bias
-
 
 class F252005(F242005):
     """
@@ -1453,6 +1941,16 @@ class F252005(F242005):
     latex_formula_bounds = r"x_i \in [-100.0, 100.0], \forall i \in [1, D]"
     latex_formula_global_optimum = r"\text{Global optimum: } x^* = o, F_6(x^*) = bias = 390.0"
 
-    def __init__(self, ndim=None, bounds=None, f_shift="data_hybrid_func4", f_matrix="hybrid_func4_M_D", f_bias=260.0):
-        super().__init__(ndim, bounds, f_shift, f_matrix, f_bias)
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "data_hybrid_func4",
+        f_matrix: typing.Any = "hybrid_func4_M_D",
+        f_bias: float = 260.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        super().__init__(ndim, bounds, f_shift, f_matrix, f_bias, parallel=parallel, fastmath=fastmath, dtype=dtype)
         self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[2.0, 5.0] for _ in range(self.dim_default)]))

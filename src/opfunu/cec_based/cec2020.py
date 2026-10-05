@@ -4,6 +4,8 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
+import typing
+
 import numpy as np
 
 from opfunu.benchmark.cec import CecBenchmark
@@ -41,8 +43,24 @@ class F12020(CecBenchmark):
 
     characteristics = ["Smooth but narrow ridge"]
 
-    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_1", f_matrix="M_1_D", f_bias=100.0):
-        super().__init__()
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "shift_data_1",
+        f_matrix: typing.Any = "M_1_D",
+        f_bias: float = 100.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(
+            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+        ) -> None:
+            z = operator.dot_mv(f_matrix, x - f_shift)
+            out[0] = operator.bent_cigar_func(z) + f_bias
+
+        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
         self.dim_changeable = True
         self.dim_default = 30
         self.dim_max = 100
@@ -56,13 +74,11 @@ class F12020(CecBenchmark):
         self.f_bias = f_bias
         self.f_global = f_bias
         self.x_global = self.f_shift
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix}
-
-    def evaluate(self, x, *args):
-        self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, x - self.f_shift)
-        return operator.bent_cigar_func(z) + self.f_bias
+        self._bind_kernel(
+            compute,
+            ["f_matrix", "f_shift", "f_bias"],
+            paras={"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix},
+        )
 
 
 class F22020(CecBenchmark):
@@ -96,8 +112,24 @@ class F22020(CecBenchmark):
 
     characteristics = ["Local optima’s number is huge", "The penultimate local optimum is far from the global optimum."]
 
-    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_2", f_matrix="M_2_D", f_bias=1100.0):
-        super().__init__()
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "shift_data_2",
+        f_matrix: typing.Any = "M_2_D",
+        f_bias: float = 1100.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(
+            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+        ) -> None:
+            z = operator.dot_mv(f_matrix, 1000.0 * (x - f_shift) / 100)
+            out[0] = operator.modified_schwefel_func(z) + f_bias
+
+        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
         self.dim_changeable = True
         self.dim_default = 30
         self.dim_max = 100
@@ -111,13 +143,11 @@ class F22020(CecBenchmark):
         self.f_bias = f_bias
         self.f_global = f_bias
         self.x_global = self.f_shift
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix}
-
-    def evaluate(self, x, *args):
-        self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 1000.0 * (x - self.f_shift) / 100)
-        return operator.modified_schwefel_func(z) + self.f_bias
+        self._bind_kernel(
+            compute,
+            ["f_matrix", "f_shift", "f_bias"],
+            paras={"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix},
+        )
 
 
 class F32020(CecBenchmark):
@@ -151,8 +181,24 @@ class F32020(CecBenchmark):
 
     characteristics = ["Asymmetrical", "Continuous everywhere yet differentiable nowhere"]
 
-    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_3", f_matrix="M_3_D", f_bias=700.0):
-        super().__init__()
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "shift_data_3",
+        f_matrix: typing.Any = "M_3_D",
+        f_bias: float = 700.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(
+            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+        ) -> None:
+            z = operator.dot_mv(f_matrix, 600.0 * (x - f_shift) / 100)
+            out[0] = operator.lunacek_bi_rastrigin_func(z, shift=2.5) + f_bias
+
+        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
         self.dim_changeable = True
         self.dim_default = 30
         self.dim_max = 100
@@ -166,13 +212,11 @@ class F32020(CecBenchmark):
         self.f_bias = f_bias
         self.f_global = f_bias
         self.x_global = self.f_shift
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix}
-
-    def evaluate(self, x, *args):
-        self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 600.0 * (x - self.f_shift) / 100)
-        return operator.lunacek_bi_rastrigin_func(z, shift=2.5) + self.f_bias
+        self._bind_kernel(
+            compute,
+            ["f_matrix", "f_shift", "f_bias"],
+            paras={"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix},
+        )
 
 
 class F42020(CecBenchmark):
@@ -206,8 +250,24 @@ class F42020(CecBenchmark):
 
     characteristics = ["Optimal point locates in flat area"]
 
-    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_4", f_matrix="M_4_D", f_bias=1900.0):
-        super().__init__()
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "shift_data_4",
+        f_matrix: typing.Any = "M_4_D",
+        f_bias: float = 1900.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(
+            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+        ) -> None:
+            z = operator.dot_mv(f_matrix, 5.0 * (x - f_shift) / 100)
+            out[0] = operator.expanded_griewank_rosenbrock_func(z) + f_bias
+
+        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
         self.dim_changeable = True
         self.dim_default = 30
         self.dim_max = 100
@@ -221,13 +281,11 @@ class F42020(CecBenchmark):
         self.f_bias = f_bias
         self.f_global = f_bias
         self.x_global = self.f_shift
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix}
-
-    def evaluate(self, x, *args):
-        self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
-        z = np.dot(self.f_matrix, 5.0 * (x - self.f_shift) / 100)
-        return operator.expanded_griewank_rosenbrock_func(z) + self.f_bias
+        self._bind_kernel(
+            compute,
+            ["f_matrix", "f_shift", "f_bias"],
+            paras={"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix},
+        )
 
 
 class F52020(CecBenchmark):
@@ -263,14 +321,39 @@ class F52020(CecBenchmark):
 
     def __init__(
         self,
-        ndim=None,
-        bounds=None,
-        f_shift="shift_data_6",
-        f_matrix="M_6_D",
-        f_shuffle="shuffle_data_6_D",
-        f_bias=1700.0,
-    ):
-        super().__init__()
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "shift_data_6",
+        f_matrix: typing.Any = "M_6_D",
+        f_shuffle: typing.Any = "shuffle_data_6_D",
+        f_bias: float = 1700.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(
+            x: np.ndarray,
+            f_shift: typing.Any,
+            idx1: typing.Any,
+            idx2: typing.Any,
+            idx3: typing.Any,
+            f_matrix: typing.Any,
+            n1: int,
+            n2: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
+        ) -> None:
+            z = x - f_shift
+            z1 = np.concatenate((z[idx1], z[idx2], z[idx3]))
+            mz = operator.dot_mv(f_matrix, z1)
+            out[0] = (
+                operator.modified_schwefel_func(mz[:n1])
+                + operator.rastrigin_func(mz[n1:n2])
+                + operator.elliptic_func(mz[n2:])
+                + f_bias
+            )
+
+        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
         self.dim_changeable = True
         self.dim_default = 30
         self.dim_max = 100
@@ -298,20 +381,16 @@ class F52020(CecBenchmark):
         self.g1 = operator.modified_schwefel_func
         self.g2 = operator.rastrigin_func
         self.g3 = operator.elliptic_func
-        self.paras = {
-            "f_shift": self.f_shift,
-            "f_bias": self.f_bias,
-            "f_matrix": self.f_matrix,
-            "f_shuffle": self.f_shuffle,
-        }
-
-    def evaluate(self, x, *args):
-        self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
-        z = x - self.f_shift
-        z1 = np.concatenate((z[self.idx1], z[self.idx2], z[self.idx3]))
-        mz = np.dot(self.f_matrix, z1)
-        return self.g1(mz[: self.n1]) + self.g2(mz[self.n1 : self.n2]) + self.g3(mz[self.n2 :]) + self.f_bias
+        self._bind_kernel(
+            compute,
+            ["f_shift", "idx1", "idx2", "idx3", "f_matrix", "n1", "n2", "f_bias"],
+            paras={
+                "f_shift": self.f_shift,
+                "f_bias": self.f_bias,
+                "f_matrix": self.f_matrix,
+                "f_shuffle": self.f_shuffle,
+            },
+        )
 
 
 class F62020(CecBenchmark):
@@ -347,14 +426,37 @@ class F62020(CecBenchmark):
 
     def __init__(
         self,
-        ndim=None,
-        bounds=None,
-        f_shift="shift_data_7",
-        f_matrix="M_7_D",
-        f_shuffle="shuffle_data_7_D",
-        f_bias=1600.0,
-    ):
-        super().__init__()
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "shift_data_7",
+        f_matrix: typing.Any = "M_7_D",
+        f_shuffle: typing.Any = "shuffle_data_7_D",
+        f_bias: float = 1600.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(
+            x: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            idx1: typing.Any,
+            idx2: typing.Any,
+            idx3: typing.Any,
+            idx4: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
+        ) -> None:
+            mz = operator.dot_mv(f_matrix, x - f_shift)
+            out[0] = (
+                operator.expanded_schaffer_f6_func(mz[idx1])
+                + operator.hgbat_func(mz[idx2], shift=-1.0)
+                + operator.rosenbrock_func(mz[idx3], shift=1.0)
+                + operator.modified_schwefel_func(mz[idx4])
+                + f_bias
+            )
+
+        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
         self.dim_changeable = True
         self.dim_default = 30
         self.dim_max = 100
@@ -377,23 +479,15 @@ class F62020(CecBenchmark):
         self.n3 = int(np.ceil(self.p[2] * self.ndim)) + self.n2
         self.idx1, self.idx2 = self.f_shuffle[: self.n1], self.f_shuffle[self.n1 : self.n2]
         self.idx3, self.idx4 = self.f_shuffle[self.n2 : self.n3], self.f_shuffle[self.n3 : self.ndim]
-        self.paras = {
-            "f_shift": self.f_shift,
-            "f_bias": self.f_bias,
-            "f_matrix": self.f_matrix,
-            "f_shuffle": self.f_shuffle,
-        }
-
-    def evaluate(self, x, *args):
-        self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
-        mz = np.dot(self.f_matrix, x - self.f_shift)
-        return (
-            operator.expanded_schaffer_f6_func(mz[self.idx1])
-            + operator.hgbat_func(mz[self.idx2], shift=-1.0)
-            + operator.rosenbrock_func(mz[self.idx3], shift=1.0)
-            + operator.modified_schwefel_func(mz[self.idx4])
-            + self.f_bias
+        self._bind_kernel(
+            compute,
+            ["f_matrix", "f_shift", "idx1", "idx2", "idx3", "idx4", "f_bias"],
+            paras={
+                "f_shift": self.f_shift,
+                "f_bias": self.f_bias,
+                "f_matrix": self.f_matrix,
+                "f_shuffle": self.f_shuffle,
+            },
         )
 
 
@@ -430,14 +524,45 @@ class F72020(CecBenchmark):
 
     def __init__(
         self,
-        ndim=None,
-        bounds=None,
-        f_shift="shift_data_16",
-        f_matrix="M_16_D",
-        f_shuffle="shuffle_data_16_D",
-        f_bias=2100.0,
-    ):
-        super().__init__()
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "shift_data_16",
+        f_matrix: typing.Any = "M_16_D",
+        f_shuffle: typing.Any = "shuffle_data_16_D",
+        f_bias: float = 2100.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(
+            x: np.ndarray,
+            f_shift: typing.Any,
+            idx1: typing.Any,
+            idx2: typing.Any,
+            idx3: typing.Any,
+            idx4: typing.Any,
+            idx5: typing.Any,
+            f_matrix: typing.Any,
+            n1: int,
+            n2: typing.Any,
+            n3: typing.Any,
+            n4: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
+        ) -> None:
+            z = x - f_shift
+            z1 = np.concatenate((z[idx1], z[idx2], z[idx3], z[idx4], z[idx5]))
+            mz = operator.dot_mv(f_matrix, z1)
+            out[0] = (
+                operator.expanded_scaffer_f6_func(mz[:n1])
+                + operator.hgbat_func(mz[n1:n2], shift=-1.0)
+                + operator.rosenbrock_func(mz[n2:n3], shift=1.0)
+                + operator.modified_schwefel_func(mz[n3:n4])
+                + operator.elliptic_func(mz[n4:])
+                + f_bias
+            )
+
+        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
         self.dim_changeable = True
         self.dim_default = 30
         self.dim_max = 100
@@ -465,26 +590,15 @@ class F72020(CecBenchmark):
             self.f_shuffle[self.n2 : self.n3],
         )
         self.idx4, self.idx5 = self.f_shuffle[self.n3 : self.n4], self.f_shuffle[self.n4 : self.ndim]
-        self.paras = {
-            "f_shift": self.f_shift,
-            "f_bias": self.f_bias,
-            "f_matrix": self.f_matrix,
-            "f_shuffle": self.f_shuffle,
-        }
-
-    def evaluate(self, x, *args):
-        self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
-        z = x - self.f_shift
-        z1 = np.concatenate((z[self.idx1], z[self.idx2], z[self.idx3], z[self.idx4], z[self.idx5]))
-        mz = np.dot(self.f_matrix, z1)
-        return (
-            operator.expanded_scaffer_f6_func(mz[: self.n1])
-            + operator.hgbat_func(mz[self.n1 : self.n2], shift=-1.0)
-            + operator.rosenbrock_func(mz[self.n2 : self.n3], shift=1.0)
-            + operator.modified_schwefel_func(mz[self.n3 : self.n4])
-            + operator.elliptic_func(mz[self.n4 :])
-            + self.f_bias
+        self._bind_kernel(
+            compute,
+            ["f_shift", "idx1", "idx2", "idx3", "idx4", "idx5", "f_matrix", "n1", "n2", "n3", "n4", "f_bias"],
+            paras={
+                "f_shift": self.f_shift,
+                "f_bias": self.f_bias,
+                "f_matrix": self.f_matrix,
+                "f_shuffle": self.f_shuffle,
+            },
         )
 
 
@@ -516,8 +630,48 @@ class F82020(CecBenchmark):
     modality = True  # Number of ambiguous peaks, unknown # peaks
     characteristics = ["Asymmetrical", "Different properties around different local optima"]
 
-    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_22", f_matrix="M_22_D", f_bias=2200.0):
-        super().__init__()
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "shift_data_22",
+        f_matrix: typing.Any = "M_22_D",
+        f_bias: float = 2200.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(
+            x: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            lamdas: typing.Any,
+            bias: typing.Any,
+            xichmas: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
+        ) -> None:
+            z0 = operator.dot_mv(f_matrix[: x.shape[0], :], x - f_shift[0])
+            g0 = lamdas[0] * operator.rastrigin_func(z0) + bias[0]
+            w0 = operator.calculate_weight(x - f_shift[0], xichmas[0])
+
+            # 2. Griewank’s Function F15’
+            z1 = operator.dot_mv(f_matrix[x.shape[0] : 2 * x.shape[0], :], x - f_shift[1])
+            g1 = lamdas[1] * operator.griewank_func(z1) + bias[1]
+            w1 = operator.calculate_weight(x - f_shift[1], xichmas[1])
+
+            # 3. Modifed Schwefel's Function F10’
+            # z2 = operator.dot_mv(f_matrix[2*x.shape[0]:3*x.shape[0], :], x - f_shift[2])
+            z2 = 1000 * (x - f_shift[2]) / 100
+            g2 = lamdas[2] * operator.modified_schwefel_func(z2) + bias[2]
+            w2 = operator.calculate_weight(x - f_shift[2], xichmas[2])
+
+            ws = np.array([w0, w1, w2])
+            ws = ws / np.sum(ws)
+            gs = np.array([g0, g1, g2])
+            out[0] = operator.dot_vv(ws, gs) + f_bias
+
+        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
         self.dim_changeable = True
         self.dim_default = 30
         self.dim_max = 100
@@ -538,32 +692,11 @@ class F82020(CecBenchmark):
         self.g0 = operator.rastrigin_func
         self.g1 = operator.griewank_func
         self.g2 = operator.modified_schwefel_func
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix}
-
-    def evaluate(self, x, *args):
-        self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
-
-        # 1. Rastrigin’s Function F5’
-        z0 = np.dot(self.f_matrix[: self.ndim, :], x - self.f_shift[0])
-        g0 = self.lamdas[0] * self.g0(z0) + self.bias[0]
-        w0 = operator.calculate_weight(x - self.f_shift[0], self.xichmas[0])
-
-        # 2. Griewank’s Function F15’
-        z1 = np.dot(self.f_matrix[self.ndim : 2 * self.ndim, :], x - self.f_shift[1])
-        g1 = self.lamdas[1] * self.g1(z1) + self.bias[1]
-        w1 = operator.calculate_weight(x - self.f_shift[1], self.xichmas[1])
-
-        # 3. Modifed Schwefel's Function F10’
-        # z2 = np.dot(self.f_matrix[2*self.ndim:3*self.ndim, :], x - self.f_shift[2])
-        z2 = 1000 * (x - self.f_shift[2]) / 100
-        g2 = self.lamdas[2] * self.g2(z2) + self.bias[2]
-        w2 = operator.calculate_weight(x - self.f_shift[2], self.xichmas[2])
-
-        ws = np.array([w0, w1, w2])
-        ws = ws / np.sum(ws)
-        gs = np.array([g0, g1, g2])
-        return np.dot(ws, gs) + self.f_bias
+        self._bind_kernel(
+            compute,
+            ["f_matrix", "f_shift", "lamdas", "bias", "xichmas", "f_bias"],
+            paras={"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix},
+        )
 
 
 class F92020(CecBenchmark):
@@ -596,8 +729,52 @@ class F92020(CecBenchmark):
     # n_valleys = 1
     characteristics = ["Asymmetrical", "Different properties around different local optima"]
 
-    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_24", f_matrix="M_24_D", f_bias=2400.0):
-        super().__init__()
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "shift_data_24",
+        f_matrix: typing.Any = "M_24_D",
+        f_bias: float = 2400.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(
+            x: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            lamdas: typing.Any,
+            bias: typing.Any,
+            xichmas: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
+        ) -> None:
+            z0 = operator.dot_mv(f_matrix[: x.shape[0], :], x - f_shift[0])
+            g0 = lamdas[0] * operator.ackley_func(z0) + bias[0]
+            w0 = operator.calculate_weight(x - f_shift[0], xichmas[0])
+
+            # 2. High Conditioned Elliptic Function F11’
+            z1 = operator.dot_mv(f_matrix[x.shape[0] : 2 * x.shape[0], :], x - f_shift[1])
+            g1 = lamdas[1] * operator.elliptic_func(z1) + bias[1]
+            w1 = operator.calculate_weight(x - f_shift[1], xichmas[1])
+
+            # 3. Girewank Function F15’
+            z2 = operator.dot_mv(f_matrix[2 * x.shape[0] : 3 * x.shape[0], :], x - f_shift[2])
+            g2 = lamdas[2] * operator.griewank_func(z2) + bias[2]
+            w2 = operator.calculate_weight(x - f_shift[2], xichmas[2])
+
+            # 4. Rastrigin’s Function F5’
+            z3 = operator.dot_mv(f_matrix[3 * x.shape[0] : 4 * x.shape[0], :], x - f_shift[3])
+            g3 = lamdas[3] * operator.rastrigin_func(z3) + bias[3]
+            w3 = operator.calculate_weight(x - f_shift[3], xichmas[3])
+
+            ws = np.array([w0, w1, w2, w3])
+            ws = ws / np.sum(ws)
+            gs = np.array([g0, g1, g2, g3])
+            out[0] = operator.dot_vv(ws, gs) + f_bias
+
+        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
         self.dim_changeable = True
         self.dim_default = 30
         self.dim_max = 100
@@ -619,36 +796,11 @@ class F92020(CecBenchmark):
         self.g1 = operator.elliptic_func
         self.g2 = operator.griewank_func
         self.g3 = operator.rastrigin_func
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix}
-
-    def evaluate(self, x, *args):
-        self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
-
-        # 1. Ackley’s Function F13’
-        z0 = np.dot(self.f_matrix[: self.ndim, :], x - self.f_shift[0])
-        g0 = self.lamdas[0] * self.g0(z0) + self.bias[0]
-        w0 = operator.calculate_weight(x - self.f_shift[0], self.xichmas[0])
-
-        # 2. High Conditioned Elliptic Function F11’
-        z1 = np.dot(self.f_matrix[self.ndim : 2 * self.ndim, :], x - self.f_shift[1])
-        g1 = self.lamdas[1] * self.g1(z1) + self.bias[1]
-        w1 = operator.calculate_weight(x - self.f_shift[1], self.xichmas[1])
-
-        # 3. Girewank Function F15’
-        z2 = np.dot(self.f_matrix[2 * self.ndim : 3 * self.ndim, :], x - self.f_shift[2])
-        g2 = self.lamdas[2] * self.g2(z2) + self.bias[2]
-        w2 = operator.calculate_weight(x - self.f_shift[2], self.xichmas[2])
-
-        # 4. Rastrigin’s Function F5’
-        z3 = np.dot(self.f_matrix[3 * self.ndim : 4 * self.ndim, :], x - self.f_shift[3])
-        g3 = self.lamdas[3] * self.g3(z3) + self.bias[3]
-        w3 = operator.calculate_weight(x - self.f_shift[3], self.xichmas[3])
-
-        ws = np.array([w0, w1, w2, w3])
-        ws = ws / np.sum(ws)
-        gs = np.array([g0, g1, g2, g3])
-        return np.dot(ws, gs) + self.f_bias
+        self._bind_kernel(
+            compute,
+            ["f_matrix", "f_shift", "lamdas", "bias", "xichmas", "f_bias"],
+            paras={"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix},
+        )
 
 
 class F102020(CecBenchmark):
@@ -681,8 +833,57 @@ class F102020(CecBenchmark):
     # n_valleys = 1
     characteristics = ["Asymmetrical", "Different properties around different local optima"]
 
-    def __init__(self, ndim=None, bounds=None, f_shift="shift_data_25", f_matrix="M_25_D", f_bias=2500.0):
-        super().__init__()
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "shift_data_25",
+        f_matrix: typing.Any = "M_25_D",
+        f_bias: float = 2500.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(
+            x: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            lamdas: typing.Any,
+            bias: typing.Any,
+            xichmas: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
+        ) -> None:
+            z0 = operator.dot_mv(f_matrix[: x.shape[0], :], x - f_shift[0])
+            g0 = lamdas[0] * operator.rastrigin_func(z0) + bias[0]
+            w0 = operator.calculate_weight(x - f_shift[0], xichmas[0])
+
+            # 2. Happycat Function F17’
+            z1 = operator.dot_mv(f_matrix[x.shape[0] : 2 * x.shape[0], :], x - f_shift[0])
+            g1 = lamdas[1] * operator.happy_cat_func(z1) + bias[1]
+            w1 = operator.calculate_weight(x - f_shift[1], xichmas[1])
+
+            # 3. Ackley Function F13’
+            z2 = operator.dot_mv(f_matrix[2 * x.shape[0] : 3 * x.shape[0], :], x - f_shift[0])
+            g2 = lamdas[2] * operator.ackley_func(z2) + bias[2]
+            w2 = operator.calculate_weight(x - f_shift[2], xichmas[2])
+
+            # 4. Discus Function F12’
+            z3 = operator.dot_mv(f_matrix[3 * x.shape[0] : 4 * x.shape[0], :], x - f_shift[0])
+            g3 = lamdas[3] * operator.discus_func(z3) + bias[3]
+            w3 = operator.calculate_weight(x - f_shift[3], xichmas[3])
+
+            # 5. Rosenbrock’s Function F4’
+            z4 = operator.dot_mv(f_matrix[4 * x.shape[0] : 5 * x.shape[0], :], 2.048 * (x - f_shift[0]) / 100) + 1
+            g4 = lamdas[4] * operator.rosenbrock_func(z4) + bias[4]
+            w4 = operator.calculate_weight(x - f_shift[4], xichmas[4])
+
+            ws = np.array([w0, w1, w2, w3, w4])
+            ws = ws / np.sum(ws)
+            gs = np.array([g0, g1, g2, g3, g4])
+            out[0] = operator.dot_vv(ws, gs) + f_bias
+
+        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
         self.dim_changeable = True
         self.dim_default = 30
         self.dim_max = 100
@@ -705,38 +906,8 @@ class F102020(CecBenchmark):
         self.g2 = operator.ackley_func
         self.g3 = operator.discus_func
         self.g4 = operator.rosenbrock_func
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix}
-
-    def evaluate(self, x, *args):
-        self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
-
-        # 1. Rastrigin’s Function F5’
-        z0 = np.dot(self.f_matrix[: self.ndim, :], x - self.f_shift[0])
-        g0 = self.lamdas[0] * self.g0(z0) + self.bias[0]
-        w0 = operator.calculate_weight(x - self.f_shift[0], self.xichmas[0])
-
-        # 2. Happycat Function F17’
-        z1 = np.dot(self.f_matrix[self.ndim : 2 * self.ndim, :], x - self.f_shift[0])
-        g1 = self.lamdas[1] * self.g1(z1) + self.bias[1]
-        w1 = operator.calculate_weight(x - self.f_shift[1], self.xichmas[1])
-
-        # 3. Ackley Function F13’
-        z2 = np.dot(self.f_matrix[2 * self.ndim : 3 * self.ndim, :], x - self.f_shift[0])
-        g2 = self.lamdas[2] * self.g2(z2) + self.bias[2]
-        w2 = operator.calculate_weight(x - self.f_shift[2], self.xichmas[2])
-
-        # 4. Discus Function F12’
-        z3 = np.dot(self.f_matrix[3 * self.ndim : 4 * self.ndim, :], x - self.f_shift[0])
-        g3 = self.lamdas[3] * self.g3(z3) + self.bias[3]
-        w3 = operator.calculate_weight(x - self.f_shift[3], self.xichmas[3])
-
-        # 5. Rosenbrock’s Function F4’
-        z4 = np.dot(self.f_matrix[4 * self.ndim : 5 * self.ndim, :], 2.048 * (x - self.f_shift[0]) / 100) + 1
-        g4 = self.lamdas[4] * self.g4(z4) + self.bias[4]
-        w4 = operator.calculate_weight(x - self.f_shift[4], self.xichmas[4])
-
-        ws = np.array([w0, w1, w2, w3, w4])
-        ws = ws / np.sum(ws)
-        gs = np.array([g0, g1, g2, g3, g4])
-        return np.dot(ws, gs) + self.f_bias
+        self._bind_kernel(
+            compute,
+            ["f_matrix", "f_shift", "lamdas", "bias", "xichmas", "f_bias"],
+            paras={"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix},
+        )

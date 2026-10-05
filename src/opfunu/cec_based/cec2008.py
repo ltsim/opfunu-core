@@ -4,6 +4,8 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
+import typing
+
 import numpy as np
 
 from opfunu.benchmark.cec import CecBenchmark
@@ -40,7 +42,19 @@ class F12008(CecBenchmark):
     # n_basins = 1
     # n_valleys = 1
 
-    def __init__(self, ndim=None, bounds=None, f_shift="sphere_shift_func_data", f_bias=-450.0):
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "sphere_shift_func_data",
+        f_bias: float = -450.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+            out[0] = operator.sphere_func(x - f_shift) + f_bias
+
         super().__init__(
             ndim=ndim,
             bounds=bounds,
@@ -49,13 +63,12 @@ class F12008(CecBenchmark):
             dim_default=500,
             dim_max=1000,
             data_name="data_2008",
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            compute=compute,
+            param_names=["f_shift", "f_bias"],
         )
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias}
-
-    def evaluate(self, x, *args):
-        self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
-        return operator.sphere_func(x - self.f_shift) + self.f_bias
 
 
 class F22008(CecBenchmark):
@@ -88,7 +101,19 @@ class F22008(CecBenchmark):
     # n_basins = 1
     # n_valleys = 1
 
-    def __init__(self, ndim=None, bounds=None, f_shift="schwefel_shift_func_data", f_bias=-450.0):
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "schwefel_shift_func_data",
+        f_bias: float = -450.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+            out[0] = np.max(np.abs(x - f_shift)) + f_bias
+
         super().__init__(
             ndim=ndim,
             bounds=bounds,
@@ -97,13 +122,12 @@ class F22008(CecBenchmark):
             dim_default=500,
             dim_max=1000,
             data_name="data_2008",
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            compute=compute,
+            param_names=["f_shift", "f_bias"],
         )
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias}
-
-    def evaluate(self, x, *args):
-        self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
-        return np.max(np.abs(x - self.f_shift)) + self.f_bias
 
 
 class F32008(CecBenchmark):
@@ -136,7 +160,19 @@ class F32008(CecBenchmark):
     # n_basins = 1
     # n_valleys = 1
 
-    def __init__(self, ndim=None, bounds=None, f_shift="rosenbrock_shift_func_data", f_bias=-390.0):
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "rosenbrock_shift_func_data",
+        f_bias: float = -390.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+            out[0] = operator.rosenbrock_func(x - f_shift, shift=1.0) + f_bias
+
         super().__init__(
             ndim=ndim,
             bounds=bounds,
@@ -145,13 +181,12 @@ class F32008(CecBenchmark):
             dim_default=500,
             dim_max=1000,
             data_name="data_2008",
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            compute=compute,
+            param_names=["f_shift", "f_bias"],
         )
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias}
-
-    def evaluate(self, x, *args):
-        self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
-        return operator.rosenbrock_func(x - self.f_shift, shift=1.0) + self.f_bias
 
 
 class F42008(CecBenchmark):
@@ -184,7 +219,20 @@ class F42008(CecBenchmark):
     # n_basins = 1
     # n_valleys = 1
 
-    def __init__(self, ndim=None, bounds=None, f_shift="rastrigin_shift_func_data", f_bias=-330.0):
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "rastrigin_shift_func_data",
+        f_bias: float = -330.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+            z = x - f_shift
+            out[0] = operator.rastrigin_func(z) + f_bias
+
         super().__init__(
             ndim=ndim,
             bounds=bounds,
@@ -194,14 +242,12 @@ class F42008(CecBenchmark):
             dim_default=500,
             dim_max=1000,
             data_name="data_2008",
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            compute=compute,
+            param_names=["f_shift", "f_bias"],
         )
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias}
-
-    def evaluate(self, x, *args):
-        self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
-        z = x - self.f_shift
-        return operator.rastrigin_func(z) + self.f_bias
 
 
 class F52008(CecBenchmark):
@@ -234,7 +280,20 @@ class F52008(CecBenchmark):
     # n_basins = 1
     # n_valleys = 1
 
-    def __init__(self, ndim=None, bounds=None, f_shift="griewank_shift_func_data", f_bias=-180.0):
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "griewank_shift_func_data",
+        f_bias: float = -180.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+            z = x - f_shift
+            out[0] = operator.griewank_func(z) + f_bias
+
         super().__init__(
             ndim=ndim,
             bounds=bounds,
@@ -244,14 +303,12 @@ class F52008(CecBenchmark):
             dim_default=500,
             dim_max=1000,
             data_name="data_2008",
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            compute=compute,
+            param_names=["f_shift", "f_bias"],
         )
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias}
-
-    def evaluate(self, x, *args):
-        self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
-        z = x - self.f_shift
-        return operator.griewank_func(z) + self.f_bias
 
 
 class F62008(CecBenchmark):
@@ -284,7 +341,20 @@ class F62008(CecBenchmark):
     # n_basins = 1
     # n_valleys = 1
 
-    def __init__(self, ndim=None, bounds=None, f_shift="ackley_shift_func_data", f_bias=-140.0):
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "ackley_shift_func_data",
+        f_bias: float = -140.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+            z = x - f_shift
+            out[0] = operator.ackley_func(z) + f_bias
+
         super().__init__(
             ndim=ndim,
             bounds=bounds,
@@ -294,14 +364,12 @@ class F62008(CecBenchmark):
             dim_default=500,
             dim_max=1000,
             data_name="data_2008",
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            compute=compute,
+            param_names=["f_shift", "f_bias"],
         )
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias}
-
-    def evaluate(self, x, *args):
-        self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
-        z = x - self.f_shift
-        return operator.ackley_func(z) + self.f_bias
 
 
 class F72008(CecBenchmark):
@@ -334,7 +402,21 @@ class F72008(CecBenchmark):
     # n_basins = 1
     # n_valleys = 1
 
-    def __init__(self, ndim=None, bounds=None, f_shift="rastrigin_shift_func_data", f_bias=0.0):
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        f_shift: typing.Any = "rastrigin_shift_func_data",
+        f_bias: float = 0.0,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, f_bias: typing.Any, out: np.ndarray) -> None:
+            ndim = len(x)
+            results = [operator.fractal_1d_func(x[idx] + operator.twist_func(x[idx + 1])) for idx in range(0, ndim - 1)]
+            out[0] = np.sum(results) + operator.fractal_1d_func(x[-1] + operator.twist_func(x[0])) + f_bias
+
         super().__init__(
             ndim=ndim,
             bounds=bounds,
@@ -344,15 +426,11 @@ class F72008(CecBenchmark):
             dim_default=500,
             dim_max=1000,
             data_name="data_2008",
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
         )
         self.f_shift = self.f_shift / np.max(self.f_shift)
         self.f_global = -1e32
         self.x_global = self.f_shift
-        self.paras = {"f_shift": self.f_shift, "f_bias": self.f_bias}
-
-    def evaluate(self, x, *args):
-        self.n_fe += 1
-        self.check_solution(x, self.dim_max, self.dim_supported)
-        ndim = len(x)
-        results = [operator.fractal_1d_func(x[idx] + operator.twist_func(x[idx + 1])) for idx in range(0, ndim - 1)]
-        return np.sum(results) + operator.fractal_1d_func(x[-1] + operator.twist_func(x[0])) + self.f_bias
+        self._bind_kernel(compute, ["f_bias"], paras={"f_shift": self.f_shift, "f_bias": self.f_bias})
