@@ -5,7 +5,11 @@
 import abc
 import dataclasses
 import typing
-from importlib.resources.abc import Traversable
+
+try:  # Python >= 3.11
+    from importlib.resources.abc import Traversable
+except ImportError:  # Python 3.10: Traversable lives in importlib.abc
+    from importlib.abc import Traversable
 
 import numpy as np
 
