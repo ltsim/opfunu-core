@@ -50,6 +50,7 @@ class Zacharov(FuncBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             u = np.sum(x**2)
@@ -68,6 +69,7 @@ class Zacharov(FuncBenchmark):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
 
 
@@ -108,6 +110,7 @@ class ZeroSum(FuncBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             if np.abs(np.sum(x)) < 3e-16:
@@ -127,6 +130,7 @@ class ZeroSum(FuncBenchmark):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
 
 
@@ -167,6 +171,7 @@ class Zettl(FuncBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = (x[0] ** 2 + x[1] ** 2 - 2 * x[0]) ** 2 + 0.25 * x[0]
@@ -183,6 +188,7 @@ class Zettl(FuncBenchmark):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
 
 
@@ -236,6 +242,7 @@ class Zimmerman(FuncBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             def Zh1(x: typing.Any) -> typing.Any:
@@ -270,6 +277,7 @@ class Zimmerman(FuncBenchmark):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
 
 
@@ -319,6 +327,7 @@ class Zirilli(FuncBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = 0.25 * x[0] ** 4 - 0.5 * x[0] ** 2 + 0.1 * x[0] + 0.5 * x[1] ** 2
@@ -335,4 +344,5 @@ class Zirilli(FuncBenchmark):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )

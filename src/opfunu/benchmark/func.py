@@ -85,6 +85,7 @@ class FuncBenchmark(Benchmark):
         params: dict[str, typing.Any] | None = None,
         paras: dict[str, typing.Any] | list[str] | tuple[str, ...] | None = None,
         verbose: bool = False,
+        shift: typing.Any = None,
     ) -> None:
         super().__init__(
             parallel=parallel,
@@ -98,6 +99,7 @@ class FuncBenchmark(Benchmark):
             dim_changeable=dim_changeable if dim_changeable is not None else False,
             dim_default=dim_default if dim_default is not None else 2,
             verbose=verbose,
+            shift=shift,
         )
 
         self.__ndim = 0
@@ -129,6 +131,10 @@ class FuncBenchmark(Benchmark):
     @dim_supported.setter
     def dim_supported(self, value: list[int]) -> None:
         self.__dim_supported = list(value)
+
+    def _set_bounds(self, bounds: np.ndarray) -> None:
+        """Write the (ndim, 2) bounds matrix (used for coordinate shifts)."""
+        self.__bounds = np.asarray(bounds, dtype=float)
 
     def check_ndim_and_bounds(
         self, ndim: int | None = None, bounds: typing.Any = None, default_bounds: typing.Any = None

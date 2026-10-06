@@ -42,6 +42,7 @@ class CamelThreeHump(FuncBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = 2 * x[0] ** 2 - 1.05 * x[0] ** 4 + x[0] ** 6 / 6 + x[0] * x[1] + x[1] ** 2
@@ -58,6 +59,7 @@ class CamelThreeHump(FuncBenchmark):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
 
 
@@ -92,6 +94,7 @@ class CamelSixHump(FuncBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = (4 - 2.1 * x[0] ** 2 + x[0] ** 4 / 3) * x[0] ** 2 + x[0] * x[1] + (4 * x[1] ** 2 - 4) * x[1] ** 2
@@ -108,6 +111,7 @@ class CamelSixHump(FuncBenchmark):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
         self.x_globals = np.array([[-0.0898, 0.7126], [0.0898, -0.7126]])
 
@@ -143,6 +147,7 @@ class ChenBird(FuncBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = -0.001 / (0.001**2 + (x[0] - 0.4 * x[1] - 0.1) ** 2) - 0.001 / (
@@ -161,6 +166,7 @@ class ChenBird(FuncBenchmark):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
 
 
@@ -195,6 +201,7 @@ class ChenV(FuncBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = (
@@ -215,6 +222,7 @@ class ChenV(FuncBenchmark):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
         self.x_globals = np.array(
             [[-0.70710678, -0.70710678], [0.70710678, -0.70710678], [-0.70710678, 0.70710678], [0.70710678, 0.70710678]]
@@ -255,6 +263,7 @@ class Chichinadze(FuncBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = (
@@ -278,6 +287,7 @@ class Chichinadze(FuncBenchmark):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
 
 
@@ -312,6 +322,7 @@ class ChungReynolds(FuncBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = np.sum(x**2) ** 2
@@ -328,6 +339,7 @@ class ChungReynolds(FuncBenchmark):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
 
 
@@ -361,6 +373,7 @@ class Cigar(FuncBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = x[0] ** 2 + 1e6 * np.sum(x[1:] ** 2)
@@ -377,6 +390,7 @@ class Cigar(FuncBenchmark):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
 
 
@@ -411,6 +425,7 @@ class Cola(FuncBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(x: np.ndarray, d: np.ndarray, out: np.ndarray) -> None:
             xi = np.atleast_2d(np.asarray([0.0, x[0]] + list(x[1::2])))
@@ -474,6 +489,7 @@ class Cola(FuncBenchmark):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
 
 
@@ -511,6 +527,7 @@ class Colville(FuncBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = (
@@ -534,6 +551,7 @@ class Colville(FuncBenchmark):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
 
 
@@ -568,6 +586,7 @@ class Corana(FuncBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             d = [1.0, 1000.0, 10.0, 100.0]
@@ -592,6 +611,7 @@ class Corana(FuncBenchmark):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
 
 
@@ -626,6 +646,7 @@ class CosineMixture(FuncBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = -0.1 * np.sum(np.cos(5.0 * np.pi * x)) - np.sum(x**2.0)
@@ -642,6 +663,7 @@ class CosineMixture(FuncBenchmark):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
 
 
@@ -679,6 +701,7 @@ class CrossInTray(FuncBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = -0.0001 * (
@@ -697,6 +720,7 @@ class CrossInTray(FuncBenchmark):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
         self.x_globals = np.array(
             [
@@ -742,6 +766,7 @@ class CrossLegTable(FuncBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             u = 100 - np.sqrt(x[0] ** 2 + x[1] ** 2) / np.pi
@@ -760,6 +785,7 @@ class CrossLegTable(FuncBenchmark):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
 
 
@@ -797,6 +823,7 @@ class CrownedCross(FuncBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             u = 100 - np.sqrt(x[0] ** 2 + x[1] ** 2) / np.pi
@@ -815,6 +842,7 @@ class CrownedCross(FuncBenchmark):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
 
 
@@ -849,6 +877,7 @@ class Csendes(FuncBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(x: np.ndarray, epsilon: float, out: np.ndarray) -> None:
             out[0] = np.sum((x**6.0) * (2.0 + np.sin(1.0 / (x + epsilon))))
@@ -866,6 +895,7 @@ class Csendes(FuncBenchmark):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
 
 
@@ -900,6 +930,7 @@ class Cube(FuncBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = 100.0 * (x[1] - x[0] ** 3.0) ** 2.0 + (1.0 - x[0]) ** 2.0
@@ -916,4 +947,5 @@ class Cube(FuncBenchmark):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )

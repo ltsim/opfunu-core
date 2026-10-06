@@ -53,6 +53,7 @@ class YaoLiu04(FuncBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = np.abs(x).max()
@@ -69,4 +70,5 @@ class YaoLiu04(FuncBenchmark):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )

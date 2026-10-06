@@ -50,6 +50,7 @@ class Qing(FuncBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             i = np.arange(1, x.shape[0] + 1)
@@ -67,6 +68,7 @@ class Qing(FuncBenchmark):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
 
 
@@ -111,6 +113,7 @@ class Quadratic(FuncBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = (
@@ -134,6 +137,7 @@ class Quadratic(FuncBenchmark):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
 
 
@@ -176,6 +180,7 @@ class Quartic(FuncBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             i = np.arange(1, x.shape[0] + 1)
@@ -195,6 +200,7 @@ class Quartic(FuncBenchmark):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
 
 
@@ -237,6 +243,7 @@ class Quintic(FuncBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = np.sum(np.abs(x**5 - 3 * x**4 + 4 * x**3 + 2 * x**2 - 10 * x - 4))
@@ -253,4 +260,5 @@ class Quintic(FuncBenchmark):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )

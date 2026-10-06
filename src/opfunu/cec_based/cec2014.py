@@ -54,6 +54,7 @@ class F12014(CecBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
@@ -70,6 +71,7 @@ class F12014(CecBenchmark):
             dim_max=100,
             dim_supported=[10, 20, 30, 50, 100],
             f_bias=f_bias,
+            shift=shift,
         )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
@@ -110,6 +112,7 @@ class F22014(F12014):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
@@ -126,6 +129,7 @@ class F22014(F12014):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
         self._bind_kernel(compute, ["f_matrix", "f_shift", "f_bias"])
 
@@ -155,6 +159,7 @@ class F32014(F12014):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
@@ -171,6 +176,7 @@ class F32014(F12014):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
         self._bind_kernel(compute, ["f_matrix", "f_shift", "f_bias"])
 
@@ -202,6 +208,7 @@ class F42014(F12014):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
@@ -218,6 +225,7 @@ class F42014(F12014):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
         self._bind_kernel(compute, ["f_matrix", "f_shift", "f_bias"])
 
@@ -249,6 +257,7 @@ class F52014(F12014):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
@@ -265,6 +274,7 @@ class F52014(F12014):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
         self._bind_kernel(compute, ["f_matrix", "f_shift", "f_bias"])
 
@@ -298,6 +308,7 @@ class F62014(F12014):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
@@ -314,6 +325,7 @@ class F62014(F12014):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
         self._bind_kernel(compute, ["f_matrix", "f_shift", "f_bias"])
 
@@ -345,6 +357,7 @@ class F72014(F12014):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
@@ -361,6 +374,7 @@ class F72014(F12014):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
         self._bind_kernel(compute, ["f_matrix", "f_shift", "f_bias"])
 
@@ -406,6 +420,7 @@ class F82014(CecBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(x: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
             out[0] = operator.rastrigin_func(5.12 * (x - f_shift) / 100) + f_bias
@@ -419,6 +434,7 @@ class F82014(CecBenchmark):
             dim_max=100,
             dim_supported=[10, 20, 30, 50, 100],
             f_bias=f_bias,
+            shift=shift,
         )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
@@ -461,6 +477,7 @@ class F92014(F12014):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
@@ -477,6 +494,7 @@ class F92014(F12014):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
         self._bind_kernel(compute, ["f_matrix", "f_shift", "f_bias"])
 
@@ -508,6 +526,7 @@ class F102014(F82014):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(x: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
             out[0] = operator.modified_schwefel_func(1000 * (x - f_shift) / 100) + f_bias
@@ -520,6 +539,7 @@ class F102014(F82014):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
         self._bind_kernel(compute, ["f_shift", "f_bias"])
 
@@ -558,6 +578,7 @@ class F112014(F12014):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
@@ -574,6 +595,7 @@ class F112014(F12014):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
         self._bind_kernel(compute, ["f_matrix", "f_shift", "f_bias"])
 
@@ -611,6 +633,7 @@ class F122014(F12014):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
@@ -627,6 +650,7 @@ class F122014(F12014):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
         self._bind_kernel(compute, ["f_matrix", "f_shift", "f_bias"])
 
@@ -662,6 +686,7 @@ class F132014(F12014):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
@@ -678,6 +703,7 @@ class F132014(F12014):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
         self._bind_kernel(compute, ["f_matrix", "f_shift", "f_bias"])
 
@@ -714,6 +740,7 @@ class F142014(F12014):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
@@ -730,6 +757,7 @@ class F142014(F12014):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
         self._bind_kernel(compute, ["f_matrix", "f_shift", "f_bias"])
 
@@ -764,6 +792,7 @@ class F152014(F12014):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
@@ -780,6 +809,7 @@ class F152014(F12014):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
         self._bind_kernel(compute, ["f_matrix", "f_shift", "f_bias"])
 
@@ -815,6 +845,7 @@ class F162014(F12014):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
@@ -831,6 +862,7 @@ class F162014(F12014):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
         self._bind_kernel(compute, ["f_matrix", "f_shift", "f_bias"])
 
@@ -878,6 +910,7 @@ class F172014(CecBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray,
@@ -910,6 +943,7 @@ class F172014(CecBenchmark):
             dim_max=100,
             dim_supported=[10, 20, 30, 50, 100],
             f_bias=f_bias,
+            shift=shift,
         )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
@@ -987,6 +1021,7 @@ class F182014(F172014):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray,
@@ -1011,7 +1046,16 @@ class F182014(F172014):
             )
 
         super().__init__(
-            ndim, bounds, f_shift, f_matrix, f_shuffle, f_bias, parallel=parallel, fastmath=fastmath, dtype=dtype
+            ndim,
+            bounds,
+            f_shift,
+            f_matrix,
+            f_shuffle,
+            f_bias,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            shift=shift,
         )
         self._bind_kernel(compute, ["f_shift", "idx1", "idx2", "idx3", "f_matrix", "n1", "n2", "f_bias"])
 
@@ -1059,6 +1103,7 @@ class F192014(F172014):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray,
@@ -1086,7 +1131,16 @@ class F192014(F172014):
             )
 
         super().__init__(
-            ndim, bounds, f_shift, f_matrix, f_shuffle, f_bias, parallel=parallel, fastmath=fastmath, dtype=dtype
+            ndim,
+            bounds,
+            f_shift,
+            f_matrix,
+            f_shuffle,
+            f_bias,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            shift=shift,
         )
         self.n_funcs = 4
         self.p = np.array([0.2, 0.2, 0.3, 0.3])
@@ -1141,6 +1195,7 @@ class F202014(F192014):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray,
@@ -1168,7 +1223,16 @@ class F202014(F192014):
             )
 
         super().__init__(
-            ndim, bounds, f_shift, f_matrix, f_shuffle, f_bias, parallel=parallel, fastmath=fastmath, dtype=dtype
+            ndim,
+            bounds,
+            f_shift,
+            f_matrix,
+            f_shuffle,
+            f_bias,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            shift=shift,
         )
         self._bind_kernel(compute, ["f_shift", "idx1", "idx2", "idx3", "idx4", "f_matrix", "n1", "n2", "n3", "f_bias"])
 
@@ -1216,6 +1280,7 @@ class F212014(F172014):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray,
@@ -1246,7 +1311,16 @@ class F212014(F172014):
             )
 
         super().__init__(
-            ndim, bounds, f_shift, f_matrix, f_shuffle, f_bias, parallel=parallel, fastmath=fastmath, dtype=dtype
+            ndim,
+            bounds,
+            f_shift,
+            f_matrix,
+            f_shuffle,
+            f_bias,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            shift=shift,
         )
         self.n_funcs = 5
         self.p = np.array([0.1, 0.2, 0.2, 0.2, 0.3])
@@ -1308,6 +1382,7 @@ class F222014(F212014):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray,
@@ -1338,7 +1413,16 @@ class F222014(F212014):
             )
 
         super().__init__(
-            ndim, bounds, f_shift, f_matrix, f_shuffle, f_bias, parallel=parallel, fastmath=fastmath, dtype=dtype
+            ndim,
+            bounds,
+            f_shift,
+            f_matrix,
+            f_shuffle,
+            f_bias,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            shift=shift,
         )
         self._bind_kernel(
             compute, ["f_shift", "idx1", "idx2", "idx3", "idx4", "idx5", "f_matrix", "n1", "n2", "n3", "n4", "f_bias"]
@@ -1386,6 +1470,7 @@ class F232014(CecBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray,
@@ -1432,6 +1517,7 @@ class F232014(CecBenchmark):
             dim_max=100,
             dim_supported=[10, 20, 30, 50, 100],
             f_bias=f_bias,
+            shift=shift,
         )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
@@ -1485,6 +1571,7 @@ class F242014(F232014):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray,
@@ -1514,7 +1601,9 @@ class F242014(F232014):
             gs = np.array([g0, g1, g2])
             out[0] = operator.dot_vv(ws, gs) + f_bias
 
-        super().__init__(ndim, bounds, f_shift, f_matrix, f_bias, parallel=parallel, fastmath=fastmath, dtype=dtype)
+        super().__init__(
+            ndim, bounds, f_shift, f_matrix, f_bias, parallel=parallel, fastmath=fastmath, dtype=dtype, shift=shift
+        )
         self.n_funcs = 3
         self.xichmas = [20, 20, 20]
         self.lamdas = [1.0, 1.0, 1.0]
@@ -1556,6 +1645,7 @@ class F252014(F232014):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray,
@@ -1585,7 +1675,9 @@ class F252014(F232014):
             gs = np.array([g0, g1, g2])
             out[0] = operator.dot_vv(ws, gs) + f_bias
 
-        super().__init__(ndim, bounds, f_shift, f_matrix, f_bias, parallel=parallel, fastmath=fastmath, dtype=dtype)
+        super().__init__(
+            ndim, bounds, f_shift, f_matrix, f_bias, parallel=parallel, fastmath=fastmath, dtype=dtype, shift=shift
+        )
         self.n_funcs = 3
         self.xichmas = [10, 30, 50]
         self.lamdas = [0.25, 1.0, 1e-7]
@@ -1628,6 +1720,7 @@ class F262014(F232014):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray,
@@ -1667,7 +1760,9 @@ class F262014(F232014):
             gs = np.array([g0, g1, g2, g3, g4])
             out[0] = operator.dot_vv(ws, gs) + f_bias
 
-        super().__init__(ndim, bounds, f_shift, f_matrix, f_bias, parallel=parallel, fastmath=fastmath, dtype=dtype)
+        super().__init__(
+            ndim, bounds, f_shift, f_matrix, f_bias, parallel=parallel, fastmath=fastmath, dtype=dtype, shift=shift
+        )
         self.n_funcs = 5
         self.xichmas = [10, 10, 10, 10, 10]
         self.lamdas = [0.25, 1, 1e-7, 2.5, 10]
@@ -1711,6 +1806,7 @@ class F272014(F232014):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray,
@@ -1750,7 +1846,9 @@ class F272014(F232014):
             gs = np.array([g0, g1, g2, g3, g4])
             out[0] = operator.dot_vv(ws, gs) + f_bias
 
-        super().__init__(ndim, bounds, f_shift, f_matrix, f_bias, parallel=parallel, fastmath=fastmath, dtype=dtype)
+        super().__init__(
+            ndim, bounds, f_shift, f_matrix, f_bias, parallel=parallel, fastmath=fastmath, dtype=dtype, shift=shift
+        )
         self.n_funcs = 5
         self.xichmas = [10, 10, 10, 20, 20]
         self.lamdas = [10, 10, 2.5, 25, 1e-6]
@@ -1794,6 +1892,7 @@ class F282014(F232014):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray,
@@ -1833,7 +1932,9 @@ class F282014(F232014):
             gs = np.array([g0, g1, g2, g3, g4])
             out[0] = operator.dot_vv(ws, gs) + f_bias
 
-        super().__init__(ndim, bounds, f_shift, f_matrix, f_bias, parallel=parallel, fastmath=fastmath, dtype=dtype)
+        super().__init__(
+            ndim, bounds, f_shift, f_matrix, f_bias, parallel=parallel, fastmath=fastmath, dtype=dtype, shift=shift
+        )
         self.n_funcs = 5
         self.xichmas = [10, 20, 30, 40, 50]
         self.lamdas = [2.5, 10, 2.5, 5e-4, 1e-6]
@@ -1878,6 +1979,7 @@ class F292014(F232014):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray,
@@ -1907,7 +2009,9 @@ class F292014(F232014):
             gs = np.array([g0, g1, g2])
             out[0] = operator.dot_vv(ws, gs) + f_bias
 
-        super().__init__(ndim, bounds, f_shift, f_matrix, f_bias, parallel=parallel, fastmath=fastmath, dtype=dtype)
+        super().__init__(
+            ndim, bounds, f_shift, f_matrix, f_bias, parallel=parallel, fastmath=fastmath, dtype=dtype, shift=shift
+        )
         self.n_funcs = 3
         self.xichmas = [10, 30, 50]
         self.lamdas = [1, 1, 1]
@@ -1955,6 +2059,7 @@ class F302014(F232014):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray,
@@ -1984,7 +2089,9 @@ class F302014(F232014):
             gs = np.array([g0, g1, g2])
             out[0] = operator.dot_vv(ws, gs) + f_bias
 
-        super().__init__(ndim, bounds, f_shift, f_matrix, f_bias, parallel=parallel, fastmath=fastmath, dtype=dtype)
+        super().__init__(
+            ndim, bounds, f_shift, f_matrix, f_bias, parallel=parallel, fastmath=fastmath, dtype=dtype, shift=shift
+        )
         self.n_funcs = 3
         self.xichmas = [10, 30, 50]
         self.lamdas = [1, 1, 1]

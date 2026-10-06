@@ -116,6 +116,22 @@ print(f12005.x_global)  # location of the global minimum
 print(f12005.is_succeed(f12005.x_global))  # did we reach the global minimum?
 ```
 
+## Shifted functions
+
+Any function can be shifted by passing a displacement vector `o`. The bounds
+and the global optimum move with it, so the shifted optimum stays feasible:
+
+```python
+from opfunu.name_based import Ackley01
+
+func = Ackley01(ndim=3, shift=[2.0, -1.5, 3.0])
+print(func.x_global)  # base optimum + shift
+print(func.bounds)  # base bounds + shift
+print(func.is_succeed(func.x_global))  # True
+
+func.set_shift(None)  # back to the unshifted problem
+```
+
 ## Construction flags
 
 Every problem accepts `parallel`, `fastmath` and `dtype` flags:
