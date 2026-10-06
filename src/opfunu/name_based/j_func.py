@@ -42,6 +42,7 @@ class JennrichSampson(FuncBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             idx = np.arange(1, 11)
@@ -59,6 +60,7 @@ class JennrichSampson(FuncBenchmark):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
 
 
@@ -113,6 +115,7 @@ class Judge(FuncBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(x: np.ndarray, a: np.ndarray, b: np.ndarray, c: np.ndarray, out: np.ndarray) -> None:
             out[0] = np.sum(((x[0] + x[1] * a + (x[1] ** 2.0) * b) - c) ** 2.0)
@@ -203,4 +206,5 @@ class Judge(FuncBenchmark):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )

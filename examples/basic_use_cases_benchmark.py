@@ -34,3 +34,9 @@ if __name__ == "__main__":
 
     # Access the latex formulas
     print(ackley02.latex_formula)
+
+    # Shifted function: bounds and global optimum move with the shift vector
+    shifted = opfunu.name_based.Ackley01(ndim=3, shift=[2.0, -1.5, 3.0])
+    print(shifted.x_global)  # base optimum + shift
+    print(shifted.bounds)  # base bounds + shift
+    print(shifted.is_succeed(shifted.x_global))  # True

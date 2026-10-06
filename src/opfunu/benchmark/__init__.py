@@ -4,6 +4,7 @@
 # --------------------------------------------------%
 import abc
 import dataclasses
+import functools
 import typing
 
 try:  # Python >= 3.11
@@ -34,6 +35,11 @@ class Benchmark(abc.ABC):
 
     _gufunc_cache: typing.ClassVar[dict[tuple[typing.Any, ...], typing.Any]] = {}
 
+    __shift: np.ndarray | None
+    __base_bounds: np.ndarray | None
+    __base_x_global: np.ndarray | None
+    __init_depth: int
+
     def __init__(
         self,
         parallel: bool = False,
@@ -45,6 +51,7 @@ class Benchmark(abc.ABC):
         dim_changeable: bool = False,
         dim_default: int = 2,
         verbose: bool = False,
+        shift: typing.Any = None,
     ) -> None:
         self.__parallel: bool = bool(parallel)
         self.__fastmath: bool = bool(fastmath)
@@ -58,12 +65,109 @@ class Benchmark(abc.ABC):
         self.__compute: typing.Callable[..., None] | None = None
         self.__dim_changeable: bool = bool(dim_changeable)
         self.__dim_default: int = int(dim_default)
+        # Stored raw; the translation runs post-construction (see __init_subclass__),
+        # once the subclass has set its bounds and global optimum.
+        self.__shift: np.ndarray | None = shift
+        self.__base_bounds: np.ndarray | None = None
+        self.__base_x_global: np.ndarray | None = None
         # Protected storage: written by subclasses while constructing data-dependent
         # metadata (loaded shift vectors, ndim-derived optima, display parameters).
         self._support_path: Traversable | None = None
         self._paras: dict[str, typing.Any] = {}
         self._f_global: float = float(f_global)
         self._x_global: np.ndarray = np.asarray(x_global if x_global is not None else [])
+
+    def __init_subclass__(cls, **kwargs: typing.Any) -> None:
+        super().__init_subclass__(**kwargs)
+        orig_init = cls.__dict__.get("__init__")
+        if orig_init is not None and not getattr(orig_init, "__opfunu_shift_wrapped__", False):
+
+            @functools.wraps(orig_init)
+            def __init__(self: "Benchmark", *args: typing.Any, **kw: typing.Any) -> None:
+                # Nested constructors (e.g. CEC chains calling super().__init__)
+                # re-enter this wrapper; only the outermost exit applies the shift,
+                # so subclass bodies mutating state after super().__init__() are seen.
+                depth = getattr(self, "_Benchmark__init_depth", 0) + 1
+                self.__init_depth = depth
+                try:
+                    orig_init(self, *args, **kw)
+                finally:
+                    self.__init_depth = depth - 1
+                if depth == 1:
+                    raw = getattr(self, "_Benchmark__shift", None)
+                    if raw is not None:
+                        self._apply_shift(raw)
+
+            __init__.__opfunu_shift_wrapped__ = True  # type: ignore[attr-defined]
+            cls.__init__ = __init__  # type: ignore[method-assign]
+
+    @property
+    def shift(self) -> np.ndarray | None:
+        """The coordinate shift vector, or ``None`` when the problem is unshifted."""
+        return getattr(self, "_Benchmark__shift", None)
+
+    def _set_bounds(self, bounds: np.ndarray) -> None:
+        """Write the (ndim, 2) bounds matrix into the subclass's private storage."""
+        raise NotImplementedError
+
+    def _normalize_shift(self, shift: typing.Any) -> np.ndarray:
+        """Validate a user shift vector against the problem dimensionality."""
+        ndim = int(self.ndim)
+        if isinstance(shift, (int, float, np.integer, np.floating)):
+            offset = np.full(ndim, float(shift))
+        else:
+            try:
+                offset = np.asarray(shift, dtype=float).ravel()
+            except (TypeError, ValueError) as exc:
+                raise ValueError(f"The shift must be a scalar or a 1D array-like of length {ndim}!") from exc
+            if offset.size == 1 and ndim > 1:
+                offset = np.full(ndim, float(offset[0]))
+        if offset.size != ndim:
+            raise ValueError(f"The shift length ({offset.size}) must match ndim ({ndim})!")
+        if not np.all(np.isfinite(offset)):
+            raise ValueError("The shift vector must contain only finite numbers!")
+        return offset
+
+    def _apply_shift(self, shift: typing.Any) -> None:
+        """Translate bounds and global optimum by ``shift`` (idempotent, re-settable)."""
+        offset = self._normalize_shift(shift)
+        if self.__base_bounds is None:
+            self.__base_bounds = np.array(self.bounds, dtype=float, copy=True)
+        if self.__base_x_global is None:
+            try:
+                current = np.array(self.x_global, dtype=float, copy=True)
+            except (TypeError, ValueError):
+                current = np.array([])
+            self.__base_x_global = current
+        assert self.__base_bounds is not None and self.__base_x_global is not None
+        # Restore the base state first so repeated calls do not accumulate.
+        self._set_bounds(self.__base_bounds.copy())
+        base_x = self.__base_x_global
+        if base_x.size > 0:
+            self._x_global = base_x.copy()
+        # Translate the search space: bounds_new = bounds_base + o.
+        self._set_bounds(self.__base_bounds + offset[:, None])
+        # Translate the optimum: x_global = x*_base + o.
+        if base_x.size > 0:
+            flat = base_x.ravel()
+            if flat.size == offset.size:
+                self._x_global = flat + offset
+            else:
+                raise ValueError(f"Cannot shift x_global of length {flat.size} with shift of length {offset.size}!")
+        self.__shift = offset.copy()
+        self._paras["shift"] = self.__shift.copy()
+
+    def set_shift(self, shift: typing.Any = None) -> None:
+        """Set (or reset with ``None``) the coordinate shift after construction."""
+        if shift is None:
+            if self.__base_bounds is not None:
+                self._set_bounds(self.__base_bounds.copy())
+            if self.__base_x_global is not None and self.__base_x_global.size > 0:
+                self._x_global = self.__base_x_global.copy()
+            self.__shift = None
+            self._paras.pop("shift", None)
+        else:
+            self._apply_shift(shift)
 
     # --- configuration exposed through read-only properties ------------------
     # Every property on this class is reader-only: values are supplied to
@@ -362,6 +466,9 @@ class Benchmark(abc.ABC):
         compute = self._compute
         if compute is None:
             raise RuntimeError(f"{type(self).__name__} has no kernel; call _bind_kernel first.")
+        shift = self.__shift
+        if shift is not None:
+            x = np.asarray(x, dtype=float) - np.asarray(shift, dtype=float)
         arr = np.ascontiguousarray(x, dtype=self.dtype)
         params = [self._cast_kernel_param(getattr(self, name)) for name in self._param_names]
         compute(arr, *params, self._out)
@@ -383,6 +490,9 @@ class Benchmark(abc.ABC):
         if not self.numba_compiled:
             # Plain-Python kernels are scalar ``(x, *params, out)`` writers; loop.
             return np.asarray([self.__evaluate(row) for row in arr], dtype=self.dtype)
+        shift = self.__shift
+        if shift is not None:
+            arr = np.ascontiguousarray(np.asarray(arr, dtype=float) - np.asarray(shift, dtype=float), dtype=self.dtype)
         out = np.empty(arr.shape[0], dtype=self.dtype)
         params = [self._cast_kernel_param(getattr(self, name)) for name in self._param_names]
         compute(arr, *params, out)

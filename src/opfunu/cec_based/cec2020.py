@@ -53,6 +53,7 @@ class F12020(CecBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
@@ -69,6 +70,7 @@ class F12020(CecBenchmark):
             dim_max=100,
             dim_supported=[2, 5, 10, 15, 20, 30, 50, 100],
             f_bias=f_bias,
+            shift=shift,
         )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
@@ -125,6 +127,7 @@ class F22020(CecBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
@@ -141,6 +144,7 @@ class F22020(CecBenchmark):
             dim_max=100,
             dim_supported=[2, 5, 10, 15, 20, 30, 50, 100],
             f_bias=f_bias,
+            shift=shift,
         )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
@@ -197,6 +201,7 @@ class F32020(CecBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
@@ -213,6 +218,7 @@ class F32020(CecBenchmark):
             dim_max=100,
             dim_supported=[2, 5, 10, 15, 20, 30, 50, 100],
             f_bias=f_bias,
+            shift=shift,
         )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
@@ -269,6 +275,7 @@ class F42020(CecBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
@@ -285,6 +292,7 @@ class F42020(CecBenchmark):
             dim_max=100,
             dim_supported=[2, 5, 10, 15, 20, 30, 50, 100],
             f_bias=f_bias,
+            shift=shift,
         )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
@@ -342,6 +350,7 @@ class F52020(CecBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray,
@@ -374,6 +383,7 @@ class F52020(CecBenchmark):
             dim_max=100,
             dim_supported=[10, 15, 20, 30, 50, 100],
             f_bias=f_bias,
+            shift=shift,
         )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
@@ -450,6 +460,7 @@ class F62020(CecBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray,
@@ -480,6 +491,7 @@ class F62020(CecBenchmark):
             dim_max=100,
             dim_supported=[10, 15, 20, 30, 50, 100],
             f_bias=f_bias,
+            shift=shift,
         )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
@@ -551,6 +563,7 @@ class F72020(CecBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray,
@@ -589,6 +602,7 @@ class F72020(CecBenchmark):
             dim_max=100,
             dim_supported=[10, 15, 20, 30, 50, 100],
             f_bias=f_bias,
+            shift=shift,
         )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
@@ -661,6 +675,7 @@ class F82020(CecBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray,
@@ -701,6 +716,7 @@ class F82020(CecBenchmark):
             dim_max=100,
             dim_supported=[2, 5, 10, 15, 20, 30, 50, 100],
             f_bias=f_bias,
+            shift=shift,
         )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
@@ -763,6 +779,7 @@ class F92020(CecBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray,
@@ -807,6 +824,7 @@ class F92020(CecBenchmark):
             dim_max=100,
             dim_supported=[2, 5, 10, 15, 20, 30, 50, 100],
             f_bias=f_bias,
+            shift=shift,
         )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
@@ -870,6 +888,7 @@ class F102020(CecBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray,
@@ -919,6 +938,7 @@ class F102020(CecBenchmark):
             dim_max=100,
             dim_supported=[2, 5, 10, 15, 20, 30, 50, 100],
             f_bias=f_bias,
+            shift=shift,
         )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])

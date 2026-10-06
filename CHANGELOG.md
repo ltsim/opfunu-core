@@ -1,5 +1,9 @@
 # Version 2026a
 
++ Added automatic coordinate-shift propagation (issue #19): every benchmark function accepts a `shift`
+  constructor argument, forwarded via `super().__init__(...)` to the parent class, evaluating
+  `f(x) = f_base(x - o)` while `x_global` and `bounds` translate by `o`
+  (`set_shift()` / `set_shift(None)` for post-construction use, `shift` exposed via `get_paras()`)
 + Migrated all benchmark functions to Numba: every problem class now implements its math in a
   mandatory `compute(x, *params, out)` kernel (a nested closure or a `@staticmethod`), compiled
   at instantiation with `numba.guvectorize` (`nopython=True`, `fastmath=True` by default,

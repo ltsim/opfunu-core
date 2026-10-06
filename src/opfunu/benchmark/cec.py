@@ -108,6 +108,7 @@ class CecBenchmark(Benchmark):
         params: dict[str, typing.Any] | None = None,
         paras: dict[str, typing.Any] | list[str] | tuple[str, ...] | None = None,
         verbose: bool = False,
+        shift: typing.Any = None,
     ) -> None:
         super().__init__(
             parallel=parallel,
@@ -117,6 +118,7 @@ class CecBenchmark(Benchmark):
             dim_changeable=dim_changeable,
             dim_default=dim_default,
             verbose=verbose,
+            shift=shift,
         )
 
         self.__dim_max: int = dim_max
@@ -232,6 +234,10 @@ class CecBenchmark(Benchmark):
     @f_bias.setter
     def f_bias(self, value: float) -> None:
         self.__f_bias = float(value)
+
+    def _set_bounds(self, bounds: np.ndarray) -> None:
+        """Write the (ndim, 2) bounds matrix (used for coordinate shifts)."""
+        self.__bounds = np.asarray(bounds, dtype=float)
 
     def make_support_data_path(self, data_name: str) -> None:
         self._support_path = importlib.resources.files("opfunu").joinpath(f"cec_based/{data_name}")

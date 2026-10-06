@@ -62,6 +62,7 @@ class OddSquare(FuncBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(x: np.ndarray, b: np.ndarray, out: np.ndarray) -> None:
             b = b[0 : x.shape[0]]
@@ -86,4 +87,5 @@ class OddSquare(FuncBenchmark):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )

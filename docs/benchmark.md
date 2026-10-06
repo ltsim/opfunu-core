@@ -23,6 +23,33 @@ Every function in `opfunu-core` inherits from one of the base classes defined in
 
 ::: opfunu.benchmark.cec.CecBenchmark
 
+## Coordinate shifts
+
+Every benchmark function accepts an optional `shift` constructor argument (a
+scalar is broadcast to all dimensions). It is an ordinary parameter of each
+class's `__init__` and is forwarded through `super().__init__(...)` all the way
+to `Benchmark`, which stores it privately. Once construction finishes, the
+translation is applied automatically:
+
+- Fitness: `f(x) = f_base(x - o)`
+- Global optimum: `x_global = x*_base + o` (`f_global` is unchanged)
+- Search space: `bounds_new = bounds_base + o` (per dimension)
+
+```python
+from opfunu.name_based import Ackley01
+
+func = Ackley01(ndim=3, shift=[2.0, -1.5, 3.0])
+print(func.x_global)  # base optimum + shift
+print(func.bounds)  # base bounds + shift
+print(func.is_succeed(func.x_global))  # True
+```
+
+`ndim`, `bounds`, `lb`, `ub` remain public read-only properties, plus a
+read-only `shift` property. The shift can also be changed after construction
+with `func.set_shift(o)`, and removed with `func.set_shift(None)`. Calling
+`set_shift` repeatedly never accumulates: the base bounds and optimum are
+snapshotted on the first shift and restored before each new translation.
+
 ## Implementing a problem
 
 A name-based problem defines its kernel inline and hands the metadata to the base class:

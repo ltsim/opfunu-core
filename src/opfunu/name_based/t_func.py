@@ -51,6 +51,7 @@ class TestTubeHolder(FuncBenchmark):
         parallel: bool = False,
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
+        shift: typing.Any = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             u = np.sin(x[0]) * np.cos(x[1])
@@ -69,4 +70,5 @@ class TestTubeHolder(FuncBenchmark):
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
+            shift=shift,
         )
