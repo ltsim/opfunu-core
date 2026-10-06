@@ -152,7 +152,9 @@ print(func._compile_error)  # compilation failure, or None (also None when Numba
 print(func.get_paras())  # kernel parameters bound for this instance
 ```
 
-Set `func.verbose = True` before construction-time binding to print compilation
+`verbose` is a read-only property configured at construction time (pass
+`verbose=True` to `Benchmark`/`FuncBenchmark`/`CecBenchmark`, or set a class
+attribute such as `F12021.verbose = True`) to print compilation
 fallbacks. Functions whose bodies cannot compile in nopython mode (stochastic terms,
 hybrid compositions holding sub-instances) bind with `plain=True` automatically and
 report `numba_compiled=False` while returning value-identical results.

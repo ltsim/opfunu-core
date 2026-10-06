@@ -86,8 +86,12 @@ vectors, composition weights, index blocks, …) bind explicitly instead:
 self._bind_kernel(compute, ["f_shift", "P", "m_group", "f_matrix"], paras=[...])  # plain=True if Numba-incompatible
 ```
 
-`compute` is a read-only property on `Benchmark`; all kernel state (`paras`,
-`numba_compiled`, …) lives in private storage behind properties. The private
+`compute` and every other `Benchmark` property are read-only: configuration is
+supplied through `__init__` kwargs (`dtype`, `dim_changeable`, `verbose`, …), and
+data-dependent metadata written by subclasses goes through protected fields
+(`self._f_global`, `self._x_global`, `self._paras`, `self._support_path`).
+All private kernel state (the bound `__compute`, `__paras`, `numba_compiled`, …)
+lives in name-mangled storage behind those properties. The private
 `__build_compute` helper is only reachable through `_bind_kernel`
 (`plain=True` binds the Python kernel directly, with no Numba attempt).
 
