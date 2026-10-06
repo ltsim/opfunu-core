@@ -322,10 +322,15 @@ class F52005(CecBenchmark):
                     best = diff
             out[0] = best + f_bias
 
-        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
-        self.dim_changeable = True
-        self.dim_default = 30
-        self.dim_max = 100
+        super().__init__(
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            dim_changeable=True,
+            dim_default=30,
+            dim_max=100,
+            f_bias=f_bias,
+        )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
         )
@@ -333,9 +338,7 @@ class F52005(CecBenchmark):
         shift_data, matrix_data = self.load_shift_and_matrix_data(f_shift)
         self.f_shift = shift_data[: self.ndim]
         self.f_matrix = matrix_data[: self.ndim, : self.ndim]
-        self.f_bias = f_bias
-        self.f_global = f_bias
-        self.x_global = self.f_shift
+        self._x_global = np.asarray(self.f_shift)
         self.f_shift[: int(0.25 * self.ndim) + 1] = -100
         self.f_shift[int(0.75 * self.ndim) :] = 100
         self._bind_kernel(
@@ -527,9 +530,6 @@ class F82005(CecBenchmark):
             fastmath=fastmath,
             dtype=dtype,
         )
-
-        self.f_bias = f_bias
-        self.f_global = f_bias
 
         a = np.arange(0, self.ndim)
         self.f_shift[a % 2 == 0] = -32
@@ -735,12 +735,11 @@ class F112005(CecBenchmark):
             f_shift=f_shift,
             dim_supported=[10, 30, 50],
             f_matrix=f_matrix,
+            f_bias=f_bias,
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
         )
-        self.f_bias = f_bias
-        self.f_global = f_bias
 
         self.a = a
         self.b = b
@@ -889,13 +888,11 @@ class F132005(CecBenchmark):
             bounds=bounds,
             f_shift=f_shift,
             default_bounds=[[-3.0, 1.0]],
+            f_bias=f_bias,
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
         )
-
-        self.f_bias = f_bias
-        self.f_global = f_bias
 
         self.f8__ = operator.griewank_func
         self.f2__ = operator.rosenbrock_func
@@ -952,20 +949,23 @@ class F142005(CecBenchmark):
             z = operator.dot_vm((x - f_shift), f_matrix)
             out[0] = operator.expanded_schaffer_f6_func(z) + f_bias
 
-        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
-        self.dim_changeable = True
-        self.dim_default = 30
-        self.dim_max = 100
-        self.dim_supported = [10, 30, 50]
+        super().__init__(
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            dim_changeable=True,
+            dim_default=30,
+            dim_max=100,
+            dim_supported=[10, 30, 50],
+            f_bias=f_bias,
+        )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
         )
         self.make_support_data_path("data_2005")
         self.f_shift = self.check_shift_data(f_shift)[: self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix)
-        self.f_bias = f_bias
-        self.f_global = f_bias
-        self.x_global = self.f_shift
+        self._x_global = np.asarray(self.f_shift)
         self._bind_kernel(
             compute,
             ["f_shift", "f_matrix", "f_bias"],
@@ -1060,10 +1060,15 @@ class F152005(CecBenchmark):
             weights = weights / np.sum(weights)
             out[0] = np.sum(operator.dot_vv(weights, (fits + bias))) + f_bias
 
-        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
-        self.dim_changeable = True
-        self.dim_default = 30
-        self.dim_max = 100
+        super().__init__(
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            dim_changeable=True,
+            dim_default=30,
+            dim_max=100,
+            f_bias=f_bias,
+        )
         self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-5.0, 5.0] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2005")
         self.f_shift = self.load_matrix_data(f_shift)[:, : self.ndim]  # This shift as matrix for M functions
@@ -1074,9 +1079,7 @@ class F152005(CecBenchmark):
         self.C = 2000
         self.M = np.identity(self.ndim)
         self.y = 5 * np.ones(self.ndim)
-        self.f_bias = f_bias
-        self.f_global = f_bias
-        self.x_global = self.f_shift[0]
+        self._x_global = np.asarray(self.f_shift[0])
         self._bind_kernel(
             compute,
             ["n_funcs", "f_shift", "xichmas", "lamdas", "M", "y", "C", "bias", "f_bias"],
@@ -1193,11 +1196,16 @@ class F162005(CecBenchmark):
             weights = weights / np.sum(weights)
             out[0] = np.sum(operator.dot_vv(weights, (fits + bias))) + f_bias
 
-        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
-        self.dim_changeable = True
-        self.dim_default = 30
-        self.dim_max = 100
-        self.dim_supported = [10, 30, 50]
+        super().__init__(
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            dim_changeable=True,
+            dim_default=30,
+            dim_max=100,
+            dim_supported=[10, 30, 50],
+            f_bias=f_bias,
+        )
         self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-5.0, 5.0] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2005")
         self.f_shift = self.load_matrix_data(f_shift)[:, : self.ndim]  # This shift as matrix for M functions
@@ -1208,9 +1216,7 @@ class F162005(CecBenchmark):
         self.xichmas = np.ones(self.n_funcs)
         self.C = 2000
         self.y = 5 * np.ones(self.ndim)
-        self.f_bias = f_bias
-        self.f_global = f_bias
-        self.x_global = self.f_shift[0]
+        self._x_global = np.asarray(self.f_shift[0])
         self._bind_kernel(
             compute,
             ["n_funcs", "f_shift", "xichmas", "lamdas", "M", "y", "C", "bias", "f_bias"],
@@ -1395,11 +1401,16 @@ class F182005(CecBenchmark):
             weights = weights / np.sum(weights)
             out[0] = np.sum(operator.dot_vv(weights, (fits + bias))) + f_bias
 
-        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
-        self.dim_changeable = True
-        self.dim_default = 30
-        self.dim_max = 100
-        self.dim_supported = [10, 30, 50]
+        super().__init__(
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            dim_changeable=True,
+            dim_default=30,
+            dim_max=100,
+            dim_supported=[10, 30, 50],
+            f_bias=f_bias,
+        )
         self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-5.0, 5.0] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2005")
         self.f_shift = self.load_matrix_data(f_shift)[:, : self.ndim]  # This shift as matrix for M functions
@@ -1412,9 +1423,7 @@ class F182005(CecBenchmark):
         self.xichmas = np.array([1, 2, 1.5, 1.5, 1, 1, 1.5, 1.5, 2, 2])
         self.C = 2000
         self.y = 5 * np.ones(self.ndim)
-        self.f_bias = f_bias
-        self.f_global = f_bias
-        self.x_global = self.f_shift[0]
+        self._x_global = np.asarray(self.f_shift[0])
         self._bind_kernel(
             compute,
             ["n_funcs", "f_shift", "xichmas", "lamdas", "M", "y", "C", "bias", "f_bias"],
@@ -1475,7 +1484,7 @@ class F192005(F182005):
             [0.1 * 5 / 32, 5.0 / 32, 2 * 1, 1, 2 * 5.0 / 100, 5.0 / 100, 2.0 * 10, 10, 2 * 5.0 / 60, 5.0 / 60]
         )
         self.xichmas = np.array([0.1, 2, 1.5, 1.5, 1, 1, 1.5, 1.5, 2, 2])
-        self.paras = {
+        self._paras = {
             "f_shift": self.f_shift,
             "f_bias": self.f_bias,
             "lambda": self.lamdas,
@@ -1516,8 +1525,8 @@ class F202005(F182005):
     ) -> None:
         super().__init__(ndim, bounds, f_shift, f_matrix, f_bias, parallel=parallel, fastmath=fastmath, dtype=dtype)
         self.f_shift[0, 1::2] = 5
-        self.x_global = self.f_shift[0]
-        self.paras = {
+        self._x_global = np.asarray(self.f_shift[0])
+        self._paras = {
             "f_shift": self.f_shift,
             "f_bias": self.f_bias,
             "lambda": self.lamdas,
@@ -1622,7 +1631,7 @@ class F212005(CecBenchmark):
             ndim=ndim, bounds=bounds, default_bounds=[[-5.0, 5.0]], parallel=parallel, fastmath=fastmath, dtype=dtype
         )
         self.f_shift = self.load_matrix_data(f_shift)[:, : self.ndim]
-        self.x_global = self.f_shift[0]
+        self._x_global = np.asarray(self.f_shift[0])
         self.M = self.check_matrix_data(f_matrix)
         self.lamdas = np.array(
             [
@@ -1643,9 +1652,7 @@ class F212005(CecBenchmark):
         self.xichmas = np.array([1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 2.0, 2.0, 2.0, 2.0])
         self.C = 2000
         self.y = 5 * np.ones(self.ndim)
-        self.f_bias = f_bias
-        self.f_global = f_bias
-        self.x_global = self.f_shift[0]
+        self._x_global = np.asarray(self.f_shift[0])
         self._bind_kernel(
             compute,
             ["n_funcs", "f_shift", "xichmas", "lamdas", "M", "y", "C", "bias", "f_bias"],
@@ -1869,11 +1876,16 @@ class F242005(CecBenchmark):
             weights = weights / np.sum(weights)
             out[0] = np.sum(operator.dot_vv(weights, (fits + bias))) + f_bias
 
-        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
-        self.dim_changeable = True
-        self.dim_default = 30
-        self.dim_max = 100
-        self.dim_supported = [10, 30, 50]
+        super().__init__(
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            dim_changeable=True,
+            dim_default=30,
+            dim_max=100,
+            dim_supported=[10, 30, 50],
+            f_bias=f_bias,
+        )
         self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-5.0, 5.0] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2005")
         self.f_shift = self.load_matrix_data(f_shift)[:, : self.ndim]  # This shift as matrix for M functions
@@ -1886,9 +1898,7 @@ class F242005(CecBenchmark):
         self.xichmas = 2 * np.ones(self.ndim)
         self.C = 2000
         self.y = 5 * np.ones(self.ndim)
-        self.f_bias = f_bias
-        self.f_global = f_bias
-        self.x_global = self.f_shift[0]
+        self._x_global = np.asarray(self.f_shift[0])
         self._bind_kernel(
             compute,
             ["n_funcs", "f_shift", "xichmas", "lamdas", "M", "y", "C", "bias", "f_bias"],

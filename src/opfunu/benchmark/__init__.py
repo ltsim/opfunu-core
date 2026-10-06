@@ -40,126 +40,88 @@ class Benchmark(abc.ABC):
         x_global: typing.Any = None,
         dim_changeable: bool = False,
         dim_default: int = 2,
+        verbose: bool = False,
     ) -> None:
         self.__parallel: bool = bool(parallel)
         self.__fastmath: bool = bool(fastmath)
         self.__dtype: np.dtype = np.dtype(dtype)
-        self.__support_path: Traversable | None = None
-        self.__verbose: bool = False
-        self.__paras: dict[str, typing.Any] = {}
+        self.__verbose: bool = bool(verbose)
         self.__numba_compiled: bool = False
         self.__compile_error: Exception | None = None
         self.__kernel: typing.Callable[..., None] | None = compute
         self.__out: np.ndarray = np.empty(1, dtype=self.__dtype)
         self.__param_names: list[str] = []
         self.__compute: typing.Callable[..., None] | None = None
-        self.__f_global: float = float(f_global)
-        self.__x_global: np.ndarray = np.asarray(x_global if x_global is not None else [])
         self.__dim_changeable: bool = bool(dim_changeable)
         self.__dim_default: int = int(dim_default)
+        # Protected storage: written by subclasses while constructing data-dependent
+        # metadata (loaded shift vectors, ndim-derived optima, display parameters).
+        self._support_path: Traversable | None = None
+        self._paras: dict[str, typing.Any] = {}
+        self._f_global: float = float(f_global)
+        self._x_global: np.ndarray = np.asarray(x_global if x_global is not None else [])
 
-    # --- configuration exposed through properties ---------------------------
+    # --- configuration exposed through read-only properties ------------------
+    # Every property on this class is reader-only: values are supplied to
+    # ``__init__`` (or to ``_bind_kernel``) at construction time. Subclasses
+    # write the data-dependent fields through the protected ``_f_global``,
+    # ``_x_global``, ``_paras`` and ``_support_path`` attributes.
     @property
     def parallel(self) -> bool:
-        """Whether the gufunc kernel is compiled with ``target="parallel"``."""
+        """Whether the gufunc kernel is compiled with ``target="parallel"`` (read-only)."""
         return self.__parallel
-
-    @parallel.setter
-    def parallel(self, value: bool) -> None:
-        self.__parallel = bool(value)
 
     @property
     def fastmath(self) -> bool:
-        """Whether the gufunc kernel is compiled with ``fastmath=True``."""
+        """Whether the gufunc kernel is compiled with ``fastmath=True`` (read-only)."""
         return self.__fastmath
-
-    @fastmath.setter
-    def fastmath(self, value: bool) -> None:
-        self.__fastmath = bool(value)
 
     @property
     def dtype(self) -> np.dtype:
-        """The floating scalar type used for evaluation."""
+        """The floating scalar type used for evaluation (read-only)."""
         return self.__dtype
-
-    @dtype.setter
-    def dtype(self, value: typing.Any) -> None:
-        self.__dtype = np.dtype(value)
 
     @property
     def support_path(self) -> Traversable | None:
-        """The package-data directory holding shift/rotation files (CEC only)."""
-        return self.__support_path
-
-    @support_path.setter
-    def support_path(self, value: Traversable | None) -> None:
-        self.__support_path = value
+        """The package-data directory holding shift/rotation files (CEC only, read-only)."""
+        return self._support_path
 
     @property
     def verbose(self) -> bool:
-        """Whether Numba compilation fallbacks are printed."""
+        """Whether Numba compilation fallbacks are printed (read-only)."""
         return self.__verbose
-
-    @verbose.setter
-    def verbose(self, value: bool) -> None:
-        self.__verbose = bool(value)
 
     @property
     def paras(self) -> dict[str, typing.Any]:
-        """Display metadata mapping parameter names to their runtime values."""
-        return self.__paras
-
-    @paras.setter
-    def paras(self, value: dict[str, typing.Any]) -> None:
-        self.__paras = dict(value)
+        """Display metadata mapping parameter names to their runtime values (read-only)."""
+        return self._paras
 
     @property
     def numba_compiled(self) -> bool:
-        """Whether the bound kernel is a compiled gufunc (``False`` for plain Python)."""
+        """Whether the bound kernel is a compiled gufunc (``False`` for plain Python, read-only)."""
         return self.__numba_compiled
 
-    @numba_compiled.setter
-    def numba_compiled(self, value: bool) -> None:
-        self.__numba_compiled = bool(value)
-
-    # --- private metadata exposed through read/write properties ---------------
     @property
     def f_global(self) -> float:
-        """The known global optimum of the problem."""
-        return self.__f_global
-
-    @f_global.setter
-    def f_global(self, value: float) -> None:
-        self.__f_global = float(value)
+        """The known global optimum of the problem (read-only)."""
+        return self._f_global
 
     @property
     def x_global(self) -> np.ndarray:
-        """A location of the global optimum (1-D array, ``len(x_global) == ndim``)."""
-        return self.__x_global
-
-    @x_global.setter
-    def x_global(self, value: typing.Any) -> None:
-        self.__x_global = np.asarray(value)
+        """A location of the global optimum (1-D array, ``len(x_global) == ndim``, read-only)."""
+        return self._x_global
 
     @property
     def dim_changeable(self) -> bool:
-        """Whether the problem dimensionality may be changed at construction."""
+        """Whether the problem dimensionality may be changed at construction (read-only)."""
         return self.__dim_changeable
-
-    @dim_changeable.setter
-    def dim_changeable(self, value: bool) -> None:
-        self.__dim_changeable = bool(value)
 
     @property
     def dim_default(self) -> int:
-        """The default dimensionality used when ``ndim`` is not supplied."""
+        """The default dimensionality used when ``ndim`` is not supplied (read-only)."""
         return self.__dim_default
 
-    @dim_default.setter
-    def dim_default(self, value: int) -> None:
-        self.__dim_default = int(value)
-
-    # --- kernel state (kept names for compatibility, backed by private storage)
+    # --- kernel state (kept names for compatibility, all read-only) ----------
     @property
     def compute(self) -> typing.Callable[..., None] | None:
         """The declared kernel (read-only). Bound for execution via ``_bind_kernel``."""
@@ -167,48 +129,28 @@ class Benchmark(abc.ABC):
 
     @property
     def _kernel(self) -> typing.Callable[..., None] | None:
-        """The instance kernel closure (kept name; prefer the ``compute`` property)."""
+        """The instance kernel closure (read-only; prefer the ``compute`` property)."""
         return self.__kernel
-
-    @_kernel.setter
-    def _kernel(self, value: typing.Callable[..., None] | None) -> None:
-        self.__kernel = value
 
     @property
     def _param_names(self) -> list[str]:
-        """Names of the instance attributes the kernel takes (after ``x``, before ``out``)."""
+        """Names of the instance attributes the kernel takes (after ``x``, before ``out``, read-only)."""
         return self.__param_names
-
-    @_param_names.setter
-    def _param_names(self, value: list[str]) -> None:
-        self.__param_names = list(value)
 
     @property
     def _compute(self) -> typing.Callable[..., None] | None:
-        """The bound kernel (compiled gufunc or plain-Python fallback)."""
+        """The bound kernel (compiled gufunc or plain-Python fallback, read-only)."""
         return self.__compute
-
-    @_compute.setter
-    def _compute(self, value: typing.Callable[..., None] | None) -> None:
-        self.__compute = value
 
     @property
     def _compile_error(self) -> Exception | None:
-        """The compilation exception when falling back to plain Python (``None`` on success)."""
+        """The compilation exception when falling back to plain Python (``None`` on success, read-only)."""
         return self.__compile_error
-
-    @_compile_error.setter
-    def _compile_error(self, value: Exception | None) -> None:
-        self.__compile_error = value
 
     @property
     def _out(self) -> np.ndarray:
-        """Scratch output buffer reused by single-point evaluation."""
+        """Scratch output buffer reused by single-point evaluation (read-only)."""
         return self.__out
-
-    @_out.setter
-    def _out(self, value: np.ndarray) -> None:
-        self.__out = value
 
     def _bind_kernel(
         self,
@@ -232,31 +174,31 @@ class Benchmark(abc.ABC):
         attempt); otherwise it is compiled via ``__build_compute``.
         """
         if compute is not None:
-            self._kernel = compute
+            self.__kernel = compute
         if params:
             for key, val in params.items():
                 setattr(self, key, val)
         names: list[str] = list(param_names) if param_names is not None else list(params.keys() if params else [])
-        self._param_names = names
+        self.__param_names = names
         if paras is None:
             if names:
-                self.paras = {name: getattr(self, name) for name in names}
+                self._paras = {name: getattr(self, name) for name in names}
             else:
-                self.paras = {}
+                self._paras = {}
         elif isinstance(paras, dict):
-            self.paras = dict(paras)
+            self._paras = dict(paras)
         elif isinstance(paras, (list, tuple)):
-            self.paras = {name: getattr(self, name) for name in paras}
+            self._paras = {name: getattr(self, name) for name in paras}
         else:
             raise TypeError(f"Unsupported paras metadata type: {type(paras)}")
-        if self._kernel is None:
+        if self.__kernel is None:
             raise RuntimeError(f"{type(self).__name__} has no kernel; pass compute= to _bind_kernel first.")
         if plain:
-            self._compute = self.__resolve_kernel()
-            self.numba_compiled = False
-            self._compile_error = None
+            self.__compute = self.__resolve_kernel()
+            self.__numba_compiled = False
+            self.__compile_error = None
         else:
-            self._compute = self.__build_compute(names)
+            self.__compute = self.__build_compute(names)
 
     def __resolve_kernel(self) -> typing.Callable[..., None]:
         """Return the instance-bound kernel, raising when none was installed."""
@@ -327,8 +269,8 @@ class Benchmark(abc.ABC):
         """
         kernel = self.__resolve_kernel()
         if not numba_compat.HAS_NUMBA:
-            self.numba_compiled = False
-            self._compile_error = None
+            self.__numba_compiled = False
+            self.__compile_error = None
             # Validate eagerly so mistyped params fail fast, exactly as in the
             # compiled path (lookup/normalization errors propagate; only
             # compile/warmup failures fall back).
@@ -368,7 +310,7 @@ class Benchmark(abc.ABC):
         # (otherwise identically signed) kernels. Requires kernels to be
         # self-contained, i.e. not to close over per-instance values.
         key = (getattr(kernel, "__code__", kernel), sig, str(self.dtype), self.parallel, self.fastmath)
-        self._compile_error = None
+        self.__compile_error = None
         try:
             gufunc = Benchmark._gufunc_cache.get(key)
             if gufunc is None:
@@ -379,14 +321,14 @@ class Benchmark(abc.ABC):
                 )
                 Benchmark._gufunc_cache[key] = gufunc
             x0 = np.zeros(self.ndim, dtype=self.dtype)
-            if self._out.dtype != self.dtype:
-                self._out = np.empty(1, dtype=self.dtype)
-            gufunc(x0, *[v for v, _ in normed], self._out)
-            self.numba_compiled = True
+            if self.__out.dtype != self.dtype:
+                self.__out = np.empty(1, dtype=self.dtype)
+            gufunc(x0, *[v for v, _ in normed], self.__out)
+            self.__numba_compiled = True
             return typing.cast(typing.Callable[..., None], gufunc)
         except Exception as exc:
-            self.numba_compiled = False
-            self._compile_error = exc
+            self.__numba_compiled = False
+            self.__compile_error = exc
             if self.verbose:
                 print(f"{type(self).__name__}: Numba compilation failed, using Python kernel: {exc}")
             return kernel

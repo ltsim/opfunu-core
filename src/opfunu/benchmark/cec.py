@@ -107,6 +107,7 @@ class CecBenchmark(Benchmark):
         plain: bool = False,
         params: dict[str, typing.Any] | None = None,
         paras: dict[str, typing.Any] | list[str] | tuple[str, ...] | None = None,
+        verbose: bool = False,
     ) -> None:
         super().__init__(
             parallel=parallel,
@@ -115,6 +116,7 @@ class CecBenchmark(Benchmark):
             compute=compute,
             dim_changeable=dim_changeable,
             dim_default=dim_default,
+            verbose=verbose,
         )
 
         self.__dim_max: int = dim_max
@@ -158,8 +160,8 @@ class CecBenchmark(Benchmark):
                 self.f_shuffle = self.check_shuffle_data(f_shuffle)
 
         self.f_bias = f_bias if f_bias is not None else 0.0
-        self.f_global = f_bias if f_bias is not None else 0.0
-        self.x_global = self.f_shift
+        self._f_global = float(f_bias if f_bias is not None else 0.0)
+        self._x_global = self.f_shift
 
         if type(self) is CecBenchmark:
             raise TypeError("CecBenchmark is abstract; subclass it and provide compute()")
@@ -232,7 +234,7 @@ class CecBenchmark(Benchmark):
         self.__f_bias = float(value)
 
     def make_support_data_path(self, data_name: str) -> None:
-        self.support_path = importlib.resources.files("opfunu").joinpath(f"cec_based/{data_name}")
+        self._support_path = importlib.resources.files("opfunu").joinpath(f"cec_based/{data_name}")
 
     def check_shift_data(self, f_shift: str | list[typing.Any] | tuple[typing.Any, ...] | np.ndarray) -> np.ndarray:
         if isinstance(f_shift, str):

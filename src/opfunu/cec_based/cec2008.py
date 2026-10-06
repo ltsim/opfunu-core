@@ -431,6 +431,6 @@ class F72008(CecBenchmark):
             dtype=dtype,
         )
         self.f_shift = self.f_shift / np.max(self.f_shift)
-        self.f_global = -1e32
-        self.x_global = self.f_shift
+        self._f_global = -1e32
+        self._x_global = np.asarray(self.f_shift)
         self._bind_kernel(compute, ["f_bias"], plain=True, paras={"f_shift": self.f_shift, "f_bias": self.f_bias})

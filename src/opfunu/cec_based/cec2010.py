@@ -185,10 +185,14 @@ class F42010(CecBenchmark):
             z_elliptic = z[idx2]
             out[0] = operator.elliptic_func(z_rot_elliptic) * 10**6 + operator.elliptic_func(z_elliptic)
 
-        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
-        self.dim_changeable = True
-        self.dim_default = 1000
-        self.dim_max = 1000
+        super().__init__(
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            dim_changeable=True,
+            dim_default=1000,
+            dim_max=1000,
+        )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
         )
@@ -202,8 +206,8 @@ class F42010(CecBenchmark):
             np.random.seed(0)
             self.P = np.random.permutation(self.ndim)
         self.m_group = self.check_m_group(m_group)
-        self.f_global = 0
-        self.x_global = self.f_shift
+        self._f_global = 0.0
+        self._x_global = np.asarray(self.f_shift)
         self._bind_kernel(
             compute,
             ["f_shift", "P", "m_group", "f_matrix"],
@@ -346,10 +350,14 @@ class F72010(CecBenchmark):
             z_sphere = z[P[m_group:]]
             out[0] = operator.schwefel_12_func(z_schwefel) * 10**6 + operator.sphere_func(z_sphere)
 
-        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
-        self.dim_changeable = True
-        self.dim_default = 1000
-        self.dim_max = 1000
+        super().__init__(
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            dim_changeable=True,
+            dim_default=1000,
+            dim_max=1000,
+        )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
         )
@@ -362,8 +370,8 @@ class F72010(CecBenchmark):
             np.random.seed(0)
             self.P = np.random.permutation(self.ndim)
         self.m_group = self.check_m_group(m_group)
-        self.f_global = 0
-        self.x_global = self.f_shift
+        self._f_global = 0.0
+        self._x_global = np.asarray(self.f_shift)
         self._bind_kernel(
             compute, ["f_shift", "P", "m_group"], paras={"f_shift": self.f_shift, "P": self.P, "m_group": self.m_group}
         )
@@ -399,7 +407,7 @@ class F82010(F72010):
             out[0] = operator.rosenbrock_func(z_rosen) * 10**6 + operator.sphere_func(z_sphere)
 
         super().__init__(ndim, bounds, f_shift, m_group, parallel=parallel, fastmath=fastmath, dtype=dtype)
-        self.x_global = self.f_shift.copy()
+        self._x_global = np.asarray(self.f_shift.copy())
         self.x_global[self.P[: self.m_group]] = self.f_shift[self.P[: self.m_group]] + 1
         self.x_global[self.P[self.m_group :]] = self.f_shift[self.P[self.m_group :]]
         self._bind_kernel(compute, ["f_shift", "P", "m_group"])
@@ -463,10 +471,14 @@ class F92010(CecBenchmark):
             z2 = z[P[int(x.shape[0] / 2) :]]
             out[0] = result + operator.elliptic_func(z2)
 
-        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
-        self.dim_changeable = True
-        self.dim_default = 1000
-        self.dim_max = 1000
+        super().__init__(
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            dim_changeable=True,
+            dim_default=1000,
+            dim_max=1000,
+        )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
         )
@@ -480,8 +492,8 @@ class F92010(CecBenchmark):
             np.random.seed(0)
             self.P = np.random.permutation(self.ndim)
         self.m_group = self.check_m_group(m_group)
-        self.f_global = 0
-        self.x_global = self.f_shift
+        self._f_global = 0.0
+        self._x_global = np.asarray(self.f_shift)
         self.count_up = int(self.ndim / (2 * self.m_group))
         self._bind_kernel(
             compute,
@@ -658,7 +670,7 @@ class F132010(F72010):
 
         super().__init__(ndim, bounds, f_shift, m_group, parallel=parallel, fastmath=fastmath, dtype=dtype)
         self.count_up = int(self.ndim / (2 * self.m_group))
-        self.x_global = self.f_shift.copy()
+        self._x_global = np.asarray(self.f_shift.copy())
         self.x_global[self.P[: int(self.ndim / 2)]] = self.f_shift[self.P[: int(self.ndim / 2)]] + 1
         self.x_global[self.P[int(self.ndim / 2) :]] = self.f_shift[self.P[int(self.ndim / 2) :]]
         self._bind_kernel(compute, ["f_shift", "count_up", "P", "m_group"])
@@ -877,7 +889,7 @@ class F182010(F72010):
 
         super().__init__(ndim, bounds, f_shift, m_group, parallel=parallel, fastmath=fastmath, dtype=dtype)
         self.count_up = int(self.ndim / self.m_group)
-        self.x_global = self.f_shift + 1
+        self._x_global = np.asarray(self.f_shift + 1)
         self._bind_kernel(compute, ["f_shift", "count_up", "P", "m_group"])
 
 
@@ -952,4 +964,4 @@ class F202010(F12010):
             dtype=dtype,
         )
         self._bind_kernel(compute, ["f_shift"])
-        self.x_global = self.f_shift + 1
+        self._x_global = np.asarray(self.f_shift + 1)

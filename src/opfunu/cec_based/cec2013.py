@@ -56,19 +56,22 @@ class F12013(CecBenchmark):
         def compute(x: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
             out[0] = operator.sphere_func(x - f_shift) + f_bias
 
-        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
-        self.dim_changeable = True
-        self.dim_default = 30
-        self.dim_max = 100
-        self.dim_supported = [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+        super().__init__(
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            dim_changeable=True,
+            dim_default=30,
+            dim_max=100,
+            dim_supported=[2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            f_bias=f_bias,
+        )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
         )
         self.make_support_data_path("data_2013")
         self.f_shift = self.check_shift_matrix(f_shift, selected_idx=0)
-        self.f_bias = f_bias
-        self.f_global = f_bias
-        self.x_global = self.f_shift
+        self._x_global = np.asarray(self.f_shift)
         self._bind_kernel(compute, ["f_shift", "f_bias"], paras={"f_shift": self.f_shift, "f_bias": self.f_bias})
 
 
@@ -121,20 +124,23 @@ class F22013(CecBenchmark):
             z = operator.tosz_func(operator.dot_mv(f_matrix, x - f_shift))
             out[0] = operator.elliptic_func(z) + f_bias
 
-        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
-        self.dim_changeable = True
-        self.dim_default = 30
-        self.dim_max = 100
-        self.dim_supported = [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+        super().__init__(
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            dim_changeable=True,
+            dim_default=30,
+            dim_max=100,
+            dim_supported=[2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            f_bias=f_bias,
+        )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
         )
         self.make_support_data_path("data_2013")
         self.f_shift = self.check_shift_matrix(f_shift, selected_idx=0)
         self.f_matrix = self.check_matrix_data(f_matrix)[: self.ndim, : self.ndim]
-        self.f_bias = f_bias
-        self.f_global = f_bias
-        self.x_global = self.f_shift
+        self._x_global = np.asarray(self.f_shift)
         self._bind_kernel(
             compute,
             ["f_matrix", "f_shift", "f_bias"],
@@ -193,20 +199,23 @@ class F32013(CecBenchmark):
             z = operator.tasy_func(operator.dot_mv(M1, x - f_shift), beta=0.5)
             out[0] = operator.bent_cigar_func(operator.dot_mv(M2, z)) + f_bias
 
-        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
-        self.dim_changeable = True
-        self.dim_default = 30
-        self.dim_max = 100
-        self.dim_supported = [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+        super().__init__(
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            dim_changeable=True,
+            dim_default=30,
+            dim_max=100,
+            dim_supported=[2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            f_bias=f_bias,
+        )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
         )
         self.make_support_data_path("data_2013")
         self.f_shift = self.check_shift_matrix(f_shift, selected_idx=0)
         self.f_matrix = self.check_matrix_data(f_matrix)[: 2 * self.ndim, : self.ndim]
-        self.f_bias = f_bias
-        self.f_global = f_bias
-        self.x_global = self.f_shift
+        self._x_global = np.asarray(self.f_shift)
         self._bind_kernel(
             compute,
             ["f_matrix", "f_shift", "f_bias"],
@@ -1184,20 +1193,23 @@ class F212013(CecBenchmark):
             gs = np.array([g0, g1, g2, g3, g4])
             out[0] = operator.dot_vv(ws, gs) + f_bias
 
-        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
-        self.dim_changeable = True
-        self.dim_default = 30
-        self.dim_max = 100
-        self.dim_supported = [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+        super().__init__(
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            dim_changeable=True,
+            dim_default=30,
+            dim_max=100,
+            dim_supported=[2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            f_bias=f_bias,
+        )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
         )
         self.make_support_data_path("data_2013")
         self.f_shift = self.check_shift_matrix(f_shift)[:, : self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix)[:, : self.ndim]
-        self.f_bias = f_bias
-        self.f_global = f_bias
-        self.x_global = self.f_shift[0]
+        self._x_global = np.asarray(self.f_shift[0])
         self.n_funcs = 5
         self.xichmas = [10, 20, 30, 40, 50]
         self.lamdas = [1.0, 1e-6, 1e-26, 1e-6, 0.1]
@@ -1284,19 +1296,22 @@ class F222013(CecBenchmark):
             gs = np.array([g0, g1, g2])
             out[0] = operator.dot_vv(ws, gs) + f_bias
 
-        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
-        self.dim_changeable = True
-        self.dim_default = 30
-        self.dim_max = 100
-        self.dim_supported = [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+        super().__init__(
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            dim_changeable=True,
+            dim_default=30,
+            dim_max=100,
+            dim_supported=[2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            f_bias=f_bias,
+        )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
         )
         self.make_support_data_path("data_2013")
         self.f_shift = self.check_shift_matrix(f_shift)[:, : self.ndim]
-        self.f_bias = f_bias
-        self.f_global = f_bias
-        self.x_global = self.f_shift[0]
+        self._x_global = np.asarray(self.f_shift[0])
         self.n_funcs = 3
         self.xichmas = [20, 20, 20]
         self.lamdas = [1.0, 1.0, 1.0]
@@ -1380,20 +1395,23 @@ class F232013(CecBenchmark):
             gs = np.array([g0, g1, g2])
             out[0] = operator.dot_vv(ws, gs) + f_bias
 
-        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
-        self.dim_changeable = True
-        self.dim_default = 30
-        self.dim_max = 100
-        self.dim_supported = [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+        super().__init__(
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            dim_changeable=True,
+            dim_default=30,
+            dim_max=100,
+            dim_supported=[2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            f_bias=f_bias,
+        )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
         )
         self.make_support_data_path("data_2013")
         self.f_shift = self.check_shift_matrix(f_shift)[:, : self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix)[:, : self.ndim]
-        self.f_bias = f_bias
-        self.f_global = f_bias
-        self.x_global = self.f_shift[0]
+        self._x_global = np.asarray(self.f_shift[0])
         self.n_funcs = 3
         self.xichmas = [20, 20, 20]
         self.lamdas = [1.0, 1.0, 1.0]
@@ -1479,20 +1497,23 @@ class F242013(CecBenchmark):
             gs = np.array([g0, g1, g2])
             out[0] = operator.dot_vv(ws, gs) + f_bias
 
-        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
-        self.dim_changeable = True
-        self.dim_default = 30
-        self.dim_max = 100
-        self.dim_supported = [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+        super().__init__(
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            dim_changeable=True,
+            dim_default=30,
+            dim_max=100,
+            dim_supported=[2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            f_bias=f_bias,
+        )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
         )
         self.make_support_data_path("data_2013")
         self.f_shift = self.check_shift_matrix(f_shift)[:, : self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix)[:, : self.ndim]
-        self.f_bias = f_bias
-        self.f_global = f_bias
-        self.x_global = self.f_shift[0]
+        self._x_global = np.asarray(self.f_shift[0])
         self.n_funcs = 3
         self.xichmas = [20, 20, 20]
         self.lamdas = [0.25, 1.0, 2.5]
@@ -1616,20 +1637,23 @@ class F262013(CecBenchmark):
             gs = np.array([g0, g1, g2, g3, g4])
             out[0] = operator.dot_vv(ws, gs) + f_bias
 
-        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
-        self.dim_changeable = True
-        self.dim_default = 30
-        self.dim_max = 100
-        self.dim_supported = [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+        super().__init__(
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            dim_changeable=True,
+            dim_default=30,
+            dim_max=100,
+            dim_supported=[2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            f_bias=f_bias,
+        )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
         )
         self.make_support_data_path("data_2013")
         self.f_shift = self.check_shift_matrix(f_shift)[:, : self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix)[:, : self.ndim]
-        self.f_bias = f_bias
-        self.f_global = f_bias
-        self.x_global = self.f_shift[0]
+        self._x_global = np.asarray(self.f_shift[0])
         self.n_funcs = 5
         self.xichmas = [10, 10, 10, 10, 10]
         self.lamdas = [0.25, 1.0, 1e-7, 2.5, 10.0]
@@ -1727,20 +1751,23 @@ class F272013(CecBenchmark):
             gs = np.array([g0, g1, g2, g3, g4])
             out[0] = operator.dot_vv(ws, gs) + f_bias
 
-        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
-        self.dim_changeable = True
-        self.dim_default = 30
-        self.dim_max = 100
-        self.dim_supported = [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+        super().__init__(
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            dim_changeable=True,
+            dim_default=30,
+            dim_max=100,
+            dim_supported=[2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            f_bias=f_bias,
+        )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
         )
         self.make_support_data_path("data_2013")
         self.f_shift = self.check_shift_matrix(f_shift)[:, : self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix)[:, : self.ndim]
-        self.f_bias = f_bias
-        self.f_global = f_bias
-        self.x_global = self.f_shift[0]
+        self._x_global = np.asarray(self.f_shift[0])
         self.n_funcs = 5
         self.xichmas = [10, 10, 10, 20, 20]
         self.lamdas = [100, 10, 2.5, 25, 0.1]
@@ -1838,20 +1865,23 @@ class F282013(CecBenchmark):
             gs = np.array([g0, g1, g2, g3, g4])
             out[0] = operator.dot_vv(ws, gs) + f_bias
 
-        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
-        self.dim_changeable = True
-        self.dim_default = 30
-        self.dim_max = 100
-        self.dim_supported = [2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+        super().__init__(
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            dim_changeable=True,
+            dim_default=30,
+            dim_max=100,
+            dim_supported=[2, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
+            f_bias=f_bias,
+        )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
         )
         self.make_support_data_path("data_2013")
         self.f_shift = self.check_shift_matrix(f_shift)[:, : self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix)[:, : self.ndim]
-        self.f_bias = f_bias
-        self.f_global = f_bias
-        self.x_global = self.f_shift[0]
+        self._x_global = np.asarray(self.f_shift[0])
         self.n_funcs = 5
         self.xichmas = [10, 20, 30, 40, 50]
         self.lamdas = [2.5, 2.5e-6, 2.5, 5e-4, 0.1]

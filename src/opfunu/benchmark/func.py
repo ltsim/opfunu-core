@@ -84,14 +84,20 @@ class FuncBenchmark(Benchmark):
         plain: bool = False,
         params: dict[str, typing.Any] | None = None,
         paras: dict[str, typing.Any] | list[str] | tuple[str, ...] | None = None,
+        verbose: bool = False,
     ) -> None:
         super().__init__(
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
             compute=compute,
+            # Callables need the resolved dimensionality; they are evaluated below,
+            # after ``check_ndim_and_bounds``.
+            f_global=f_global if not callable(f_global) else 0.0,
+            x_global=x_global if (x_global is not None and not callable(x_global)) else None,
             dim_changeable=dim_changeable if dim_changeable is not None else False,
             dim_default=dim_default if dim_default is not None else 2,
+            verbose=verbose,
         )
 
         self.__ndim = 0
@@ -103,18 +109,16 @@ class FuncBenchmark(Benchmark):
         if default_bounds is None:
             raise TypeError("FuncBenchmark requires default_bounds; pass it to super().__init__()")
 
-        if dim_changeable is not None:
-            self.dim_changeable = dim_changeable
-        if dim_default is not None:
-            self.dim_default = dim_default
         self.check_ndim_and_bounds(ndim, bounds, default_bounds)
-        self.f_global = f_global(self.ndim) if callable(f_global) else f_global
+        # ``f_global``/``x_global`` depend on the resolved dimensionality, so they
+        # are (re)written through the protected storage after the bounds check.
+        self._f_global = float(f_global(self.ndim) if callable(f_global) else f_global)
         if callable(x_global):
-            self.x_global = x_global(self.ndim)
+            self._x_global = np.asarray(x_global(self.ndim))
         elif x_global is None:
-            self.x_global = np.zeros(self.ndim)
+            self._x_global = np.asarray(np.zeros(self.ndim))
         else:
-            self.x_global = x_global
+            self._x_global = np.asarray(x_global)
         self._bind_kernel(compute, param_names or [], plain=plain, params=params, paras=paras)
 
     @property

@@ -56,18 +56,21 @@ class F12019(CecBenchmark):
         def compute(x: np.ndarray, f_bias: typing.Any, out: np.ndarray) -> None:
             out[0] = operator.chebyshev_func(x) + f_bias
 
-        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
-        self.dim_changeable = False
-        self.dim_default = 9
-        self.dim_max = 9
+        super().__init__(
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            dim_changeable=False,
+            dim_default=9,
+            dim_max=9,
+            f_bias=f_bias,
+        )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-8192.0, 8192.0] for _ in range(self.dim_default)])
         )
         self.make_support_data_path("data_2019")
         self.f_shift = self.check_shift_data(f_shift)[: self.ndim]
-        self.f_bias = f_bias
-        self.f_global = f_bias
-        self.x_global = np.zeros(self.ndim)
+        self._x_global = np.asarray(np.zeros(self.ndim))
         self._bind_kernel(compute, ["f_bias"], paras={"f_shift": self.f_shift, "f_bias": self.f_bias})
 
 
@@ -115,10 +118,14 @@ class F22019(CecBenchmark):
         def compute(x: np.ndarray, f_bias: typing.Any, out: np.ndarray) -> None:
             out[0] = operator.inverse_hilbert_func(x) + f_bias
 
-        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
-        self.dim_changeable = False
-        self.dim_default = 16
-        self.dim_max = 16
+        super().__init__(
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            dim_changeable=False,
+            dim_default=16,
+            dim_max=16,
+        )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-16384.0, 16384.0] for _ in range(self.dim_default)])
         )
@@ -126,8 +133,8 @@ class F22019(CecBenchmark):
         self.f_shift = self.check_shift_data(f_shift)[: self.ndim]
         self.f_bias = f_bias
         # the f_global and x_global was obtained by executing the cec2019 c code
-        self.f_global = int(np.sqrt(self.ndim)) + f_bias
-        self.x_global = np.zeros(self.ndim)
+        self._f_global = float(int(np.sqrt(self.ndim)) + f_bias)
+        self._x_global = np.asarray(np.zeros(self.ndim))
         self._bind_kernel(compute, ["f_bias"], paras={"f_shift": self.f_shift, "f_bias": self.f_bias})
 
 
@@ -177,17 +184,21 @@ class F32019(CecBenchmark):
         def compute(x: np.ndarray, f_bias: typing.Any, out: np.ndarray) -> None:
             out[0] = operator.lennard_jones_func(x) + f_bias
 
-        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
-        self.dim_changeable = False
-        self.dim_default = 18
-        self.dim_max = 18
+        super().__init__(
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            dim_changeable=False,
+            dim_default=18,
+            dim_max=18,
+        )
         self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-4.0, 4.0] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2019")
         self.f_shift = self.check_shift_data(f_shift)[: self.ndim]
         self.f_bias = f_bias
         # f_global calculated by verifying the cec2019 C value for f(x*) where x*==f_shift
-        self.f_global = 12.712062001703194 + self.f_bias
-        self.x_global = self.f_shift
+        self._f_global = float(12.712062001703194 + self.f_bias)
+        self._x_global = np.asarray(self.f_shift)
         self._bind_kernel(compute, ["f_bias"], paras={"f_shift": self.f_shift, "f_bias": self.f_bias})
 
 
@@ -239,20 +250,23 @@ class F42019(CecBenchmark):
             z = operator.dot_mv(f_matrix, x - f_shift)
             out[0] = operator.rastrigin_func(z) + f_bias
 
-        super().__init__(parallel=parallel, fastmath=fastmath, dtype=dtype)
-        self.dim_changeable = True
-        self.dim_default = 10
-        self.dim_max = 10
-        self.dim_supported = [2, 10]
+        super().__init__(
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            dim_changeable=True,
+            dim_default=10,
+            dim_max=10,
+            dim_supported=[2, 10],
+            f_bias=f_bias,
+        )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
         )
         self.make_support_data_path("data_2019")
         self.f_shift = self.check_shift_data(f_shift)[: self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
-        self.f_bias = f_bias
-        self.f_global = f_bias
-        self.x_global = self.f_shift
+        self._x_global = np.asarray(self.f_shift)
         self._bind_kernel(
             compute,
             ["f_matrix", "f_shift", "f_bias"],
