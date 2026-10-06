@@ -4,6 +4,8 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
+import typing
+
 import numpy as np
 
 from opfunu.benchmark.func import FuncBenchmark
@@ -53,21 +55,35 @@ class OddSquare(FuncBenchmark):
 
     modality = False  # Number of ambiguous peaks, unknown # peaks
 
-    def __init__(self, ndim=None, bounds=None):
-        super().__init__()
-        self.dim_changeable = True
-        self.dim_default = 2
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[-5 * np.pi, 5.0 * np.pi] for _ in range(self.dim_default)]))
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, b: np.ndarray, out: np.ndarray) -> None:
+            b = b[0 : x.shape[0]]
+            d = x.shape[0] * max((x - b) ** 2.0)
+            h = np.sum((x - b) ** 2.0)
+            out[0] = -np.exp(-d / (2.0 * np.pi)) * np.cos(np.pi * d) * (1.0 + 0.02 * h / (d + 0.01))
+
         self.b = np.array(
             [1, 1.3, 0.8, -0.4, -1.3, 1.6, -0.2, -0.6, 0.5, 1.4, 1, 1.3, 0.8, -0.4, -1.3, 1.6, -0.2, -0.6, 0.5, 1.4]
         )
-        self.f_global = -1.00846728102
-        self.x_global = self.b[: self.ndim]
 
-    def evaluate(self, x, *args):
-        self.check_solution(x)
-        self.n_fe += 1
-        b = self.b[0 : self.ndim]
-        d = self.ndim * max((x - b) ** 2.0)
-        h = np.sum((x - b) ** 2.0)
-        return -np.exp(-d / (2.0 * np.pi)) * np.cos(np.pi * d) * (1.0 + 0.02 * h / (d + 0.01))
+        super().__init__(
+            compute=compute,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[-5 * np.pi, 5.0 * np.pi] for _ in range(2)]),
+            f_global=-1.00846728102,
+            x_global=lambda nd: self.b[:nd],
+            dim_changeable=True,
+            dim_default=2,
+            param_names=["b"],
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+        )

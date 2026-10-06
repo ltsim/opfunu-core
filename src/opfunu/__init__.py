@@ -25,14 +25,31 @@ import re
 from typing import Any
 
 from . import cec_based, name_based
+from .utils.numba_compat import HAS_NUMBA
+
+__all__ = [
+    "FUNC_DATABASE",
+    "CEC_DATABASE",
+    "ALL_DATABASE",
+    "EXCLUDES",
+    "HAS_NUMBA",
+    "get_functions_by_classname",
+    "get_functions_based_classname",
+    "get_functions_by_ndim",
+    "get_functions_based_ndim",
+    "get_all_name_based_functions",
+    "get_all_cec_based_functions",
+    "get_name_based_functions",
+    "get_cec_based_functions",
+]
 
 FUNC_DATABASE: list[tuple[str, Any]] = inspect.getmembers(name_based, inspect.isclass)
 CEC_DATABASE: list[tuple[str, Any]] = inspect.getmembers(cec_based, inspect.isclass)
 ALL_DATABASE: list[tuple[str, Any]] = FUNC_DATABASE + CEC_DATABASE
-EXCLUDES: list[str] = ["Benchmark", "CecBenchmark", "ABC"]
+EXCLUDES: list[str] = ["Benchmark", "FuncBenchmark", "CecBenchmark", "ABC"]
 
 
-def get_functions_by_classname(name=None):
+def get_functions_by_classname(name: Any = None) -> list[Any]:
     """
     Parameters
     ----------
@@ -47,7 +64,7 @@ def get_functions_by_classname(name=None):
     ]
 
 
-def get_functions_based_classname(name=None):
+def get_functions_based_classname(name: Any = None) -> list[Any]:
     """
     Parameters
     ----------
@@ -64,7 +81,7 @@ def get_functions_based_classname(name=None):
     ]
 
 
-def get_functions_by_ndim(ndim=None):
+def get_functions_by_ndim(ndim: int | None = None) -> list[Any]:
     """
     Parameters
     ----------
@@ -80,7 +97,7 @@ def get_functions_by_ndim(ndim=None):
     return functions
 
 
-def get_functions_based_ndim(ndim=None):
+def get_functions_based_ndim(ndim: int | None = None) -> list[Any]:
     """
     Parameters
     ----------
@@ -96,27 +113,27 @@ def get_functions_based_ndim(ndim=None):
     return functions
 
 
-def get_all_name_based_functions():
+def get_all_name_based_functions() -> list[Any]:
     return [cls for classname, cls in FUNC_DATABASE if classname not in EXCLUDES]
 
 
-def get_all_cec_based_functions():
+def get_all_cec_based_functions() -> list[Any]:
     return [cls for classname, cls in CEC_DATABASE if classname not in EXCLUDES]
 
 
 def get_name_based_functions(
-    ndim,
-    continuous=None,
-    linear=None,
-    convex=None,
-    unimodal=None,
-    separable=None,
-    differentiable=None,
-    scalable=None,
-    randomized_term=None,
-    parametric=None,
-    modality=None,
-):
+    ndim: int | None,
+    continuous: bool | None = None,
+    linear: bool | None = None,
+    convex: bool | None = None,
+    unimodal: bool | None = None,
+    separable: bool | None = None,
+    differentiable: bool | None = None,
+    scalable: bool | None = None,
+    randomized_term: bool | None = None,
+    parametric: bool | None = None,
+    modality: bool | None = None,
+) -> list[Any]:
     functions = [cls for classname, cls in FUNC_DATABASE if classname not in EXCLUDES]
     functions = [f for f in functions if f().is_ndim_compatible(ndim)]
 
@@ -134,20 +151,20 @@ def get_name_based_functions(
 
 
 def get_cec_based_functions(
-    ndim=None,
-    continuous=None,
-    linear=None,
-    convex=None,
-    unimodal=None,
-    separable=None,
-    differentiable=None,
-    scalable=None,
-    randomized_term=None,
-    parametric=True,
-    shifted=True,
-    rotated=None,
-    modality=None,
-):
+    ndim: int | None = None,
+    continuous: bool | None = None,
+    linear: bool | None = None,
+    convex: bool | None = None,
+    unimodal: bool | None = None,
+    separable: bool | None = None,
+    differentiable: bool | None = None,
+    scalable: bool | None = None,
+    randomized_term: bool | None = None,
+    parametric: bool | None = True,
+    shifted: bool | None = True,
+    rotated: bool | None = None,
+    modality: bool | None = None,
+) -> list[Any]:
     functions = [cls for classname, cls in CEC_DATABASE if classname not in EXCLUDES]
     functions = [f for f in functions if f().is_ndim_compatible(ndim)]
 

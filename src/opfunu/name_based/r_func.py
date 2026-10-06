@@ -4,6 +4,8 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
+import typing
+
 import numpy as np
 
 from opfunu.benchmark.func import FuncBenchmark
@@ -43,18 +45,30 @@ class Rana(FuncBenchmark):
 
     modality = True  # Number of ambiguous peaks, unknown # peaks
 
-    def __init__(self, ndim=None, bounds=None):
-        super().__init__()
-        self.dim_changeable = True
-        self.dim_default = 2
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[-500.0, 500.0] for _ in range(self.dim_default)]))
-        self.f_global = -500.8021602966615
-        self.x_global = np.array([-300.3376, 500.0])
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, out: np.ndarray) -> None:
+            t1 = np.sqrt(np.abs(x[1:] + x[:-1] + 1))
+            t2 = np.sqrt(np.abs(x[1:] - x[:-1] + 1))
+            v = (x[1:] + 1) * np.cos(t2) * np.sin(t1) + x[:-1] * np.cos(t1) * np.sin(t2)
+            out[0] = np.sum(v)
 
-    def evaluate(self, x, *args):
-        self.check_solution(x)
-        self.n_fe += 1
-        t1 = np.sqrt(np.abs(x[1:] + x[:-1] + 1))
-        t2 = np.sqrt(np.abs(x[1:] - x[:-1] + 1))
-        v = (x[1:] + 1) * np.cos(t2) * np.sin(t1) + x[:-1] * np.cos(t1) * np.sin(t2)
-        return np.sum(v)
+        super().__init__(
+            compute=compute,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[-500.0, 500.0] for _ in range(2)]),
+            f_global=-500.8021602966615,
+            x_global=np.array([-300.3376, 500.0]),
+            dim_changeable=True,
+            dim_default=2,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+        )

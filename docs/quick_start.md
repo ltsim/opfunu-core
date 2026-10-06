@@ -8,10 +8,25 @@ Install the current PyPI release with pip:
 $ pip install opfunu-core
 ```
 
+For Numba-based vectorization (CPython only):
+
+```sh
+$ pip install opfunu-core[numba]
+```
+
+Without the `[numba]` extra the library runs in pure-Python/NumPy mode, which also
+works on PyPy (`opfunu.HAS_NUMBA` reports whether Numba is available).
+
 Or, if you manage the project with [uv](https://github.com/astral-sh/uv):
 
 ```sh
 $ uv add opfunu-core
+```
+
+With `uv`, the Numba extra lives in the `numba` dependency group:
+
+```sh
+$ uv sync --group numba   # opt-in guvectorize vectorization (CPython only)
 ```
 
 Install directly from GitHub:
@@ -100,6 +115,49 @@ print(f12005.f_global)  # global minimum value
 print(f12005.x_global)  # location of the global minimum
 print(f12005.is_succeed(f12005.x_global))  # did we reach the global minimum?
 ```
+
+## Construction flags
+
+Every problem accepts `parallel`, `fastmath` and `dtype` flags:
+
+```python
+func = opfunu.cec_based.F12014(ndim=30, parallel=True, fastmath=True, dtype=np.float64)
+```
+
+* `dtype` sets the floating scalar type used for evaluation; `evaluate` returns
+  `self.dtype.type(...)` (`np.float64` by default, `np.float32` when requested).
+* `fastmath=True` (default) compiles the kernel with Numba `fastmath`; pass
+  `fastmath=False` for bit-exact agreement with the pre-migration NumPy code.
+* `parallel=True` compiles with `target="parallel"` for multi-threaded batch runs.
+
+## Batch evaluation
+
+`_evaluate_batch` evaluates a whole population in one gufunc call — `(N, ndim)` in,
+`(N,)` out with dtype `self.dtype` (a 1-D `(ndim,)` input is treated as `N=1`):
+
+```python
+pop = np.random.uniform(func.lb, func.ub, size=(256, func.ndim))
+values = func._evaluate_batch(pop)
+```
+
+Without Numba the same call loops the scalar kernel, so the interface is identical
+on every interpreter — only slower.
+
+## Diagnostics
+
+```python
+print(opfunu.HAS_NUMBA)  # is Numba available in this environment?
+print(func.numba_compiled)  # did this instance bind a compiled gufunc?
+print(func._compile_error)  # compilation failure, or None (also None when Numba is absent)
+print(func.get_paras())  # kernel parameters bound for this instance
+```
+
+`verbose` is a read-only property configured at construction time (pass
+`verbose=True` to `Benchmark`/`FuncBenchmark`/`CecBenchmark`, or set a class
+attribute such as `F12021.verbose = True`) to print compilation
+fallbacks. Functions whose bodies cannot compile in nopython mode (stochastic terms,
+hybrid compositions holding sub-instances) bind with `plain=True` automatically and
+report `numba_compiled=False` while returning value-identical results.
 
 For more usage examples, see the [Examples](examples.md) page and the
 [`examples/`](https://github.com/ltsim/opfunu-core/tree/master/examples) folder.

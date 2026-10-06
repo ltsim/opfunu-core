@@ -4,6 +4,8 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
+import typing
+
 import numpy as np
 
 from opfunu.benchmark.func import FuncBenchmark
@@ -41,22 +43,34 @@ class Watson(FuncBenchmark):
 
     modality = True  # Number of ambiguous peaks, unknown # peaks
 
-    def __init__(self, ndim=None, bounds=None):
-        super().__init__()
-        self.dim_changeable = False
-        self.dim_default = 6
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[-5.0, 5.0] for _ in range(self.dim_default)]))
-        self.f_global = 0.002288
-        self.x_global = np.array([-0.0158, 1.012, -0.2329, 1.260, -1.513, 0.9928])
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, out: np.ndarray) -> None:
+            i = np.atleast_2d(np.arange(30.0)).T
+            a = i / 29.0
+            j = np.arange(5.0)
+            k = np.arange(6.0)
+            t1 = np.sum((j + 1) * a**j * x[1:], axis=1)
+            t2 = np.sum(a**k * x, axis=1)
+            inner = (t1 - t2**2 - 1) ** 2
+            out[0] = np.sum(inner) + x[0] ** 2
 
-    def evaluate(self, x, *args):
-        self.check_solution(x)
-        self.n_fe += 1
-        i = np.atleast_2d(np.arange(30.0)).T
-        a = i / 29.0
-        j = np.arange(5.0)
-        k = np.arange(6.0)
-        t1 = np.sum((j + 1) * a**j * x[1:], axis=1)
-        t2 = np.sum(a**k * x, axis=1)
-        inner = (t1 - t2**2 - 1) ** 2
-        return np.sum(inner) + x[0] ** 2
+        super().__init__(
+            compute=compute,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[-5.0, 5.0] for _ in range(6)]),
+            f_global=0.002288,
+            x_global=np.array([-0.0158, 1.012, -0.2329, 1.26, -1.513, 0.9928]),
+            dim_changeable=False,
+            dim_default=6,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+        )

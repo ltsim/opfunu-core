@@ -112,6 +112,20 @@ print(problem.evaluate(problem.x_global))
 print(problem.is_succeed(problem.x_global))
 ```
 
+## Construction flags and batch evaluation
+
+```python
+# Single-precision, multi-threaded kernel
+func = opfunu.cec_based.F12014(ndim=30, parallel=True, dtype=np.float32)
+print(func.evaluate(np.ones(30)))  # np.float32 scalar
+print(func.numba_compiled)  # True when the [numba] extra is installed
+
+# Evaluate a whole population at once: (N, ndim) -> (N,)
+pop = np.random.uniform(func.lb, func.ub, size=(256, func.ndim))
+values = func._evaluate_batch(pop)
+print(values.shape, values.dtype)
+```
+
 ## Optimizing with another library (mealpy)
 
 ```python

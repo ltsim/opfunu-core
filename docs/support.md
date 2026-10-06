@@ -14,9 +14,14 @@ Please read the [CODE OF CONDUCT](https://github.com/ltsim/opfunu-core/blob/mast
 The project is managed with [uv](https://github.com/astral-sh/uv):
 
 ```sh
-$ uv sync                # install runtime + dev dependencies
+$ uv sync                # install runtime (NumPy only) + dev dependencies
+$ uv sync --group numba  # opt-in guvectorize vectorization (CPython only)
 $ uv sync --group docs   # additionally install the docs tooling
 ```
+
+CI runs three test jobs per pull request: a compiled CPython matrix (`uv sync --group numba`),
+a no-Numba CPython job, and a PyPy job (both `uv sync` only), so every change is verified with
+and without Numba.
 
 ### Ruff
 
@@ -31,12 +36,12 @@ $ uv run ruff format --check .   # verify formatting
 
 ### Mypy
 
-[Mypy](https://mypy.readthedocs.io/) is used for static type-checking. Its configuration lives in `pyproject.toml`
-under `[tool.mypy]` and checks the `src/` package.
+[Mypy](https://mypy.readthedocs.io/) is used for static type-checking in strict mode. Its configuration lives in
+`pyproject.toml` under `[tool.mypy]` and checks the `src/` package.
 
 ```sh
 $ uv run mypy           # type-check the package
-$ uv run mypy-coverage  # report type-annotation coverage
+$ uv run mypy-coverage --threshold 35  # report type-annotation coverage (enforced in CI)
 ```
 
 ### MkDocs

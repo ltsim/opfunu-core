@@ -4,6 +4,8 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
+import typing
+
 import numpy as np
 
 from opfunu.benchmark.func import FuncBenchmark
@@ -46,22 +48,34 @@ class Katsuura(FuncBenchmark):
 
     modality = False  # Number of ambiguous peaks, unknown # peaks
 
-    def __init__(self, ndim=None, bounds=None):
-        super().__init__()
-        self.dim_changeable = True
-        self.dim_default = 2
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[0.0, 100.0] for _ in range(self.dim_default)]))
-        self.f_global = 1.0
-        self.x_global = np.zeros(self.ndim)
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, out: np.ndarray) -> None:
+            d = 32
+            k = np.atleast_2d(np.arange(1, d + 1)).T
+            idx = np.arange(0.0, x.shape[0] * 1.0)
+            inner = np.round(2**k * x) * (2.0 ** (-k))
+            out[0] = np.prod(np.sum(inner, axis=0) * (idx + 1) + 1)
 
-    def evaluate(self, x, *args):
-        self.check_solution(x)
-        self.n_fe += 1
-        d = 32
-        k = np.atleast_2d(np.arange(1, d + 1)).T
-        idx = np.arange(0.0, self.ndim * 1.0)
-        inner = np.round(2**k * x) * (2.0 ** (-k))
-        return np.prod(np.sum(inner, axis=0) * (idx + 1) + 1)
+        super().__init__(
+            compute=compute,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[0.0, 100.0] for _ in range(2)]),
+            f_global=1.0,
+            x_global=lambda nd: np.zeros(nd),
+            dim_changeable=True,
+            dim_default=2,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+        )
 
 
 class Keane(FuncBenchmark):
@@ -94,19 +108,31 @@ class Keane(FuncBenchmark):
 
     modality = True  # Number of ambiguous peaks, unknown # peaks
 
-    def __init__(self, ndim=None, bounds=None):
-        super().__init__()
-        self.dim_changeable = False
-        self.dim_default = 2
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[0.0, 10.0] for _ in range(self.dim_default)]))
-        self.f_global = 0.0
-        self.x_global = np.array([7.85396153, 7.85396135])
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, out: np.ndarray) -> None:
+            val = np.sin(x[0] - x[1]) ** 2 * np.sin(x[0] + x[1]) ** 2
+            out[0] = val / np.sqrt(x[0] ** 2 + x[1] ** 2)
 
-    def evaluate(self, x, *args):
-        self.check_solution(x)
-        self.n_fe += 1
-        val = np.sin(x[0] - x[1]) ** 2 * np.sin(x[0] + x[1]) ** 2
-        return val / np.sqrt(x[0] ** 2 + x[1] ** 2)
+        super().__init__(
+            compute=compute,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[0.0, 10.0] for _ in range(2)]),
+            f_global=0.0,
+            x_global=np.array([7.85396153, 7.85396135]),
+            dim_changeable=False,
+            dim_default=2,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+        )
 
 
 class Kowalik(FuncBenchmark):
@@ -147,18 +173,32 @@ class Kowalik(FuncBenchmark):
 
     modality = False  # Number of ambiguous peaks, unknown # peaks
 
-    def __init__(self, ndim=None, bounds=None):
-        super().__init__()
-        self.dim_changeable = False
-        self.dim_default = 4
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[-5.0, 5.0] for _ in range(self.dim_default)]))
-        self.f_global = 0.00030748610
-        self.x_global = np.array([0.192833, 0.190836, 0.123117, 0.135766])
-        self.a = np.asarray([4.0, 2.0, 1.0, 1 / 2.0, 1 / 4.0, 1 / 6.0, 1 / 8.0, 1 / 10.0, 1 / 12.0, 1 / 14.0, 1 / 16.0])
-        self.b = np.asarray([0.1957, 0.1947, 0.1735, 0.1600, 0.0844, 0.0627, 0.0456, 0.0342, 0.0323, 0.0235, 0.0246])
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, b: np.ndarray, a: np.ndarray, out: np.ndarray) -> None:
+            vec = b - (x[0] * (a**2 + a * x[1]) / (a**2 + a * x[2] + x[3]))
+            out[0] = np.sum(vec**2)
 
-    def evaluate(self, x, *args):
-        self.check_solution(x)
-        self.n_fe += 1
-        vec = self.b - (x[0] * (self.a**2 + self.a * x[1]) / (self.a**2 + self.a * x[2] + x[3]))
-        return np.sum(vec**2)
+        self.a = np.asarray([4.0, 2.0, 1.0, 1 / 2.0, 1 / 4.0, 1 / 6.0, 1 / 8.0, 1 / 10.0, 1 / 12.0, 1 / 14.0, 1 / 16.0])
+        self.b = np.asarray([0.1957, 0.1947, 0.1735, 0.16, 0.0844, 0.0627, 0.0456, 0.0342, 0.0323, 0.0235, 0.0246])
+
+        super().__init__(
+            compute=compute,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[-5.0, 5.0] for _ in range(4)]),
+            f_global=0.0003074861,
+            x_global=np.array([0.192833, 0.190836, 0.123117, 0.135766]),
+            dim_changeable=False,
+            dim_default=4,
+            param_names=["b", "a"],
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+        )

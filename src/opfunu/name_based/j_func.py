@@ -4,6 +4,8 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
+import typing
+
 import numpy as np
 
 from opfunu.benchmark.func import FuncBenchmark
@@ -33,19 +35,31 @@ class JennrichSampson(FuncBenchmark):
 
     modality = False  # Number of ambiguous peaks, unknown # peaks
 
-    def __init__(self, ndim=None, bounds=None):
-        super().__init__()
-        self.dim_changeable = False
-        self.dim_default = 2
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[-1.0, 1.0] for _ in range(self.dim_default)]))
-        self.f_global = 124.36
-        self.x_global = np.array([0.257825, 0.257825])
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, out: np.ndarray) -> None:
+            idx = np.arange(1, 11)
+            out[0] = np.sum((2 + 2 * idx - (np.exp(idx * x[0]) + np.exp(idx * x[1]))) ** 2)
 
-    def evaluate(self, x, *args):
-        self.check_solution(x)
-        self.n_fe += 1
-        idx = np.arange(1, 11)
-        return np.sum((2 + 2 * idx - (np.exp(idx * x[0]) + np.exp(idx * x[1]))) ** 2)
+        super().__init__(
+            compute=compute,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[-1.0, 1.0] for _ in range(2)]),
+            f_global=124.36,
+            x_global=np.array([0.257825, 0.257825]),
+            dim_changeable=False,
+            dim_default=2,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+        )
 
 
 class Judge(FuncBenchmark):
@@ -92,13 +106,17 @@ class Judge(FuncBenchmark):
 
     modality = False  # Number of ambiguous peaks, unknown # peaks
 
-    def __init__(self, ndim=None, bounds=None):
-        super().__init__()
-        self.dim_changeable = False
-        self.dim_default = 2
-        self.check_ndim_and_bounds(ndim, bounds, np.array([[-10.0, 10.0] for _ in range(self.dim_default)]))
-        self.f_global = 16.0817307
-        self.x_global = np.array([0.86479, 1.2357])
+    def __init__(
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        parallel: bool = False,
+        fastmath: bool = True,
+        dtype: typing.Any = np.float64,
+    ) -> None:
+        def compute(x: np.ndarray, a: np.ndarray, b: np.ndarray, c: np.ndarray, out: np.ndarray) -> None:
+            out[0] = np.sum(((x[0] + x[1] * a + (x[1] ** 2.0) * b) - c) ** 2.0)
+
         self.c = np.asarray(
             [
                 4.284,
@@ -123,7 +141,6 @@ class Judge(FuncBenchmark):
                 2.152,
             ]
         )
-
         self.a = np.asarray(
             [
                 0.286,
@@ -148,12 +165,11 @@ class Judge(FuncBenchmark):
                 0.889,
             ]
         )
-
         self.b = np.asarray(
             [
                 0.645,
                 0.585,
-                0.310,
+                0.31,
                 0.058,
                 0.455,
                 0.779,
@@ -164,17 +180,27 @@ class Judge(FuncBenchmark):
                 0.142,
                 0.296,
                 0.175,
-                0.180,
+                0.18,
                 0.842,
                 0.039,
                 0.103,
-                0.620,
+                0.62,
                 0.158,
                 0.704,
             ]
         )
 
-    def evaluate(self, x, *args):
-        self.check_solution(x)
-        self.n_fe += 1
-        return np.sum(((x[0] + x[1] * self.a + (x[1] ** 2.0) * self.b) - self.c) ** 2.0)
+        super().__init__(
+            compute=compute,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[-10.0, 10.0] for _ in range(2)]),
+            f_global=16.0817307,
+            x_global=np.array([0.86479, 1.2357]),
+            dim_changeable=False,
+            dim_default=2,
+            param_names=["a", "b", "c"],
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+        )

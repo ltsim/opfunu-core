@@ -9,4 +9,4 @@ implied warranty of **MERCHANTABILITY** or **FITNESS FOR A PARTICULAR PURPOSE**.
 See the [GNU General Public License, version 3](https://www.gnu.org/licenses/gpl-3.0) for details.
 
 The full license text is included in the repository as
-[LICENSE](https://github.com/ltsim/opfunu-core/blob/master/LICENSE).
+[LICENSE.md](https://github.com/ltsim/opfunu-core/blob/master/LICENSE.md).
