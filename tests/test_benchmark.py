@@ -80,21 +80,49 @@ def test_inline_compute_declaration_style():
     assert problem.x_global.tolist() == [0.0] * ndim
 
 
-def test_metadata_are_private_properties():
+#: Every property defined on ``Benchmark`` must be reader-only: values are
+#: supplied to ``__init__`` (or ``_bind_kernel``) at construction time.
+READ_ONLY_PROPERTIES = [
+    "parallel",
+    "fastmath",
+    "dtype",
+    "verbose",
+    "support_path",
+    "paras",
+    "numba_compiled",
+    "f_global",
+    "x_global",
+    "dim_changeable",
+    "dim_default",
+    "_kernel",
+    "_param_names",
+    "_compute",
+    "_compile_error",
+    "_out",
+]
+
+
+def test_metadata_are_read_only_properties():
     problem = _DummyProblem(ndim=2)
-    problem.f_global = 1.5
-    problem.x_global = [1.0, 2.0]
-    problem.dim_default = 4
-    problem.dim_changeable = False
-    assert problem.f_global == 1.5
-    assert np.array_equal(problem.x_global, np.array([1.0, 2.0]))
-    assert problem.dim_default == 4
-    assert problem.dim_changeable is False
-    # The storage lives in name-mangled attributes on the base class.
-    assert "_Benchmark__f_global" in vars(problem)
-    assert "_Benchmark__x_global" in vars(problem)
+    # Construction-time metadata keeps the values passed to the constructor.
+    assert problem.f_global == 0.0
+    assert np.array_equal(problem.x_global, np.zeros(2))
+    assert problem.dim_default == 2
+    assert problem.dim_changeable is True
+    # Data-dependent metadata lives in protected storage; the rest is name-mangled.
+    assert "_f_global" in vars(problem)
+    assert "_x_global" in vars(problem)
+    assert "_paras" in vars(problem)
     assert "_Benchmark__dim_default" in vars(problem)
     assert "_Benchmark__dim_changeable" in vars(problem)
+
+
+@pytest.mark.parametrize("name", READ_ONLY_PROPERTIES)
+def test_benchmark_properties_are_read_only(name):
+    problem = _DummyProblem(ndim=2)
+    assert isinstance(getattr(type(problem), name), property)
+    with pytest.raises(AttributeError):
+        setattr(problem, name, getattr(problem, name))
 
 
 def test_kernel_state_is_encapsulated():
@@ -104,7 +132,6 @@ def test_kernel_state_is_encapsulated():
     assert "_Benchmark__kernel" in vars(problem)
     assert "_Benchmark__param_names" in vars(problem)
     assert "_Benchmark__compute" in vars(problem)
-    assert "_Benchmark__paras" in vars(problem)
     with pytest.raises(AttributeError):
         problem.compute = problem.compute
 
