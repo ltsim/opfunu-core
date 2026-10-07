@@ -366,6 +366,7 @@ CLAUDE.md
 GEMINI.md
 CURSOR.md
 AIDER.md
+.graphifyignore
 
 # Agent & tooling directories
 .opencode/
