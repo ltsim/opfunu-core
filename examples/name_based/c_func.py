@@ -1,13 +1,13 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 20:18, 19/07/2022 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 20:18, 19/07/2022 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
-import opfunu
 import numpy as np
 from mealpy.swarm_based import WOA
 
+import opfunu
 
 print("====================Test CamelThreeHump")
 ndim = 2
@@ -187,7 +187,6 @@ print(problem.x_global)
 print(problem.evaluate(problem.x_global))
 print(problem.is_succeed(x))
 print(problem.is_succeed(problem.x_global))
-
 
 
 print("====================Test Cube")

@@ -4,9 +4,9 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
-import opfunu
 import numpy as np
 
+import opfunu
 
 ## Test CEC2014 F1
 print("====================F1")
@@ -258,7 +258,6 @@ print(problem.x_global)
 print(problem.evaluate(problem.x_global))
 print(problem.is_succeed(x))
 print(problem.is_succeed(problem.x_global))
-
 
 
 ## Test CEC2014 F22

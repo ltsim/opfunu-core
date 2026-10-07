@@ -10,12 +10,15 @@
 
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/ltsim/opfunu-core/publish.yml?style=flat-square&logo=pypi&label=Publish)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/ltsim/opfunu-core/test.yml?style=flat-square&logo=pytest&label=Testing)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/ltsim/opfunu-core/type.yml?style=flat-square&logo=mypy&label=Type-checking)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/ltsim/opfunu-core/lint.yml?style=flat-square&logo=ruff&label=Linting)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/ltsim/opfunu-core/docs.yml?style=flat-square&logo=githubpages&label=Docs)
 
 This library is a maintenance version, a fork of [OPFUNU (Optimization Reference Functions in NUMPy)](https://github.com/thieu1995/opfunu). Is one of the most comprehensive Python libraries of numerical optimization reference functions. It contains all the functions from the CEC competitions of 2005, 2008, 2010, 2013, 2014, 2015, 2017, 2019, 2020, 2021, and 2022. In addition, it implements over 300 traditional functions with varying dimensions.
 
 * **Free software:** GNU General Public License (GPL) V3 license
 * **Total problems**: > 500 problems
-* **Documentation:** https://opfunu.readthedocs.io
+* **Documentation:** https://ltsim.github.io/opfunu-core/
 
 # Citation Request 
 
@@ -47,9 +50,28 @@ Install the [current PyPI release](https://pypi.python.org/pypi/opfunu-core):
 $ pip install opfunu-core
 ```
 
+For Numba-based vectorization (CPython only, faster batch evaluation):
+```sh
+$ pip install opfunu-core[numba]
+```
+
+Without the `[numba]` extra the library runs in pure-Python/NumPy mode, which also
+works on PyPy. Check which mode is active via `opfunu.HAS_NUMBA`
+(`problem.numba_compiled` reports it per instance).
+
 Install from Github:
 ```sh
 $ pip install git+https://github.com/ltsim/opfunu-core
+```
+
+```sh
+$ pip install "opfunu-core[numba] @ git+https://github.com/ltsim/opfunu-core"
+```
+
+Or, if you manage the project with [uv](https://github.com/astral-sh/uv):
+```sh
+$ uv add opfunu-core
+$ uv add "opfunu-core[numba]"
 ```
 
 After installation, you can import and check version of Opfunu:
@@ -116,14 +138,52 @@ For more usage examples please look at [examples](/examples) folder.
 
 # Contributing
 
-There are lots of ways how you can contribute to Permetrics's development, and you are welcome to join in! For example, 
+There are lots of ways how you can contribute to opfunu-core's development, and you are welcome to join in! For example, 
 you can report problems or make feature requests on the [issues](/issues) pages. To facilitate contributions, 
 please check for the guidelines in the [CONTRIBUTING.md](/CONTRIBUTING.md) file.
+
+# Development
+
+The project is managed with [uv](https://github.com/astral-sh/uv):
+
+```sh
+$ uv sync                # install runtime + dev dependencies
+$ uv sync --group docs   # additionally install the docs tooling
+```
+
+Ruff (lint and format):
+
+```sh
+$ uv run ruff check .            # lint
+$ uv run ruff format .           # format
+$ uv run ruff format --check .   # verify formatting
+```
+
+Mypy (type-checking):
+
+```sh
+$ uv run mypy          # type-check the package (config in pyproject.toml)
+$ uv run mypy-coverage # report type-annotation coverage
+```
+
+MkDocs (documentation, Material theme):
+
+```sh
+$ uv run mkdocs serve                # live preview at http://127.0.0.1:8000
+$ uv run mkdocs build                # build the static site into site/
+$ uv run mkdocs gh-deploy --force    # publish to GitHub Pages
+```
+
+Run the test suite with:
+
+```sh
+$ uv run pytest
+```
 
 # Official channels 
 
 * [Official source code repository](https://github.com/ltsim/opfunu-core)
-* [Official document](https://opfunu.readthedocs.io/)
+* [Official document](https://ltsim.github.io/opfunu-core/)
 * [Download releases](https://pypi.org/project/opfunu-core/) 
 * [Issue tracker](https://github.com/ltsim/opfunu-core/issues) 
 * [Notable changes log](/CHANGELOG.md)

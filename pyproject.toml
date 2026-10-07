@@ -63,25 +63,43 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+numba = ["numba>=0.68.0; implementation_name == 'cpython'"]
+
+[dependency-groups]
 dev = [
     "pytest>=8.0.0",
     "pytest-cov>=5.0.0",
-    "mypy>=1.9.0",
+    "mypy>=2.3.0",
+    "mypy-coverage>=0.2.4; python_version >= '3.11'",
+    "ruff>=0.16.0",
     "twine>=5.0.0",
+]
+numba = [
+    "numba>=0.68.0; implementation_name == 'cpython'",
+]
+
+docs = [
+    "mkdocs>=1.6.0",
+    "mkdocs-material>=9.5.0",
+    "mkdocstrings[python]>=0.27.0",
+    "mkdocs-bibtex>=2.6.0",
+    "pypandoc-binary>=1.15",
 ]
 
 [project.urls]
 "Homepage" = "https://github.com/ltsim/opfunu-core"
-"Documentation" = "https://opfunu.readthedocs.io/"
+"Documentation" = "https://ltsim.github.io/opfunu-core/"
 "Source Code" = "https://github.com/ltsim/opfunu-core"
 "Bug Tracker" = "https://github.com/ltsim/opfunu-core/issues"
-"Change Log" = "https://github.com/ltsim/opfunu-core/blob/master/ChangeLog.md"
+"Change Log" = "https://github.com/ltsim/opfunu-core/blob/master/CHANGELOG.md"
 
 [tool.setuptools.packages.find]
+where = ["src"]
 exclude = ["tests*", "examples*"]
 
 [tool.setuptools]
 include-package-data = true
+package-dir = { "" = "src" }
 
 [tool.setuptools.dynamic]
 version = {attr = "opfunu.__version__"}
@@ -93,22 +111,35 @@ python_classes = ["Test*"]
 python_functions = ["test_*"]
 addopts = "-v --tb=short --strict-markers"
 
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = []
+
+[tool.ruff.lint.isort]
+known-first-party = ["opfunu"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.ruff.lint.per-file-ignores]
+"src/opfunu/cec_based/**" = ["E501"]
+"src/opfunu/name_based/**" = ["E501"]
+
 [tool.mypy]
-files = ["opfunu"]
+files = ["src"]
 exclude = ["tests/", "docs/", "examples/"]
+strict = true
 warn_unused_ignores = true
 warn_redundant_casts = true
 warn_unreachable = true
 no_implicit_optional = true
 strict_optional = true
-disallow_untyped_defs = true
-disallow_incomplete_defs = true
-disallow_any_generics = false
 disallow_any_unimported = false
-disallow_subclassing_any = false
-disallow_untyped_decorators = false
-check_untyped_defs = true
-warn_return_any = false
 show_error_codes = true
 show_column_numbers = true
 pretty = true
@@ -116,6 +147,8 @@ error_summary = true
 
 [[tool.mypy.overrides]]
 module = [
+    "numba",
+    "numba.*",
     "numpy",
     "numpy.*"
 ]

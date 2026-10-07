@@ -1,46 +1,53 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 20:59, 29/06/2022 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 20:59, 29/06/2022 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
-import opfunu
 import numpy as np
 
+import opfunu
 
-if __name__ == '__main__':
-    # get all the available functions accepting ANY dimension
+if __name__ == "__main__":
+    # Get all the available functions accepting any dimension
     any_dim_functions = opfunu.get_name_based_functions(None)
     print(any_dim_functions)
 
-    # get all the available differentiable functions accepting 2D
+    # Get all the available differentiable functions accepting 2D
     differentiable_2d_functions = opfunu.get_name_based_functions(
         ndim=2,  # dimension
         differentiable=True,
     )
-    print(differentiable_2d_functions)  # --> 41
+    print(differentiable_2d_functions)
 
-    # Import specific function
+    # Import a specific function and evaluate a solution
     ackley03 = opfunu.name_based.Ackley03()
-    print(ackley03.evaluate(np.array([ 5, 4])))      # get results
+    print(ackley03.evaluate(np.array([5, 4])))  # get results
 
-    # Plot 2d or plot 3d contours
-    # Warning ! Only working on 2d functions objects !
-    # Warning 2! change n_space to reduce the computing time
+    # Access/change the parameters of parametric functions
     ackley02 = opfunu.name_based.Ackley02()
-    # opfunu.plot_2d(ackley02, n_space=1000, ax=None)
-    # opfunu.plot_3d(ackley02, n_space=1000, ax=None)
-
-    # Access/change the parameters of parametrics functions
     print(ackley02.get_paras())
 
     # Get the global minimum for a specific dimension
     print(ackley02.f_global)
     print(ackley02.x_global)
 
-    # Acces/plot the latex formulas
-    latex = ackley02.latex_formula
-    # latex = ackley02.latex_formula_dimension
-    # latex = ackley02.latex_formula_bounds
-    # latex = ackley02.latex_formula_global_optimum
-    print(latex)  # --> f(\mathbf{x}) = exp(-\sum_{i=1}^{d}(x_i / \beta)^{2m}) - 2exp(-\prod_{i=1}^{d}x_i^2) \prod_{i=1}^{d}cos^ 2(x_i)
+    # Access the latex formulas
+    print(ackley02.latex_formula)
+
+    # Shifted function: bounds and global optimum move with the shift vector
+    shifted = opfunu.name_based.Ackley01(ndim=3, shift=[2.0, -1.5, 3.0])
+    print(shifted.x_global)  # base optimum + shift
+    print(shifted.bounds)  # base bounds + shift
+    print(shifted.is_succeed(shifted.x_global))  # True
+
+    # Rotated function: optimum maps through M.T and bounds become the enclosing
+    # axis-aligned box of the rotated box (compose with a shift as needed)
+    theta = np.pi / 4
+    rotate = np.eye(3)
+    rotate[:2, :2] = [[np.cos(theta), -np.sin(theta)], [np.sin(theta), np.cos(theta)]]
+    rotated = opfunu.name_based.Ackley01(ndim=3, rotate=rotate)
+    print(rotated.x_global)  # M.T @ base optimum
+    print(rotated.bounds)  # enclosing AABB of the rotated bounds
+    print(rotated.is_succeed(rotated.x_global))  # True
+    rotated.set_rotate(None)  # back to the unrotated problem
