@@ -132,6 +132,32 @@ print(func.is_succeed(func.x_global))  # True
 func.set_shift(None)  # back to the unshifted problem
 ```
 
+## Rotated functions
+
+Any function can be rotated by passing an orthogonal matrix `M`. The optimum
+maps through `M.T` and the bounds become the enclosing axis-aligned box of the
+rotated box, so the rotated optimum stays feasible:
+
+```python
+import numpy as np
+from opfunu.name_based import Ackley01
+
+theta = np.pi / 4
+M = np.eye(3)
+M[:2, :2] = [[np.cos(theta), -np.sin(theta)], [np.sin(theta), np.cos(theta)]]
+
+func = Ackley01(ndim=3, shift=[2.0, -1.5, 3.0], rotate=M)
+print(func.x_global)  # shift + M.T @ base optimum
+print(func.bounds)  # enclosing rotated box + shift
+print(func.is_succeed(func.x_global))  # True
+
+func.set_rotate(None)  # back to the unrotated (shifted) problem
+```
+
+The matrix must be orthogonal (`M.T @ M = I`, reflections allowed), finite and
+`(ndim, ndim)` shaped. Pass `rotate_bounds=False` to keep the original bounds
+(the CEC convention) instead of the enclosing box.
+
 ## Construction flags
 
 Every problem accepts `parallel`, `fastmath` and `dtype` flags:

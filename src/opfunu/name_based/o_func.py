@@ -63,6 +63,8 @@ class OddSquare(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        rotate: typing.Any = None,
+        rotate_bounds: bool = True,
     ) -> None:
         def compute(x: np.ndarray, b: np.ndarray, out: np.ndarray) -> None:
             b = b[0 : x.shape[0]]
@@ -88,4 +90,6 @@ class OddSquare(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            rotate=rotate,
+            rotate_bounds=rotate_bounds,
         )

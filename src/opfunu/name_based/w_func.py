@@ -51,6 +51,8 @@ class Watson(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        rotate: typing.Any = None,
+        rotate_bounds: bool = True,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             i = np.atleast_2d(np.arange(30.0)).T
@@ -75,4 +77,6 @@ class Watson(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            rotate=rotate,
+            rotate_bounds=rotate_bounds,
         )

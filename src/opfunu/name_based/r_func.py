@@ -53,6 +53,8 @@ class Rana(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        rotate: typing.Any = None,
+        rotate_bounds: bool = True,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             t1 = np.sqrt(np.abs(x[1:] + x[:-1] + 1))
@@ -73,4 +75,6 @@ class Rana(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            rotate=rotate,
+            rotate_bounds=rotate_bounds,
         )

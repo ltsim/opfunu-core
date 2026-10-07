@@ -43,6 +43,8 @@ class CamelThreeHump(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        rotate: typing.Any = None,
+        rotate_bounds: bool = True,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = 2 * x[0] ** 2 - 1.05 * x[0] ** 4 + x[0] ** 6 / 6 + x[0] * x[1] + x[1] ** 2
@@ -60,6 +62,8 @@ class CamelThreeHump(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            rotate=rotate,
+            rotate_bounds=rotate_bounds,
         )
 
 
@@ -95,6 +99,8 @@ class CamelSixHump(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        rotate: typing.Any = None,
+        rotate_bounds: bool = True,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = (4 - 2.1 * x[0] ** 2 + x[0] ** 4 / 3) * x[0] ** 2 + x[0] * x[1] + (4 * x[1] ** 2 - 4) * x[1] ** 2
@@ -112,6 +118,8 @@ class CamelSixHump(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            rotate=rotate,
+            rotate_bounds=rotate_bounds,
         )
         self.x_globals = np.array([[-0.0898, 0.7126], [0.0898, -0.7126]])
 
@@ -148,6 +156,8 @@ class ChenBird(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        rotate: typing.Any = None,
+        rotate_bounds: bool = True,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = -0.001 / (0.001**2 + (x[0] - 0.4 * x[1] - 0.1) ** 2) - 0.001 / (
@@ -167,6 +177,8 @@ class ChenBird(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            rotate=rotate,
+            rotate_bounds=rotate_bounds,
         )
 
 
@@ -202,6 +214,8 @@ class ChenV(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        rotate: typing.Any = None,
+        rotate_bounds: bool = True,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = (
@@ -223,6 +237,8 @@ class ChenV(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            rotate=rotate,
+            rotate_bounds=rotate_bounds,
         )
         self.x_globals = np.array(
             [[-0.70710678, -0.70710678], [0.70710678, -0.70710678], [-0.70710678, 0.70710678], [0.70710678, 0.70710678]]
@@ -264,6 +280,8 @@ class Chichinadze(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        rotate: typing.Any = None,
+        rotate_bounds: bool = True,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = (
@@ -288,6 +306,8 @@ class Chichinadze(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            rotate=rotate,
+            rotate_bounds=rotate_bounds,
         )
 
 
@@ -323,6 +343,8 @@ class ChungReynolds(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        rotate: typing.Any = None,
+        rotate_bounds: bool = True,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = np.sum(x**2) ** 2
@@ -340,6 +362,8 @@ class ChungReynolds(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            rotate=rotate,
+            rotate_bounds=rotate_bounds,
         )
 
 
@@ -374,6 +398,8 @@ class Cigar(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        rotate: typing.Any = None,
+        rotate_bounds: bool = True,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = x[0] ** 2 + 1e6 * np.sum(x[1:] ** 2)
@@ -391,6 +417,8 @@ class Cigar(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            rotate=rotate,
+            rotate_bounds=rotate_bounds,
         )
 
 
@@ -426,6 +454,8 @@ class Cola(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        rotate: typing.Any = None,
+        rotate_bounds: bool = True,
     ) -> None:
         def compute(x: np.ndarray, d: np.ndarray, out: np.ndarray) -> None:
             xi = np.atleast_2d(np.asarray([0.0, x[0]] + list(x[1::2])))
@@ -490,6 +520,8 @@ class Cola(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            rotate=rotate,
+            rotate_bounds=rotate_bounds,
         )
 
 
@@ -528,6 +560,8 @@ class Colville(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        rotate: typing.Any = None,
+        rotate_bounds: bool = True,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = (
@@ -552,6 +586,8 @@ class Colville(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            rotate=rotate,
+            rotate_bounds=rotate_bounds,
         )
 
 
@@ -587,6 +623,8 @@ class Corana(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        rotate: typing.Any = None,
+        rotate_bounds: bool = True,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             d = [1.0, 1000.0, 10.0, 100.0]
@@ -612,6 +650,8 @@ class Corana(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            rotate=rotate,
+            rotate_bounds=rotate_bounds,
         )
 
 
@@ -647,6 +687,8 @@ class CosineMixture(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        rotate: typing.Any = None,
+        rotate_bounds: bool = True,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = -0.1 * np.sum(np.cos(5.0 * np.pi * x)) - np.sum(x**2.0)
@@ -664,6 +706,8 @@ class CosineMixture(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            rotate=rotate,
+            rotate_bounds=rotate_bounds,
         )
 
 
@@ -702,6 +746,8 @@ class CrossInTray(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        rotate: typing.Any = None,
+        rotate_bounds: bool = True,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = -0.0001 * (
@@ -721,6 +767,8 @@ class CrossInTray(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            rotate=rotate,
+            rotate_bounds=rotate_bounds,
         )
         self.x_globals = np.array(
             [
@@ -767,6 +815,8 @@ class CrossLegTable(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        rotate: typing.Any = None,
+        rotate_bounds: bool = True,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             u = 100 - np.sqrt(x[0] ** 2 + x[1] ** 2) / np.pi
@@ -786,6 +836,8 @@ class CrossLegTable(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            rotate=rotate,
+            rotate_bounds=rotate_bounds,
         )
 
 
@@ -824,6 +876,8 @@ class CrownedCross(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        rotate: typing.Any = None,
+        rotate_bounds: bool = True,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             u = 100 - np.sqrt(x[0] ** 2 + x[1] ** 2) / np.pi
@@ -843,6 +897,8 @@ class CrownedCross(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            rotate=rotate,
+            rotate_bounds=rotate_bounds,
         )
 
 
@@ -878,6 +934,8 @@ class Csendes(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        rotate: typing.Any = None,
+        rotate_bounds: bool = True,
     ) -> None:
         def compute(x: np.ndarray, epsilon: float, out: np.ndarray) -> None:
             out[0] = np.sum((x**6.0) * (2.0 + np.sin(1.0 / (x + epsilon))))
@@ -896,6 +954,8 @@ class Csendes(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            rotate=rotate,
+            rotate_bounds=rotate_bounds,
         )
 
 
@@ -931,6 +991,8 @@ class Cube(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        rotate: typing.Any = None,
+        rotate_bounds: bool = True,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = 100.0 * (x[1] - x[0] ** 3.0) ** 2.0 + (1.0 - x[0]) ** 2.0
@@ -948,4 +1010,6 @@ class Cube(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            rotate=rotate,
+            rotate_bounds=rotate_bounds,
         )

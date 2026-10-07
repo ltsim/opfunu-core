@@ -51,6 +51,8 @@ class Qing(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        rotate: typing.Any = None,
+        rotate_bounds: bool = True,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             i = np.arange(1, x.shape[0] + 1)
@@ -69,6 +71,8 @@ class Qing(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            rotate=rotate,
+            rotate_bounds=rotate_bounds,
         )
 
 
@@ -114,6 +118,8 @@ class Quadratic(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        rotate: typing.Any = None,
+        rotate_bounds: bool = True,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = (
@@ -138,6 +144,8 @@ class Quadratic(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            rotate=rotate,
+            rotate_bounds=rotate_bounds,
         )
 
 
@@ -181,6 +189,8 @@ class Quartic(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        rotate: typing.Any = None,
+        rotate_bounds: bool = True,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             i = np.arange(1, x.shape[0] + 1)
@@ -201,6 +211,8 @@ class Quartic(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            rotate=rotate,
+            rotate_bounds=rotate_bounds,
         )
 
 
@@ -244,6 +256,8 @@ class Quintic(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        rotate: typing.Any = None,
+        rotate_bounds: bool = True,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = np.sum(np.abs(x**5 - 3 * x**4 + 4 * x**3 + 2 * x**2 - 10 * x - 4))
@@ -261,4 +275,6 @@ class Quintic(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            rotate=rotate,
+            rotate_bounds=rotate_bounds,
         )

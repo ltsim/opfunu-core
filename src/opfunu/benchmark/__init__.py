@@ -36,6 +36,8 @@ class Benchmark(abc.ABC):
     _gufunc_cache: typing.ClassVar[dict[tuple[typing.Any, ...], typing.Any]] = {}
 
     __shift: np.ndarray | None
+    __rotate: np.ndarray | None
+    __rotate_bounds: bool
     __base_bounds: np.ndarray | None
     __base_x_global: np.ndarray | None
     __init_depth: int
@@ -52,6 +54,8 @@ class Benchmark(abc.ABC):
         dim_default: int = 2,
         verbose: bool = False,
         shift: typing.Any = None,
+        rotate: typing.Any = None,
+        rotate_bounds: bool = True,
     ) -> None:
         self.__parallel: bool = bool(parallel)
         self.__fastmath: bool = bool(fastmath)
@@ -65,9 +69,11 @@ class Benchmark(abc.ABC):
         self.__compute: typing.Callable[..., None] | None = None
         self.__dim_changeable: bool = bool(dim_changeable)
         self.__dim_default: int = int(dim_default)
-        # Stored raw; the translation runs post-construction (see __init_subclass__),
+        # Stored raw; validation runs post-construction (see __init_subclass__),
         # once the subclass has set its bounds and global optimum.
         self.__shift: np.ndarray | None = shift
+        self.__rotate: np.ndarray | None = rotate
+        self.__rotate_bounds: bool = bool(rotate_bounds)
         self.__base_bounds: np.ndarray | None = None
         self.__base_x_global: np.ndarray | None = None
         # Protected storage: written by subclasses while constructing data-dependent
@@ -94,9 +100,17 @@ class Benchmark(abc.ABC):
                 finally:
                     self.__init_depth = depth - 1
                 if depth == 1:
-                    raw = getattr(self, "_Benchmark__shift", None)
-                    if raw is not None:
-                        self._apply_shift(raw)
+                    raw_shift = getattr(self, "_Benchmark__shift", None)
+                    if raw_shift is not None:
+                        self.__shift = self._normalize_shift(raw_shift)
+                    raw_rotate = getattr(self, "_Benchmark__rotate", None)
+                    if raw_rotate is not None:
+                        self.__rotate = self._normalize_rotate(raw_rotate)
+                    if (
+                        getattr(self, "_Benchmark__shift", None) is not None
+                        or getattr(self, "_Benchmark__rotate", None) is not None
+                    ):
+                        self._recompute_transform()
 
             __init__.__opfunu_shift_wrapped__ = True  # type: ignore[attr-defined]
             cls.__init__ = __init__  # type: ignore[method-assign]
@@ -105,6 +119,11 @@ class Benchmark(abc.ABC):
     def shift(self) -> np.ndarray | None:
         """The coordinate shift vector, or ``None`` when the problem is unshifted."""
         return getattr(self, "_Benchmark__shift", None)
+
+    @property
+    def rotate(self) -> np.ndarray | None:
+        """The coordinate rotation matrix, or ``None`` when the problem is unrotated."""
+        return getattr(self, "_Benchmark__rotate", None)
 
     def _set_bounds(self, bounds: np.ndarray) -> None:
         """Write the (ndim, 2) bounds matrix into the subclass's private storage."""
@@ -128,9 +147,39 @@ class Benchmark(abc.ABC):
             raise ValueError("The shift vector must contain only finite numbers!")
         return offset
 
-    def _apply_shift(self, shift: typing.Any) -> None:
-        """Translate bounds and global optimum by ``shift`` (idempotent, re-settable)."""
-        offset = self._normalize_shift(shift)
+    def _normalize_rotate(self, rotate: typing.Any) -> np.ndarray:
+        """Validate a user rotation matrix: shape ``(ndim, ndim)``, finite, orthogonal."""
+        ndim = int(self.ndim)
+        try:
+            matrix = np.asarray(rotate, dtype=float)
+        except (TypeError, ValueError) as exc:
+            raise ValueError(f"The rotation must be a ({ndim}, {ndim}) orthogonal matrix!") from exc
+        if matrix.shape != (ndim, ndim):
+            raise ValueError(f"The rotation shape {matrix.shape} must be ({ndim}, {ndim})!")
+        if not np.all(np.isfinite(matrix)):
+            raise ValueError("The rotation matrix must contain only finite numbers!")
+        if not np.allclose(matrix.T @ matrix, np.eye(ndim)):
+            raise ValueError("The rotation matrix must be orthogonal (M.T @ M must be the identity)!")
+        return matrix
+
+    def _recompute_transform(self) -> None:
+        """Restore the base state, then apply rotation and shift (idempotent, re-settable).
+
+        Geometry follows ``f(x) = f_base(M @ (x - o))``: the pullback through
+        ``M.T`` (rotated optimum, enclosing axis-aligned box of the rotated
+        bounds) happens before the translation by ``o``.
+        """
+        matrix = self.__rotate
+        offset = self.__shift
+        if matrix is None and offset is None:
+            # Reset: restore the pristine base state captured on first use.
+            if self.__base_bounds is not None:
+                self._set_bounds(self.__base_bounds.copy())
+            if self.__base_x_global is not None and self.__base_x_global.size > 0:
+                self._x_global = self.__base_x_global.copy()
+            self._paras.pop("shift", None)
+            self._paras.pop("rotate", None)
+            return
         if self.__base_bounds is None:
             self.__base_bounds = np.array(self.bounds, dtype=float, copy=True)
         if self.__base_x_global is None:
@@ -140,34 +189,55 @@ class Benchmark(abc.ABC):
                 current = np.array([])
             self.__base_x_global = current
         assert self.__base_bounds is not None and self.__base_x_global is not None
-        # Restore the base state first so repeated calls do not accumulate.
-        self._set_bounds(self.__base_bounds.copy())
-        base_x = self.__base_x_global
-        if base_x.size > 0:
-            self._x_global = base_x.copy()
-        # Translate the search space: bounds_new = bounds_base + o.
-        self._set_bounds(self.__base_bounds + offset[:, None])
-        # Translate the optimum: x_global = x*_base + o.
-        if base_x.size > 0:
-            flat = base_x.ravel()
-            if flat.size == offset.size:
-                self._x_global = flat + offset
-            else:
-                raise ValueError(f"Cannot shift x_global of length {flat.size} with shift of length {offset.size}!")
-        self.__shift = offset.copy()
-        self._paras["shift"] = self.__shift.copy()
+        bounds = self.__base_bounds
+        x_opt = self.__base_x_global
+        if matrix is not None:
+            if self.__rotate_bounds:
+                # Enclosing AABB of M.T @ [lb, ub]: center -> M.T @ c,
+                # half-widths -> |M.T| @ h (a rotation grows the box).
+                center = (bounds[:, 0] + bounds[:, 1]) / 2.0
+                half = (bounds[:, 1] - bounds[:, 0]) / 2.0
+                new_center = matrix.T @ center
+                new_half = np.abs(matrix.T) @ half
+                bounds = np.column_stack([new_center - new_half, new_center + new_half])
+            # rotate_bounds=False keeps the rigid base box (CEC-style); only
+            # x_global still maps through M.T either way.
+            if x_opt.size > 0:
+                flat = x_opt.ravel()
+                if flat.size == matrix.shape[1]:
+                    x_opt = matrix.T @ flat
+                else:
+                    raise ValueError(f"Cannot rotate x_global of length {flat.size} with a {matrix.shape} matrix!")
+        if offset is not None:
+            # Translate the search space and the (rotated) optimum: + o.
+            bounds = bounds + offset[:, None]
+            if x_opt.size > 0:
+                flat = x_opt.ravel()
+                if flat.size == offset.size:
+                    x_opt = flat + offset
+                else:
+                    raise ValueError(f"Cannot shift x_global of length {flat.size} with shift of length {offset.size}!")
+        self._set_bounds(bounds)
+        if self.__base_x_global.size > 0:
+            self._x_global = x_opt
+        if offset is not None:
+            self._paras["shift"] = offset.copy()
+        else:
+            self._paras.pop("shift", None)
+        if matrix is not None:
+            self._paras["rotate"] = matrix.copy()
+        else:
+            self._paras.pop("rotate", None)
 
     def set_shift(self, shift: typing.Any = None) -> None:
         """Set (or reset with ``None``) the coordinate shift after construction."""
-        if shift is None:
-            if self.__base_bounds is not None:
-                self._set_bounds(self.__base_bounds.copy())
-            if self.__base_x_global is not None and self.__base_x_global.size > 0:
-                self._x_global = self.__base_x_global.copy()
-            self.__shift = None
-            self._paras.pop("shift", None)
-        else:
-            self._apply_shift(shift)
+        self.__shift = None if shift is None else self._normalize_shift(shift)
+        self._recompute_transform()
+
+    def set_rotate(self, rotate: typing.Any = None) -> None:
+        """Set (or reset with ``None``) the coordinate rotation after construction."""
+        self.__rotate = None if rotate is None else self._normalize_rotate(rotate)
+        self._recompute_transform()
 
     # --- configuration exposed through read-only properties ------------------
     # Every property on this class is reader-only: values are supplied to
@@ -469,6 +539,10 @@ class Benchmark(abc.ABC):
         shift = self.__shift
         if shift is not None:
             x = np.asarray(x, dtype=float) - np.asarray(shift, dtype=float)
+        rotate = self.__rotate
+        if rotate is not None:
+            # f(x) = f_base(M @ (x - o)): translate first, then rotate.
+            x = np.asarray(rotate, dtype=float) @ np.asarray(x, dtype=float)
         arr = np.ascontiguousarray(x, dtype=self.dtype)
         params = [self._cast_kernel_param(getattr(self, name)) for name in self._param_names]
         compute(arr, *params, self._out)
@@ -492,7 +566,13 @@ class Benchmark(abc.ABC):
             return np.asarray([self.__evaluate(row) for row in arr], dtype=self.dtype)
         shift = self.__shift
         if shift is not None:
-            arr = np.ascontiguousarray(np.asarray(arr, dtype=float) - np.asarray(shift, dtype=float), dtype=self.dtype)
+            arr = np.asarray(arr, dtype=float) - np.asarray(shift, dtype=float)
+        rotate = self.__rotate
+        if rotate is not None:
+            # Row-stacked candidates: z = M @ x per row is arr @ M.T.
+            arr = np.asarray(arr, dtype=float) @ np.asarray(rotate, dtype=float).T
+        if shift is not None or rotate is not None:
+            arr = np.ascontiguousarray(arr, dtype=self.dtype)
         out = np.empty(arr.shape[0], dtype=self.dtype)
         params = [self._cast_kernel_param(getattr(self, name)) for name in self._param_names]
         compute(arr, *params, out)

@@ -1,5 +1,11 @@
 # Version 2026a
 
++ Added automatic coordinate-rotation propagation (issue #22): every benchmark function accepts a
+  `rotate` matrix and a `rotate_bounds` flag (default `True`), forwarded via `super().__init__(...)`
+  like `shift`, composing as `f(x) = f_base(M @ (x - o))` while `x_global = o + M.T @ x*_base` and
+  `bounds` become the enclosing axis-aligned box of the rotated box plus `o`
+  (`set_rotate()` / `set_rotate(None)` for post-construction use, `rotate` exposed via
+  `get_paras()`; `rotate_bounds=False` keeps the rigid CEC-style box)
 + Added automatic coordinate-shift propagation (issue #19): every benchmark function accepts a `shift`
   constructor argument, forwarded via `super().__init__(...)` to the parent class, evaluating
   `f(x) = f_base(x - o)` while `x_global` and `bounds` translate by `o`

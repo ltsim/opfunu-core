@@ -40,3 +40,14 @@ if __name__ == "__main__":
     print(shifted.x_global)  # base optimum + shift
     print(shifted.bounds)  # base bounds + shift
     print(shifted.is_succeed(shifted.x_global))  # True
+
+    # Rotated function: optimum maps through M.T and bounds become the enclosing
+    # axis-aligned box of the rotated box (compose with a shift as needed)
+    theta = np.pi / 4
+    rotate = np.eye(3)
+    rotate[:2, :2] = [[np.cos(theta), -np.sin(theta)], [np.sin(theta), np.cos(theta)]]
+    rotated = opfunu.name_based.Ackley01(ndim=3, rotate=rotate)
+    print(rotated.x_global)  # M.T @ base optimum
+    print(rotated.bounds)  # enclosing AABB of the rotated bounds
+    print(rotated.is_succeed(rotated.x_global))  # True
+    rotated.set_rotate(None)  # back to the unrotated problem

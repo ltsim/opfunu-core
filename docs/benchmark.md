@@ -48,7 +48,49 @@ print(func.is_succeed(func.x_global))  # True
 read-only `shift` property. The shift can also be changed after construction
 with `func.set_shift(o)`, and removed with `func.set_shift(None)`. Calling
 `set_shift` repeatedly never accumulates: the base bounds and optimum are
-snapshotted on the first shift and restored before each new translation.
+snapshotted on the first transform and restored before each recomputation.
+
+## Coordinate rotations
+
+Every benchmark function also accepts an optional `rotate` constructor argument
+(an orthogonal `ndim x ndim` matrix — any matrix with `M.T @ M = I`, including
+reflections) and a `rotate_bounds` flag (default `True`). Both are ordinary
+`__init__` parameters forwarded like `shift`, and compose with it as
+`f(x) = f_base(M @ (x - o))` — the shift is applied first, then the rotation:
+
+- Fitness: `f(x) = f_base(M @ (x - o))`
+- Global optimum: `x_global = o + M.T @ x*_base` (`f_global` is unchanged)
+- Search space: the enclosing axis-aligned box of `M.T @ bounds_base`, then
+  `+ o`. For a corner-defined box this is `center -> M.T @ c`,
+  `half-widths -> |M.T| @ h`, so a rotation can only grow the box (at 45 deg
+  a `[-a, a]` interval becomes `[-a*sqrt(2), a*sqrt(2)]`).
+
+```python
+import numpy as np
+from opfunu.name_based import Ackley01
+
+theta = np.pi / 4
+M = np.eye(3)
+M[:2, :2] = [[np.cos(theta), -np.sin(theta)], [np.sin(theta), np.cos(theta)]]
+
+func = Ackley01(ndim=3, shift=[2.0, -1.5, 3.0], rotate=M)
+print(func.x_global)  # o + M.T @ base optimum
+print(func.bounds)  # enclosing AABB of the rotated box + shift
+print(func.is_succeed(func.x_global))  # True
+```
+
+Validation is strict: the matrix must have shape `(ndim, ndim)`, contain only
+finite numbers, and be orthogonal (`np.allclose(M.T @ M, I)`); anything else
+raises `ValueError` during construction. A read-only `rotate` property exposes
+the matrix, `func.get_paras()["rotate"]` carries a copy, and `set_rotate(M)` /
+`set_rotate(None)` change or remove it after construction with the same
+idempotency guarantee as `set_shift`.
+
+Pass `rotate_bounds=False` to keep the base box rigid (the CEC convention,
+where official rotation data only transforms the fitness landscape): bounds
+stay `bounds_base + o` while `x_global` still maps through `M.T`. Caveat: the
+rotated optimum may then fall outside the bounds, making
+`is_succeed(x_global)` return `False` — that is expected CEC behavior.
 
 ## Implementing a problem
 
