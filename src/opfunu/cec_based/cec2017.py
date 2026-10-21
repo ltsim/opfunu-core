@@ -78,7 +78,6 @@ class F12017(CecBenchmark):
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
         )
-        self.make_support_data_path("data_2017")
         self.f_shift = self.check_shift_data(f_shift)[: self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
         self._x_global = np.asarray(self.f_shift)
@@ -586,7 +585,6 @@ class F102017(CecBenchmark):
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
         )
-        self.make_support_data_path("data_2017")
         self.f_shift = self.check_shift_data(f_shift)[: self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
         self.f_shuffle = self.check_shuffle_data(f_shuffle, needed_dim=True)
@@ -1439,7 +1437,6 @@ class F202017(CecBenchmark):
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
         )
-        self.make_support_data_path("data_2017")
         self.f_shift = self.check_shift_matrix(f_shift)[:, : self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix)[:, : self.ndim]
         self._x_global = np.asarray(self.f_shift[0])

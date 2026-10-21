@@ -46,7 +46,21 @@ __all__ = [
 FUNC_DATABASE: list[tuple[str, Any]] = inspect.getmembers(name_based, inspect.isclass)
 CEC_DATABASE: list[tuple[str, Any]] = inspect.getmembers(cec_based, inspect.isclass)
 ALL_DATABASE: list[tuple[str, Any]] = FUNC_DATABASE + CEC_DATABASE
-EXCLUDES: list[str] = ["Benchmark", "FuncBenchmark", "CecBenchmark", "ABC"]
+EXCLUDES: list[str] = ["FuncBenchmark", "CecBenchmark"]
+
+
+def _classes(database: list[tuple[str, Any]]) -> list[Any]:
+    """Concrete problem classes of a database, abstract bases filtered out."""
+    return [cls for classname, cls in database if classname not in EXCLUDES]
+
+
+def _match_traits(classes: list[Any], ndim: int | None, **traits: bool | None) -> list[Any]:
+    """Filter classes by compatibility with ``ndim`` and the given boolean traits."""
+    classes = [f for f in classes if f().is_ndim_compatible(ndim)]
+    for name, expected in traits.items():
+        if expected is not None:
+            classes = [f for f in classes if getattr(f, name) == expected]
+    return classes
 
 
 def get_functions_by_classname(name: Any = None) -> list[Any]:
@@ -59,9 +73,7 @@ def get_functions_by_classname(name: Any = None) -> list[Any]:
     -------
         List of the functions, but all the classname are different, so the result is list of 1 function or list of empty
     """
-    return [
-        cls for classname, cls in ALL_DATABASE if (classname not in EXCLUDES and (classname.lower() == name.lower()))
-    ]
+    return [cls for classname, cls in ALL_DATABASE if classname not in EXCLUDES and classname.lower() == name.lower()]
 
 
 def get_functions_based_classname(name: Any = None) -> list[Any]:
@@ -77,7 +89,7 @@ def get_functions_based_classname(name: Any = None) -> list[Any]:
     return [
         cls
         for classname, cls in ALL_DATABASE
-        if (classname not in EXCLUDES and re.search(name.lower(), classname.lower()))
+        if classname not in EXCLUDES and re.search(name.lower(), classname.lower())
     ]
 
 
@@ -91,9 +103,9 @@ def get_functions_by_ndim(ndim: int | None = None) -> list[Any]:
     -------
         List of the functions
     """
-    functions = [cls for classname, cls in ALL_DATABASE if classname not in EXCLUDES]
+    functions = _classes(ALL_DATABASE)
     if isinstance(ndim, int) and ndim > 1:
-        return [f for f in functions if (f().dim_default == ndim and f().dim_changeable is False)]
+        return [f for f in functions if f().dim_default == ndim and f().dim_changeable is False]
     return functions
 
 
@@ -107,18 +119,18 @@ def get_functions_based_ndim(ndim: int | None = None) -> list[Any]:
     -------
         List of the functions
     """
-    functions = [cls for classname, cls in ALL_DATABASE if classname not in EXCLUDES]
+    functions = _classes(ALL_DATABASE)
     if isinstance(ndim, int) and ndim > 1:
-        return [f for f in functions if (f().dim_default == ndim or f().dim_changeable is True)]
+        return [f for f in functions if f().dim_default == ndim or f().dim_changeable is True]
     return functions
 
 
 def get_all_name_based_functions() -> list[Any]:
-    return [cls for classname, cls in FUNC_DATABASE if classname not in EXCLUDES]
+    return _classes(FUNC_DATABASE)
 
 
 def get_all_cec_based_functions() -> list[Any]:
-    return [cls for classname, cls in CEC_DATABASE if classname not in EXCLUDES]
+    return _classes(CEC_DATABASE)
 
 
 def get_name_based_functions(
@@ -134,20 +146,20 @@ def get_name_based_functions(
     parametric: bool | None = None,
     modality: bool | None = None,
 ) -> list[Any]:
-    functions = [cls for classname, cls in FUNC_DATABASE if classname not in EXCLUDES]
-    functions = [f for f in functions if f().is_ndim_compatible(ndim)]
-
-    functions = [f for f in functions if (continuous is None) or (f.continuous == continuous)]
-    functions = [f for f in functions if (linear is None) or (f.linear == linear)]
-    functions = [f for f in functions if (convex is None) or (f.convex == convex)]
-    functions = [f for f in functions if (unimodal is None) or (f.unimodal == unimodal)]
-    functions = [f for f in functions if (separable is None) or (f.separable == separable)]
-    functions = [f for f in functions if (differentiable is None) or (f.differentiable == differentiable)]
-    functions = [f for f in functions if (scalable is None) or (f.scalable == scalable)]
-    functions = [f for f in functions if (randomized_term is None) or (f.randomized_term == randomized_term)]
-    functions = [f for f in functions if (parametric is None) or (f.parametric == parametric)]
-    functions = [f for f in functions if (modality is None) or (f.modality == modality)]
-    return functions
+    return _match_traits(
+        _classes(FUNC_DATABASE),
+        ndim,
+        continuous=continuous,
+        linear=linear,
+        convex=convex,
+        unimodal=unimodal,
+        separable=separable,
+        differentiable=differentiable,
+        scalable=scalable,
+        randomized_term=randomized_term,
+        parametric=parametric,
+        modality=modality,
+    )
 
 
 def get_cec_based_functions(
@@ -165,19 +177,19 @@ def get_cec_based_functions(
     rotated: bool | None = None,
     modality: bool | None = None,
 ) -> list[Any]:
-    functions = [cls for classname, cls in CEC_DATABASE if classname not in EXCLUDES]
-    functions = [f for f in functions if f().is_ndim_compatible(ndim)]
-
-    functions = [f for f in functions if (continuous is None) or (f.continuous == continuous)]
-    functions = [f for f in functions if (linear is None) or (f.linear == linear)]
-    functions = [f for f in functions if (convex is None) or (f.convex == convex)]
-    functions = [f for f in functions if (unimodal is None) or (f.unimodal == unimodal)]
-    functions = [f for f in functions if (separable is None) or (f.separable == separable)]
-    functions = [f for f in functions if (differentiable is None) or (f.differentiable == differentiable)]
-    functions = [f for f in functions if (scalable is None) or (f.scalable == scalable)]
-    functions = [f for f in functions if (randomized_term is None) or (f.randomized_term == randomized_term)]
-    functions = [f for f in functions if (parametric is None) or (f.parametric == parametric)]
-    functions = [f for f in functions if (shifted is None) or (f.shifted == shifted)]
-    functions = [f for f in functions if (rotated is None) or (f.rotated == rotated)]
-    functions = [f for f in functions if (modality is None) or (f.modality == modality)]
-    return functions
+    return _match_traits(
+        _classes(CEC_DATABASE),
+        ndim,
+        continuous=continuous,
+        linear=linear,
+        convex=convex,
+        unimodal=unimodal,
+        separable=separable,
+        differentiable=differentiable,
+        scalable=scalable,
+        randomized_term=randomized_term,
+        parametric=parametric,
+        shifted=shifted,
+        rotated=rotated,
+        modality=modality,
+    )

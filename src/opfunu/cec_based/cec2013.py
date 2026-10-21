@@ -73,7 +73,6 @@ class F12013(CecBenchmark):
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
         )
-        self.make_support_data_path("data_2013")
         self.f_shift = self.check_shift_matrix(f_shift, selected_idx=0)
         self._x_global = np.asarray(self.f_shift)
         self._bind_kernel(compute, ["f_shift", "f_bias"], paras={"f_shift": self.f_shift, "f_bias": self.f_bias})
@@ -145,7 +144,6 @@ class F22013(CecBenchmark):
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
         )
-        self.make_support_data_path("data_2013")
         self.f_shift = self.check_shift_matrix(f_shift, selected_idx=0)
         self.f_matrix = self.check_matrix_data(f_matrix)[: self.ndim, : self.ndim]
         self._x_global = np.asarray(self.f_shift)
@@ -224,7 +222,6 @@ class F32013(CecBenchmark):
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
         )
-        self.make_support_data_path("data_2013")
         self.f_shift = self.check_shift_matrix(f_shift, selected_idx=0)
         self.f_matrix = self.check_matrix_data(f_matrix)[: 2 * self.ndim, : self.ndim]
         self._x_global = np.asarray(self.f_shift)
@@ -1299,7 +1296,6 @@ class F212013(CecBenchmark):
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
         )
-        self.make_support_data_path("data_2013")
         self.f_shift = self.check_shift_matrix(f_shift)[:, : self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix)[:, : self.ndim]
         self._x_global = np.asarray(self.f_shift[0])
@@ -1406,7 +1402,6 @@ class F222013(CecBenchmark):
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
         )
-        self.make_support_data_path("data_2013")
         self.f_shift = self.check_shift_matrix(f_shift)[:, : self.ndim]
         self._x_global = np.asarray(self.f_shift[0])
         self.n_funcs = 3
@@ -1509,7 +1504,6 @@ class F232013(CecBenchmark):
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
         )
-        self.make_support_data_path("data_2013")
         self.f_shift = self.check_shift_matrix(f_shift)[:, : self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix)[:, : self.ndim]
         self._x_global = np.asarray(self.f_shift[0])
@@ -1615,7 +1609,6 @@ class F242013(CecBenchmark):
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
         )
-        self.make_support_data_path("data_2013")
         self.f_shift = self.check_shift_matrix(f_shift)[:, : self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix)[:, : self.ndim]
         self._x_global = np.asarray(self.f_shift[0])
@@ -1772,7 +1765,6 @@ class F262013(CecBenchmark):
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
         )
-        self.make_support_data_path("data_2013")
         self.f_shift = self.check_shift_matrix(f_shift)[:, : self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix)[:, : self.ndim]
         self._x_global = np.asarray(self.f_shift[0])
@@ -1890,7 +1882,6 @@ class F272013(CecBenchmark):
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
         )
-        self.make_support_data_path("data_2013")
         self.f_shift = self.check_shift_matrix(f_shift)[:, : self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix)[:, : self.ndim]
         self._x_global = np.asarray(self.f_shift[0])
@@ -2008,7 +1999,6 @@ class F282013(CecBenchmark):
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
         )
-        self.make_support_data_path("data_2013")
         self.f_shift = self.check_shift_matrix(f_shift)[:, : self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix)[:, : self.ndim]
         self._x_global = np.asarray(self.f_shift[0])

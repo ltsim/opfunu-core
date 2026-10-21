@@ -26,10 +26,33 @@ class Formula:
 
 
 class Benchmark(abc.ABC):
+    """
+    Abstract base class for an optimization benchmark problem.
+
+    Subclasses supply a ``compute`` kernel and the problem-specific metadata; the
+    shared evaluation machinery (``evaluate``, ``_evaluate_batch``), the shape
+    storage behind ``bounds``/``ndim``/``lb``/``ub``, and the mathematical trait
+    defaults below are implemented once, here.
+    """
+
+    name: str = "Benchmark name"
     latex_formula: str = r"f(\mathbf{x})"
     latex_formula_dimension: str = r"d \in \mathbb{N}_{+}^{*}"
     latex_formula_bounds: str = r"x_i \in [-2\pi, 2\pi], \forall i \in \llbracket 1, d\rrbracket"
     latex_formula_global_optimum: str = r"f(0, ..., 0)=-1, \text{ for}, m=5, \beta=15"
+
+    continuous: bool = True
+    linear: bool = False
+    convex: bool = True
+    unimodal: bool = False
+    separable: bool = False
+
+    differentiable: bool = True
+    scalable: bool = True
+    randomized_term: bool = False
+    parametric: bool = True
+
+    modality: bool = True  # Number of ambiguous peaks, unknown # peaks
 
     epsilon: typing.Final[float] = 1e-8
 
@@ -44,6 +67,12 @@ class Benchmark(abc.ABC):
     __base_bounds: np.ndarray | None
     __base_x_global: np.ndarray | None
     __init_depth: int
+
+    #: Shape storage: (ndim, 2) bounds matrix and its dimensionality, written by
+    #: the concrete ``check_ndim_and_bounds`` implementations and exposed through
+    #: the read-only ``bounds``/``ndim``/``lb``/``ub`` properties.
+    _ndim: int
+    _bounds: np.ndarray
 
     def __init__(
         self,
@@ -85,6 +114,9 @@ class Benchmark(abc.ABC):
         self._paras: dict[str, typing.Any] = {}
         self._f_global: float = float(f_global)
         self._x_global: np.ndarray = np.asarray(x_global if x_global is not None else [])
+        # Shape storage; the concrete check_ndim_and_bounds of each base fills it.
+        self._ndim = 0
+        self._bounds = np.array([])
 
     def __init_subclass__(cls, **kwargs: typing.Any) -> None:
         super().__init_subclass__(**kwargs)
@@ -116,8 +148,8 @@ class Benchmark(abc.ABC):
         return getattr(self, "_Benchmark__shift", None)
 
     def _set_bounds(self, bounds: np.ndarray) -> None:
-        """Write the (ndim, 2) bounds matrix into the subclass's private storage."""
-        raise NotImplementedError
+        """Write the (ndim, 2) bounds matrix behind the read-only ``bounds`` property."""
+        self._bounds = np.asarray(bounds, dtype=float)
 
     def _normalize_shift(self, shift: typing.Any) -> np.ndarray:
         """Validate a user shift vector against the problem dimensionality."""
@@ -255,11 +287,6 @@ class Benchmark(abc.ABC):
         return self.__kernel
 
     @property
-    def _kernel(self) -> typing.Callable[..., None] | None:
-        """The instance kernel closure (read-only; prefer the ``compute`` property)."""
-        return self.__kernel
-
-    @property
     def _param_names(self) -> list[str]:
         """Names of the instance attributes the kernel takes (after ``x``, before ``out``, read-only)."""
         return self.__param_names
@@ -285,18 +312,17 @@ class Benchmark(abc.ABC):
         param_names: list[str] | None = None,
         *,
         plain: bool = False,
-        params: dict[str, typing.Any] | None = None,
         paras: dict[str, typing.Any] | list[str] | tuple[str, ...] | None = None,
     ) -> None:
         """
         Install ``compute`` and bind it for execution.
 
         The only sanctioned caller of the private ``__build_compute``
-        helper. ``params`` sets extra attributes before binding;
-        ``param_names`` lists the kernel parameters in call order
-        (defaults to ``params`` keys); ``paras`` is display metadata
-        (a dict, or a list of attribute names resolved against ``self``;
-        defaults to ``{name: getattr(self, name)}`` for ``param_names``).
+        helper. ``param_names`` lists the kernel parameters in call order
+        (instance attributes read at bind time); ``paras`` is display
+        metadata (a dict, or a list of attribute names resolved against
+        ``self``; defaults to ``{name: getattr(self, name)}`` for
+        ``param_names``).
         With ``plain=True`` the kernel is bound uncompiled (no Numba
         attempt); otherwise it is compiled via ``__build_compute``, which
         requires Numba to be installed and the instance's ``precompile``
@@ -304,10 +330,7 @@ class Benchmark(abc.ABC):
         """
         if compute is not None:
             self.__kernel = compute
-        if params:
-            for key, val in params.items():
-                setattr(self, key, val)
-        names: list[str] = list(param_names) if param_names is not None else list(params.keys() if params else [])
+        names: list[str] = list(param_names) if param_names is not None else []
         self.__param_names = names
         if paras is None:
             if names:
@@ -595,10 +618,29 @@ class Benchmark(abc.ABC):
         self.check_solution(x)
         return self.__evaluate(x)
 
-    @abc.abstractmethod
-    def is_ndim_compatible(self, ndim: int | None) -> bool: ...
+    def is_ndim_compatible(self, ndim: int | None) -> bool:
+        """
+        Method to support searching the functions with input ndim
 
-    @abc.abstractmethod
+        Parameters
+        ----------
+        ndim : int
+                The number of dimensions
+
+        Returns
+        -------
+        val: bool
+             Always true if dim_changeable = True, Else return ndim == self.ndim
+        """
+        assert (ndim is None) or (isinstance(ndim, int) and (not ndim < 0)), (
+            "The dimension ndim must be None or a positive integer"
+        )
+        if ndim is None:
+            return True
+        if self.dim_changeable:
+            return ndim > 0
+        return ndim == self.ndim
+
     def is_succeed(self, x: np.ndarray, tol: float = 1.0e-5) -> bool:
         """
         Check if a candidate solution at the global minimum.
@@ -616,20 +658,30 @@ class Benchmark(abc.ABC):
         is_succeed : bool
             Answer the question: is the candidate vector at the global minimum?
         """
-        ...
+
+        # the solution should still be in bounds, otherwise immediate fail.
+        if np.any(x > self.ub) or np.any(x < self.lb):
+            return False
+
+        val = float(self.evaluate(np.squeeze(x)))
+        if np.abs(val - self.f_global) < tol:
+            return True
+
+        # you found a lower global minimum.  This shouldn't happen.
+        if val < self.f_global:
+            raise ValueError("Found a lower global minimum", x, val, self.f_global)
+        return False
 
     @property
-    @abc.abstractmethod
     def bounds(self) -> np.ndarray:
         """
         The lower/upper bounds to be used for optimization problem. This a 2D-matrix of [lower, upper] array that
         contain the lower and upper bounds for the problem. The problem should not be asked for evaluation outside
         these bounds. ``len(bounds) == ndim``.
         """
-        ...
+        return self._bounds
 
     @property
-    @abc.abstractmethod
     def ndim(self) -> int:
         """
         The dimensionality of the problem.
@@ -639,10 +691,9 @@ class Benchmark(abc.ABC):
         ndim : int
             The dimensionality of the problem
         """
-        ...
+        return self._ndim
 
     @property
-    @abc.abstractmethod
     def lb(self) -> np.ndarray:
         """
         The lower bounds for the problem
@@ -652,10 +703,9 @@ class Benchmark(abc.ABC):
         lb : 1D-vector
             The lower bounds for the problem
         """
-        ...
+        return np.array([x[0] for x in self.bounds])
 
     @property
-    @abc.abstractmethod
     def ub(self) -> np.ndarray:
         """
         The upper bounds for the problem
@@ -665,7 +715,7 @@ class Benchmark(abc.ABC):
         ub : 1D-vector
             The upper bounds for the problem
         """
-        ...
+        return np.array([x[1] for x in self.bounds])
 
     def create_solution(self) -> np.ndarray:
         """
