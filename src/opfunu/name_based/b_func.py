@@ -43,6 +43,7 @@ class BartelsConn(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = np.abs(x[0] ** 2 + x[1] ** 2 + x[0] * x[1]) + np.abs(np.sin(x[0])) + np.abs(np.cos(x[1]))
@@ -60,6 +61,7 @@ class BartelsConn(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
 
 
@@ -98,6 +100,7 @@ class Beale(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = (
@@ -119,6 +122,7 @@ class Beale(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
 
 
@@ -157,6 +161,7 @@ class BiggsExp02(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             t = np.arange(1, 11.0) * 0.1
@@ -176,6 +181,7 @@ class BiggsExp02(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
 
 
@@ -214,6 +220,7 @@ class BiggsExp03(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             t = np.arange(1.0, 11.0) * 0.1
@@ -233,6 +240,7 @@ class BiggsExp03(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
 
 
@@ -271,6 +279,7 @@ class BiggsExp04(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             t = np.arange(1, 11.0) * 0.1
@@ -290,6 +299,7 @@ class BiggsExp04(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
 
 
@@ -328,6 +338,7 @@ class BiggsExp05(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             t = np.arange(1, 12.0) * 0.1
@@ -347,6 +358,7 @@ class BiggsExp05(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
 
 
@@ -387,6 +399,7 @@ class Bird(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = (
@@ -408,6 +421,7 @@ class Bird(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
         self.x_globals = np.array([[4.701055751981055, 3.152946019601391], [-1.582142172055011, -3.130246799635430]])
 
@@ -444,6 +458,7 @@ class Bohachevsky1(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = x[0] ** 2 + 2 * x[1] ** 2 - 0.3 * np.cos(3 * np.pi * x[0]) - 0.4 * np.cos(4 * np.pi * x[1]) + 0.7
@@ -461,6 +476,7 @@ class Bohachevsky1(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
 
 
@@ -496,6 +512,7 @@ class Bohachevsky2(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = x[0] ** 2 + 2 * x[1] ** 2 - 0.3 * np.cos(3 * np.pi * x[0]) * np.cos(4 * np.pi * x[1]) + 0.3
@@ -513,6 +530,7 @@ class Bohachevsky2(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
 
 
@@ -548,6 +566,7 @@ class Bohachevsky3(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = x[0] ** 2 + 2 * x[1] ** 2 - 0.3 * np.cos(3 * np.pi * x[0] + 4 * np.pi * x[1]) + 0.3
@@ -565,6 +584,7 @@ class Bohachevsky3(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
 
 
@@ -600,6 +620,7 @@ class Booth(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = (x[0] + 2 * x[1] - 7) ** 2 + (2 * x[0] + x[1] - 5) ** 2
@@ -617,6 +638,7 @@ class Booth(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
 
 
@@ -652,6 +674,7 @@ class BoxBetts(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             i = np.arange(1, 11)
@@ -671,6 +694,7 @@ class BoxBetts(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
 
 
@@ -711,6 +735,7 @@ class Branin01(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = (
@@ -732,6 +757,7 @@ class Branin01(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
         self.x_globals = np.array([[-np.pi, 12.275], [np.pi, 2.275], [3 * np.pi, 2.475]])
 
@@ -771,6 +797,7 @@ class Branin02(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = (
@@ -793,6 +820,7 @@ class Branin02(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
 
 
@@ -828,6 +856,7 @@ class Brent(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = (x[0] + 10.0) ** 2.0 + (x[1] + 10.0) ** 2.0 + np.exp(-(x[0] ** 2.0) - x[1] ** 2.0)
@@ -845,6 +874,7 @@ class Brent(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
 
 
@@ -880,6 +910,7 @@ class Brown(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             x0 = x[:-1]
@@ -899,6 +930,7 @@ class Brown(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
 
 
@@ -934,6 +966,7 @@ class Bukin02(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = 100 * (x[1] ** 2 - 0.01 * x[0] ** 2 + 1.0) + 0.01 * (x[0] + 10.0) ** 2.0
@@ -951,6 +984,7 @@ class Bukin02(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
 
 
@@ -986,6 +1020,7 @@ class Bukin04(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = 100 * x[1] ** 2 + 0.01 * np.abs(x[0] + 10)
@@ -1003,6 +1038,7 @@ class Bukin04(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
 
 
@@ -1040,6 +1076,7 @@ class Bukin06(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = 100 * np.sqrt(np.abs(x[1] - 0.01 * x[0] ** 2)) + 0.01 * np.abs(x[0] + 10)
@@ -1057,4 +1094,5 @@ class Bukin06(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )

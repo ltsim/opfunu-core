@@ -59,6 +59,10 @@ Without the `[numba]` extra the library runs in pure-Python/NumPy mode, which al
 works on PyPy. Check which mode is active via `opfunu.HAS_NUMBA`
 (`problem.numba_compiled` reports it per instance).
 
+Compilation stays optional even with the extra installed: every problem accepts
+`precompile` (e.g. `Ackley01(ndim=10, precompile=False)`), and
+`Benchmark.default_precompile` sets the policy for a whole session.
+
 Install from Github:
 ```sh
 $ pip install git+https://github.com/ltsim/opfunu-core

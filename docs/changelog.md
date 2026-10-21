@@ -19,3 +19,6 @@ The full changelog is maintained in the repository:
 * Numba is an opt-in extra (`pip install opfunu-core[numba]`, CPython only); without it every kernel
   binds as plain Python so the library stays fully usable on CPython and PyPy
   (`opfunu.HAS_NUMBA`, per-instance `numba_compiled`).
+* Compilation stays optional even with Numba installed: every problem accepts `precompile`
+  (`False` keeps the plain kernel, `True` requests compilation, `None` follows the
+  package-wide `Benchmark.default_precompile` policy).

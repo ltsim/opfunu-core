@@ -86,6 +86,7 @@ READ_ONLY_PROPERTIES = [
     "parallel",
     "fastmath",
     "dtype",
+    "precompile",
     "verbose",
     "support_path",
     "paras",

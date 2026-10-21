@@ -33,6 +33,11 @@ class Benchmark(abc.ABC):
 
     epsilon: typing.Final[float] = 1e-8
 
+    #: Package-wide compilation policy for instances built without an explicit
+    #: ``precompile`` argument. Set it before constructing problems to change the
+    #: default for every subclass (e.g. ``Benchmark.default_precompile = False``).
+    default_precompile: typing.ClassVar[bool] = True
+
     _gufunc_cache: typing.ClassVar[dict[tuple[typing.Any, ...], typing.Any]] = {}
 
     __shift: np.ndarray | None
@@ -52,11 +57,15 @@ class Benchmark(abc.ABC):
         dim_default: int = 2,
         verbose: bool = False,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         self.__parallel: bool = bool(parallel)
         self.__fastmath: bool = bool(fastmath)
         self.__dtype: np.dtype = np.dtype(dtype)
         self.__verbose: bool = bool(verbose)
+        # ``None`` defers to the package-wide policy; a bool is an explicit
+        # per-instance choice that always wins over the class default.
+        self.__precompile: bool = bool(type(self).default_precompile if precompile is None else precompile)
         self.__numba_compiled: bool = False
         self.__compile_error: Exception | None = None
         self.__kernel: typing.Callable[..., None] | None = compute
@@ -190,6 +199,16 @@ class Benchmark(abc.ABC):
         return self.__dtype
 
     @property
+    def precompile(self) -> bool:
+        """Whether the kernel may be compiled with Numba (read-only; resolved intent).
+
+        ``False`` when the instance was built with ``precompile=False`` or when
+        ``Benchmark.default_precompile`` was ``False`` at construction time.
+        Report what actually bound through ``numba_compiled``.
+        """
+        return self.__precompile
+
+    @property
     def support_path(self) -> Traversable | None:
         """The package-data directory holding shift/rotation files (CEC only, read-only)."""
         return self._support_path
@@ -279,7 +298,9 @@ class Benchmark(abc.ABC):
         (a dict, or a list of attribute names resolved against ``self``;
         defaults to ``{name: getattr(self, name)}`` for ``param_names``).
         With ``plain=True`` the kernel is bound uncompiled (no Numba
-        attempt); otherwise it is compiled via ``__build_compute``.
+        attempt); otherwise it is compiled via ``__build_compute``, which
+        requires Numba to be installed and the instance's ``precompile``
+        to be enabled.
         """
         if compute is not None:
             self.__kernel = compute
@@ -368,15 +389,20 @@ class Benchmark(abc.ABC):
         (in call order, after ``x`` and before ``out``). Attribute lookup
         and normalization errors propagate; only Numba compilation/warmup
         failures fall back to the plain Python kernel, keeping the same
-        ``(x, *params, out)`` calling convention. When Numba is not installed
-        (PyPy, minimal installs) the plain kernel is used directly without
-        attempting compilation. Compilation (plus a warmup call) happens here,
-        i.e. at instantiation, never on first ``evaluate``. On fallback the
-        raised exception is stored in ``_compile_error`` (useful for diagnosing
-        silent fallbacks; ``None`` when Numba is simply absent).
+        ``(x, *params, out)`` calling convention. The plain kernel is used
+        directly, without any compilation attempt, when Numba is not installed
+        (PyPy, minimal installs) or when compilation is declined for this
+        instance (``precompile=False``, or ``Benchmark.default_precompile``
+        being ``False`` while ``precompile`` is ``None``). Compilation (plus a
+        warmup call) happens here, i.e. at instantiation, never on first
+        ``evaluate``. On fallback the raised exception is stored in
+        ``_compile_error`` (useful for diagnosing silent fallbacks; ``None``
+        when compilation was simply skipped).
         """
         kernel = self.__resolve_kernel()
-        if not numba_compat.HAS_NUMBA:
+        if not (numba_compat.HAS_NUMBA and self.__precompile):
+            # Numba absent, or compilation declined (``precompile=False`` /
+            # ``Benchmark.default_precompile=False``): bind the plain kernel.
             self.__numba_compiled = False
             self.__compile_error = None
             # Validate eagerly so mistyped params fail fast, exactly as in the

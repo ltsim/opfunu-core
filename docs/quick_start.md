@@ -145,6 +145,14 @@ func = opfunu.cec_based.F12014(ndim=30, parallel=True, fastmath=True, dtype=np.f
 * `fastmath=True` (default) compiles the kernel with Numba `fastmath`; pass
   `fastmath=False` for bit-exact agreement with the pre-migration NumPy code.
 * `parallel=True` compiles with `target="parallel"` for multi-threaded batch runs.
+* `precompile` decides whether Numba is used at all. `Ackley01(ndim=10,
+  precompile=False)` keeps the plain-Python/NumPy kernel even when the `[numba]`
+  extra is installed; `precompile=True` forces the compilation attempt. The
+  default (`None`) follows the package-wide policy
+  `Benchmark.default_precompile`, which is `True` out of the box — set it to
+  `False` before building problems to make plain kernels the session default.
+  Kernels bound with `plain=True` (stochastic terms, hybrid compositions) always
+  stay plain, and `precompile=True` is inert when Numba is not installed.
 
 ## Batch evaluation
 
@@ -163,8 +171,9 @@ on every interpreter — only slower.
 
 ```python
 print(opfunu.HAS_NUMBA)  # is Numba available in this environment?
+print(func.precompile)  # did this instance allow compilation?
 print(func.numba_compiled)  # did this instance bind a compiled gufunc?
-print(func._compile_error)  # compilation failure, or None (also None when Numba is absent)
+print(func._compile_error)  # compile failure; None on success, without Numba, or when declined
 print(func.get_paras())  # kernel parameters bound for this instance
 ```
 

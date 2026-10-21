@@ -50,6 +50,7 @@ class F12010(CecBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, f_shift: typing.Any, out: np.ndarray) -> None:
             out[0] = operator.elliptic_func(x - f_shift)
@@ -67,6 +68,7 @@ class F12010(CecBenchmark):
             compute=compute,
             param_names=["f_shift"],
             shift=shift,
+            precompile=precompile,
         )
 
 
@@ -92,12 +94,20 @@ class F22010(F12010):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, f_shift: typing.Any, out: np.ndarray) -> None:
             out[0] = operator.rastrigin_func(x - f_shift)
 
         super().__init__(
-            ndim=ndim, bounds=bounds, f_shift=f_shift, parallel=parallel, fastmath=fastmath, dtype=dtype, shift=shift
+            ndim=ndim,
+            bounds=bounds,
+            f_shift=f_shift,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            shift=shift,
+            precompile=precompile,
         )
         self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-5.0, 5.0] for _ in range(self.dim_default)]))
         self._bind_kernel(compute, ["f_shift"])
@@ -125,12 +135,20 @@ class F32010(F12010):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, f_shift: typing.Any, out: np.ndarray) -> None:
             out[0] = operator.ackley_func(x - f_shift)
 
         super().__init__(
-            ndim=ndim, bounds=bounds, f_shift=f_shift, parallel=parallel, fastmath=fastmath, dtype=dtype, shift=shift
+            ndim=ndim,
+            bounds=bounds,
+            f_shift=f_shift,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            shift=shift,
+            precompile=precompile,
         )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-32.0, 32.0] for _ in range(self.dim_default)])
@@ -178,6 +196,7 @@ class F42010(CecBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(
             x: np.ndarray,
@@ -202,6 +221,7 @@ class F42010(CecBenchmark):
             dim_default=1000,
             dim_max=1000,
             shift=shift,
+            precompile=precompile,
         )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
@@ -249,6 +269,7 @@ class F52010(F42010):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(
             x: np.ndarray,
@@ -266,7 +287,16 @@ class F52010(F42010):
             out[0] = operator.rastrigin_func(z_rot_ras) * 10**6 + operator.rastrigin_func(z_ras)
 
         super().__init__(
-            ndim, bounds, f_shift, f_matrix, m_group, parallel=parallel, fastmath=fastmath, dtype=dtype, shift=shift
+            ndim,
+            bounds,
+            f_shift,
+            f_matrix,
+            m_group,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            shift=shift,
+            precompile=precompile,
         )
         self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-5.0, 5.0] for _ in range(self.dim_default)]))
         self._bind_kernel(compute, ["f_shift", "P", "m_group", "f_matrix"])
@@ -296,6 +326,7 @@ class F62010(F42010):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(
             x: np.ndarray,
@@ -313,7 +344,16 @@ class F62010(F42010):
             out[0] = operator.ackley_func(z_rot_ras) * 10**6 + operator.ackley_func(z_ras)
 
         super().__init__(
-            ndim, bounds, f_shift, f_matrix, m_group, parallel=parallel, fastmath=fastmath, dtype=dtype, shift=shift
+            ndim,
+            bounds,
+            f_shift,
+            f_matrix,
+            m_group,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            shift=shift,
+            precompile=precompile,
         )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-32.0, 32.0] for _ in range(self.dim_default)])
@@ -360,6 +400,7 @@ class F72010(CecBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, f_shift: typing.Any, P: typing.Any, m_group: typing.Any, out: np.ndarray) -> None:
             z = x - f_shift
@@ -375,6 +416,7 @@ class F72010(CecBenchmark):
             dim_default=1000,
             dim_max=1000,
             shift=shift,
+            precompile=precompile,
         )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
@@ -418,6 +460,7 @@ class F82010(F72010):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, f_shift: typing.Any, P: typing.Any, m_group: typing.Any, out: np.ndarray) -> None:
             z = x - f_shift
@@ -425,7 +468,17 @@ class F82010(F72010):
             z_sphere = z[P[m_group:]]
             out[0] = operator.rosenbrock_func(z_rosen) * 10**6 + operator.sphere_func(z_sphere)
 
-        super().__init__(ndim, bounds, f_shift, m_group, parallel=parallel, fastmath=fastmath, dtype=dtype, shift=shift)
+        super().__init__(
+            ndim,
+            bounds,
+            f_shift,
+            m_group,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            shift=shift,
+            precompile=precompile,
+        )
         self._x_global = np.asarray(self.f_shift.copy())
         self.x_global[self.P[: self.m_group]] = self.f_shift[self.P[: self.m_group]] + 1
         self.x_global[self.P[self.m_group :]] = self.f_shift[self.P[self.m_group :]]
@@ -472,6 +525,7 @@ class F92010(CecBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(
             x: np.ndarray,
@@ -499,6 +553,7 @@ class F92010(CecBenchmark):
             dim_default=1000,
             dim_max=1000,
             shift=shift,
+            precompile=precompile,
         )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
@@ -547,6 +602,7 @@ class F102010(F92010):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(
             x: np.ndarray,
@@ -567,7 +623,16 @@ class F102010(F92010):
             out[0] = result + operator.rastrigin_func(z2)
 
         super().__init__(
-            ndim, bounds, f_shift, f_matrix, m_group, parallel=parallel, fastmath=fastmath, dtype=dtype, shift=shift
+            ndim,
+            bounds,
+            f_shift,
+            f_matrix,
+            m_group,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            shift=shift,
+            precompile=precompile,
         )
         self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-5.0, 5.0] for _ in range(self.dim_default)]))
         self._bind_kernel(compute, ["f_shift", "count_up", "P", "m_group", "f_matrix"])
@@ -597,6 +662,7 @@ class F112010(F92010):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(
             x: np.ndarray,
@@ -617,7 +683,16 @@ class F112010(F92010):
             out[0] = result + operator.ackley_func(z2)
 
         super().__init__(
-            ndim, bounds, f_shift, f_matrix, m_group, parallel=parallel, fastmath=fastmath, dtype=dtype, shift=shift
+            ndim,
+            bounds,
+            f_shift,
+            f_matrix,
+            m_group,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            shift=shift,
+            precompile=precompile,
         )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-32.0, 32.0] for _ in range(self.dim_default)])
@@ -646,6 +721,7 @@ class F122010(F72010):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(
             x: np.ndarray, f_shift: typing.Any, count_up: int, P: typing.Any, m_group: typing.Any, out: np.ndarray
@@ -658,7 +734,17 @@ class F122010(F72010):
             z2 = z[P[int(x.shape[0] / 2) :]]
             out[0] = result + operator.sphere_func(z2)
 
-        super().__init__(ndim, bounds, f_shift, m_group, parallel=parallel, fastmath=fastmath, dtype=dtype, shift=shift)
+        super().__init__(
+            ndim,
+            bounds,
+            f_shift,
+            m_group,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            shift=shift,
+            precompile=precompile,
+        )
         self.count_up = int(self.ndim / (2 * self.m_group))
         self._bind_kernel(compute, ["f_shift", "count_up", "P", "m_group"])
 
@@ -685,6 +771,7 @@ class F132010(F72010):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(
             x: np.ndarray, f_shift: typing.Any, count_up: int, P: typing.Any, m_group: typing.Any, out: np.ndarray
@@ -697,7 +784,17 @@ class F132010(F72010):
             z2 = z[P[int(x.shape[0] / 2) :]]
             out[0] = result + operator.sphere_func(z2)
 
-        super().__init__(ndim, bounds, f_shift, m_group, parallel=parallel, fastmath=fastmath, dtype=dtype, shift=shift)
+        super().__init__(
+            ndim,
+            bounds,
+            f_shift,
+            m_group,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            shift=shift,
+            precompile=precompile,
+        )
         self.count_up = int(self.ndim / (2 * self.m_group))
         self._x_global = np.asarray(self.f_shift.copy())
         self.x_global[self.P[: int(self.ndim / 2)]] = self.f_shift[self.P[: int(self.ndim / 2)]] + 1
@@ -727,6 +824,7 @@ class F142010(F92010):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(
             x: np.ndarray,
@@ -746,7 +844,16 @@ class F142010(F92010):
             out[0] = result
 
         super().__init__(
-            ndim, bounds, f_shift, f_matrix, m_group, parallel=parallel, fastmath=fastmath, dtype=dtype, shift=shift
+            ndim,
+            bounds,
+            f_shift,
+            f_matrix,
+            m_group,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            shift=shift,
+            precompile=precompile,
         )
         self.count_up = int(self.ndim / self.m_group)
         self._bind_kernel(compute, ["f_shift", "count_up", "P", "m_group", "f_matrix"])
@@ -776,6 +883,7 @@ class F152010(F92010):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(
             x: np.ndarray,
@@ -795,7 +903,16 @@ class F152010(F92010):
             out[0] = result
 
         super().__init__(
-            ndim, bounds, f_shift, f_matrix, m_group, parallel=parallel, fastmath=fastmath, dtype=dtype, shift=shift
+            ndim,
+            bounds,
+            f_shift,
+            f_matrix,
+            m_group,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            shift=shift,
+            precompile=precompile,
         )
         self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-5.0, 5.0] for _ in range(self.dim_default)]))
         self.count_up = int(self.ndim / self.m_group)
@@ -826,6 +943,7 @@ class F162010(F92010):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(
             x: np.ndarray,
@@ -845,7 +963,16 @@ class F162010(F92010):
             out[0] = result
 
         super().__init__(
-            ndim, bounds, f_shift, f_matrix, m_group, parallel=parallel, fastmath=fastmath, dtype=dtype, shift=shift
+            ndim,
+            bounds,
+            f_shift,
+            f_matrix,
+            m_group,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            shift=shift,
+            precompile=precompile,
         )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-32.0, 32.0] for _ in range(self.dim_default)])
@@ -877,6 +1004,7 @@ class F172010(F72010):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(
             x: np.ndarray, f_shift: typing.Any, count_up: int, P: typing.Any, m_group: typing.Any, out: np.ndarray
@@ -888,7 +1016,17 @@ class F172010(F72010):
                 result += operator.ackley_func(z[idx1])
             out[0] = result
 
-        super().__init__(ndim, bounds, f_shift, m_group, parallel=parallel, fastmath=fastmath, dtype=dtype, shift=shift)
+        super().__init__(
+            ndim,
+            bounds,
+            f_shift,
+            m_group,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            shift=shift,
+            precompile=precompile,
+        )
         self.count_up = int(self.ndim / self.m_group)
         self._bind_kernel(compute, ["f_shift", "count_up", "P", "m_group"])
 
@@ -916,6 +1054,7 @@ class F182010(F72010):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(
             x: np.ndarray, f_shift: typing.Any, count_up: int, P: typing.Any, m_group: typing.Any, out: np.ndarray
@@ -927,7 +1066,17 @@ class F182010(F72010):
                 result += operator.rosenbrock_func(z[idx1])
             out[0] = result
 
-        super().__init__(ndim, bounds, f_shift, m_group, parallel=parallel, fastmath=fastmath, dtype=dtype, shift=shift)
+        super().__init__(
+            ndim,
+            bounds,
+            f_shift,
+            m_group,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            shift=shift,
+            precompile=precompile,
+        )
         self.count_up = int(self.ndim / self.m_group)
         self._x_global = np.asarray(self.f_shift + 1)
         self._bind_kernel(compute, ["f_shift", "count_up", "P", "m_group"])
@@ -955,6 +1104,7 @@ class F192010(F12010):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, f_shift: typing.Any, out: np.ndarray) -> None:
             out[0] = operator.schwefel_12_func(x - f_shift)
@@ -967,6 +1117,7 @@ class F192010(F12010):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
         self._bind_kernel(compute, ["f_shift"])
 
@@ -994,6 +1145,7 @@ class F202010(F12010):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, f_shift: typing.Any, out: np.ndarray) -> None:
             out[0] = operator.rosenbrock_func(x - f_shift)
@@ -1006,6 +1158,7 @@ class F202010(F12010):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
         self._bind_kernel(compute, ["f_shift"])
         self._x_global = np.asarray(self.f_shift + 1)

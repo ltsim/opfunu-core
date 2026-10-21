@@ -26,6 +26,11 @@
 +   every kernel binds as plain Python automatically so the library stays fully usable
 +   on CPython and PyPy (`opfunu.HAS_NUMBA`, per-instance `numba_compiled`); shared
 +   operators and CEC2005 helpers use a `numba_compat.njit` pass-through shim
++ Added `precompile` to every benchmark constructor: with Numba installed, `precompile=False`
++   keeps the plain-Python kernel for that problem and `precompile=True` requests compilation;
++   `precompile=None` (the default) follows the package-wide `Benchmark.default_precompile`
++   policy (`True` out of the box, read at construction). `problem.precompile` exposes the
++   resolved choice, and kernels bound `plain=True` stay uncompiled whatever the flag says
 + Added `numba>=0.68.0` as an optional dependency (`[numba]` extra, CPython-only marker);
 +   `FuncBenchmark` joined `EXCLUDES` in the function registry (its `compute` is now abstract)
 + Migrated the project to a `src/` layout and to the `uv` package manager

@@ -54,6 +54,7 @@ class Parsopoulos(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = np.cos(x[0]) ** 2.0 + np.sin(x[1]) ** 2.0
@@ -71,4 +72,5 @@ class Parsopoulos(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
