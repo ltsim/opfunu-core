@@ -72,7 +72,6 @@ class F12019(CecBenchmark):
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-8192.0, 8192.0] for _ in range(self.dim_default)])
         )
-        self.make_support_data_path("data_2019")
         self.f_shift = self.check_shift_data(f_shift)[: self.ndim]
         self._x_global = np.asarray(np.zeros(self.ndim))
         self._bind_kernel(compute, ["f_bias"], paras={"f_shift": self.f_shift, "f_bias": self.f_bias})
@@ -137,7 +136,6 @@ class F22019(CecBenchmark):
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-16384.0, 16384.0] for _ in range(self.dim_default)])
         )
-        self.make_support_data_path("data_2019")
         self.f_shift = self.check_shift_data(f_shift)[: self.ndim]
         self.f_bias = f_bias
         # the f_global and x_global was obtained by executing the cec2019 c code
@@ -205,7 +203,6 @@ class F32019(CecBenchmark):
             precompile=precompile,
         )
         self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-4.0, 4.0] for _ in range(self.dim_default)]))
-        self.make_support_data_path("data_2019")
         self.f_shift = self.check_shift_data(f_shift)[: self.ndim]
         self.f_bias = f_bias
         # f_global calculated by verifying the cec2019 C value for f(x*) where x*==f_shift
@@ -279,7 +276,6 @@ class F42019(CecBenchmark):
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
         )
-        self.make_support_data_path("data_2019")
         self.f_shift = self.check_shift_data(f_shift)[: self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
         self._x_global = np.asarray(self.f_shift)

@@ -31,6 +31,20 @@
 +   `precompile=None` (the default) follows the package-wide `Benchmark.default_precompile`
 +   policy (`True` out of the box, read at construction). `problem.precompile` exposes the
 +   resolved choice, and kernels bound `plain=True` stay uncompiled whatever the flag says
++ Standardized the base classes (ponytail audit, over-engineering pass): the shape storage
++   (`_ndim`/`_bounds`) behind `bounds`/`ndim`/`lb`/`ub`, the `is_succeed`/`is_ndim_compatible`/
++   `create_solution` implementations and the shared trait defaults (`name`, `continuous`, …,
++   `modality`) now live once on `Benchmark` instead of being duplicated across `FuncBenchmark`
++   and `CecBenchmark`; the four CEC data-file loaders share one `_load_table` helper and the
++   `data_*` folder is auto-detected from the trailing competition year of the class name
++   (`F202017` was previously only correct because of its explicit declaration), so the 71
++   redundant per-class data-path declarations were removed
++ Removed dead configuration and aliases: the `_bind_kernel(params=...)` attribute-setting
++   branch (no callers), the `_kernel` property (alias of `compute`), the unused `dim_max`
++   setter, the `load_tow_matrix` typo alias, the never-matched `EXCLUDES` entries, and the
++   unused `f8f2_func`/`gz_func`/`sphere_noise_func` operators; `opfunu.plot` now re-exports
++   the lazy engine entry points directly, and the function-registry helpers share one filter
++   core (`opfunu/__init__.py`)
 + Added `numba>=0.68.0` as an optional dependency (`[numba]` extra, CPython-only marker);
 +   `FuncBenchmark` joined `EXCLUDES` in the function registry (its `compute` is now abstract)
 + Migrated the project to a `src/` layout and to the `uv` package manager

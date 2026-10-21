@@ -5,7 +5,7 @@ The `opfunu.utils.operator` module provides the low-level mathematical operators
 decorated with `njit(fastmath=True)` — imported from the `opfunu.utils.numba_compat` shim, so they compile when the
 `[numba]` extra is installed and run as plain functions otherwise. Keep them nopython-compatible (`np.asarray`, no
 `np.array(list)`, no `np.dot`/`np.matmul` — use the `dot_vv`/`dot_mv`/`dot_vm`/`dot_mm` loop helpers, SciPy-free by
-design). `sphere_noise_func`/`fractal_1d_func` stay plain (RNG streams). Reuse these helpers — don't duplicate them.
+design). `fractal_1d_func` stays plain (RNG stream). Reuse these helpers — don't duplicate them.
 
 ::: opfunu.utils.operator
     options:
