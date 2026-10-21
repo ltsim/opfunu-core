@@ -106,6 +106,11 @@ super().__init__(
 )
 ```
 
+Configuration flags (`parallel`, `fastmath`, `dtype`, `shift`, `precompile`) stay
+ordinary parameters of every class's `__init__` and are forwarded to
+`super().__init__(...)`; `precompile` defaults to `None` so the package-wide
+`Benchmark.default_precompile` policy applies unless the caller chooses explicitly.
+
 Problems that compute extra kernel parameters after `super().__init__` (permutation
 vectors, composition weights, index blocks, …) bind explicitly instead:
 
@@ -114,7 +119,7 @@ self._bind_kernel(compute, ["f_shift", "P", "m_group", "f_matrix"], paras=[...])
 ```
 
 `compute` and every other `Benchmark` property are read-only: configuration is
-supplied through `__init__` kwargs (`dtype`, `dim_changeable`, `verbose`, …), and
+supplied through `__init__` kwargs (`dtype`, `dim_changeable`, `verbose`, `precompile`, …), and
 data-dependent metadata written by subclasses goes through protected fields
 (`self._f_global`, `self._x_global`, `self._paras`, `self._support_path`).
 All private kernel state (the bound `__compute`, `__paras`, `numba_compiled`, …)
@@ -130,6 +135,42 @@ the library stays fully usable on CPython and PyPy — only batch/single-point
 evaluation is slower. `opfunu.HAS_NUMBA` reports whether Numba is available and
 `problem.numba_compiled` reports which path a given instance bound.
 
+### Choosing not to compile
+
+Installing Numba does not force you to use it. Every problem constructor accepts a
+`precompile` flag, so compilation stays optional even in a Numba-enabled
+environment:
+
+```python
+from opfunu.name_based import Ackley01
+from opfunu.benchmark import Benchmark
+
+f1 = Ackley01(ndim=10, precompile=False)  # plain Python/NumPy kernel
+f2 = Ackley01(ndim=10, precompile=True)  # gufunc kernel (if Numba installed)
+
+Benchmark.default_precompile = False  # package-wide policy for new instances
+f3 = Ackley01(ndim=10)  # follows the policy: plain kernel
+f4 = Ackley01(ndim=10, precompile=True)  # explicit choice always wins
+```
+
+`precompile` defaults to `None`, meaning "follow `Benchmark.default_precompile`"
+(`True` out of the box). Set the class attribute before building problems to flip
+the default for a whole session; it is read at construction, so already-built
+instances keep their own setting. `problem.precompile` reports the resolved
+decision, `problem.numba_compiled` reports what actually bound.
+
+The flag only declines compilation; it never enables it. Kernels bound with
+`plain=True` (stochastic terms, hybrid compositions holding sub-instances) stay
+plain Python whatever `precompile` says, and `precompile=True` is inert when
+Numba is not installed. Skipping compilation is not an error: `_compile_error`
+stays `None` and `numba_compiled` is `False`. Note that plain kernels calling
+`opfunu.utils.operator` helpers still let those `njit`-decorated functions
+compile on first use, so `precompile=False` keeps the *problem* kernel plain
+rather than guaranteeing that no Numba code is ever generated.
+
+`parallel=True` and `fastmath` are gufunc options and have no effect on an
+instance that was built with `precompile=False`.
+
 ### Evaluation contract
 
 `evaluate` is implemented once on `Benchmark` and inherited by every problem — subclasses
@@ -142,7 +183,8 @@ to `self.dtype` (`np.float64` by default; `np.float32` when constructed with
 (or `(ndim,)`, treated as `N=1`), `(N,)` out with dtype `self.dtype`. For plain-Python
 fallbacks it loops the scalar kernel behind the same interface.
 
-Compilation (plus a warmup call) happens at instantiation, never on first `evaluate`.
+Compilation (plus a warmup call) happens at instantiation, never on first `evaluate`,
+and only when the instance allows it (`precompile`; see *Choosing not to compile*).
 The gufunc cache is keyed on the kernel's `__code__`, so kernels must be self-contained —
 no closing over per-instance values.
 
@@ -160,4 +202,5 @@ Attribute-lookup and normalization errors propagate — a mistyped `param_names`
 an un-normalizable value is a bug, not a compile failure. Only Numba
 compilation/warmup failures fall back to the plain Python kernel, keeping the same
 `(x, *params, out)` calling convention; the exception is stored on `_compile_error`
-(`None` on success, or when Numba is simply absent) and printed when `verbose=True`.
+(`None` on success, when Numba is absent, or when compilation was declined) and
+printed when `verbose=True`.

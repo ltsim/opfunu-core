@@ -57,6 +57,7 @@ class Langermann(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, c: np.ndarray, a: np.ndarray, b: np.ndarray, out: np.ndarray) -> None:
             out[0] = -np.sum(
@@ -83,6 +84,7 @@ class Langermann(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
 
 
@@ -138,6 +140,7 @@ class LennardJones(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, dim_supported: list[int], out: np.ndarray) -> None:
             if x.shape[0] not in dim_supported:
@@ -194,6 +197,7 @@ class LennardJones(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
 
 
@@ -239,6 +243,7 @@ class Leon(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = 100.0 * (x[1] - x[0] ** 2.0) ** 2.0 + (1 - x[0]) ** 2.0
@@ -256,6 +261,7 @@ class Leon(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
 
 
@@ -301,6 +307,7 @@ class Levy03(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             y = 1 + (x - 1) / 4
@@ -321,6 +328,7 @@ class Levy03(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
 
 
@@ -361,6 +369,7 @@ class Levy05(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             idx = np.arange(1, 6)
@@ -381,6 +390,7 @@ class Levy05(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
 
 
@@ -422,6 +432,7 @@ class Levy13(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             u = np.sin(3 * np.pi * x[0]) ** 2
@@ -442,4 +453,5 @@ class Levy13(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )

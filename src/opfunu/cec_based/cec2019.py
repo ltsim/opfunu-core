@@ -53,6 +53,7 @@ class F12019(CecBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, f_bias: typing.Any, out: np.ndarray) -> None:
             out[0] = operator.chebyshev_func(x) + f_bias
@@ -66,6 +67,7 @@ class F12019(CecBenchmark):
             dim_max=9,
             f_bias=f_bias,
             shift=shift,
+            precompile=precompile,
         )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-8192.0, 8192.0] for _ in range(self.dim_default)])
@@ -117,6 +119,7 @@ class F22019(CecBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, f_bias: typing.Any, out: np.ndarray) -> None:
             out[0] = operator.inverse_hilbert_func(x) + f_bias
@@ -129,6 +132,7 @@ class F22019(CecBenchmark):
             dim_default=16,
             dim_max=16,
             shift=shift,
+            precompile=precompile,
         )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-16384.0, 16384.0] for _ in range(self.dim_default)])
@@ -185,6 +189,7 @@ class F32019(CecBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, f_bias: typing.Any, out: np.ndarray) -> None:
             out[0] = operator.lennard_jones_func(x) + f_bias
@@ -197,6 +202,7 @@ class F32019(CecBenchmark):
             dim_default=18,
             dim_max=18,
             shift=shift,
+            precompile=precompile,
         )
         self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-4.0, 4.0] for _ in range(self.dim_default)]))
         self.make_support_data_path("data_2019")
@@ -250,6 +256,7 @@ class F42019(CecBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(
             x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
@@ -267,6 +274,7 @@ class F42019(CecBenchmark):
             dim_supported=[2, 10],
             f_bias=f_bias,
             shift=shift,
+            precompile=precompile,
         )
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
@@ -310,6 +318,7 @@ class F52019(F42019):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(
             x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
@@ -327,6 +336,7 @@ class F52019(F42019):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
         self._bind_kernel(compute, ["f_matrix", "f_shift", "f_bias"])
 
@@ -359,6 +369,7 @@ class F62019(F42019):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(
             x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
@@ -376,6 +387,7 @@ class F62019(F42019):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
         self._bind_kernel(compute, ["f_matrix", "f_shift", "f_bias"])
 
@@ -408,6 +420,7 @@ class F72019(F42019):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(
             x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
@@ -425,6 +438,7 @@ class F72019(F42019):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
         self._bind_kernel(compute, ["f_matrix", "f_shift", "f_bias"])
 
@@ -457,6 +471,7 @@ class F82019(F42019):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(
             x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
@@ -474,6 +489,7 @@ class F82019(F42019):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
         self._bind_kernel(compute, ["f_matrix", "f_shift", "f_bias"])
 
@@ -506,6 +522,7 @@ class F92019(F42019):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(
             x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
@@ -523,6 +540,7 @@ class F92019(F42019):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
         self._bind_kernel(compute, ["f_matrix", "f_shift", "f_bias"])
 
@@ -555,6 +573,7 @@ class F102019(F42019):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(
             x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
@@ -572,5 +591,6 @@ class F102019(F42019):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
         self._bind_kernel(compute, ["f_matrix", "f_shift", "f_bias"])

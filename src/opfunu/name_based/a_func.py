@@ -43,6 +43,7 @@ class Ackley01(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             ndim = x.shape[0]
@@ -63,6 +64,7 @@ class Ackley01(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
 
 
@@ -98,6 +100,7 @@ class Ackley02(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = -200 * np.exp(-0.02 * np.sqrt(x[0] ** 2 + x[1] ** 2))
@@ -115,6 +118,7 @@ class Ackley02(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
 
 
@@ -152,6 +156,7 @@ class Ackley03(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = -200 * np.exp(-0.02 * np.sqrt(x[0] ** 2 + x[1] ** 2)) + 5 * np.exp(
@@ -171,6 +176,7 @@ class Ackley03(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
 
 
@@ -206,6 +212,7 @@ class Adjiman(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = np.cos(x[0]) * np.sin(x[1]) - x[0] / (x[1] ** 2 + 1)
@@ -223,6 +230,7 @@ class Adjiman(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
 
 
@@ -258,6 +266,7 @@ class Alpine01(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = np.sum(np.abs(x * np.sin(x) + 0.1 * x))
@@ -275,6 +284,7 @@ class Alpine01(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
 
 
@@ -310,6 +320,7 @@ class Alpine02(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = np.prod(np.sqrt(x) * np.sin(x))
@@ -327,6 +338,7 @@ class Alpine02(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
 
 
@@ -364,6 +376,7 @@ class AMGM(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             f1 = np.sum(x) / x.shape[0]
@@ -383,4 +396,5 @@ class AMGM(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )

@@ -109,6 +109,7 @@ class CecBenchmark(Benchmark):
         paras: dict[str, typing.Any] | list[str] | tuple[str, ...] | None = None,
         verbose: bool = False,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         super().__init__(
             parallel=parallel,
@@ -119,6 +120,7 @@ class CecBenchmark(Benchmark):
             dim_default=dim_default,
             verbose=verbose,
             shift=shift,
+            precompile=precompile,
         )
 
         self.__dim_max: int = dim_max

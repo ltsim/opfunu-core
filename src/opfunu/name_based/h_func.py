@@ -45,6 +45,7 @@ class Hansen(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             i = np.arange(5.0)
@@ -65,6 +66,7 @@ class Hansen(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
 
 
@@ -100,6 +102,7 @@ class Hartmann3(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, a: np.ndarray, p: np.ndarray, c: np.ndarray, out: np.ndarray) -> None:
             XX = np.atleast_2d(x)
@@ -126,6 +129,7 @@ class Hartmann3(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
 
 
@@ -163,6 +167,7 @@ class Hartmann6(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, a: np.ndarray, p: np.ndarray, c: np.ndarray, out: np.ndarray) -> None:
             XX = np.atleast_2d(x)
@@ -201,6 +206,7 @@ class Hartmann6(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
 
 
@@ -236,6 +242,7 @@ class HelicalValley(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             r = np.sqrt(x[0] ** 2 + x[1] ** 2)
@@ -255,6 +262,7 @@ class HelicalValley(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
 
 
@@ -290,6 +298,7 @@ class Himmelblau(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = (x[0] ** 2 + x[1] - 11) ** 2 + (x[0] + x[1] ** 2 - 7) ** 2
@@ -307,6 +316,7 @@ class Himmelblau(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
 
 
@@ -344,6 +354,7 @@ class Hosaki(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             val = 1 - 8 * x[0] + 7 * x[0] ** 2 - 7 / 3.0 * x[0] ** 3 + 0.25 * x[0] ** 4
@@ -362,6 +373,7 @@ class Hosaki(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
 
 
@@ -399,6 +411,7 @@ class HolderTable(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
+        precompile: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = -np.abs(np.sin(x[0]) * np.cos(x[1]) * np.exp(np.abs(1 - np.sqrt(x[0] ** 2 + x[1] ** 2) / np.pi)))
@@ -416,6 +429,7 @@ class HolderTable(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
+            precompile=precompile,
         )
         self.x_globals = np.array(
             [
