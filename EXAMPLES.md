@@ -1,6 +1,6 @@
 # Examples
 
-This page shows how to use **opfunu-core** (version `2026a`). More runnable scripts live in the
+This page shows how to use **opfunu-core** (version `2026a0`). More runnable scripts live in the
 [examples](https://github.com/ltsim/opfunu-core/tree/master/examples) folder.
 
 ## Import and version

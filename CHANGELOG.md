@@ -1,4 +1,4 @@
-# Version 2026a
+# Version 2026a0
 
 + Added automatic coordinate-shift propagation (issue #19): every benchmark function accepts a `shift`
   constructor argument, forwarded via `super().__init__(...)` to the parent class, evaluating

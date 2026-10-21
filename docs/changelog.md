@@ -4,7 +4,7 @@ The full changelog is maintained in the repository:
 
 [CHANGELOG.md](https://github.com/ltsim/opfunu-core/blob/master/CHANGELOG.md)
 
-## Version 2026a
+## Version 2026a0
 
 * Maintenance release based on the original `opfunu` library.
 * Project migrated to a `src/` layout and managed with [uv](https://github.com/astral-sh/uv).
