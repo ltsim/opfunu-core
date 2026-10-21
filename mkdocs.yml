@@ -68,6 +68,7 @@ nav:
           - CEC 2022: cec_based/cec2022.md
       - Package-level API: integrated.md
       - Utilities: utils.md
+      - Plotting: plot.md
   - Support: support.md
   - License: license.md
   - Changelog: changelog.md

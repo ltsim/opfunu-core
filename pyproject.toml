@@ -64,6 +64,8 @@ dependencies = [
 
 [project.optional-dependencies]
 numba = ["numba>=0.68.0; implementation_name == 'cpython'"]
+plot = ["matplotlib>=3.8.0"]
+interactive = ["pyvista>=0.43.0"]
 
 [dependency-groups]
 dev = [
@@ -150,6 +152,10 @@ module = [
     "numba",
     "numba.*",
     "numpy",
-    "numpy.*"
+    "numpy.*",
+    "matplotlib",
+    "matplotlib.*",
+    "pyvista",
+    "pyvista.*",
 ]
 ignore_missing_imports = true
