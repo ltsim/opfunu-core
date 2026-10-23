@@ -4,6 +4,19 @@ The full changelog is maintained in the repository:
 
 [CHANGELOG.md](https://github.com/ltsim/opfunu-core/blob/master/CHANGELOG.md)
 
+## Version 2026b0
+
+* Released on the `release/v2026b0` branch; published as PEP 440 version `2026.10` when the
+  cycle merges into `master`.
+* Base classes standardized after a whole-`src` over-engineering audit: shape storage, `is_succeed`,
+  `is_ndim_compatible` and the trait defaults live once on `Benchmark`; CEC data folders are
+  auto-detected from the class-name year; dead config (`_bind_kernel(params=…)`, `_kernel`,
+  the `dim_max` setter, the `load_tow_matrix` typo, unused operators) removed.
+* `Traversable` import guarded by `sys.version_info`, so `mypy` stays clean on Python 3.12–3.14
+  (`importlib.abc.Traversable` was removed in 3.14) while Python 3.10 keeps working.
+* Husky git hooks: `pre-commit` and `pre-push` run `ruff`, `mypy` and the full `pytest` suite —
+  the same checks as CI — before anything is committed or pushed.
+
 ## Version 2026a0
 
 * Maintenance release based on the original `opfunu` library.
@@ -22,7 +35,3 @@ The full changelog is maintained in the repository:
 * Compilation stays optional even with Numba installed: every problem accepts `precompile`
   (`False` keeps the plain kernel, `True` requests compilation, `None` follows the
   package-wide `Benchmark.default_precompile` policy).
-* Base classes standardized after a whole-`src` over-engineering audit: shape storage, `is_succeed`,
-  `is_ndim_compatible` and the trait defaults live once on `Benchmark`; CEC data folders are
-  auto-detected from the class-name year; dead config (`_bind_kernel(params=…)`, `_kernel`,
-  the `dim_max` setter, the `load_tow_matrix` typo, unused operators) removed.

@@ -1,3 +1,32 @@
+# Version 2026b0
+
++ Standardized the base classes (whole-repo over-engineering audit): the shape storage
++   (`_ndim`/`_bounds`) behind `bounds`/`ndim`/`lb`/`ub`, the `is_succeed`/`is_ndim_compatible`/
++   `create_solution` implementations and the shared trait defaults (`name`, `continuous`, …,
++   `modality`) now live once on `Benchmark` instead of being duplicated across `FuncBenchmark`
++   and `CecBenchmark`; the four CEC data-file loaders share one `_load_table` helper and the
++   `data_*` folder is auto-detected from the trailing competition year of the class name
++   (`F202017` was previously only correct because of its explicit declaration), so the 71
++   redundant per-class data-path declarations were removed
++ Removed dead configuration and aliases: the `_bind_kernel(params=...)` attribute-setting
++   branch (no callers), the `_kernel` property (alias of `compute`), the unused `dim_max`
++   setter, the `load_tow_matrix` typo alias, the never-matched `EXCLUDES` entries, and the
++   unused `f8f2_func`/`gz_func`/`sphere_noise_func` operators; `opfunu.plot` now re-exports
++   the lazy engine entry points directly, and the function-registry helpers share one filter
++   core (`opfunu/__init__.py`)
++ Guarded the `Traversable` import with `sys.version_info` instead of a `try`/`except ImportError`,
++   so `mypy` type-checks cleanly on Python 3.12–3.14 (`importlib.abc.Traversable` was removed in
++   3.14) while the Python 3.10 fallback keeps working; runtime behaviour is unchanged
++ Added Husky git hooks: `pre-commit` and `pre-push` run the same trio as CI — `ruff check --fix`
++   then `ruff check`, `mypy`, and the full `pytest` suite. Ruff's auto-fixes are staged only for
++   files it touched, so unrelated unstaged work is never swept into a commit. Requires a one-time
++   `npm install` (Node >= 18); `HUSKY=0` skips a run
++ Opened the second cycle of the release model: this version lives on `release/v2026b0` and will be
++   published as the PEP 440 numeric version **2026.10** when the cycle merges into `master`
++   (tags, branches and changelog keep the `v<year><edition><version>` cycle name)
+
+---------------------------------------------------------------------
+
 # Version 2026a0
 
 + Added automatic coordinate-shift propagation (issue #19): every benchmark function accepts a `shift`
@@ -31,20 +60,6 @@
 +   `precompile=None` (the default) follows the package-wide `Benchmark.default_precompile`
 +   policy (`True` out of the box, read at construction). `problem.precompile` exposes the
 +   resolved choice, and kernels bound `plain=True` stay uncompiled whatever the flag says
-+ Standardized the base classes (whole-repo over-engineering audit): the shape storage
-+   (`_ndim`/`_bounds`) behind `bounds`/`ndim`/`lb`/`ub`, the `is_succeed`/`is_ndim_compatible`/
-+   `create_solution` implementations and the shared trait defaults (`name`, `continuous`, …,
-+   `modality`) now live once on `Benchmark` instead of being duplicated across `FuncBenchmark`
-+   and `CecBenchmark`; the four CEC data-file loaders share one `_load_table` helper and the
-+   `data_*` folder is auto-detected from the trailing competition year of the class name
-+   (`F202017` was previously only correct because of its explicit declaration), so the 71
-+   redundant per-class data-path declarations were removed
-+ Removed dead configuration and aliases: the `_bind_kernel(params=...)` attribute-setting
-+   branch (no callers), the `_kernel` property (alias of `compute`), the unused `dim_max`
-+   setter, the `load_tow_matrix` typo alias, the never-matched `EXCLUDES` entries, and the
-+   unused `f8f2_func`/`gz_func`/`sphere_noise_func` operators; `opfunu.plot` now re-exports
-+   the lazy engine entry points directly, and the function-registry helpers share one filter
-+   core (`opfunu/__init__.py`)
 + Added `numba>=0.68.0` as an optional dependency (`[numba]` extra, CPython-only marker);
 +   `FuncBenchmark` joined `EXCLUDES` in the function registry (its `compute` is now abstract)
 + Migrated the project to a `src/` layout and to the `uv` package manager
