@@ -1,14 +1,15 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 00:36, 30/06/2022 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 00:36, 30/06/2022 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
-## Examples with Mealpy >= 3.0.0
-
-from opfunu.cec_based import cec2017
-f3 = cec2017.F32017(ndim=30)
+## Examples with mealpy-lts
 
 from mealpy import GA, FloatVar
+
+from opfunu.cec_based import cec2017
+
+f3 = cec2017.F32017(ndim=30)
 
 problem = {
     "obj_func": f3.evaluate,

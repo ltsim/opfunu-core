@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 20:40, 18/07/2022 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 20:40, 18/07/2022 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
-import opfunu
 import numpy as np
 
+import opfunu
 
 print("====================Test BartelsConn")
 problem = opfunu.name_based.BartelsConn(ndim=25)
@@ -218,12 +218,3 @@ print(problem.x_global)
 print(problem.evaluate(problem.x_global))
 print(problem.is_succeed(x))
 print(problem.is_succeed(problem.x_global))
-
-
-
-
-
-
-
-
-
