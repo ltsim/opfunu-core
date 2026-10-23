@@ -46,7 +46,7 @@ class FreudensteinRoth(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
-        precompile: bool | None = None,
+        prepare: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             f1 = (-13.0 + x[0] + ((5.0 - x[1]) * x[1] - 2.0) * x[1]) ** 2
@@ -66,5 +66,5 @@ class FreudensteinRoth(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
-            precompile=precompile,
+            prepare=prepare,
         )

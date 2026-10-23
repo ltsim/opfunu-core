@@ -58,7 +58,7 @@ class NeedleEye(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
-        precompile: bool | None = None,
+        prepare: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             f = fp = 0.0
@@ -86,7 +86,7 @@ class NeedleEye(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
-            precompile=precompile,
+            prepare=prepare,
         )
 
 
@@ -129,7 +129,7 @@ class NewFunction01(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
-        precompile: bool | None = None,
+        prepare: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = (np.abs(np.cos(np.sqrt(np.abs(x[0] ** 2 + x[1]))))) ** 0.5 + 0.01 * (x[0] + x[1])
@@ -147,7 +147,7 @@ class NewFunction01(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
-            precompile=precompile,
+            prepare=prepare,
         )
 
 
@@ -190,7 +190,7 @@ class NewFunction02(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
-        precompile: bool | None = None,
+        prepare: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = (np.abs(np.sin(np.sqrt(np.abs(x[0] ** 2 + x[1]))))) ** 0.5 + 0.01 * (x[0] + x[1])
@@ -208,5 +208,5 @@ class NewFunction02(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
-            precompile=precompile,
+            prepare=prepare,
         )

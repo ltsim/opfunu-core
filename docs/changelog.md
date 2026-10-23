@@ -16,6 +16,11 @@ The full changelog is maintained in the repository:
   (`importlib.abc.Traversable` was removed in 3.14) while Python 3.10 keeps working.
 * Husky git hooks: `pre-commit` and `pre-push` run `ruff`, `mypy` and the full `pytest` suite —
   the same checks as CI — before anything is committed or pushed.
+* The `precompile` flag is renamed to `prepare` and compilation becomes deferrable: `True` compiles
+  the kernel at construction, `False` binds the plain-Python kernel, and `problem.prepare()`
+  compiles a deferred instance on demand (idempotent; returns whether the kernel ended up compiled);
+  `None` (the default) follows the package-wide `Benchmark.default_prepare` policy. `prepare()` is a
+  quiet no-op without Numba, so the PyPy path is unchanged.
 
 ## Version 2026a0
 

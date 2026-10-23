@@ -51,7 +51,7 @@ class Ursem01(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
-        precompile: bool | None = None,
+        prepare: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = -np.sin(2 * x[0] - 0.5 * np.pi) - 3.0 * np.cos(x[1]) - 0.5 * x[0]
@@ -69,5 +69,5 @@ class Ursem01(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
-            precompile=precompile,
+            prepare=prepare,
         )

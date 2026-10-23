@@ -46,7 +46,7 @@ class FuncBenchmark(Benchmark):
         paras: dict[str, typing.Any] | list[str] | tuple[str, ...] | None = None,
         verbose: bool = False,
         shift: typing.Any = None,
-        precompile: bool | None = None,
+        prepare: bool | None = None,
     ) -> None:
         super().__init__(
             parallel=parallel,
@@ -61,7 +61,7 @@ class FuncBenchmark(Benchmark):
             dim_default=dim_default if dim_default is not None else 2,
             verbose=verbose,
             shift=shift,
-            precompile=precompile,
+            prepare=prepare,
         )
 
         self.__dim_supported: list[int] = list(dim_supported) if dim_supported is not None else []

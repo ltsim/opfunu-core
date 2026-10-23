@@ -54,7 +54,7 @@ class YaoLiu04(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
-        precompile: bool | None = None,
+        prepare: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = np.abs(x).max()
@@ -72,5 +72,5 @@ class YaoLiu04(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
-            precompile=precompile,
+            prepare=prepare,
         )

@@ -46,7 +46,7 @@ class Damavandi(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
-        precompile: bool | None = None,
+        prepare: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, epsilon: float, out: np.ndarray) -> None:
             num = np.sin(np.pi * (x[0] - 2.0)) * np.sin(np.pi * (x[1] - 2.0))
@@ -69,7 +69,7 @@ class Damavandi(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
-            precompile=precompile,
+            prepare=prepare,
         )
 
 
@@ -105,7 +105,7 @@ class Deb01(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
-        precompile: bool | None = None,
+        prepare: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = -(1.0 / x.shape[0]) * np.sum(np.sin(5 * np.pi * x) ** 6.0)
@@ -123,7 +123,7 @@ class Deb01(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
-            precompile=precompile,
+            prepare=prepare,
         )
 
 
@@ -159,7 +159,7 @@ class Deb03(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
-        precompile: bool | None = None,
+        prepare: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = -(1.0 / x.shape[0]) * np.sum(np.sin(5 * np.pi * (x**0.75 - 0.05)) ** 6.0)
@@ -177,7 +177,7 @@ class Deb03(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
-            precompile=precompile,
+            prepare=prepare,
         )
 
 
@@ -216,7 +216,7 @@ class Decanomial(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
-        precompile: bool | None = None,
+        prepare: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             val = x[1] ** 4 + 12 * x[1] ** 3 + 54 * x[1] ** 2 + 108 * x[1] + 81.0
@@ -238,7 +238,7 @@ class Decanomial(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
-            precompile=precompile,
+            prepare=prepare,
         )
 
 
@@ -273,7 +273,7 @@ class Deceptive(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
-        precompile: bool | None = None,
+        prepare: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             alpha = np.arange(1.0, x.shape[0] + 1.0) / (x.shape[0] + 1.0)
@@ -307,7 +307,7 @@ class Deceptive(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
-            precompile=precompile,
+            prepare=prepare,
         )
 
 
@@ -343,7 +343,7 @@ class DeckkersAarts(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
-        precompile: bool | None = None,
+        prepare: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = (
@@ -363,7 +363,7 @@ class DeckkersAarts(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
-            precompile=precompile,
+            prepare=prepare,
         )
         self.x_globals = np.array([[0, 14.9451209], [0, -14.9451209]])
 
@@ -400,7 +400,7 @@ class DeflectedCorrugatedSpring(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
-        precompile: bool | None = None,
+        prepare: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, alpha: typing.Any, out: np.ndarray) -> None:
             K = 5.0
@@ -422,7 +422,7 @@ class DeflectedCorrugatedSpring(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
-            precompile=precompile,
+            prepare=prepare,
         )
 
 
@@ -458,7 +458,7 @@ class DeVilliersGlasser01(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
-        precompile: bool | None = None,
+        prepare: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             t = 0.1 * np.arange(24)
@@ -478,7 +478,7 @@ class DeVilliersGlasser01(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
-            precompile=precompile,
+            prepare=prepare,
         )
 
 
@@ -517,7 +517,7 @@ class DeVilliersGlasser02(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
-        precompile: bool | None = None,
+        prepare: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             t = 0.1 * np.arange(16)
@@ -539,7 +539,7 @@ class DeVilliersGlasser02(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
-            precompile=precompile,
+            prepare=prepare,
         )
 
 
@@ -575,7 +575,7 @@ class DixonPrice(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
-        precompile: bool | None = None,
+        prepare: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             i = np.arange(2, x.shape[0] + 1)
@@ -595,7 +595,7 @@ class DixonPrice(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
-            precompile=precompile,
+            prepare=prepare,
         )
 
 
@@ -633,7 +633,7 @@ class Dolan(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
-        precompile: bool | None = None,
+        prepare: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             out[0] = np.abs(
@@ -658,7 +658,7 @@ class Dolan(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
-            precompile=precompile,
+            prepare=prepare,
         )
 
 
@@ -695,7 +695,7 @@ class DropWave(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
-        precompile: bool | None = None,
+        prepare: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, out: np.ndarray) -> None:
             norm_x = np.sum(x**2)
@@ -714,5 +714,5 @@ class DropWave(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
-            precompile=precompile,
+            prepare=prepare,
         )
