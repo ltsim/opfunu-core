@@ -28,9 +28,8 @@
 +   `Benchmark.default_prepare` policy. The `precompile` property is dropped (`numba_compiled`
 +   remains), `plain=True` kernels are never compiled, and `prepare()` is a quiet no-op without
 +   Numba — keeping the PyPy path unchanged
-+ Opened the second cycle of the release model: this version lives on `release/v2026b0` and will be
-+   published as the PEP 440 numeric version **2026.10** when the cycle merges into `master`
-+   (tags, branches and changelog keep the `v<year><edition><version>` cycle name)
++ Opened the second cycle of the release model: this version lives on `release/v2026b0` and
++   publishes to PyPI under the same name, `v2026b0`, when the cycle merges into `master`
 
 ---------------------------------------------------------------------
 

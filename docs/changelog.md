@@ -6,8 +6,8 @@ The full changelog is maintained in the repository:
 
 ## Version 2026b0
 
-* Released on the `release/v2026b0` branch; published as PEP 440 version `2026.10` when the
-  cycle merges into `master`.
+* Released on the `release/v2026b0` branch; published to PyPI under the same name, `v2026b0`,
+  when the cycle merges into `master`.
 * Base classes standardized after a whole-`src` over-engineering audit: shape storage, `is_succeed`,
   `is_ndim_compatible` and the trait defaults live once on `Benchmark`; CEC data folders are
   auto-detected from the class-name year; dead config (`_bind_kernel(params=…)`, `_kernel`,

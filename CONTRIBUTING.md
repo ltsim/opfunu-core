@@ -46,21 +46,23 @@ Releases are tagged `v<year><edition><version>`, for example `v2026a0` or `v2026
 - **edition** — a lowercase letter track within the year (`a`, `b`, `c`, …).
 - **version** — a single digit `0`–`9` within the edition.
 
-The sequence advances `v2026a0 → v2026a1 → … → v2026a9 → v2026b0 → …`. The `v` prefix is used
-for branch names and git tags.
+The sequence advances `v2026a0 → v2026a1 → … → v2026a9 → v2026b0 → …`.
 
-The published package version is the **numeric form** of the same release, so that it is a final
-(PEP 440) version rather than a pre-release:
+The published package version is the cycle name itself, `v` prefix included:
 
 ```
-__version__ = "<year>.<edition * 10 + version>"
+__version__ = "v2026b0"
 ```
 
-the edition letter counts from zero (`a`→0, `b`→1, …) and `version` is its digit. So `v2026a0`
-publishes as `2026.0`, `v2026a9` as `2026.9`, `v2026b0` as `2026.10` and `v2026b1` as `2026.11`.
-The letters cannot be used verbatim: `2026a0` parses as a pre-release of `2026` (`a` = alpha,
-`b` = beta, `c` = release candidate), so `pip` would keep serving the older stable release, and
-`2026d1` is not a valid version at all.
+so branch, git tag, GitHub release and PyPI release share one spelling. Be aware of how PEP 440
+reads that string:
+
+- PyPI normalizes away the `v` prefix — `v2026b0` is published and resolved as `2026b0`.
+- The edition letter is interpreted as a pre-release marker (`a` = alpha, `b` = beta, `c`/`rc` =
+  release candidate), so installers do not pick it up by default: users pin it explicitly
+  (`pip install "opfunu-core==v2026b0"`) or pass `--pre`.
+- Letters beyond `c` are not valid PEP 440 at all (`v2026d0` cannot be published), so the letter
+  track stops at edition `c`; continuing past it requires a different numeric form.
 
 ### Release cycle
 
@@ -70,7 +72,7 @@ The letters cannot be used verbatim: `2026a0` parses as a pre-release of `2026` 
    complete, refresh `CITATION.cff` (`version`, `date-released`) and finalize the changelog.
 3. Open a pull request from the release branch into `master`; merge it once CI passes.
 4. Tag the merge commit `v<year><edition><version>` and publish the GitHub release — this triggers
-   `publish.yml` to build and upload to PyPI under the numeric version (`<year>.<edition*10+version>`).
+   `publish.yml` to build and upload to PyPI under the same name (`v2026b0`, resolved as `2026b0`).
 5. Cut the next release branch from `master` and repeat.
 
 ## Getting Started
