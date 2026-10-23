@@ -59,8 +59,9 @@ works on PyPy. Check which mode is active via `opfunu.HAS_NUMBA`
 (`problem.numba_compiled` reports it per instance).
 
 Compilation stays optional even with the extra installed: every problem accepts
-`precompile` (e.g. `Ackley01(ndim=10, precompile=False)`), and
-`Benchmark.default_precompile` sets the policy for a whole session.
+`prepare` (e.g. `Ackley01(ndim=10, prepare=False)` defers compilation, and
+`problem.prepare()` compiles such an instance on demand), and
+`Benchmark.default_prepare` sets the policy for a whole session.
 
 Install from Github:
 ```sh

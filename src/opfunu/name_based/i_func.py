@@ -43,7 +43,7 @@ class Infinity(FuncBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
-        precompile: bool | None = None,
+        prepare: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, epsilon: float, out: np.ndarray) -> None:
             out[0] = np.sum(x**6.0 * (np.sin(1.0 / (x + epsilon)) + 2.0))
@@ -62,5 +62,5 @@ class Infinity(FuncBenchmark):
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
-            precompile=precompile,
+            prepare=prepare,
         )

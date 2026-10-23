@@ -21,6 +21,13 @@
 +   then `ruff check`, `mypy`, and the full `pytest` suite. Ruff's auto-fixes are staged only for
 +   files it touched, so unrelated unstaged work is never swept into a commit. Requires a one-time
 +   `npm install` (Node >= 18); `HUSKY=0` skips a run
++ Renamed the `precompile` flag to `prepare` and made compilation deferrable: `prepare=True`
++   compiles the kernel with Numba at construction, `prepare=False` binds the plain-Python kernel,
++   and `problem.prepare()` compiles such an instance on demand (idempotent; returns whether the
++   kernel ended up compiled); `prepare=None` (the default) follows the package-wide
++   `Benchmark.default_prepare` policy. The `precompile` property is dropped (`numba_compiled`
++   remains), `plain=True` kernels are never compiled, and `prepare()` is a quiet no-op without
++   Numba — keeping the PyPy path unchanged
 + Opened the second cycle of the release model: this version lives on `release/v2026b0` and will be
 +   published as the PEP 440 numeric version **2026.10** when the cycle merges into `master`
 +   (tags, branches and changelog keep the `v<year><edition><version>` cycle name)
