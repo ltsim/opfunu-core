@@ -59,8 +59,9 @@ reads that string:
 
 - PyPI normalizes away the `v` prefix — `v2026b0` is published and resolved as `2026b0`.
 - The edition letter is interpreted as a pre-release marker (`a` = alpha, `b` = beta, `c`/`rc` =
-  release candidate), so installers do not pick it up by default: users pin it explicitly
-  (`pip install "opfunu-core==v2026b0"`) or pass `--pre`.
+  release candidate), so installers do not resolve it by default and an exact pin is the only
+  reliable way to get it: `pip install "opfunu-core==v2026b0"`. Not even `--pre` helps while the
+  final `2026.0` (the `v2026a0` release) is on PyPI: a pre-release of `2026` sorts *below* it.
 - Letters beyond `c` are not valid PEP 440 at all (`v2026d0` cannot be published), so the letter
   track stops at edition `c`; continuing past it requires a different numeric form.
 
