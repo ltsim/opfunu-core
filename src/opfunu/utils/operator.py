@@ -172,24 +172,6 @@ def grie_rosen_cec_func(x: np.ndarray) -> float:
 
 
 @njit(fastmath=True)
-def f8f2_func(x: np.ndarray) -> float:
-    x = np.asarray(x).ravel()
-    ndim = len(x)
-    pair = np.empty(2, dtype=x.dtype)
-    single = np.empty(1, dtype=x.dtype)
-    result = 0.0
-    for idx in range(0, ndim - 1):
-        pair[0] = x[idx]
-        pair[1] = x[idx + 1]
-        single[0] = rosenbrock_func(pair)
-        result += griewank_func(single)
-    pair[0] = x[-1]
-    pair[1] = x[0]
-    single[0] = rosenbrock_func(pair)
-    return result + griewank_func(single)
-
-
-@njit(fastmath=True)
 def non_continuous_expanded_scaffer_func(x: np.ndarray) -> float:
     x = np.asarray(x).ravel()
     ndim = len(x)
@@ -217,11 +199,6 @@ def elliptic_func(x: np.ndarray) -> float:
     ndim = len(x)
     idx = np.arange(0, ndim)
     return float(np.sum(10 ** (6.0 * idx / (ndim - 1)) * x**2))
-
-
-def sphere_noise_func(x: np.ndarray) -> float:
-    x = np.asarray(x).ravel()
-    return float(np.sum(x**2) * (1 + 0.1 * np.abs(np.random.normal(0, 1))))
 
 
 @njit(fastmath=True)
@@ -328,21 +305,6 @@ def generate_diagonal_matrix(size: int, alpha: float = 10) -> np.ndarray:
     matrix = np.zeros((size, size), float)
     np.fill_diagonal(matrix, diagonal)
     return matrix
-
-
-@njit(fastmath=True)
-def gz_func(x: np.ndarray) -> np.ndarray:
-    x = np.asarray(x).ravel()
-    ndim = len(x)
-    t1 = (500 - np.mod(x, 500)) * np.sin(np.sqrt(np.abs(500 - np.mod(x, 500)))) - (x - 500) ** 2 / (10000 * ndim)
-    t2 = (np.mod(np.abs(x), 500) - 500) * np.sin(np.sqrt(np.abs(np.mod(np.abs(x), 500) - 500))) - (x + 500) ** 2 / (
-        10000 * ndim
-    )
-    t3 = x * np.sin(np.abs(x) ** 0.5)
-    conditions = [x < -500, (-500 <= x) & (x <= 500), x > 500]
-    choices = [t2, t3, t1]
-    y = np.select(conditions, choices, default=np.nan)
-    return np.asarray(y)
 
 
 @njit(fastmath=True)

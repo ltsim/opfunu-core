@@ -196,7 +196,6 @@ class F32005(CecBenchmark):
             ndim=ndim,
             f_shift=f_shift,
             f_matrix=f_matrix,
-            data_name="data_2005",
             dim_supported=[10, 30, 50],
             parallel=parallel,
             fastmath=fastmath,
@@ -354,7 +353,6 @@ class F52005(CecBenchmark):
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
         )
-        self.make_support_data_path("data_2005")
         shift_data, matrix_data = self.load_shift_and_matrix_data(f_shift)
         self.f_shift = shift_data[: self.ndim]
         self.f_matrix = matrix_data[: self.ndim, : self.ndim]
@@ -1018,7 +1016,6 @@ class F142005(CecBenchmark):
         self.check_ndim_and_bounds(
             ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
         )
-        self.make_support_data_path("data_2005")
         self.f_shift = self.check_shift_data(f_shift)[: self.ndim]
         self.f_matrix = self.check_matrix_data(f_matrix)
         self._x_global = np.asarray(self.f_shift)
@@ -1130,7 +1127,6 @@ class F152005(CecBenchmark):
             precompile=precompile,
         )
         self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-5.0, 5.0] for _ in range(self.dim_default)]))
-        self.make_support_data_path("data_2005")
         self.f_shift = self.load_matrix_data(f_shift)[:, : self.ndim]  # This shift as matrix for M functions
         self.lamdas = np.array([1, 1, 10, 10, 5.0 / 60, 5.0 / 60, 5.0 / 32, 5.0 / 32, 5.0 / 100, 5.0 / 100])
         self.bias = np.array([0, 100, 200, 300, 400, 500, 600, 700, 800, 900])  # ==> f_shift[0] is the global optimum
@@ -1271,7 +1267,6 @@ class F162005(CecBenchmark):
             precompile=precompile,
         )
         self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-5.0, 5.0] for _ in range(self.dim_default)]))
-        self.make_support_data_path("data_2005")
         self.f_shift = self.load_matrix_data(f_shift)[:, : self.ndim]  # This shift as matrix for M functions
         self.M = self.check_matrix_data(f_matrix)
         self.lamdas = np.array([1, 1, 10, 10, 5.0 / 60, 5.0 / 60, 5.0 / 32, 5.0 / 32, 5.0 / 100, 5.0 / 100])
@@ -1493,7 +1488,6 @@ class F182005(CecBenchmark):
             precompile=precompile,
         )
         self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-5.0, 5.0] for _ in range(self.dim_default)]))
-        self.make_support_data_path("data_2005")
         self.f_shift = self.load_matrix_data(f_shift)[:, : self.ndim]  # This shift as matrix for M functions
         self.M = self.check_matrix_data(f_matrix)
         self.lamdas = np.array(
@@ -2033,7 +2027,6 @@ class F242005(CecBenchmark):
             precompile=precompile,
         )
         self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-5.0, 5.0] for _ in range(self.dim_default)]))
-        self.make_support_data_path("data_2005")
         self.f_shift = self.load_matrix_data(f_shift)[:, : self.ndim]  # This shift as matrix for M functions
         self.M = self.check_matrix_data(f_matrix)
         self.lamdas = np.array(

@@ -22,3 +22,7 @@ The full changelog is maintained in the repository:
 * Compilation stays optional even with Numba installed: every problem accepts `precompile`
   (`False` keeps the plain kernel, `True` requests compilation, `None` follows the
   package-wide `Benchmark.default_precompile` policy).
+* Base classes standardized after a whole-`src` over-engineering audit: shape storage, `is_succeed`,
+  `is_ndim_compatible` and the trait defaults live once on `Benchmark`; CEC data folders are
+  auto-detected from the class-name year; dead config (`_bind_kernel(params=…)`, `_kernel`,
+  the `dim_max` setter, the `load_tow_matrix` typo, unused operators) removed.

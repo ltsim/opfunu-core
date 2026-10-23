@@ -95,7 +95,6 @@ READ_ONLY_PROPERTIES = [
     "x_global",
     "dim_changeable",
     "dim_default",
-    "_kernel",
     "_param_names",
     "_compute",
     "_compile_error",
@@ -129,7 +128,7 @@ def test_benchmark_properties_are_read_only(name):
 def test_kernel_state_is_encapsulated():
     problem = _DummyProblem(ndim=2)
     assert callable(problem.compute)
-    assert problem.compute is problem._kernel
+    assert problem.compute is problem.compute  # stable property, not a rebuild
     assert "_Benchmark__kernel" in vars(problem)
     assert "_Benchmark__param_names" in vars(problem)
     assert "_Benchmark__compute" in vars(problem)
