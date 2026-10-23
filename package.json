@@ -1,0 +1,11 @@
+{
+  "name": "opfunu-core",
+  "private": true,
+  "description": "Development tooling (Husky git hooks) for opfunu-core",
+  "scripts": {
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7"
+  }
+}
