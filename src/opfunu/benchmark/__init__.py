@@ -5,11 +5,12 @@
 import abc
 import dataclasses
 import functools
+import sys
 import typing
 
-try:  # Python >= 3.11
+if sys.version_info >= (3, 11):
     from importlib.resources.abc import Traversable
-except ImportError:  # Python 3.10: Traversable lives in importlib.abc
+else:  # Python 3.10: Traversable lives in importlib.abc
     from importlib.abc import Traversable
 
 import numpy as np
