@@ -38,14 +38,27 @@ branch**:
 
 ### Versioning
 
-Releases are tagged `<year><tag><version>`, for example `v2026a0` or `v2026b9`:
+Releases are tagged `v<year><edition><version>`, for example `v2026a0` or `v2026b9`:
 
 - **year** — four-digit release year (`2026`).
-- **tag** — a lowercase letter track within the year (`a`, `b`, `c`, …).
-- **version** — a single digit `0`–`9` within the tag.
+- **edition** — a lowercase letter track within the year (`a`, `b`, `c`, …).
+- **version** — a single digit `0`–`9` within the edition.
 
 The sequence advances `v2026a0 → v2026a1 → … → v2026a9 → v2026b0 → …`. The `v` prefix is used
-for branch names and git tags; the Python package version drops it (`__version__ = "2026a0"`).
+for branch names and git tags.
+
+The published package version is the **numeric form** of the same release, so that it is a final
+(PEP 440) version rather than a pre-release:
+
+```
+__version__ = "<year>.<edition * 10 + version>"
+```
+
+the edition letter counts from zero (`a`→0, `b`→1, …) and `version` is its digit. So `v2026a0`
+publishes as `2026.0`, `v2026a9` as `2026.9`, `v2026b0` as `2026.10` and `v2026b1` as `2026.11`.
+The letters cannot be used verbatim: `2026a0` parses as a pre-release of `2026` (`a` = alpha,
+`b` = beta, `c` = release candidate), so `pip` would keep serving the older stable release, and
+`2026d1` is not a valid version at all.
 
 ### Release cycle
 
