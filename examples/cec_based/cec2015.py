@@ -1,12 +1,12 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 14:52, 07/07/2022 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 14:52, 07/07/2022 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
-import opfunu
 import numpy as np
 
+import opfunu
 
 ## Test CEC2015 F1
 print("====================F1")

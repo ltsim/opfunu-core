@@ -1,74 +1,27 @@
 #!/usr/bin/env python
-# Created by "Thieu" at 17:27, 22/07/2022 ----------%                                                                               
-#       Email: nguyenthieu2102@gmail.com            %                                                    
-#       Github: https://github.com/thieu1995        %                         
+# Created by "Thieu" at 17:27, 22/07/2022 ----------%
+#       Email: nguyenthieu2102@gmail.com            %
+#       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
-
-import numpy as np
 
 import opfunu
 
 
-def test_Giunta_results():
-    ndim = 2
-    problem = opfunu.name_based.Giunta(ndim=ndim)
-    x = np.ones(ndim)
-    result = problem.evaluate(x)
-    assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
-    assert isinstance(problem.lb, np.ndarray)
-    assert len(problem.lb) == ndim
-    assert problem.bounds.shape[0] == ndim
-    assert len(problem.x_global) == ndim
+def test_Giunta_results(assert_problem):
+    assert_problem(opfunu.name_based.Giunta(ndim=2), 2, opfunu.name_based.FuncBenchmark)
 
 
-def test_GoldsteinPrice_results():
-    ndim = 2
-    problem = opfunu.name_based.GoldsteinPrice(ndim=ndim)
-    x = np.ones(ndim)
-    result = problem.evaluate(x)
-    assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
-    assert isinstance(problem.lb, np.ndarray)
-    assert len(problem.lb) == ndim
-    assert problem.bounds.shape[0] == ndim
-    assert len(problem.x_global) == ndim
+def test_GoldsteinPrice_results(assert_problem):
+    assert_problem(opfunu.name_based.GoldsteinPrice(ndim=2), 2, opfunu.name_based.FuncBenchmark)
 
 
-def test_Griewank_results():
-    ndim = 17
-    problem = opfunu.name_based.Griewank(ndim=ndim)
-    x = np.ones(ndim)
-    result = problem.evaluate(x)
-    assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
-    assert isinstance(problem.lb, np.ndarray)
-    assert len(problem.lb) == ndim
-    assert problem.bounds.shape[0] == ndim
-    assert len(problem.x_global) == ndim
+def test_Griewank_results(assert_problem):
+    assert_problem(opfunu.name_based.Griewank(ndim=17), 17, opfunu.name_based.FuncBenchmark)
 
 
-def test_Gulf_results():
-    ndim = 3
-    problem = opfunu.name_based.Gulf(ndim=ndim)
-    x = np.ones(ndim)
-    result = problem.evaluate(x)
-    assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
-    assert isinstance(problem.lb, np.ndarray)
-    assert len(problem.lb) == ndim
-    assert problem.bounds.shape[0] == ndim
-    assert len(problem.x_global) == ndim
+def test_Gulf_results(assert_problem):
+    assert_problem(opfunu.name_based.Gulf(ndim=3), 3, opfunu.name_based.FuncBenchmark)
 
 
-def test_Gear_results():
-    ndim = 4
-    problem = opfunu.name_based.Gear(ndim=ndim)
-    x = np.ones(ndim)
-    result = problem.evaluate(x)
-    assert type(result) == np.float64
-    assert isinstance(problem, opfunu.name_based.FuncBenchmark)
-    assert isinstance(problem.lb, np.ndarray)
-    assert len(problem.lb) == ndim
-    assert problem.bounds.shape[0] == ndim
-    assert len(problem.x_global) == ndim
+def test_Gear_results(assert_problem):
+    assert_problem(opfunu.name_based.Gear(ndim=4), 4, opfunu.name_based.FuncBenchmark)

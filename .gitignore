@@ -358,3 +358,21 @@ pyrightconfig.json
 
 # Sphinx documentation
 docs/build/
+
+# Agent & tooling configs (local only)
+AGENTS.md
+AGENT.md
+CLAUDE.md
+GEMINI.md
+CURSOR.md
+AIDER.md
+
+# Agent & tooling directories
+.opencode/
+.claude/
+.cursor/
+.aider/
+.continue/
+
+# Local generated artifacts
+graphify-out/
