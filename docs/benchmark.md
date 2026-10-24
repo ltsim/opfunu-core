@@ -106,10 +106,10 @@ super().__init__(
 )
 ```
 
-Configuration flags (`parallel`, `fastmath`, `dtype`, `shift`, `precompile`) stay
+Configuration flags (`parallel`, `fastmath`, `dtype`, `shift`, `prepare`) stay
 ordinary parameters of every class's `__init__` and are forwarded to
-`super().__init__(...)`; `precompile` defaults to `None` so the package-wide
-`Benchmark.default_precompile` policy applies unless the caller chooses explicitly.
+`super().__init__(...)`; `prepare` defaults to `None` so the package-wide
+`Benchmark.default_prepare` policy applies unless the caller chooses explicitly.
 
 Problems that compute extra kernel parameters after `super().__init__` (permutation
 vectors, composition weights, index blocks, …) bind explicitly instead:
@@ -119,13 +119,17 @@ self._bind_kernel(compute, ["f_shift", "P", "m_group", "f_matrix"], paras=[...])
 ```
 
 `compute` and every other `Benchmark` property are read-only: configuration is
-supplied through `__init__` kwargs (`dtype`, `dim_changeable`, `verbose`, `precompile`, …), and
+supplied through `__init__` kwargs (`dtype`, `dim_changeable`, `verbose`, `prepare`, …), and
 data-dependent metadata written by subclasses goes through protected fields
-(`self._f_global`, `self._x_global`, `self._paras`, `self._support_path`).
-All private kernel state (the bound `__compute`, `__paras`, `numba_compiled`, …)
+(`self._f_global`, `self._x_global`, `self._paras`, `self._support_path`, `self._ndim`,
+`self._bounds`). The shape (`bounds`/`ndim`/`lb`/`ub`), `is_succeed`, `is_ndim_compatible`
+and `create_solution` are implemented once on `Benchmark`; `FuncBenchmark`/`CecBenchmark`
+only add their own `check_ndim_and_bounds`/`check_solution` and CEC specifics. All private
+kernel state (the bound `__compute`, `__paras`, `numba_compiled`, …)
 lives in name-mangled storage behind those properties. The private
 `__build_compute` helper is only reachable through `_bind_kernel`
-(`plain=True` binds the Python kernel directly, with no Numba attempt).
+(`plain=True` binds the Python kernel directly, with no Numba attempt) and the
+public `prepare()` method.
 
 ## Numba acceleration (optional)
 
@@ -138,38 +142,45 @@ evaluation is slower. `opfunu.HAS_NUMBA` reports whether Numba is available and
 ### Choosing not to compile
 
 Installing Numba does not force you to use it. Every problem constructor accepts a
-`precompile` flag, so compilation stays optional even in a Numba-enabled
+`prepare` flag, so compilation stays optional even in a Numba-enabled
 environment:
 
 ```python
 from opfunu.name_based import Ackley01
 from opfunu.benchmark import Benchmark
 
-f1 = Ackley01(ndim=10, precompile=False)  # plain Python/NumPy kernel
-f2 = Ackley01(ndim=10, precompile=True)  # gufunc kernel (if Numba installed)
+f1 = Ackley01(ndim=10, prepare=False)  # plain Python/NumPy kernel for now
+f2 = Ackley01(ndim=10, prepare=True)  # gufunc kernel at construction (if Numba installed)
 
-Benchmark.default_precompile = False  # package-wide policy for new instances
-f3 = Ackley01(ndim=10)  # follows the policy: plain kernel
-f4 = Ackley01(ndim=10, precompile=True)  # explicit choice always wins
+f1.prepare()  # deferred compilation: now f1 binds a compiled gufunc
+
+Benchmark.default_prepare = False  # package-wide policy for new instances
+f3 = Ackley01(ndim=10)  # follows the policy: plain kernel until prepare()
+f4 = Ackley01(ndim=10, prepare=True)  # explicit choice always wins
 ```
 
-`precompile` defaults to `None`, meaning "follow `Benchmark.default_precompile`"
+`prepare` defaults to `None`, meaning "follow `Benchmark.default_prepare`"
 (`True` out of the box). Set the class attribute before building problems to flip
 the default for a whole session; it is read at construction, so already-built
-instances keep their own setting. `problem.precompile` reports the resolved
-decision, `problem.numba_compiled` reports what actually bound.
+instances keep their own setting. `problem.numba_compiled` reports what actually
+bound.
 
-The flag only declines compilation; it never enables it. Kernels bound with
-`plain=True` (stochastic terms, hybrid compositions holding sub-instances) stay
-plain Python whatever `precompile` says, and `precompile=True` is inert when
-Numba is not installed. Skipping compilation is not an error: `_compile_error`
+`prepare=False` defers compilation, it does not forbid it: `problem.prepare()`
+performs the `guvectorize` compilation and warm-up that construction skipped and
+returns whether the kernel ended up compiled. The call is idempotent (an
+already-compiled kernel returns `True` without recompiling) and it never touches
+the instance's metadata. Kernels bound with `plain=True` (stochastic terms,
+hybrid compositions holding sub-instances) stay plain Python whatever the flag
+or `prepare()` says, and `prepare()` is a quiet no-op — returning `False` and
+recording no error — when Numba is not installed (PyPy, minimal installs).
+Declining or skipping compilation is not an error either: `_compile_error`
 stays `None` and `numba_compiled` is `False`. Note that plain kernels calling
 `opfunu.utils.operator` helpers still let those `njit`-decorated functions
-compile on first use, so `precompile=False` keeps the *problem* kernel plain
+compile on first use, so `prepare=False` keeps the *problem* kernel plain
 rather than guaranteeing that no Numba code is ever generated.
 
 `parallel=True` and `fastmath` are gufunc options and have no effect on an
-instance that was built with `precompile=False`.
+instance that was built with `prepare=False` until `prepare()` compiles it.
 
 ### Evaluation contract
 
@@ -183,8 +194,9 @@ to `self.dtype` (`np.float64` by default; `np.float32` when constructed with
 (or `(ndim,)`, treated as `N=1`), `(N,)` out with dtype `self.dtype`. For plain-Python
 fallbacks it loops the scalar kernel behind the same interface.
 
-Compilation (plus a warmup call) happens at instantiation, never on first `evaluate`,
-and only when the instance allows it (`precompile`; see *Choosing not to compile*).
+Compilation (plus a warmup call) happens either at instantiation, when the
+instance prepares eagerly, or on demand via `prepare()` — never on first
+`evaluate`; see *Choosing not to compile*.
 The gufunc cache is keyed on the kernel's `__code__`, so kernels must be self-contained —
 no closing over per-instance values.
 

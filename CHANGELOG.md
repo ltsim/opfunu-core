@@ -1,3 +1,38 @@
+# Version 2026b0
+
++ Standardized the base classes (whole-repo over-engineering audit): the shape storage
++   (`_ndim`/`_bounds`) behind `bounds`/`ndim`/`lb`/`ub`, the `is_succeed`/`is_ndim_compatible`/
++   `create_solution` implementations and the shared trait defaults (`name`, `continuous`, …,
++   `modality`) now live once on `Benchmark` instead of being duplicated across `FuncBenchmark`
++   and `CecBenchmark`; the four CEC data-file loaders share one `_load_table` helper and the
++   `data_*` folder is auto-detected from the trailing competition year of the class name
++   (`F202017` was previously only correct because of its explicit declaration), so the 71
++   redundant per-class data-path declarations were removed
++ Removed dead configuration and aliases: the `_bind_kernel(params=...)` attribute-setting
++   branch (no callers), the `_kernel` property (alias of `compute`), the unused `dim_max`
++   setter, the `load_tow_matrix` typo alias, the never-matched `EXCLUDES` entries, and the
++   unused `f8f2_func`/`gz_func`/`sphere_noise_func` operators; `opfunu.plot` now re-exports
++   the lazy engine entry points directly, and the function-registry helpers share one filter
++   core (`opfunu/__init__.py`)
++ Guarded the `Traversable` import with `sys.version_info` instead of a `try`/`except ImportError`,
++   so `mypy` type-checks cleanly on Python 3.12–3.14 (`importlib.abc.Traversable` was removed in
++   3.14) while the Python 3.10 fallback keeps working; runtime behaviour is unchanged
++ Added Husky git hooks: `pre-commit` and `pre-push` run the same trio as CI — `ruff check --fix`
++   then `ruff check`, `mypy`, and the full `pytest` suite. Ruff's auto-fixes are staged only for
++   files it touched, so unrelated unstaged work is never swept into a commit. Requires a one-time
++   `npm install` (Node >= 18); `HUSKY=0` skips a run
++ Renamed the `precompile` flag to `prepare` and made compilation deferrable: `prepare=True`
++   compiles the kernel with Numba at construction, `prepare=False` binds the plain-Python kernel,
++   and `problem.prepare()` compiles such an instance on demand (idempotent; returns whether the
++   kernel ended up compiled); `prepare=None` (the default) follows the package-wide
++   `Benchmark.default_prepare` policy. The `precompile` property is dropped (`numba_compiled`
++   remains), `plain=True` kernels are never compiled, and `prepare()` is a quiet no-op without
++   Numba — keeping the PyPy path unchanged
++ Opened the second cycle of the release model: this version lives on `release/v2026b0` and
++   publishes to PyPI under the same name, `v2026b0`, when the cycle merges into `master`
+
+---------------------------------------------------------------------
+
 # Version 2026a0
 
 + Added automatic coordinate-shift propagation (issue #19): every benchmark function accepts a `shift`

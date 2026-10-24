@@ -52,7 +52,7 @@ class F12008(CecBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
-        precompile: bool | None = None,
+        prepare: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
             out[0] = operator.sphere_func(x - f_shift) + f_bias
@@ -64,14 +64,13 @@ class F12008(CecBenchmark):
             f_bias=f_bias,
             dim_default=500,
             dim_max=1000,
-            data_name="data_2008",
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
             compute=compute,
             param_names=["f_shift", "f_bias"],
             shift=shift,
-            precompile=precompile,
+            prepare=prepare,
         )
 
 
@@ -115,7 +114,7 @@ class F22008(CecBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
-        precompile: bool | None = None,
+        prepare: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
             out[0] = np.max(np.abs(x - f_shift)) + f_bias
@@ -127,14 +126,13 @@ class F22008(CecBenchmark):
             f_bias=f_bias,
             dim_default=500,
             dim_max=1000,
-            data_name="data_2008",
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
             compute=compute,
             param_names=["f_shift", "f_bias"],
             shift=shift,
-            precompile=precompile,
+            prepare=prepare,
         )
 
 
@@ -178,7 +176,7 @@ class F32008(CecBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
-        precompile: bool | None = None,
+        prepare: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
             out[0] = operator.rosenbrock_func(x - f_shift, shift=1.0) + f_bias
@@ -190,14 +188,13 @@ class F32008(CecBenchmark):
             f_bias=f_bias,
             dim_default=500,
             dim_max=1000,
-            data_name="data_2008",
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
             compute=compute,
             param_names=["f_shift", "f_bias"],
             shift=shift,
-            precompile=precompile,
+            prepare=prepare,
         )
 
 
@@ -241,7 +238,7 @@ class F42008(CecBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
-        precompile: bool | None = None,
+        prepare: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
             z = x - f_shift
@@ -255,14 +252,13 @@ class F42008(CecBenchmark):
             default_bounds=[[-5.0, 5.0]],
             dim_default=500,
             dim_max=1000,
-            data_name="data_2008",
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
             compute=compute,
             param_names=["f_shift", "f_bias"],
             shift=shift,
-            precompile=precompile,
+            prepare=prepare,
         )
 
 
@@ -306,7 +302,7 @@ class F52008(CecBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
-        precompile: bool | None = None,
+        prepare: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
             z = x - f_shift
@@ -320,14 +316,13 @@ class F52008(CecBenchmark):
             default_bounds=[[-600.0, 600.0]],
             dim_default=500,
             dim_max=1000,
-            data_name="data_2008",
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
             compute=compute,
             param_names=["f_shift", "f_bias"],
             shift=shift,
-            precompile=precompile,
+            prepare=prepare,
         )
 
 
@@ -371,7 +366,7 @@ class F62008(CecBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
-        precompile: bool | None = None,
+        prepare: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
             z = x - f_shift
@@ -385,14 +380,13 @@ class F62008(CecBenchmark):
             default_bounds=[[-32.0, 32.0]],
             dim_default=500,
             dim_max=1000,
-            data_name="data_2008",
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
             compute=compute,
             param_names=["f_shift", "f_bias"],
             shift=shift,
-            precompile=precompile,
+            prepare=prepare,
         )
 
 
@@ -436,7 +430,7 @@ class F72008(CecBenchmark):
         fastmath: bool = True,
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
-        precompile: bool | None = None,
+        prepare: bool | None = None,
     ) -> None:
         def compute(x: np.ndarray, f_bias: typing.Any, out: np.ndarray) -> None:
             ndim = len(x)
@@ -451,12 +445,11 @@ class F72008(CecBenchmark):
             default_bounds=[[-1.0, 1.0]],
             dim_default=500,
             dim_max=1000,
-            data_name="data_2008",
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
-            precompile=precompile,
+            prepare=prepare,
         )
         self.f_shift = self.f_shift / np.max(self.f_shift)
         self._f_global = -1e32

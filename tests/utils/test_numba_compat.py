@@ -38,6 +38,8 @@ def test_import_and_evaluate_without_numba():
         "f = opfunu.name_based.Ackley01(ndim=2); "
         "assert f.numba_compiled is False; "
         "assert f._compile_error is None; "
+        "assert f.prepare() is False, 'prepare() must decline quietly without numba'; "
+        "assert f.numba_compiled is False; "
         "print(f.evaluate(np.ones(2)))"
     )
     proc = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, timeout=300)

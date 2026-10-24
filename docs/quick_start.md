@@ -145,14 +145,17 @@ func = opfunu.cec_based.F12014(ndim=30, parallel=True, fastmath=True, dtype=np.f
 * `fastmath=True` (default) compiles the kernel with Numba `fastmath`; pass
   `fastmath=False` for bit-exact agreement with the pre-migration NumPy code.
 * `parallel=True` compiles with `target="parallel"` for multi-threaded batch runs.
-* `precompile` decides whether Numba is used at all. `Ackley01(ndim=10,
-  precompile=False)` keeps the plain-Python/NumPy kernel even when the `[numba]`
-  extra is installed; `precompile=True` forces the compilation attempt. The
-  default (`None`) follows the package-wide policy
-  `Benchmark.default_precompile`, which is `True` out of the box — set it to
-  `False` before building problems to make plain kernels the session default.
-  Kernels bound with `plain=True` (stochastic terms, hybrid compositions) always
-  stay plain, and `precompile=True` is inert when Numba is not installed.
+* `prepare` decides whether Numba compiles at construction. `Ackley01(ndim=10,
+  prepare=True)` compiles the gufunc kernel right away; `Ackley01(ndim=10,
+  prepare=False)` keeps the plain-Python/NumPy kernel even when the `[numba]`
+  extra is installed and compiles later on demand with `problem.prepare()`
+  (idempotent; returns whether the kernel ended up compiled). The default
+  (`None`) follows the package-wide policy
+  `Benchmark.default_prepare`, which is `True` out of the box — set it to
+  `False` before building problems to make deferred plain kernels the session
+  default. Kernels bound with `plain=True` (stochastic terms, hybrid
+  compositions) always stay plain, and `prepare()` is a no-op when Numba is
+  not installed (PyPy, minimal installs).
 
 ## Batch evaluation
 
@@ -171,11 +174,14 @@ on every interpreter — only slower.
 
 ```python
 print(opfunu.HAS_NUMBA)  # is Numba available in this environment?
-print(func.precompile)  # did this instance allow compilation?
 print(func.numba_compiled)  # did this instance bind a compiled gufunc?
 print(func._compile_error)  # compile failure; None on success, without Numba, or when declined
 print(func.get_paras())  # kernel parameters bound for this instance
 ```
+
+An instance deferred with `prepare=False` compiles on demand: `func.prepare()`
+performs the work construction skipped and returns `True` once the kernel is
+bound as a compiled gufunc (`False` without Numba, or for `plain=True` kernels).
 
 `verbose` is a read-only property configured at construction time (pass
 `verbose=True` to `Benchmark`/`FuncBenchmark`/`CecBenchmark`, or set a class

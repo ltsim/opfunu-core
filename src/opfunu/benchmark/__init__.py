@@ -5,11 +5,12 @@
 import abc
 import dataclasses
 import functools
+import sys
 import typing
 
-try:  # Python >= 3.11
+if sys.version_info >= (3, 11):
     from importlib.resources.abc import Traversable
-except ImportError:  # Python 3.10: Traversable lives in importlib.abc
+else:  # Python 3.10: Traversable lives in importlib.abc
     from importlib.abc import Traversable
 
 import numpy as np
@@ -26,17 +27,40 @@ class Formula:
 
 
 class Benchmark(abc.ABC):
+    """
+    Abstract base class for an optimization benchmark problem.
+
+    Subclasses supply a ``compute`` kernel and the problem-specific metadata; the
+    shared evaluation machinery (``evaluate``, ``_evaluate_batch``), the shape
+    storage behind ``bounds``/``ndim``/``lb``/``ub``, and the mathematical trait
+    defaults below are implemented once, here.
+    """
+
+    name: str = "Benchmark name"
     latex_formula: str = r"f(\mathbf{x})"
     latex_formula_dimension: str = r"d \in \mathbb{N}_{+}^{*}"
     latex_formula_bounds: str = r"x_i \in [-2\pi, 2\pi], \forall i \in \llbracket 1, d\rrbracket"
     latex_formula_global_optimum: str = r"f(0, ..., 0)=-1, \text{ for}, m=5, \beta=15"
 
+    continuous: bool = True
+    linear: bool = False
+    convex: bool = True
+    unimodal: bool = False
+    separable: bool = False
+
+    differentiable: bool = True
+    scalable: bool = True
+    randomized_term: bool = False
+    parametric: bool = True
+
+    modality: bool = True  # Number of ambiguous peaks, unknown # peaks
+
     epsilon: typing.Final[float] = 1e-8
 
     #: Package-wide compilation policy for instances built without an explicit
-    #: ``precompile`` argument. Set it before constructing problems to change the
-    #: default for every subclass (e.g. ``Benchmark.default_precompile = False``).
-    default_precompile: typing.ClassVar[bool] = True
+    #: ``prepare`` argument. Set it before constructing problems to change the
+    #: default for every subclass (e.g. ``Benchmark.default_prepare = False``).
+    default_prepare: typing.ClassVar[bool] = True
 
     _gufunc_cache: typing.ClassVar[dict[tuple[typing.Any, ...], typing.Any]] = {}
 
@@ -44,6 +68,12 @@ class Benchmark(abc.ABC):
     __base_bounds: np.ndarray | None
     __base_x_global: np.ndarray | None
     __init_depth: int
+
+    #: Shape storage: (ndim, 2) bounds matrix and its dimensionality, written by
+    #: the concrete ``check_ndim_and_bounds`` implementations and exposed through
+    #: the read-only ``bounds``/``ndim``/``lb``/``ub`` properties.
+    _ndim: int
+    _bounds: np.ndarray
 
     def __init__(
         self,
@@ -57,7 +87,7 @@ class Benchmark(abc.ABC):
         dim_default: int = 2,
         verbose: bool = False,
         shift: typing.Any = None,
-        precompile: bool | None = None,
+        prepare: bool | None = None,
     ) -> None:
         self.__parallel: bool = bool(parallel)
         self.__fastmath: bool = bool(fastmath)
@@ -65,7 +95,8 @@ class Benchmark(abc.ABC):
         self.__verbose: bool = bool(verbose)
         # ``None`` defers to the package-wide policy; a bool is an explicit
         # per-instance choice that always wins over the class default.
-        self.__precompile: bool = bool(type(self).default_precompile if precompile is None else precompile)
+        self.__auto_prepare: bool = bool(type(self).default_prepare if prepare is None else prepare)
+        self.__plain_kernel: bool = False
         self.__numba_compiled: bool = False
         self.__compile_error: Exception | None = None
         self.__kernel: typing.Callable[..., None] | None = compute
@@ -85,6 +116,9 @@ class Benchmark(abc.ABC):
         self._paras: dict[str, typing.Any] = {}
         self._f_global: float = float(f_global)
         self._x_global: np.ndarray = np.asarray(x_global if x_global is not None else [])
+        # Shape storage; the concrete check_ndim_and_bounds of each base fills it.
+        self._ndim = 0
+        self._bounds = np.array([])
 
     def __init_subclass__(cls, **kwargs: typing.Any) -> None:
         super().__init_subclass__(**kwargs)
@@ -116,8 +150,8 @@ class Benchmark(abc.ABC):
         return getattr(self, "_Benchmark__shift", None)
 
     def _set_bounds(self, bounds: np.ndarray) -> None:
-        """Write the (ndim, 2) bounds matrix into the subclass's private storage."""
-        raise NotImplementedError
+        """Write the (ndim, 2) bounds matrix behind the read-only ``bounds`` property."""
+        self._bounds = np.asarray(bounds, dtype=float)
 
     def _normalize_shift(self, shift: typing.Any) -> np.ndarray:
         """Validate a user shift vector against the problem dimensionality."""
@@ -199,16 +233,6 @@ class Benchmark(abc.ABC):
         return self.__dtype
 
     @property
-    def precompile(self) -> bool:
-        """Whether the kernel may be compiled with Numba (read-only; resolved intent).
-
-        ``False`` when the instance was built with ``precompile=False`` or when
-        ``Benchmark.default_precompile`` was ``False`` at construction time.
-        Report what actually bound through ``numba_compiled``.
-        """
-        return self.__precompile
-
-    @property
     def support_path(self) -> Traversable | None:
         """The package-data directory holding shift/rotation files (CEC only, read-only)."""
         return self._support_path
@@ -255,11 +279,6 @@ class Benchmark(abc.ABC):
         return self.__kernel
 
     @property
-    def _kernel(self) -> typing.Callable[..., None] | None:
-        """The instance kernel closure (read-only; prefer the ``compute`` property)."""
-        return self.__kernel
-
-    @property
     def _param_names(self) -> list[str]:
         """Names of the instance attributes the kernel takes (after ``x``, before ``out``, read-only)."""
         return self.__param_names
@@ -285,29 +304,29 @@ class Benchmark(abc.ABC):
         param_names: list[str] | None = None,
         *,
         plain: bool = False,
-        params: dict[str, typing.Any] | None = None,
         paras: dict[str, typing.Any] | list[str] | tuple[str, ...] | None = None,
     ) -> None:
         """
         Install ``compute`` and bind it for execution.
 
         The only sanctioned caller of the private ``__build_compute``
-        helper. ``params`` sets extra attributes before binding;
-        ``param_names`` lists the kernel parameters in call order
-        (defaults to ``params`` keys); ``paras`` is display metadata
-        (a dict, or a list of attribute names resolved against ``self``;
-        defaults to ``{name: getattr(self, name)}`` for ``param_names``).
-        With ``plain=True`` the kernel is bound uncompiled (no Numba
-        attempt); otherwise it is compiled via ``__build_compute``, which
-        requires Numba to be installed and the instance's ``precompile``
-        to be enabled.
+        The only sanctioned caller of the private ``__build_compute``
+        helper. ``param_names`` lists the kernel parameters in call order
+        (instance attributes read at bind time); ``paras`` is display
+        metadata (a dict, or a list of attribute names resolved against
+        ``self``; defaults to ``{name: getattr(self, name)}`` for
+        ``param_names``).
+        With ``plain=True`` the kernel is declared Numba-incompatible and
+        bound uncompiled, whatever the ``prepare`` flag says; otherwise it is
+        compiled through ``__build_compute`` when Numba is installed and the
+        instance prepares eagerly (``prepare=True``, or the package-wide
+        ``Benchmark.default_prepare`` policy). A deferred instance
+        (``prepare=False``) binds the plain kernel here and compiles when
+        ``prepare()`` is called.
         """
         if compute is not None:
             self.__kernel = compute
-        if params:
-            for key, val in params.items():
-                setattr(self, key, val)
-        names: list[str] = list(param_names) if param_names is not None else list(params.keys() if params else [])
+        names: list[str] = list(param_names) if param_names is not None else []
         self.__param_names = names
         if paras is None:
             if names:
@@ -322,12 +341,61 @@ class Benchmark(abc.ABC):
             raise TypeError(f"Unsupported paras metadata type: {type(paras)}")
         if self.__kernel is None:
             raise RuntimeError(f"{type(self).__name__} has no kernel; pass compute= to _bind_kernel first.")
+        self.__plain_kernel = bool(plain)
         if plain:
-            self.__compute = self.__resolve_kernel()
-            self.__numba_compiled = False
-            self.__compile_error = None
-        else:
+            self.__compute = self.__bind_plain(names, validate=False)
+        elif numba_compat.HAS_NUMBA and self.__auto_prepare:
             self.__compute = self.__build_compute(names)
+        else:
+            # Numba absent, or compilation deferred (``prepare=False`` /
+            # ``Benchmark.default_prepare=False``): bind the plain kernel.
+            self.__compute = self.__bind_plain(names, validate=True)
+
+    def prepare(self) -> bool:
+        """
+        Compile the bound kernel with Numba now (deferred compilation).
+
+        Problems built with ``prepare=False`` (or with ``Benchmark.default_prepare``
+        set to ``False``) bind a plain Python/NumPy kernel at construction and
+        skip the ``guvectorize`` compilation and warm-up; this method performs
+        that work on demand. It is safe to call at any time and repeatedly:
+        an already-compiled kernel returns ``True`` without recompiling, and
+        kernels declared Numba-incompatible (bound with ``plain=True``) are
+        never compiled.
+
+        Without Numba installed (PyPy, minimal installs) the call is a no-op
+        returning ``False`` and recording no error. If compilation fails, the
+        plain kernel stays bound, the exception is stored in ``_compile_error``
+        (printed when ``verbose`` is enabled) and ``False`` is returned;
+        evaluation is value-identical either way.
+
+        Returns
+        -------
+        prepared : bool
+            Whether the kernel is bound as a compiled gufunc after the call.
+        """
+        if self.__numba_compiled:
+            return True
+        if self.__plain_kernel or not numba_compat.HAS_NUMBA:
+            return False
+        self.__compute = self.__build_compute(self.__param_names)
+        return self.__numba_compiled
+
+    def __bind_plain(self, param_names: list[str], *, validate: bool) -> typing.Callable[..., None]:
+        """
+        Bind the uncompiled Python kernel and record that nothing was compiled.
+
+        With ``validate=True`` the kernel parameters are normalized eagerly so
+        mistyped names fail fast, exactly as on the compiled path. ``plain=True``
+        kernels skip validation: they legitimately hold values
+        ``_normalize_kernel_param`` rejects (sub-instances, bound methods).
+        """
+        self.__numba_compiled = False
+        self.__compile_error = None
+        if validate:
+            for name in param_names:
+                self._normalize_kernel_param(getattr(self, name))
+        return self.__resolve_kernel()
 
     def __resolve_kernel(self) -> typing.Callable[..., None]:
         """Return the instance-bound kernel, raising when none was installed."""
@@ -386,31 +454,17 @@ class Benchmark(abc.ABC):
         Compile the bound kernel into a ``guvectorize`` gufunc.
 
         ``param_names`` lists the instance attributes the kernel needs
-        (in call order, after ``x`` and before ``out``). Attribute lookup
-        and normalization errors propagate; only Numba compilation/warmup
-        failures fall back to the plain Python kernel, keeping the same
-        ``(x, *params, out)`` calling convention. The plain kernel is used
-        directly, without any compilation attempt, when Numba is not installed
-        (PyPy, minimal installs) or when compilation is declined for this
-        instance (``precompile=False``, or ``Benchmark.default_precompile``
-        being ``False`` while ``precompile`` is ``None``). Compilation (plus a
-        warmup call) happens here, i.e. at instantiation, never on first
-        ``evaluate``. On fallback the raised exception is stored in
-        ``_compile_error`` (useful for diagnosing silent fallbacks; ``None``
-        when compilation was simply skipped).
+        (in call order, after ``x`` and before ``out``). The caller decides
+        whether a compilation attempt is made; this helper assumes Numba is
+        installed. Attribute lookup and normalization errors propagate; only
+        Numba compilation/warmup failures fall back to the plain Python
+        kernel, keeping the same ``(x, *params, out)`` calling convention.
+        On fallback the raised exception is stored in ``_compile_error``
+        (useful for diagnosing silent fallbacks). Compilation (plus a warmup
+        call) happens here — either at instantiation through ``_bind_kernel``
+        or later through ``prepare()`` — never on first ``evaluate``.
         """
         kernel = self.__resolve_kernel()
-        if not (numba_compat.HAS_NUMBA and self.__precompile):
-            # Numba absent, or compilation declined (``precompile=False`` /
-            # ``Benchmark.default_precompile=False``): bind the plain kernel.
-            self.__numba_compiled = False
-            self.__compile_error = None
-            # Validate eagerly so mistyped params fail fast, exactly as in the
-            # compiled path (lookup/normalization errors propagate; only
-            # compile/warmup failures fall back).
-            for name in param_names:
-                self._normalize_kernel_param(getattr(self, name))
-            return kernel
         import numba as nb
 
         # Let AttributeError/TypeError/ValueError propagate: a mistyped name
@@ -595,10 +649,29 @@ class Benchmark(abc.ABC):
         self.check_solution(x)
         return self.__evaluate(x)
 
-    @abc.abstractmethod
-    def is_ndim_compatible(self, ndim: int | None) -> bool: ...
+    def is_ndim_compatible(self, ndim: int | None) -> bool:
+        """
+        Method to support searching the functions with input ndim
 
-    @abc.abstractmethod
+        Parameters
+        ----------
+        ndim : int
+                The number of dimensions
+
+        Returns
+        -------
+        val: bool
+             Always true if dim_changeable = True, Else return ndim == self.ndim
+        """
+        assert (ndim is None) or (isinstance(ndim, int) and (not ndim < 0)), (
+            "The dimension ndim must be None or a positive integer"
+        )
+        if ndim is None:
+            return True
+        if self.dim_changeable:
+            return ndim > 0
+        return ndim == self.ndim
+
     def is_succeed(self, x: np.ndarray, tol: float = 1.0e-5) -> bool:
         """
         Check if a candidate solution at the global minimum.
@@ -616,20 +689,30 @@ class Benchmark(abc.ABC):
         is_succeed : bool
             Answer the question: is the candidate vector at the global minimum?
         """
-        ...
+
+        # the solution should still be in bounds, otherwise immediate fail.
+        if np.any(x > self.ub) or np.any(x < self.lb):
+            return False
+
+        val = float(self.evaluate(np.squeeze(x)))
+        if np.abs(val - self.f_global) < tol:
+            return True
+
+        # you found a lower global minimum.  This shouldn't happen.
+        if val < self.f_global:
+            raise ValueError("Found a lower global minimum", x, val, self.f_global)
+        return False
 
     @property
-    @abc.abstractmethod
     def bounds(self) -> np.ndarray:
         """
         The lower/upper bounds to be used for optimization problem. This a 2D-matrix of [lower, upper] array that
         contain the lower and upper bounds for the problem. The problem should not be asked for evaluation outside
         these bounds. ``len(bounds) == ndim``.
         """
-        ...
+        return self._bounds
 
     @property
-    @abc.abstractmethod
     def ndim(self) -> int:
         """
         The dimensionality of the problem.
@@ -639,10 +722,9 @@ class Benchmark(abc.ABC):
         ndim : int
             The dimensionality of the problem
         """
-        ...
+        return self._ndim
 
     @property
-    @abc.abstractmethod
     def lb(self) -> np.ndarray:
         """
         The lower bounds for the problem
@@ -652,10 +734,9 @@ class Benchmark(abc.ABC):
         lb : 1D-vector
             The lower bounds for the problem
         """
-        ...
+        return np.array([x[0] for x in self.bounds])
 
     @property
-    @abc.abstractmethod
     def ub(self) -> np.ndarray:
         """
         The upper bounds for the problem
@@ -665,7 +746,7 @@ class Benchmark(abc.ABC):
         ub : 1D-vector
             The upper bounds for the problem
         """
-        ...
+        return np.array([x[1] for x in self.bounds])
 
     def create_solution(self) -> np.ndarray:
         """
