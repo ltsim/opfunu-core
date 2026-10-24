@@ -376,5 +376,6 @@ AIDER.md
 
 # Local generated artifacts
 graphify-out/
+examples/figures/
 # Node.js / Husky (development tooling)
 node_modules/

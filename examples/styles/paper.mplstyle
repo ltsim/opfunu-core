@@ -1,0 +1,16 @@
+# Minimal academic style for opfunu.plot.Plotting(style="styles/paper.mplstyle").
+# Pass to Plotting as a path, a list entry, or via matplotlib's style machinery.
+font.family: serif
+font.size: 9
+axes.labelsize: 9
+axes.titlesize: 10
+legend.fontsize: 8
+xtick.labelsize: 8
+ytick.labelsize: 8
+figure.figsize: 3.5, 2.6
+figure.dpi: 300
+savefig.bbox: tight
+savefig.pad_inches: 0.02
+axes.grid: true
+grid.alpha: 0.3
+lines.linewidth: 1.2

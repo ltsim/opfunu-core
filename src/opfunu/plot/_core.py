@@ -1,9 +1,13 @@
-"""Shared sampling math for the ``opfunu.plot`` visualization suite.
+"""Shared helpers for the ``opfunu.plot`` visualization suite.
 
-This module depends only on ``numpy`` so both the static (matplotlib) and
-interactive (pyvista) engines can reuse it without pulling in heavy backends.
+This module depends only on ``numpy`` (plus the standard library) so the
+static (matplotlib) and the interactive (plotly, pyvista) views can reuse the
+sampling math and environment probes without pulling in heavy backends.
 """
 
+import builtins
+import os
+import sys
 import typing
 
 import numpy as np
@@ -16,7 +20,7 @@ def validate_inputs(
     selected_dims: tuple[int, int] | list[int],
     n_points: int,
 ) -> tuple[np.ndarray, np.ndarray, int, int]:
-    """Validate the common ``draw``/``interactive`` arguments.
+    """Validate the common ``Plotting`` arguments.
 
     Parameters
     ----------
@@ -67,6 +71,56 @@ def validate_inputs(
     if int(n_points) < 2:
         raise ValueError(f"n_points must be >= 2, got {n_points!r}.")
     return lb_arr, ub_arr, int(dims[0]) - 1, int(dims[1]) - 1
+
+
+def resolve_bounds(
+    target: typing.Callable[..., typing.Any],
+    lb: typing.Any,
+    ub: typing.Any,
+) -> tuple[typing.Any, typing.Any]:
+    """Fill missing bounds from the owner of a bound ``problem.evaluate`` method.
+
+    Parameters
+    ----------
+    target : callable
+        Objective function ``f(x) -> float``; a bound method exposes its problem
+        instance through ``target.__self__``.
+    lb, ub : array-like or None
+        Explicit bounds; missing ones are taken from the problem instance.
+
+    Returns
+    -------
+    lb, ub : array-like
+        Concrete bounds for both sides.
+
+    Raises
+    ------
+    TypeError
+        If ``target`` is not callable, or a bound cannot be resolved from the
+        explicit argument nor from the problem instance.
+    """
+    if not callable(target):
+        raise TypeError(f"target must be callable, got {type(target).__name__!r}.")
+    if lb is not None and ub is not None:
+        return lb, ub
+    owner = getattr(target, "__self__", None)
+    if lb is None:
+        lb = getattr(owner, "lb", None)
+    if ub is None:
+        ub = getattr(owner, "ub", None)
+    if lb is None or ub is None:
+        raise TypeError(
+            "Plotting() needs lb and ub: pass them explicitly, or pass a bound problem.evaluate method."
+        )
+    return lb, ub
+
+
+def owner_name(target: typing.Callable[..., typing.Any]) -> str | None:
+    """Class name of the problem instance owning a bound ``target`` method."""
+    owner = getattr(target, "__self__", None)
+    if owner is None:
+        return None
+    return type(owner).__name__
 
 
 def sample_surface(
@@ -120,3 +174,48 @@ def sample_surface(
     else:
         values = np.asarray([float(target(row)) for row in flat], dtype=float)
     return x_grid, y_grid, values.reshape(x_grid.shape)
+
+
+def in_notebook() -> bool:
+    """Detect a Jupyter kernel (via the injected ``get_ipython``) for inline display."""
+    get_ipython = getattr(builtins, "get_ipython", None)
+    if not callable(get_ipython):
+        return False
+    shell = get_ipython()
+    if shell is None:
+        return False
+    return bool(shell.__class__.__name__ == "ZMQInteractiveShell")
+
+
+def headless() -> bool:
+    """Report whether the process runs on a Linux session without a display server."""
+    display_server = os.environ.get("DISPLAY") or os.environ.get("WAYLAND_DISPLAY")
+    return bool(sys.platform.startswith("linux") and not display_server)
+
+
+# Common matplotlib colormap names mapped onto built-in Plotly colorscale names.
+_PLOTLY_COLORSCALES: dict[str, str] = {
+    "blackbody": "Blackbody",
+    "bluered": "Bluered",
+    "blues": "Blues",
+    "cividis": "Cividis",
+    "earth": "Earth",
+    "electric": "Electric",
+    "greens": "Greens",
+    "greys": "Greys",
+    "hot": "Hot",
+    "jet": "Jet",
+    "picnic": "Picnic",
+    "portland": "Portland",
+    "rainbow": "Rainbow",
+    "rdbu": "RdBu",
+    "reds": "Reds",
+    "viridis": "Viridis",
+    "ylgnbu": "YlGnBu",
+    "ylorrd": "YlOrRd",
+}
+
+
+def plotly_colorscale(cmap: str) -> str:
+    """Normalize a colormap name for Plotly, mapping known matplotlib aliases."""
+    return _PLOTLY_COLORSCALES.get(cmap.lower(), cmap)
