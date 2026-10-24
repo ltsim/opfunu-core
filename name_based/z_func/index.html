@@ -1,0 +1,6068 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="An Open-source Python Library for Optimization Benchmark Functions">
+      
+      
+      
+        <link rel="canonical" href="https://ltsim.github.io/opfunu-core/name_based/z_func/">
+      
+      
+        <link rel="prev" href="../y_func/">
+      
+      
+        <link rel="next" href="../../cec_based/cec2005/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Z - opfunu-core</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="green" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#functions-z" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="opfunu-core" class="md-header__button md-logo" aria-label="opfunu-core" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            opfunu-core
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Z
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/ltsim/opfunu-core" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ltsim/opfunu-core
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="opfunu-core" class="md-nav__button md-logo" aria-label="opfunu-core" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    opfunu-core
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/ltsim/opfunu-core" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ltsim/opfunu-core
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../quick_start/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quick Start
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../categories/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Function Categories
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../examples/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Examples
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../benchmark/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Benchmark Base Classes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Name-based Functions
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Name-based Functions
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../a_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../b_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    B
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../c_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    C
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../d_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    D
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../e_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    E
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../f_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    F
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../g_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    G
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../h_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    H
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../i_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    I
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../j_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    J
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../k_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    K
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../l_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    L
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../m_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    M
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../n_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    N
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../o_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    O
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../p_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../q_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Q
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../r_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    R
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    S
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../t_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    T
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../u_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    U
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../v_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    V
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../w_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    W
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../x_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    X
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../y_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Y
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Z
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Z
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zacharov" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Zacharov
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Zacharov">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zacharov-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attributes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Attributes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zacharov.continuous" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        continuous
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zacharov.convex" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        convex
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zacharov.differentiable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        differentiable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zacharov.latex_formula" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zacharov.latex_formula_bounds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula_bounds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zacharov.latex_formula_dimension" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula_dimension
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zacharov.latex_formula_global_optimum" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula_global_optimum
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zacharov.linear" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        linear
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zacharov.modality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        modality
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zacharov.name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zacharov.parametric" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        parametric
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zacharov.randomized_term" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        randomized_term
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zacharov.scalable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        scalable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zacharov.separable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        separable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zacharov.unimodal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        unimodal
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zacharov-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Methods:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.ZeroSum" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ZeroSum
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ZeroSum">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.ZeroSum-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attributes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Attributes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.ZeroSum.continuous" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        continuous
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.ZeroSum.convex" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        convex
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.ZeroSum.differentiable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        differentiable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.ZeroSum.latex_formula" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.ZeroSum.latex_formula_bounds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula_bounds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.ZeroSum.latex_formula_dimension" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula_dimension
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.ZeroSum.latex_formula_global_optimum" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula_global_optimum
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.ZeroSum.linear" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        linear
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.ZeroSum.modality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        modality
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.ZeroSum.name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.ZeroSum.parametric" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        parametric
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.ZeroSum.randomized_term" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        randomized_term
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.ZeroSum.scalable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        scalable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.ZeroSum.separable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        separable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.ZeroSum.unimodal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        unimodal
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.ZeroSum-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Methods:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zettl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Zettl
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Zettl">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zettl-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attributes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Attributes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zettl.continuous" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        continuous
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zettl.convex" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        convex
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zettl.differentiable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        differentiable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zettl.latex_formula" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zettl.latex_formula_bounds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula_bounds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zettl.latex_formula_dimension" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula_dimension
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zettl.latex_formula_global_optimum" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula_global_optimum
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zettl.linear" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        linear
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zettl.modality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        modality
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zettl.name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zettl.parametric" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        parametric
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zettl.randomized_term" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        randomized_term
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zettl.scalable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        scalable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zettl.separable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        separable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zettl.unimodal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        unimodal
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zettl-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Methods:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zimmerman" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Zimmerman
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Zimmerman">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zimmerman-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attributes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Attributes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zimmerman.continuous" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        continuous
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zimmerman.convex" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        convex
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zimmerman.differentiable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        differentiable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zimmerman.latex_formula" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zimmerman.latex_formula_bounds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula_bounds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zimmerman.latex_formula_dimension" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula_dimension
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zimmerman.latex_formula_global_optimum" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula_global_optimum
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zimmerman.linear" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        linear
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zimmerman.modality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        modality
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zimmerman.name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zimmerman.parametric" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        parametric
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zimmerman.randomized_term" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        randomized_term
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zimmerman.scalable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        scalable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zimmerman.separable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        separable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zimmerman.unimodal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        unimodal
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zimmerman-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Methods:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zirilli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Zirilli
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Zirilli">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zirilli-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attributes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Attributes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zirilli.continuous" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        continuous
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zirilli.convex" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        convex
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zirilli.differentiable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        differentiable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zirilli.latex_formula" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zirilli.latex_formula_bounds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula_bounds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zirilli.latex_formula_dimension" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula_dimension
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zirilli.latex_formula_global_optimum" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula_global_optimum
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zirilli.linear" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        linear
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zirilli.modality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        modality
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zirilli.name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zirilli.parametric" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        parametric
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zirilli.randomized_term" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        randomized_term
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zirilli.scalable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        scalable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zirilli.separable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        separable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zirilli.unimodal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        unimodal
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zirilli-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Methods:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_3" id="__nav_5_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CEC-based Functions
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CEC-based Functions
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cec_based/cec2005/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CEC 2005
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cec_based/cec2008/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CEC 2008
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cec_based/cec2010/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CEC 2010
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cec_based/cec2013/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CEC 2013
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cec_based/cec2014/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CEC 2014
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cec_based/cec2015/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CEC 2015
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cec_based/cec2017/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CEC 2017
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cec_based/cec2019/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CEC 2019
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cec_based/cec2020/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CEC 2020
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cec_based/cec2021/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CEC 2021
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../cec_based/cec2022/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CEC 2022
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integrated/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Package-level API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../utils/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Utilities
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plot/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plotting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../support/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Support
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../license/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    License
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zacharov" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Zacharov
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Zacharov">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zacharov-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attributes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Attributes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zacharov.continuous" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        continuous
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zacharov.convex" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        convex
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zacharov.differentiable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        differentiable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zacharov.latex_formula" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zacharov.latex_formula_bounds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula_bounds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zacharov.latex_formula_dimension" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula_dimension
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zacharov.latex_formula_global_optimum" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula_global_optimum
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zacharov.linear" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        linear
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zacharov.modality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        modality
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zacharov.name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zacharov.parametric" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        parametric
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zacharov.randomized_term" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        randomized_term
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zacharov.scalable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        scalable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zacharov.separable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        separable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zacharov.unimodal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        unimodal
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zacharov-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Methods:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.ZeroSum" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ZeroSum
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ZeroSum">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.ZeroSum-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attributes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Attributes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.ZeroSum.continuous" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        continuous
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.ZeroSum.convex" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        convex
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.ZeroSum.differentiable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        differentiable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.ZeroSum.latex_formula" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.ZeroSum.latex_formula_bounds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula_bounds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.ZeroSum.latex_formula_dimension" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula_dimension
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.ZeroSum.latex_formula_global_optimum" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula_global_optimum
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.ZeroSum.linear" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        linear
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.ZeroSum.modality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        modality
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.ZeroSum.name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.ZeroSum.parametric" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        parametric
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.ZeroSum.randomized_term" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        randomized_term
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.ZeroSum.scalable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        scalable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.ZeroSum.separable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        separable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.ZeroSum.unimodal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        unimodal
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.ZeroSum-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Methods:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zettl" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Zettl
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Zettl">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zettl-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attributes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Attributes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zettl.continuous" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        continuous
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zettl.convex" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        convex
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zettl.differentiable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        differentiable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zettl.latex_formula" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zettl.latex_formula_bounds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula_bounds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zettl.latex_formula_dimension" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula_dimension
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zettl.latex_formula_global_optimum" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula_global_optimum
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zettl.linear" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        linear
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zettl.modality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        modality
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zettl.name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zettl.parametric" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        parametric
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zettl.randomized_term" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        randomized_term
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zettl.scalable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        scalable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zettl.separable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        separable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zettl.unimodal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        unimodal
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zettl-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Methods:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zimmerman" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Zimmerman
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Zimmerman">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zimmerman-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attributes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Attributes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zimmerman.continuous" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        continuous
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zimmerman.convex" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        convex
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zimmerman.differentiable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        differentiable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zimmerman.latex_formula" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zimmerman.latex_formula_bounds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula_bounds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zimmerman.latex_formula_dimension" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula_dimension
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zimmerman.latex_formula_global_optimum" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula_global_optimum
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zimmerman.linear" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        linear
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zimmerman.modality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        modality
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zimmerman.name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zimmerman.parametric" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        parametric
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zimmerman.randomized_term" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        randomized_term
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zimmerman.scalable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        scalable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zimmerman.separable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        separable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zimmerman.unimodal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        unimodal
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zimmerman-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Methods:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zirilli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Zirilli
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Zirilli">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zirilli-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attributes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Attributes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zirilli.continuous" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        continuous
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zirilli.convex" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        convex
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zirilli.differentiable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        differentiable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zirilli.latex_formula" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zirilli.latex_formula_bounds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula_bounds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zirilli.latex_formula_dimension" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula_dimension
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zirilli.latex_formula_global_optimum" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        latex_formula_global_optimum
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zirilli.linear" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        linear
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zirilli.modality" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        modality
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zirilli.name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zirilli.parametric" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        parametric
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zirilli.randomized_term" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        randomized_term
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zirilli.scalable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        scalable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zirilli.separable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        separable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zirilli.unimodal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        unimodal
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.name_based.z_func.Zirilli-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Methods:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="functions-z">Functions — Z<a class="headerlink" href="#functions-z" title="Permanent link">&para;</a></h1>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="opfunu.name_based.z_func.Zacharov" class="doc doc-heading">
+            <span class="doc doc-object-name doc-class-name">Zacharov</span>
+
+
+<a href="#opfunu.name_based.z_func.Zacharov" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="nf">Zacharov</span><span class="p">(</span>
+    <span class="n">ndim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">bounds</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">fastmath</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span>
+    <span class="n">shift</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">prepare</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents first">
+
+
+
+        <p>.. [1] Jamil, M. &amp; Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
+Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.</p>
+<p>.. math::</p>
+<div class="codehilite"><pre><span></span><code>f_{     ext{Zacharov}}(x) = \sum_{i=1}^{n} x_i^2 + \left ( rac{1}{2}\sum_{i=1}^{n} i x_i
+</code></pre></div>
+
+<p>ight )^2
+                             + \left ( rac{1}{2} \sum_{i=1}^{n} i x_i 
+ight )^4</p>
+<p>Here :math:<code>x_i \in [-5, 10]</code> for :math:<code>i = 1, ..., n</code>.
+<em>Global optimum</em>: :math:<code>f(x) = 0.0</code>for :math:<code>x = [0, 0,,,0]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+<h3 id="opfunu.name_based.z_func.Zacharov-attributes">Attributes<a href="#opfunu.name_based.z_func.Zacharov-attributes" class="headerlink" title="Permanent link">&para;</a></h3>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zacharov.continuous" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">continuous</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zacharov.continuous" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">continuous</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zacharov.convex" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">convex</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zacharov.convex" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">convex</span> <span class="o">=</span> <span class="kc">True</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zacharov.differentiable" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">differentiable</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zacharov.differentiable" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">differentiable</span> <span class="o">=</span> <span class="kc">True</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zacharov.latex_formula" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">latex_formula</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zacharov.latex_formula" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">latex_formula</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">sum_{i=1}^</span><span class="si">{n}</span><span class="s2"> x_i^2 + </span><span class="se">\\</span><span class="s2">left ( </span><span class="se">\x0c</span><span class="s2">rac</span><span class="si">{1}{2}</span><span class="se">\\</span><span class="s2">sum_{i=1}^</span><span class="si">{n}</span><span class="s2"> i x_i </span><span class="se">\r</span><span class="s2">ight )^2+ </span><span class="se">\\</span><span class="s2">left ( </span><span class="se">\x0c</span><span class="s2">rac</span><span class="si">{1}{2}</span><span class="s2"> </span><span class="se">\\</span><span class="s2">sum_{i=1}^</span><span class="si">{n}</span><span class="s2"> i x_i </span><span class="se">\r</span><span class="s2">ight )^4&quot;</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zacharov.latex_formula_bounds" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">latex_formula_bounds</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zacharov.latex_formula_bounds" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">latex_formula_bounds</span> <span class="o">=</span> <span class="s1">&#39;x_i </span><span class="se">\\</span><span class="s1">in [-5, 10]&#39;</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zacharov.latex_formula_dimension" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">latex_formula_dimension</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zacharov.latex_formula_dimension" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">latex_formula_dimension</span> <span class="o">=</span> <span class="s1">&#39;d = n&#39;</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zacharov.latex_formula_global_optimum" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">latex_formula_global_optimum</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zacharov.latex_formula_global_optimum" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">latex_formula_global_optimum</span> <span class="o">=</span> <span class="s1">&#39;f(0, 0,...,0) = 0&#39;</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zacharov.linear" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">linear</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zacharov.linear" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">linear</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zacharov.modality" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">modality</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zacharov.modality" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">modality</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zacharov.name" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">name</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zacharov.name" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Zacharov Function&#39;</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zacharov.parametric" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">parametric</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zacharov.parametric" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">parametric</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zacharov.randomized_term" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">randomized_term</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zacharov.randomized_term" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">randomized_term</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zacharov.scalable" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">scalable</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zacharov.scalable" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">scalable</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zacharov.separable" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">separable</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zacharov.separable" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">separable</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zacharov.unimodal" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">unimodal</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zacharov.unimodal" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">unimodal</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+
+<h3 id="opfunu.name_based.z_func.Zacharov-functions">Methods:<a href="#opfunu.name_based.z_func.Zacharov-functions" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="opfunu.name_based.z_func.ZeroSum" class="doc doc-heading">
+            <span class="doc doc-object-name doc-class-name">ZeroSum</span>
+
+
+<a href="#opfunu.name_based.z_func.ZeroSum" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="nf">ZeroSum</span><span class="p">(</span>
+    <span class="n">ndim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">bounds</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">fastmath</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span>
+    <span class="n">shift</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">prepare</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents first">
+
+
+
+        <p>.. [1] Gavana, A. Global Optimization Benchmarks and AMPGO retrieved 2015</p>
+<p>.. math::</p>
+<div class="codehilite"><pre><span></span><code>f_{     ext{ZeroSum}}(x) = egin{cases} 0 &amp;     extrm{if} \sum_{i=1}^n x_i = 0 \
+                        1 + \left(10000 \left |\sum_{i=1}^n x_i
+</code></pre></div>
+
+<p>ight| 
+ight)^{0.5} &amp;   extrm{otherwise} \end{cases}</p>
+<p>Here :math:<code>x_i \in [-10, 10]</code> for :math:<code>i = 1, ..., n</code>.
+<em>Global optimum</em>: :math:<code>f(x) = 0.0</code>for :math:<code>\sum_{i=1}^n x_i = 0</code></p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+<h3 id="opfunu.name_based.z_func.ZeroSum-attributes">Attributes<a href="#opfunu.name_based.z_func.ZeroSum-attributes" class="headerlink" title="Permanent link">&para;</a></h3>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.ZeroSum.continuous" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">continuous</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.ZeroSum.continuous" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">continuous</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.ZeroSum.convex" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">convex</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.ZeroSum.convex" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">convex</span> <span class="o">=</span> <span class="kc">True</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.ZeroSum.differentiable" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">differentiable</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.ZeroSum.differentiable" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">differentiable</span> <span class="o">=</span> <span class="kc">True</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.ZeroSum.latex_formula" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">latex_formula</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.ZeroSum.latex_formula" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">latex_formula</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\x08</span><span class="s2">egin</span><span class="si">{cases}</span><span class="s2"> 0 &amp; </span><span class="se">\t</span><span class="s2">extrm</span><span class="si">{if}</span><span class="s2"> </span><span class="se">\\</span><span class="s2">sum_{i=1}^n x_i = 0 </span><span class="se">\\</span><span class="s2"> 1 + </span><span class="se">\\</span><span class="s2">left(10000 </span><span class="se">\\</span><span class="s2">left |</span><span class="se">\\</span><span class="s2">sum_{i=1}^n x_i</span><span class="se">\r</span><span class="s2">ight| </span><span class="se">\r</span><span class="s2">ight)^</span><span class="si">{0.5}</span><span class="s2"> &amp; </span><span class="se">\t</span><span class="s2">extrm</span><span class="si">{otherwise}</span><span class="s2"> </span><span class="se">\\</span><span class="s2">end</span><span class="si">{cases}</span><span class="s2">&quot;</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.ZeroSum.latex_formula_bounds" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">latex_formula_bounds</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.ZeroSum.latex_formula_bounds" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">latex_formula_bounds</span> <span class="o">=</span> <span class="s1">&#39;x_i </span><span class="se">\\</span><span class="s1">in [-10, 10]&#39;</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.ZeroSum.latex_formula_dimension" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">latex_formula_dimension</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.ZeroSum.latex_formula_dimension" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">latex_formula_dimension</span> <span class="o">=</span> <span class="s1">&#39;d = n&#39;</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.ZeroSum.latex_formula_global_optimum" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">latex_formula_global_optimum</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.ZeroSum.latex_formula_global_optimum" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">latex_formula_global_optimum</span> <span class="o">=</span> <span class="s1">&#39;f(x_best) = 0&#39;</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.ZeroSum.linear" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">linear</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.ZeroSum.linear" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">linear</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.ZeroSum.modality" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">modality</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.ZeroSum.modality" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">modality</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.ZeroSum.name" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">name</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.ZeroSum.name" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;ZeroSum Function&#39;</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.ZeroSum.parametric" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">parametric</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.ZeroSum.parametric" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">parametric</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.ZeroSum.randomized_term" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">randomized_term</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.ZeroSum.randomized_term" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">randomized_term</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.ZeroSum.scalable" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">scalable</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.ZeroSum.scalable" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">scalable</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.ZeroSum.separable" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">separable</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.ZeroSum.separable" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">separable</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.ZeroSum.unimodal" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">unimodal</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.ZeroSum.unimodal" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">unimodal</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+
+<h3 id="opfunu.name_based.z_func.ZeroSum-functions">Methods:<a href="#opfunu.name_based.z_func.ZeroSum-functions" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="opfunu.name_based.z_func.Zettl" class="doc doc-heading">
+            <span class="doc doc-object-name doc-class-name">Zettl</span>
+
+
+<a href="#opfunu.name_based.z_func.Zettl" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="nf">Zettl</span><span class="p">(</span>
+    <span class="n">ndim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">bounds</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">fastmath</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span>
+    <span class="n">shift</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">prepare</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents first">
+
+
+
+        <p>.. [1] Gavana, A. Global Optimization Benchmarks and AMPGO retrieved 2015</p>
+<p>.. math::</p>
+<div class="codehilite"><pre><span></span><code>f_{     ext{Zettl}}(x) = rac{1}{4} x_{1} + \left(x_{1}^{2} - 2 x_{1}
+                     + x_{2}^{2}
+</code></pre></div>
+
+<p>ight)^{2}</p>
+<p>Here :math:<code>x_i \in [-1, 5]</code> for :math:<code>i = 1, 2</code>.
+<em>Global optimum</em>: :math:<code>f(x) = -0.0037912</code>for :math:<code>x = [-0.029896, 0.0]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+<h3 id="opfunu.name_based.z_func.Zettl-attributes">Attributes<a href="#opfunu.name_based.z_func.Zettl-attributes" class="headerlink" title="Permanent link">&para;</a></h3>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zettl.continuous" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">continuous</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zettl.continuous" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">continuous</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zettl.convex" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">convex</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zettl.convex" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">convex</span> <span class="o">=</span> <span class="kc">True</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zettl.differentiable" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">differentiable</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zettl.differentiable" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">differentiable</span> <span class="o">=</span> <span class="kc">True</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zettl.latex_formula" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">latex_formula</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zettl.latex_formula" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">latex_formula</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">sum_{i=1}^</span><span class="si">{n}</span><span class="s2"> x_i^2 + </span><span class="se">\\</span><span class="s2">left ( </span><span class="se">\x0c</span><span class="s2">rac</span><span class="si">{1}{2}</span><span class="se">\\</span><span class="s2">sum_{i=1}^</span><span class="si">{n}</span><span class="s2"> i x_i </span><span class="se">\r</span><span class="s2">ight )^2+ </span><span class="se">\\</span><span class="s2">left ( </span><span class="se">\x0c</span><span class="s2">rac</span><span class="si">{1}{2}</span><span class="s2"> </span><span class="se">\\</span><span class="s2">sum_{i=1}^</span><span class="si">{n}</span><span class="s2"> i x_i </span><span class="se">\r</span><span class="s2">ight )^4&quot;</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zettl.latex_formula_bounds" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">latex_formula_bounds</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zettl.latex_formula_bounds" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">latex_formula_bounds</span> <span class="o">=</span> <span class="s1">&#39;x_i </span><span class="se">\\</span><span class="s1">in [-0.029896, 0.0]&#39;</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zettl.latex_formula_dimension" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">latex_formula_dimension</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zettl.latex_formula_dimension" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">latex_formula_dimension</span> <span class="o">=</span> <span class="s1">&#39;d = 2&#39;</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zettl.latex_formula_global_optimum" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">latex_formula_global_optimum</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zettl.latex_formula_global_optimum" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">latex_formula_global_optimum</span> <span class="o">=</span> <span class="s1">&#39;f(x_best) = -0.0037912&#39;</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zettl.linear" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">linear</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zettl.linear" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">linear</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zettl.modality" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">modality</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zettl.modality" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">modality</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zettl.name" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">name</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zettl.name" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Zettl Function&#39;</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zettl.parametric" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">parametric</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zettl.parametric" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">parametric</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zettl.randomized_term" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">randomized_term</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zettl.randomized_term" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">randomized_term</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zettl.scalable" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">scalable</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zettl.scalable" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">scalable</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zettl.separable" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">separable</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zettl.separable" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">separable</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zettl.unimodal" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">unimodal</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zettl.unimodal" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">unimodal</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+
+<h3 id="opfunu.name_based.z_func.Zettl-functions">Methods:<a href="#opfunu.name_based.z_func.Zettl-functions" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="opfunu.name_based.z_func.Zimmerman" class="doc doc-heading">
+            <span class="doc doc-object-name doc-class-name">Zimmerman</span>
+
+
+<a href="#opfunu.name_based.z_func.Zimmerman" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="nf">Zimmerman</span><span class="p">(</span>
+    <span class="n">ndim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">bounds</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">fastmath</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span>
+    <span class="n">shift</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">prepare</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents first">
+
+
+
+        <p>.. [1] Gavana, A. Global Optimization Benchmarks and AMPGO retrieved 2015</p>
+<p>.. math::</p>
+<div class="codehilite"><pre><span></span><code>f_{     ext{Zimmerman}}(x) = \max \left[Zh1(x), Zp(Zh2(x))      extrm{sgn}(Zh2(x)), Zp(Zh3(x))  extrm{sgn}(Zh3(x)),
+                          Zp(-x_1)      extrm{sgn}(x_1),Zp(-x_2)        extrm{sgn}(x_2)
+</code></pre></div>
+
+<p>ight]</p>
+<p>.. math::</p>
+<div class="codehilite"><pre><span></span><code>egin{cases}
+Zh1(x) = 9 - x_1 - x_2 \
+Zh2(x) = (x_1 - 3)^2 + (x_2 - 2)^2 \
+Zh3(x) = x_1x_2 - 14 \
+Zp(t) = 100(1 + t)
+\end{cases}
+</code></pre></div>
+
+<p>Where :math:<code>x</code> is a vector and :math:<code>t</code> is a scalar.
+Here, :math:<code>x_i \in [0, 100]</code> for :math:<code>i = 1, 2</code>.
+<em>Global optimum</em>: :math:<code>f(x) = 0</code> for :math:<code>x = [7, 2]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+<h3 id="opfunu.name_based.z_func.Zimmerman-attributes">Attributes<a href="#opfunu.name_based.z_func.Zimmerman-attributes" class="headerlink" title="Permanent link">&para;</a></h3>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zimmerman.continuous" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">continuous</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zimmerman.continuous" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">continuous</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zimmerman.convex" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">convex</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zimmerman.convex" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">convex</span> <span class="o">=</span> <span class="kc">True</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zimmerman.differentiable" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">differentiable</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zimmerman.differentiable" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">differentiable</span> <span class="o">=</span> <span class="kc">True</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zimmerman.latex_formula" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">latex_formula</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zimmerman.latex_formula" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">latex_formula</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">max </span><span class="se">\\</span><span class="s2">left[Zh1(x), Zp(Zh2(x))</span><span class="se">\t</span><span class="s2">extrm</span><span class="si">{sgn}</span><span class="s2">(Zh2(x)), Zp(Zh3(x))</span><span class="se">\t</span><span class="s2">extrm</span><span class="si">{sgn}</span><span class="s2">(Zh3(x)), Zp(-x_1)</span><span class="se">\t</span><span class="s2">extrm</span><span class="si">{sgn}</span><span class="s2">(x_1),Zp(-x_2)</span><span class="se">\t</span><span class="s2">extrm</span><span class="si">{sgn}</span><span class="s2">(x_2) </span><span class="se">\r</span><span class="s2">ight]&quot;</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zimmerman.latex_formula_bounds" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">latex_formula_bounds</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zimmerman.latex_formula_bounds" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">latex_formula_bounds</span> <span class="o">=</span> <span class="s1">&#39;x_i </span><span class="se">\\</span><span class="s1">in [0, 100]&#39;</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zimmerman.latex_formula_dimension" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">latex_formula_dimension</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zimmerman.latex_formula_dimension" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">latex_formula_dimension</span> <span class="o">=</span> <span class="s1">&#39;d = 2&#39;</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zimmerman.latex_formula_global_optimum" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">latex_formula_global_optimum</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zimmerman.latex_formula_global_optimum" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">latex_formula_global_optimum</span> <span class="o">=</span> <span class="s1">&#39;f([7, 2]) = 0.&#39;</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zimmerman.linear" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">linear</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zimmerman.linear" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">linear</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zimmerman.modality" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">modality</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zimmerman.modality" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">modality</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zimmerman.name" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">name</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zimmerman.name" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Zimmerman Function&#39;</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zimmerman.parametric" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">parametric</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zimmerman.parametric" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">parametric</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zimmerman.randomized_term" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">randomized_term</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zimmerman.randomized_term" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">randomized_term</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zimmerman.scalable" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">scalable</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zimmerman.scalable" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">scalable</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zimmerman.separable" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">separable</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zimmerman.separable" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">separable</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zimmerman.unimodal" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">unimodal</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zimmerman.unimodal" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">unimodal</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+
+<h3 id="opfunu.name_based.z_func.Zimmerman-functions">Methods:<a href="#opfunu.name_based.z_func.Zimmerman-functions" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="opfunu.name_based.z_func.Zirilli" class="doc doc-heading">
+            <span class="doc doc-object-name doc-class-name">Zirilli</span>
+
+
+<a href="#opfunu.name_based.z_func.Zirilli" class="headerlink" title="Permanent link">&para;</a></h2>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="nf">Zirilli</span><span class="p">(</span>
+    <span class="n">ndim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">bounds</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">fastmath</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span>
+    <span class="n">shift</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">prepare</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents first">
+
+
+
+        <p>.. [1] Gavana, A. Global Optimization Benchmarks and AMPGO retrieved 2015</p>
+<p>.. math::</p>
+<div class="codehilite"><pre><span></span><code> f_{    ext{Zirilli}}(x) = 0.25x_1^4 - 0.5x_1^2 + 0.1x_1 + 0.5x_2^2
+</code></pre></div>
+
+<p>.. math::</p>
+<div class="codehilite"><pre><span></span><code>egin{cases}
+Zh1(x) = 9 - x_1 - x_2 \
+Zh2(x) = (x_1 - 3)^2 + (x_2 - 2)^2 \
+Zh3(x) = x_1x_2 - 14 \
+Zp(t) = 100(1 + t)
+\end{cases}
+</code></pre></div>
+
+<p>Where :math:<code>x</code> is a vector and :math:<code>t</code> is a scalar.
+Here, :math:<code>x_i \in [-10, 10]</code> for :math:<code>i = 1, 2</code>.
+<em>Global optimum</em>: :math:<code>f(x) = -0.3523</code> for :math:<code>x = [-1.0465, 0]</code></p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+<h3 id="opfunu.name_based.z_func.Zirilli-attributes">Attributes<a href="#opfunu.name_based.z_func.Zirilli-attributes" class="headerlink" title="Permanent link">&para;</a></h3>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zirilli.continuous" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">continuous</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zirilli.continuous" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">continuous</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zirilli.convex" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">convex</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zirilli.convex" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">convex</span> <span class="o">=</span> <span class="kc">True</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zirilli.differentiable" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">differentiable</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zirilli.differentiable" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">differentiable</span> <span class="o">=</span> <span class="kc">True</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zirilli.latex_formula" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">latex_formula</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zirilli.latex_formula" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">latex_formula</span> <span class="o">=</span> <span class="s2">&quot;f_{</span><span class="se">\t</span><span class="s2">ext</span><span class="si">{Zirilli}</span><span class="s2">}(x) = 0.25x_1^4 - 0.5x_1^2 + 0.1x_1 + 0.5x_2^2&quot;</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zirilli.latex_formula_bounds" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">latex_formula_bounds</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zirilli.latex_formula_bounds" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">latex_formula_bounds</span> <span class="o">=</span> <span class="s1">&#39;x_i </span><span class="se">\\</span><span class="s1">in [-10, 10]&#39;</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zirilli.latex_formula_dimension" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">latex_formula_dimension</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zirilli.latex_formula_dimension" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">latex_formula_dimension</span> <span class="o">=</span> <span class="s1">&#39;d = 2&#39;</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zirilli.latex_formula_global_optimum" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">latex_formula_global_optimum</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zirilli.latex_formula_global_optimum" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">latex_formula_global_optimum</span> <span class="o">=</span> <span class="s1">&#39;f([-1.0465, 0]) = -0.3523&#39;</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zirilli.linear" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">linear</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zirilli.linear" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">linear</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zirilli.modality" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">modality</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zirilli.modality" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">modality</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zirilli.name" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">name</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zirilli.name" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Zirilli Function&#39;</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zirilli.parametric" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">parametric</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zirilli.parametric" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">parametric</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zirilli.randomized_term" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">randomized_term</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zirilli.randomized_term" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">randomized_term</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zirilli.scalable" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">scalable</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zirilli.scalable" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">scalable</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zirilli.separable" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">separable</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zirilli.separable" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">separable</span> <span class="o">=</span> <span class="kc">False</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.name_based.z_func.Zirilli.unimodal" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">unimodal</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-class-attribute"><code>class-attribute</code></small>
+      <small class="doc doc-label doc-label-instance-attribute"><code>instance-attribute</code></small>
+  </span>
+
+<a href="#opfunu.name_based.z_func.Zirilli.unimodal" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">unimodal</span> <span class="o">=</span> <span class="kc">True</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+    </div>
+
+</div>
+
+
+<h3 id="opfunu.name_based.z_func.Zirilli-functions">Methods:<a href="#opfunu.name_based.z_func.Zirilli-functions" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2026 LTSIM
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.top", "content.code.copy", "search.suggest", "toc.follow"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

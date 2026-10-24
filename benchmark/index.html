@@ -1,0 +1,5058 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="An Open-source Python Library for Optimization Benchmark Functions">
+      
+      
+      
+        <link rel="canonical" href="https://ltsim.github.io/opfunu-core/benchmark/">
+      
+      
+        <link rel="prev" href="../examples/">
+      
+      
+        <link rel="next" href="../name_based/a_func/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Benchmark Base Classes - opfunu-core</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="green" data-md-color-accent="teal">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#benchmark-base-classes" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="opfunu-core" class="md-header__button md-logo" aria-label="opfunu-core" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            opfunu-core
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Benchmark Base Classes
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/ltsim/opfunu-core" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ltsim/opfunu-core
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="opfunu-core" class="md-nav__button md-logo" aria-label="opfunu-core" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    opfunu-core
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/ltsim/opfunu-core" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ltsim/opfunu-core
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quick_start/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quick Start
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../categories/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Function Categories
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../examples/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Examples
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Benchmark Base Classes
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Benchmark Base Classes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#benchmark-and-formula" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Benchmark and Formula
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#opfunu.benchmark" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        benchmark
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="benchmark">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark-classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Classes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Classes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Formula" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Formula
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Benchmark
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Benchmark">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attributes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Attributes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.bounds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        bounds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.compute" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        compute
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.dim_changeable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        dim_changeable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.dim_default" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        dim_default
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.dtype" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        dtype
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.f_global" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        f_global
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.fastmath" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fastmath
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.lb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        lb
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.lb--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.ndim" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ndim
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.ndim--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.numba_compiled" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        numba_compiled
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.parallel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        parallel
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.paras" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        paras
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.shift" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        shift
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.support_path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        support_path
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.ub" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ub
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.ub--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.verbose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        verbose
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.x_global" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        x_global
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Methods:
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Methods:">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.__bind_plain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        __bind_plain
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.__build_compute" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        __build_compute
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.__cast_result" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        __cast_result
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.__evaluate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        __evaluate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.__resolve_kernel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        __resolve_kernel
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.check_ndim_and_bounds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        check_ndim_and_bounds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.check_ndim_and_bounds--parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.check_solution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        check_solution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.check_solution--parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.create_solution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        create_solution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.create_solution--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.evaluate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        evaluate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.evaluate--parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.evaluate--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.get_paras" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_paras
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.is_ndim_compatible" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        is_ndim_compatible
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.is_ndim_compatible--parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.is_ndim_compatible--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.is_succeed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        is_succeed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.is_succeed--parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.is_succeed--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.prepare" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        prepare
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.prepare--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.set_shift" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        set_shift
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#funcbenchmark" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FuncBenchmark
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#opfunu.benchmark.func.FuncBenchmark" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FuncBenchmark
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="FuncBenchmark">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.func.FuncBenchmark--attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attributes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.func.FuncBenchmark-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attributes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Attributes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.func.FuncBenchmark.dim_supported" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        dim_supported
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.func.FuncBenchmark-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Methods:
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Methods:">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.func.FuncBenchmark.check_ndim_and_bounds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        check_ndim_and_bounds
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="check_ndim_and_bounds">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.func.FuncBenchmark.check_ndim_and_bounds--parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.func.FuncBenchmark.check_solution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        check_solution
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="check_solution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.func.FuncBenchmark.check_solution--parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cecbenchmark" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CecBenchmark
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#opfunu.benchmark.cec.CecBenchmark" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CecBenchmark
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CecBenchmark">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.cec.CecBenchmark-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Methods:
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Methods:">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.cec.CecBenchmark.check_ndim_and_bounds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        check_ndim_and_bounds
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="check_ndim_and_bounds">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.cec.CecBenchmark.check_ndim_and_bounds--parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.cec.CecBenchmark.check_solution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        check_solution
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="check_solution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.cec.CecBenchmark.check_solution--parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coordinate-shifts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coordinate shifts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementing-a-problem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Implementing a problem
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#numba-acceleration-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Numba acceleration (optional)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Numba acceleration (optional)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#choosing-not-to-compile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choosing not to compile
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#evaluation-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Evaluation contract
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kernel-parameter-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kernel parameter handling
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Name-based Functions
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Name-based Functions
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../name_based/a_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    A
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../name_based/b_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    B
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../name_based/c_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    C
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../name_based/d_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    D
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../name_based/e_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    E
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../name_based/f_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    F
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../name_based/g_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    G
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../name_based/h_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    H
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../name_based/i_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    I
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../name_based/j_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    J
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../name_based/k_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    K
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../name_based/l_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    L
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../name_based/m_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    M
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../name_based/n_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    N
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../name_based/o_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    O
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../name_based/p_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    P
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../name_based/q_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Q
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../name_based/r_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    R
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../name_based/s_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    S
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../name_based/t_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    T
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../name_based/u_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    U
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../name_based/v_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    V
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../name_based/w_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    W
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../name_based/x_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    X
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../name_based/y_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Y
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../name_based/z_func/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Z
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_5_3" id="__nav_5_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CEC-based Functions
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    CEC-based Functions
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cec_based/cec2005/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CEC 2005
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cec_based/cec2008/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CEC 2008
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cec_based/cec2010/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CEC 2010
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cec_based/cec2013/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CEC 2013
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cec_based/cec2014/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CEC 2014
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cec_based/cec2015/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CEC 2015
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cec_based/cec2017/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CEC 2017
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cec_based/cec2019/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CEC 2019
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cec_based/cec2020/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CEC 2020
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cec_based/cec2021/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CEC 2021
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cec_based/cec2022/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CEC 2022
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../integrated/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Package-level API
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../utils/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Utilities
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../plot/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plotting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../support/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Support
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../license/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    License
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../changelog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Changelog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#benchmark-and-formula" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Benchmark and Formula
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#opfunu.benchmark" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        benchmark
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="benchmark">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark-classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Classes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Classes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Formula" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Formula
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Benchmark
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Benchmark">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attributes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Attributes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.bounds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        bounds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.compute" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        compute
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.dim_changeable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        dim_changeable
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.dim_default" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        dim_default
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.dtype" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        dtype
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.f_global" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        f_global
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.fastmath" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        fastmath
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.lb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        lb
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.lb--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.ndim" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ndim
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.ndim--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.numba_compiled" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        numba_compiled
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.parallel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        parallel
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.paras" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        paras
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.shift" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        shift
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.support_path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        support_path
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.ub" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ub
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.ub--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.verbose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        verbose
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.x_global" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        x_global
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Methods:
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Methods:">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.__bind_plain" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        __bind_plain
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.__build_compute" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        __build_compute
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.__cast_result" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        __cast_result
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.__evaluate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        __evaluate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.__resolve_kernel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        __resolve_kernel
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.check_ndim_and_bounds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        check_ndim_and_bounds
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.check_ndim_and_bounds--parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.check_solution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        check_solution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.check_solution--parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.create_solution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        create_solution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.create_solution--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.evaluate" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        evaluate
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.evaluate--parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.evaluate--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.get_paras" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_paras
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.is_ndim_compatible" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        is_ndim_compatible
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.is_ndim_compatible--parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.is_ndim_compatible--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.is_succeed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        is_succeed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.is_succeed--parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.is_succeed--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.prepare" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        prepare
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.prepare--returns" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Returns
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.Benchmark.set_shift" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        set_shift
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#funcbenchmark" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FuncBenchmark
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#opfunu.benchmark.func.FuncBenchmark" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FuncBenchmark
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="FuncBenchmark">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.func.FuncBenchmark--attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attributes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.func.FuncBenchmark-attributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Attributes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Attributes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.func.FuncBenchmark.dim_supported" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        dim_supported
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.func.FuncBenchmark-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Methods:
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Methods:">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.func.FuncBenchmark.check_ndim_and_bounds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        check_ndim_and_bounds
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="check_ndim_and_bounds">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.func.FuncBenchmark.check_ndim_and_bounds--parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.func.FuncBenchmark.check_solution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        check_solution
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="check_solution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.func.FuncBenchmark.check_solution--parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cecbenchmark" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CecBenchmark
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#opfunu.benchmark.cec.CecBenchmark" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CecBenchmark
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CecBenchmark">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.cec.CecBenchmark-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Methods:
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Methods:">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.cec.CecBenchmark.check_ndim_and_bounds" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        check_ndim_and_bounds
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="check_ndim_and_bounds">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.cec.CecBenchmark.check_ndim_and_bounds--parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.cec.CecBenchmark.check_solution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        check_solution
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="check_solution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#opfunu.benchmark.cec.CecBenchmark.check_solution--parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Parameters
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#coordinate-shifts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Coordinate shifts
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#implementing-a-problem" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Implementing a problem
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#numba-acceleration-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Numba acceleration (optional)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Numba acceleration (optional)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#choosing-not-to-compile" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choosing not to compile
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#evaluation-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Evaluation contract
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kernel-parameter-handling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kernel parameter handling
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="benchmark-base-classes">Benchmark Base Classes<a class="headerlink" href="#benchmark-base-classes" title="Permanent link">&para;</a></h1>
+<p>Every function in <code>opfunu-core</code> inherits from one of the base classes defined in the <code>opfunu.benchmark</code> package:</p>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Description</th>
+<th>Used by</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Benchmark</code></td>
+<td>Abstract base class defining the common function interface</td>
+<td>all functions</td>
+</tr>
+<tr>
+<td><code>Formula</code></td>
+<td>Dataclass holding a LaTeX formula (rendered by IPython)</td>
+<td>all functions</td>
+</tr>
+<tr>
+<td><code>FuncBenchmark</code></td>
+<td>Base class for traditional (name-based) functions</td>
+<td><code>opfunu.name_based.*</code></td>
+</tr>
+<tr>
+<td><code>CecBenchmark</code></td>
+<td>Base class for CEC competition functions</td>
+<td><code>opfunu.cec_based.*</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="benchmark-and-formula">Benchmark and Formula<a class="headerlink" href="#benchmark-and-formula" title="Permanent link">&para;</a></h2>
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="opfunu.benchmark" class="doc doc-heading">
+            <span class="doc doc-object-name doc-module-name">opfunu.benchmark</span>
+
+
+<a href="#opfunu.benchmark" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents first">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+<h3 id="opfunu.benchmark-classes">Classes<a href="#opfunu.benchmark-classes" class="headerlink" title="Permanent link">&para;</a></h3>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h4 id="opfunu.benchmark.Formula" class="doc doc-heading">
+            <span class="doc doc-object-name doc-class-name">Formula</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#opfunu.benchmark.Formula" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h4 id="opfunu.benchmark.Benchmark" class="doc doc-heading">
+            <span class="doc doc-object-name doc-class-name">Benchmark</span>
+
+
+<a href="#opfunu.benchmark.Benchmark" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>Abstract base class for an optimization benchmark problem.</p>
+<p>Subclasses supply a <code>compute</code> kernel and the problem-specific metadata; the
+shared evaluation machinery (<code>evaluate</code>, <code>_evaluate_batch</code>), the shape
+storage behind <code>bounds</code>/<code>ndim</code>/<code>lb</code>/<code>ub</code>, and the mathematical trait
+defaults below are implemented once, here.</p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+<h5 id="opfunu.benchmark.Benchmark-attributes">Attributes<a href="#opfunu.benchmark.Benchmark-attributes" class="headerlink" title="Permanent link">&para;</a></h5>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h6 id="opfunu.benchmark.Benchmark.bounds" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">bounds</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#opfunu.benchmark.Benchmark.bounds" class="headerlink" title="Permanent link">&para;</a></h6>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">bounds</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>The lower/upper bounds to be used for optimization problem. This a 2D-matrix of [lower, upper] array that
+contain the lower and upper bounds for the problem. The problem should not be asked for evaluation outside
+these bounds. <code>len(bounds) == ndim</code>.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h6 id="opfunu.benchmark.Benchmark.compute" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">compute</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#opfunu.benchmark.Benchmark.compute" class="headerlink" title="Permanent link">&para;</a></h6>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">compute</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>The declared kernel (read-only). Bound for execution via <code>_bind_kernel</code>.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h6 id="opfunu.benchmark.Benchmark.dim_changeable" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">dim_changeable</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#opfunu.benchmark.Benchmark.dim_changeable" class="headerlink" title="Permanent link">&para;</a></h6>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">dim_changeable</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Whether the problem dimensionality may be changed at construction (read-only).</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h6 id="opfunu.benchmark.Benchmark.dim_default" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">dim_default</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#opfunu.benchmark.Benchmark.dim_default" class="headerlink" title="Permanent link">&para;</a></h6>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">dim_default</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>The default dimensionality used when <code>ndim</code> is not supplied (read-only).</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h6 id="opfunu.benchmark.Benchmark.dtype" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">dtype</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#opfunu.benchmark.Benchmark.dtype" class="headerlink" title="Permanent link">&para;</a></h6>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">dtype</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>The floating scalar type used for evaluation (read-only).</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h6 id="opfunu.benchmark.Benchmark.f_global" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">f_global</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#opfunu.benchmark.Benchmark.f_global" class="headerlink" title="Permanent link">&para;</a></h6>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">f_global</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>The known global optimum of the problem (read-only).</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h6 id="opfunu.benchmark.Benchmark.fastmath" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">fastmath</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#opfunu.benchmark.Benchmark.fastmath" class="headerlink" title="Permanent link">&para;</a></h6>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">fastmath</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Whether the gufunc kernel is compiled with <code>fastmath=True</code> (read-only).</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h6 id="opfunu.benchmark.Benchmark.lb" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">lb</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#opfunu.benchmark.Benchmark.lb" class="headerlink" title="Permanent link">&para;</a></h6>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">lb</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>The lower bounds for the problem</p>
+<h6 id="opfunu.benchmark.Benchmark.lb--returns">Returns<a class="headerlink" href="#opfunu.benchmark.Benchmark.lb--returns" title="Permanent link">&para;</a></h6>
+<p>lb : 1D-vector
+    The lower bounds for the problem</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h6 id="opfunu.benchmark.Benchmark.ndim" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">ndim</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#opfunu.benchmark.Benchmark.ndim" class="headerlink" title="Permanent link">&para;</a></h6>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">ndim</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>The dimensionality of the problem.</p>
+<h6 id="opfunu.benchmark.Benchmark.ndim--returns">Returns<a class="headerlink" href="#opfunu.benchmark.Benchmark.ndim--returns" title="Permanent link">&para;</a></h6>
+<p>ndim : int
+    The dimensionality of the problem</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h6 id="opfunu.benchmark.Benchmark.numba_compiled" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">numba_compiled</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#opfunu.benchmark.Benchmark.numba_compiled" class="headerlink" title="Permanent link">&para;</a></h6>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">numba_compiled</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Whether the bound kernel is a compiled gufunc (<code>False</code> for plain Python, read-only).</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h6 id="opfunu.benchmark.Benchmark.parallel" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">parallel</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#opfunu.benchmark.Benchmark.parallel" class="headerlink" title="Permanent link">&para;</a></h6>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">parallel</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Whether the gufunc kernel is compiled with <code>target="parallel"</code> (read-only).</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h6 id="opfunu.benchmark.Benchmark.paras" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">paras</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#opfunu.benchmark.Benchmark.paras" class="headerlink" title="Permanent link">&para;</a></h6>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">paras</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Display metadata mapping parameter names to their runtime values (read-only).</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h6 id="opfunu.benchmark.Benchmark.shift" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">shift</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#opfunu.benchmark.Benchmark.shift" class="headerlink" title="Permanent link">&para;</a></h6>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">shift</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>The coordinate shift vector, or <code>None</code> when the problem is unshifted.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h6 id="opfunu.benchmark.Benchmark.support_path" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">support_path</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#opfunu.benchmark.Benchmark.support_path" class="headerlink" title="Permanent link">&para;</a></h6>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">support_path</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>The package-data directory holding shift/rotation files (CEC only, read-only).</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h6 id="opfunu.benchmark.Benchmark.ub" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">ub</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#opfunu.benchmark.Benchmark.ub" class="headerlink" title="Permanent link">&para;</a></h6>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">ub</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>The upper bounds for the problem</p>
+<h6 id="opfunu.benchmark.Benchmark.ub--returns">Returns<a class="headerlink" href="#opfunu.benchmark.Benchmark.ub--returns" title="Permanent link">&para;</a></h6>
+<p>ub : 1D-vector
+    The upper bounds for the problem</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h6 id="opfunu.benchmark.Benchmark.verbose" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">verbose</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#opfunu.benchmark.Benchmark.verbose" class="headerlink" title="Permanent link">&para;</a></h6>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">verbose</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Whether Numba compilation fallbacks are printed (read-only).</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h6 id="opfunu.benchmark.Benchmark.x_global" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">x_global</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#opfunu.benchmark.Benchmark.x_global" class="headerlink" title="Permanent link">&para;</a></h6>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">x_global</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>A location of the global optimum (1-D array, <code>len(x_global) == ndim</code>, read-only).</p>
+
+    </div>
+
+</div>
+
+
+<h5 id="opfunu.benchmark.Benchmark-functions">Methods:<a href="#opfunu.benchmark.Benchmark-functions" class="headerlink" title="Permanent link">&para;</a></h5>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="opfunu.benchmark.Benchmark.__bind_plain" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">__bind_plain</span>
+
+
+<a href="#opfunu.benchmark.Benchmark.__bind_plain" class="headerlink" title="Permanent link">&para;</a></h6>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="nf">__bind_plain</span><span class="p">(</span><span class="n">param_names</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">validate</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Bind the uncompiled Python kernel and record that nothing was compiled.</p>
+<p>With <code>validate=True</code> the kernel parameters are normalized eagerly so
+mistyped names fail fast, exactly as on the compiled path. <code>plain=True</code>
+kernels skip validation: they legitimately hold values
+<code>_normalize_kernel_param</code> rejects (sub-instances, bound methods).</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="opfunu.benchmark.Benchmark.__build_compute" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">__build_compute</span>
+
+
+<a href="#opfunu.benchmark.Benchmark.__build_compute" class="headerlink" title="Permanent link">&para;</a></h6>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="nf">__build_compute</span><span class="p">(</span><span class="n">param_names</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Compile the bound kernel into a <code>guvectorize</code> gufunc.</p>
+<p><code>param_names</code> lists the instance attributes the kernel needs
+(in call order, after <code>x</code> and before <code>out</code>). The caller decides
+whether a compilation attempt is made; this helper assumes Numba is
+installed. Attribute lookup and normalization errors propagate; only
+Numba compilation/warmup failures fall back to the plain Python
+kernel, keeping the same <code>(x, *params, out)</code> calling convention.
+On fallback the raised exception is stored in <code>_compile_error</code>
+(useful for diagnosing silent fallbacks). Compilation (plus a warmup
+call) happens here — either at instantiation through <code>_bind_kernel</code>
+or later through <code>prepare()</code> — never on first <code>evaluate</code>.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="opfunu.benchmark.Benchmark.__cast_result" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">__cast_result</span>
+
+
+<a href="#opfunu.benchmark.Benchmark.__cast_result" class="headerlink" title="Permanent link">&para;</a></h6>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="nf">__cast_result</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Cast the raw kernel output to the scalar type configured by <code>dtype</code>.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="opfunu.benchmark.Benchmark.__evaluate" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">__evaluate</span>
+
+
+<a href="#opfunu.benchmark.Benchmark.__evaluate" class="headerlink" title="Permanent link">&para;</a></h6>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="nf">__evaluate</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Run the kernel on one candidate and return the <code>dtype</code>-cast scalar.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="opfunu.benchmark.Benchmark.__resolve_kernel" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">__resolve_kernel</span>
+
+
+<a href="#opfunu.benchmark.Benchmark.__resolve_kernel" class="headerlink" title="Permanent link">&para;</a></h6>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="nf">__resolve_kernel</span><span class="p">()</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Return the instance-bound kernel, raising when none was installed.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="opfunu.benchmark.Benchmark.check_ndim_and_bounds" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">check_ndim_and_bounds</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-abstractmethod"><code>abstractmethod</code></small>
+  </span>
+
+<a href="#opfunu.benchmark.Benchmark.check_ndim_and_bounds" class="headerlink" title="Permanent link">&para;</a></h6>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="nf">check_ndim_and_bounds</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Check the bounds when initializing the object.</p>
+<h6 id="opfunu.benchmark.Benchmark.check_ndim_and_bounds--parameters">Parameters<a class="headerlink" href="#opfunu.benchmark.Benchmark.check_ndim_and_bounds--parameters" title="Permanent link">&para;</a></h6>
+<p>ndim : int
+    The number of dimensions (variables)
+bounds : list, tuple, np.ndarray
+    List of lower bound and upper bound, should use default None value
+default_bounds : np.ndarray
+    List of initial lower bound and upper bound values</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="opfunu.benchmark.Benchmark.check_solution" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">check_solution</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-abstractmethod"><code>abstractmethod</code></small>
+  </span>
+
+<a href="#opfunu.benchmark.Benchmark.check_solution" class="headerlink" title="Permanent link">&para;</a></h6>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="nf">check_solution</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Raise the error if the problem size is not equal to the solution length</p>
+<h6 id="opfunu.benchmark.Benchmark.check_solution--parameters">Parameters<a class="headerlink" href="#opfunu.benchmark.Benchmark.check_solution--parameters" title="Permanent link">&para;</a></h6>
+<p>x : np.ndarray
+    The solution</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="opfunu.benchmark.Benchmark.create_solution" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">create_solution</span>
+
+
+<a href="#opfunu.benchmark.Benchmark.create_solution" class="headerlink" title="Permanent link">&para;</a></h6>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="nf">create_solution</span><span class="p">()</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Create a random solution for the current problem</p>
+<h6 id="opfunu.benchmark.Benchmark.create_solution--returns">Returns<a class="headerlink" href="#opfunu.benchmark.Benchmark.create_solution--returns" title="Permanent link">&para;</a></h6>
+<p>solution: 1D-vector
+    The random solution</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="opfunu.benchmark.Benchmark.evaluate" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">evaluate</span>
+
+
+<a href="#opfunu.benchmark.Benchmark.evaluate" class="headerlink" title="Permanent link">&para;</a></h6>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="nf">evaluate</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Evaluation of the benchmark function.</p>
+<h6 id="opfunu.benchmark.Benchmark.evaluate--parameters">Parameters<a class="headerlink" href="#opfunu.benchmark.Benchmark.evaluate--parameters" title="Permanent link">&para;</a></h6>
+<p>x : np.ndarray
+    The candidate vector for evaluating the benchmark problem. Must have <code>len(x) == self.ndim</code>.</p>
+<h6 id="opfunu.benchmark.Benchmark.evaluate--returns">Returns<a class="headerlink" href="#opfunu.benchmark.Benchmark.evaluate--returns" title="Permanent link">&para;</a></h6>
+<p>val : np.floating | np.integer
+       the evaluated benchmark function, cast to <code>self.dtype</code></p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="opfunu.benchmark.Benchmark.get_paras" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">get_paras</span>
+
+
+<a href="#opfunu.benchmark.Benchmark.get_paras" class="headerlink" title="Permanent link">&para;</a></h6>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="nf">get_paras</span><span class="p">()</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Return the parameters of the problem. Depended on function</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="opfunu.benchmark.Benchmark.is_ndim_compatible" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">is_ndim_compatible</span>
+
+
+<a href="#opfunu.benchmark.Benchmark.is_ndim_compatible" class="headerlink" title="Permanent link">&para;</a></h6>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="nf">is_ndim_compatible</span><span class="p">(</span><span class="n">ndim</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Method to support searching the functions with input ndim</p>
+<h6 id="opfunu.benchmark.Benchmark.is_ndim_compatible--parameters">Parameters<a class="headerlink" href="#opfunu.benchmark.Benchmark.is_ndim_compatible--parameters" title="Permanent link">&para;</a></h6>
+<p>ndim : int
+        The number of dimensions</p>
+<h6 id="opfunu.benchmark.Benchmark.is_ndim_compatible--returns">Returns<a class="headerlink" href="#opfunu.benchmark.Benchmark.is_ndim_compatible--returns" title="Permanent link">&para;</a></h6>
+<p>val: bool
+     Always true if dim_changeable = True, Else return ndim == self.ndim</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="opfunu.benchmark.Benchmark.is_succeed" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">is_succeed</span>
+
+
+<a href="#opfunu.benchmark.Benchmark.is_succeed" class="headerlink" title="Permanent link">&para;</a></h6>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="nf">is_succeed</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1e-05</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Check if a candidate solution at the global minimum.</p>
+<h6 id="opfunu.benchmark.Benchmark.is_succeed--parameters">Parameters<a class="headerlink" href="#opfunu.benchmark.Benchmark.is_succeed--parameters" title="Permanent link">&para;</a></h6>
+<p>x : np.ndarray
+    The candidate vector for testing if the global minimum has been reached. Must have <code>len(x) == self.ndim</code>
+tol : float
+    The evaluated function and known global minimum must differ by less than this amount to be at a
+    global minimum.</p>
+<h6 id="opfunu.benchmark.Benchmark.is_succeed--returns">Returns<a class="headerlink" href="#opfunu.benchmark.Benchmark.is_succeed--returns" title="Permanent link">&para;</a></h6>
+<p>is_succeed : bool
+    Answer the question: is the candidate vector at the global minimum?</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="opfunu.benchmark.Benchmark.prepare" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">prepare</span>
+
+
+<a href="#opfunu.benchmark.Benchmark.prepare" class="headerlink" title="Permanent link">&para;</a></h6>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="nf">prepare</span><span class="p">()</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Compile the bound kernel with Numba now (deferred compilation).</p>
+<p>Problems built with <code>prepare=False</code> (or with <code>Benchmark.default_prepare</code>
+set to <code>False</code>) bind a plain Python/NumPy kernel at construction and
+skip the <code>guvectorize</code> compilation and warm-up; this method performs
+that work on demand. It is safe to call at any time and repeatedly:
+an already-compiled kernel returns <code>True</code> without recompiling, and
+kernels declared Numba-incompatible (bound with <code>plain=True</code>) are
+never compiled.</p>
+<p>Without Numba installed (PyPy, minimal installs) the call is a no-op
+returning <code>False</code> and recording no error. If compilation fails, the
+plain kernel stays bound, the exception is stored in <code>_compile_error</code>
+(printed when <code>verbose</code> is enabled) and <code>False</code> is returned;
+evaluation is value-identical either way.</p>
+<h6 id="opfunu.benchmark.Benchmark.prepare--returns">Returns<a class="headerlink" href="#opfunu.benchmark.Benchmark.prepare--returns" title="Permanent link">&para;</a></h6>
+<p>prepared : bool
+    Whether the kernel is bound as a compiled gufunc after the call.</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h6 id="opfunu.benchmark.Benchmark.set_shift" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">set_shift</span>
+
+
+<a href="#opfunu.benchmark.Benchmark.set_shift" class="headerlink" title="Permanent link">&para;</a></h6>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="nf">set_shift</span><span class="p">(</span><span class="n">shift</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Set (or reset with <code>None</code>) the coordinate shift after construction.</p>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div><h2 id="funcbenchmark">FuncBenchmark<a class="headerlink" href="#funcbenchmark" title="Permanent link">&para;</a></h2>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="opfunu.benchmark.func.FuncBenchmark" class="doc doc-heading">
+            <span class="doc doc-object-name doc-class-name">opfunu.benchmark.func.FuncBenchmark</span>
+
+
+<a href="#opfunu.benchmark.func.FuncBenchmark" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
+    <div class="doc doc-contents first">
+
+
+
+        <p>Defines an abstract class for optimization benchmark problem.</p>
+<p>All subclasses should implement the <code>compute</code> method for a particular optimization problem; the shared
+<code>evaluate</code>, shape (<code>bounds</code>/<code>ndim</code>/<code>lb</code>/<code>ub</code>) and <code>is_succeed</code> machinery comes from <code>Benchmark</code>.</p>
+<h4 id="opfunu.benchmark.func.FuncBenchmark--attributes">Attributes<a class="headerlink" href="#opfunu.benchmark.func.FuncBenchmark--attributes" title="Permanent link">&para;</a></h4>
+<p>dim_supported : list[int]
+    The dimensionalities the problem supports (empty means any <code>ndim &gt; 1</code>).</p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+<h3 id="opfunu.benchmark.func.FuncBenchmark-attributes">Attributes<a href="#opfunu.benchmark.func.FuncBenchmark-attributes" class="headerlink" title="Permanent link">&para;</a></h3>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="opfunu.benchmark.func.FuncBenchmark.dim_supported" class="doc doc-heading">
+            <span class="doc doc-object-name doc-attribute-name">dim_supported</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+      <small class="doc doc-label doc-label-writable"><code>writable</code></small>
+  </span>
+
+<a href="#opfunu.benchmark.func.FuncBenchmark.dim_supported" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="n">dim_supported</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>The list of supported dimensionalities (empty means any <code>ndim &gt; 1</code>).</p>
+
+    </div>
+
+</div>
+
+
+<h3 id="opfunu.benchmark.func.FuncBenchmark-functions">Methods:<a href="#opfunu.benchmark.func.FuncBenchmark-functions" class="headerlink" title="Permanent link">&para;</a></h3>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="opfunu.benchmark.func.FuncBenchmark.check_ndim_and_bounds" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">check_ndim_and_bounds</span>
+
+
+<a href="#opfunu.benchmark.func.FuncBenchmark.check_ndim_and_bounds" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="nf">check_ndim_and_bounds</span><span class="p">(</span>
+    <span class="n">ndim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">default_bounds</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Check the bounds when initializing the object.</p>
+<h6 id="opfunu.benchmark.func.FuncBenchmark.check_ndim_and_bounds--parameters">Parameters<a class="headerlink" href="#opfunu.benchmark.func.FuncBenchmark.check_ndim_and_bounds--parameters" title="Permanent link">&para;</a></h6>
+<p>ndim : int
+    The number of dimensions (variables)
+bounds : list, tuple, np.ndarray
+    List of lower bound and upper bound, should use default None value
+default_bounds : np.ndarray
+    List of initial lower bound and upper bound values</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="opfunu.benchmark.func.FuncBenchmark.check_solution" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">check_solution</span>
+
+
+<a href="#opfunu.benchmark.func.FuncBenchmark.check_solution" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="nf">check_solution</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Raise the error if the problem size is not equal to the solution length</p>
+<h6 id="opfunu.benchmark.func.FuncBenchmark.check_solution--parameters">Parameters<a class="headerlink" href="#opfunu.benchmark.func.FuncBenchmark.check_solution--parameters" title="Permanent link">&para;</a></h6>
+<p>x : np.ndarray
+    The solution</p>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div><h2 id="cecbenchmark">CecBenchmark<a class="headerlink" href="#cecbenchmark" title="Permanent link">&para;</a></h2>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h2 id="opfunu.benchmark.cec.CecBenchmark" class="doc doc-heading">
+            <span class="doc doc-object-name doc-class-name">opfunu.benchmark.cec.CecBenchmark</span>
+
+
+<a href="#opfunu.benchmark.cec.CecBenchmark" class="headerlink" title="Permanent link">&para;</a></h2>
+
+
+    <div class="doc doc-contents first">
+
+
+
+        <p>Defines an abstract class for optimization benchmark problem.</p>
+<p>All subclasses should implement the <code>compute</code> method for a particular problem; the shared
+<code>evaluate</code>, shape (<code>bounds</code>/<code>ndim</code>/<code>lb</code>/<code>ub</code>) and <code>is_succeed</code> machinery comes from
+<code>Benchmark</code>. CEC problems add the competition data handling: <code>dim_max</code>/<code>dim_supported</code>
+limits and the shift/matrix/shuffle/bias terms loaded from the bundled <code>data_*</code> folders.</p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+<h3 id="opfunu.benchmark.cec.CecBenchmark-functions">Methods:<a href="#opfunu.benchmark.cec.CecBenchmark-functions" class="headerlink" title="Permanent link">&para;</a></h3>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="opfunu.benchmark.cec.CecBenchmark.check_ndim_and_bounds" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">check_ndim_and_bounds</span>
+
+
+<a href="#opfunu.benchmark.cec.CecBenchmark.check_ndim_and_bounds" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="nf">check_ndim_and_bounds</span><span class="p">(</span>
+    <span class="n">ndim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">dim_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">bounds</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">default_bounds</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Check the bounds when initializing the object.</p>
+<h6 id="opfunu.benchmark.cec.CecBenchmark.check_ndim_and_bounds--parameters">Parameters<a class="headerlink" href="#opfunu.benchmark.cec.CecBenchmark.check_ndim_and_bounds--parameters" title="Permanent link">&para;</a></h6>
+<p>ndim : int
+    The number of dimensions (variables)
+dim_max : int
+    The maximum number of dimensions (variables) that the problem is supported
+bounds : list, tuple, np.ndarray
+    List of lower bound and upper bound, should use default None value
+default_bounds : np.ndarray
+    List of initial lower bound and upper bound values</p>
+
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="opfunu.benchmark.cec.CecBenchmark.check_solution" class="doc doc-heading">
+            <span class="doc doc-object-name doc-function-name">check_solution</span>
+
+
+<a href="#opfunu.benchmark.cec.CecBenchmark.check_solution" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature codehilite"><pre><span></span><code><span class="nf">check_solution</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dim_max</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dim_support</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Raise the error if the problem size is not equal to the solution length</p>
+<h6 id="opfunu.benchmark.cec.CecBenchmark.check_solution--parameters">Parameters<a class="headerlink" href="#opfunu.benchmark.cec.CecBenchmark.check_solution--parameters" title="Permanent link">&para;</a></h6>
+<p>x : np.ndarray
+    The solution
+dim_max : The maximum number of variables that the function is supported
+dim_support : List of the supported dimensions</p>
+
+
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div><h2 id="coordinate-shifts">Coordinate shifts<a class="headerlink" href="#coordinate-shifts" title="Permanent link">&para;</a></h2>
+<p>Every benchmark function accepts an optional <code>shift</code> constructor argument (a
+scalar is broadcast to all dimensions). It is an ordinary parameter of each
+class's <code>__init__</code> and is forwarded through <code>super().__init__(...)</code> all the way
+to <code>Benchmark</code>, which stores it privately. Once construction finishes, the
+translation is applied automatically:</p>
+<ul>
+<li>Fitness: <code>f(x) = f_base(x - o)</code></li>
+<li>Global optimum: <code>x_global = x*_base + o</code> (<code>f_global</code> is unchanged)</li>
+<li>Search space: <code>bounds_new = bounds_base + o</code> (per dimension)</li>
+</ul>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">opfunu.name_based</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ackley01</span>
+
+<span class="n">func</span> <span class="o">=</span> <span class="n">Ackley01</span><span class="p">(</span><span class="n">ndim</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="p">[</span><span class="mf">2.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">x_global</span><span class="p">)</span>  <span class="c1"># base optimum + shift</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">bounds</span><span class="p">)</span>  <span class="c1"># base bounds + shift</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">is_succeed</span><span class="p">(</span><span class="n">func</span><span class="o">.</span><span class="n">x_global</span><span class="p">))</span>  <span class="c1"># True</span>
+</code></pre></div>
+
+<p><code>ndim</code>, <code>bounds</code>, <code>lb</code>, <code>ub</code> remain public read-only properties, plus a
+read-only <code>shift</code> property. The shift can also be changed after construction
+with <code>func.set_shift(o)</code>, and removed with <code>func.set_shift(None)</code>. Calling
+<code>set_shift</code> repeatedly never accumulates: the base bounds and optimum are
+snapshotted on the first shift and restored before each new translation.</p>
+<h2 id="implementing-a-problem">Implementing a problem<a class="headerlink" href="#implementing-a-problem" title="Permanent link">&para;</a></h2>
+<p>A name-based problem defines its kernel inline and hands the metadata to the base class:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">Quadratic</span><span class="p">(</span><span class="n">FuncBenchmark</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ndim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bounds</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parallel</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fastmath</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">compute</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+            <span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="o">-</span><span class="mf">3803.84</span>
+                <span class="o">-</span> <span class="mf">138.08</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="o">-</span> <span class="mf">232.92</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="o">+</span> <span class="mf">128.08</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span>
+                <span class="o">+</span> <span class="mf">203.64</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span>
+                <span class="o">+</span> <span class="mf">182.25</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">compute</span><span class="o">=</span><span class="n">compute</span><span class="p">,</span>
+            <span class="n">ndim</span><span class="o">=</span><span class="n">ndim</span><span class="p">,</span>
+            <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span>
+            <span class="n">default_bounds</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">)]),</span>
+            <span class="n">f_global</span><span class="o">=-</span><span class="mf">3873.72418</span><span class="p">,</span>
+            <span class="n">x_global</span><span class="o">=</span><span class="p">[</span><span class="mf">0.19388</span><span class="p">,</span> <span class="mf">0.48513</span><span class="p">],</span>
+            <span class="n">dim_changeable</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">dim_default</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="n">parallel</span><span class="o">=</span><span class="n">parallel</span><span class="p">,</span>
+            <span class="n">fastmath</span><span class="o">=</span><span class="n">fastmath</span><span class="p">,</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span>
+        <span class="p">)</span>
+</code></pre></div>
+
+<p><code>x_global</code> and <code>f_global</code> may also be callables of <code>ndim</code> (useful when the optimum scales with
+the dimension).</p>
+<p>Simple CEC problems declare the kernel straight in the <code>super().__init__</code> call —
+the base loads the shift/rotation data, then binds:</p>
+<div class="codehilite"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">compute</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">f_shift</span><span class="p">,</span> <span class="n">f_bias</span><span class="p">,</span> <span class="n">out</span><span class="p">):</span>
+    <span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">...</span>
+
+
+<span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+    <span class="n">ndim</span><span class="o">=</span><span class="n">ndim</span><span class="p">,</span>
+    <span class="n">bounds</span><span class="o">=</span><span class="n">bounds</span><span class="p">,</span>
+    <span class="n">f_shift</span><span class="o">=</span><span class="n">f_shift</span><span class="p">,</span>
+    <span class="n">f_bias</span><span class="o">=</span><span class="n">f_bias</span><span class="p">,</span>
+    <span class="n">compute</span><span class="o">=</span><span class="n">compute</span><span class="p">,</span>
+    <span class="n">param_names</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;f_shift&quot;</span><span class="p">,</span> <span class="s2">&quot;f_bias&quot;</span><span class="p">],</span>
+    <span class="n">parallel</span><span class="o">=</span><span class="n">parallel</span><span class="p">,</span>
+    <span class="n">fastmath</span><span class="o">=</span><span class="n">fastmath</span><span class="p">,</span>
+    <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span>
+<span class="p">)</span>
+</code></pre></div>
+
+<p>Configuration flags (<code>parallel</code>, <code>fastmath</code>, <code>dtype</code>, <code>shift</code>, <code>prepare</code>) stay
+ordinary parameters of every class's <code>__init__</code> and are forwarded to
+<code>super().__init__(...)</code>; <code>prepare</code> defaults to <code>None</code> so the package-wide
+<code>Benchmark.default_prepare</code> policy applies unless the caller chooses explicitly.</p>
+<p>Problems that compute extra kernel parameters after <code>super().__init__</code> (permutation
+vectors, composition weights, index blocks, …) bind explicitly instead:</p>
+<div class="codehilite"><pre><span></span><code><span class="bp">self</span><span class="o">.</span><span class="n">_bind_kernel</span><span class="p">(</span><span class="n">compute</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;f_shift&quot;</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">,</span> <span class="s2">&quot;m_group&quot;</span><span class="p">,</span> <span class="s2">&quot;f_matrix&quot;</span><span class="p">],</span> <span class="n">paras</span><span class="o">=</span><span class="p">[</span><span class="o">...</span><span class="p">])</span>  <span class="c1"># plain=True if Numba-incompatible</span>
+</code></pre></div>
+
+<p><code>compute</code> and every other <code>Benchmark</code> property are read-only: configuration is
+supplied through <code>__init__</code> kwargs (<code>dtype</code>, <code>dim_changeable</code>, <code>verbose</code>, <code>prepare</code>, …), and
+data-dependent metadata written by subclasses goes through protected fields
+(<code>self._f_global</code>, <code>self._x_global</code>, <code>self._paras</code>, <code>self._support_path</code>, <code>self._ndim</code>,
+<code>self._bounds</code>). The shape (<code>bounds</code>/<code>ndim</code>/<code>lb</code>/<code>ub</code>), <code>is_succeed</code>, <code>is_ndim_compatible</code>
+and <code>create_solution</code> are implemented once on <code>Benchmark</code>; <code>FuncBenchmark</code>/<code>CecBenchmark</code>
+only add their own <code>check_ndim_and_bounds</code>/<code>check_solution</code> and CEC specifics. All private
+kernel state (the bound <code>__compute</code>, <code>__paras</code>, <code>numba_compiled</code>, …)
+lives in name-mangled storage behind those properties. The private
+<code>__build_compute</code> helper is only reachable through <code>_bind_kernel</code>
+(<code>plain=True</code> binds the Python kernel directly, with no Numba attempt) and the
+public <code>prepare()</code> method.</p>
+<h2 id="numba-acceleration-optional">Numba acceleration (optional)<a class="headerlink" href="#numba-acceleration-optional" title="Permanent link">&para;</a></h2>
+<p>Numba-based vectorization is opt-in: install with <code>pip install opfunu-core[numba]</code>
+(CPython only) or <code>uv sync --group numba</code>. Without Numba every kernel binds as plain Python automatically and
+the library stays fully usable on CPython and PyPy — only batch/single-point
+evaluation is slower. <code>opfunu.HAS_NUMBA</code> reports whether Numba is available and
+<code>problem.numba_compiled</code> reports which path a given instance bound.</p>
+<h3 id="choosing-not-to-compile">Choosing not to compile<a class="headerlink" href="#choosing-not-to-compile" title="Permanent link">&para;</a></h3>
+<p>Installing Numba does not force you to use it. Every problem constructor accepts a
+<code>prepare</code> flag, so compilation stays optional even in a Numba-enabled
+environment:</p>
+<div class="codehilite"><pre><span></span><code><span class="kn">from</span><span class="w"> </span><span class="nn">opfunu.name_based</span><span class="w"> </span><span class="kn">import</span> <span class="n">Ackley01</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">opfunu.benchmark</span><span class="w"> </span><span class="kn">import</span> <span class="n">Benchmark</span>
+
+<span class="n">f1</span> <span class="o">=</span> <span class="n">Ackley01</span><span class="p">(</span><span class="n">ndim</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">prepare</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># plain Python/NumPy kernel for now</span>
+<span class="n">f2</span> <span class="o">=</span> <span class="n">Ackley01</span><span class="p">(</span><span class="n">ndim</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">prepare</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># gufunc kernel at construction (if Numba installed)</span>
+
+<span class="n">f1</span><span class="o">.</span><span class="n">prepare</span><span class="p">()</span>  <span class="c1"># deferred compilation: now f1 binds a compiled gufunc</span>
+
+<span class="n">Benchmark</span><span class="o">.</span><span class="n">default_prepare</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># package-wide policy for new instances</span>
+<span class="n">f3</span> <span class="o">=</span> <span class="n">Ackley01</span><span class="p">(</span><span class="n">ndim</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>  <span class="c1"># follows the policy: plain kernel until prepare()</span>
+<span class="n">f4</span> <span class="o">=</span> <span class="n">Ackley01</span><span class="p">(</span><span class="n">ndim</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">prepare</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># explicit choice always wins</span>
+</code></pre></div>
+
+<p><code>prepare</code> defaults to <code>None</code>, meaning "follow <code>Benchmark.default_prepare</code>"
+(<code>True</code> out of the box). Set the class attribute before building problems to flip
+the default for a whole session; it is read at construction, so already-built
+instances keep their own setting. <code>problem.numba_compiled</code> reports what actually
+bound.</p>
+<p><code>prepare=False</code> defers compilation, it does not forbid it: <code>problem.prepare()</code>
+performs the <code>guvectorize</code> compilation and warm-up that construction skipped and
+returns whether the kernel ended up compiled. The call is idempotent (an
+already-compiled kernel returns <code>True</code> without recompiling) and it never touches
+the instance's metadata. Kernels bound with <code>plain=True</code> (stochastic terms,
+hybrid compositions holding sub-instances) stay plain Python whatever the flag
+or <code>prepare()</code> says, and <code>prepare()</code> is a quiet no-op — returning <code>False</code> and
+recording no error — when Numba is not installed (PyPy, minimal installs).
+Declining or skipping compilation is not an error either: <code>_compile_error</code>
+stays <code>None</code> and <code>numba_compiled</code> is <code>False</code>. Note that plain kernels calling
+<code>opfunu.utils.operator</code> helpers still let those <code>njit</code>-decorated functions
+compile on first use, so <code>prepare=False</code> keeps the <em>problem</em> kernel plain
+rather than guaranteeing that no Numba code is ever generated.</p>
+<p><code>parallel=True</code> and <code>fastmath</code> are gufunc options and have no effect on an
+instance that was built with <code>prepare=False</code> until <code>prepare()</code> compiles it.</p>
+<h3 id="evaluation-contract">Evaluation contract<a class="headerlink" href="#evaluation-contract" title="Permanent link">&para;</a></h3>
+<p><code>evaluate</code> is implemented once on <code>Benchmark</code> and inherited by every problem — subclasses
+only supply <code>compute</code> and must not reimplement it. It calls <code>self.check_solution(x)</code>,
+runs the bound kernel through a per-instance output buffer, and returns the result cast
+to <code>self.dtype</code> (<code>np.float64</code> by default; <code>np.float32</code> when constructed with
+<code>dtype=np.float32</code>).</p>
+<p><code>_evaluate_batch(x)</code> evaluates a whole population in a single gufunc call: <code>(N, ndim)</code> in
+(or <code>(ndim,)</code>, treated as <code>N=1</code>), <code>(N,)</code> out with dtype <code>self.dtype</code>. For plain-Python
+fallbacks it loops the scalar kernel behind the same interface.</p>
+<p>Compilation (plus a warmup call) happens either at instantiation, when the
+instance prepares eagerly, or on demand via <code>prepare()</code> — never on first
+<code>evaluate</code>; see <em>Choosing not to compile</em>.
+The gufunc cache is keyed on the kernel's <code>__code__</code>, so kernels must be self-contained —
+no closing over per-instance values.</p>
+<h3 id="kernel-parameter-handling">Kernel parameter handling<a class="headerlink" href="#kernel-parameter-handling" title="Permanent link">&para;</a></h3>
+<p><code>_normalize_kernel_param</code> maps each runtime attribute to <code>(call_value, numpy_dtype)</code>
+without importing Numba (<code>numba.from_dtype</code> conversion happens only inside
+<code>__build_compute</code>, when <code>HAS_NUMBA</code> is true): float arrays are cast to <code>self.dtype</code>,
+integer arrays to <code>int64</code> (index arrays must stay integer), int/float scalars to
+<code>int64</code>/<code>self.dtype</code>, bool scalars to <code>bool</code>, and numeric Python lists (including nested
+matrices) to arrays; zero-dimensional arrays unwrap to scalars. Anything else raises
+<code>TypeError</code>.</p>
+<p>Attribute-lookup and normalization errors propagate — a mistyped <code>param_names</code> entry or
+an un-normalizable value is a bug, not a compile failure. Only Numba
+compilation/warmup failures fall back to the plain Python kernel, keeping the same
+<code>(x, *params, out)</code> calling convention; the exception is stored on <code>_compile_error</code>
+(<code>None</code> on success, when Numba is absent, or when compilation was declined) and
+printed when <code>verbose=True</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2026 LTSIM
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.top", "content.code.copy", "search.suggest", "toc.follow"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
