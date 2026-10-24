@@ -83,3 +83,24 @@ jobs:
 
       - name: Run pytest
         run: uv run pytest
+
+  test-viz-extras:
+    name: pytest / viz extras / 3.12
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install system dependencies (pyvista off-screen rendering)
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends libgl1 xvfb
+
+      - name: Install dependencies (plot + plotly + pyvista)
+        run: uv sync --group numba --extra plot --extra plotly --extra pyvista
+
+      - name: Run pytest
+        run: xvfb-run -a uv run pytest

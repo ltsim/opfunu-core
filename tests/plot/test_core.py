@@ -1,8 +1,14 @@
 import numpy as np
 import pytest
 
-from opfunu.plot import HAS_MATPLOTLIB, HAS_PYVISTA, draw, interactive
-from opfunu.plot._core import sample_surface, validate_inputs
+from opfunu.plot import HAS_MATPLOTLIB, HAS_PLOTLY, HAS_PYVISTA, Plotting
+from opfunu.plot._core import (
+    owner_name,
+    plotly_colorscale,
+    resolve_bounds,
+    sample_surface,
+    validate_inputs,
+)
 
 
 def _sphere(x):
@@ -54,23 +60,51 @@ def test_sample_surface_uses_batch_kernel_when_available():
     assert np.all(np.isfinite(zg))
 
 
-def test_draw_invalid_mode_raises_without_backend():
-    with pytest.raises(ValueError, match='mode must be "2d" or "3d"'):
-        draw(mode="4d", target=_sphere, lb=[-1.0], ub=[1.0])
+def test_resolve_bounds_prefers_explicit_arguments():
+    lb, ub = resolve_bounds(_sphere, [-1.0, -1.0], [1.0, 1.0])
+    assert list(lb) == [-1.0, -1.0] and list(ub) == [1.0, 1.0]
 
 
-def test_draw_requires_target_lb_ub():
-    with pytest.raises(TypeError, match="requires target, lb and ub"):
-        draw(mode="2d")
+def test_resolve_bounds_infers_from_bound_method_owner():
+    from opfunu.name_based import Ackley01
+
+    f = Ackley01(ndim=4)
+    lb, ub = resolve_bounds(f.evaluate, None, None)
+    assert np.asarray(lb).size == 4 and np.asarray(ub).size == 4
+    assert owner_name(f.evaluate) == "Ackley01"
+    assert owner_name(_sphere) is None
 
 
-@pytest.mark.skipif(HAS_PYVISTA, reason="checks the missing-extra guidance")
-def test_interactive_missing_extra_message():
-    with pytest.raises(ImportError, match=r"pip install opfunu-core\[interactive\]"):
-        interactive(target=_sphere, lb=[-1.0, -1.0], ub=[1.0, 1.0], n_points=3)
+def test_resolve_bounds_rejects_plain_callable_without_bounds():
+    with pytest.raises(TypeError, match="needs lb and ub"):
+        resolve_bounds(_sphere, None, None)
+
+
+def test_resolve_bounds_rejects_non_callable():
+    with pytest.raises(TypeError, match="callable"):
+        resolve_bounds(42.0, None, None)
+
+
+def test_plotly_colorscale_maps_common_matplotlib_names():
+    assert plotly_colorscale("viridis") == "Viridis"
+    assert plotly_colorscale("Cividis") == "Cividis"
+    assert plotly_colorscale("RdBu") == "RdBu"
+    assert plotly_colorscale("inferno") == "inferno"  # unknown names pass through
 
 
 @pytest.mark.skipif(HAS_MATPLOTLIB, reason="checks the missing-extra guidance")
-def test_draw_missing_extra_message():
+def test_matplotlib_missing_extra_message():
     with pytest.raises(ImportError, match=r"pip install opfunu-core\[plot\]"):
-        draw(mode="2d", target=_sphere, lb=[-1.0, -1.0], ub=[1.0, 1.0], n_points=3)
+        Plotting(_sphere, [-1.0, -1.0], [1.0, 1.0], mode="2d", n_points=3).render()
+
+
+@pytest.mark.skipif(HAS_PLOTLY, reason="checks the missing-extra guidance")
+def test_plotly_missing_extra_message():
+    with pytest.raises(ImportError, match=r"pip install opfunu-core\[plotly\]"):
+        Plotting(_sphere, [-1.0, -1.0], [1.0, 1.0], backend="plotly", n_points=3).render()
+
+
+@pytest.mark.skipif(HAS_PYVISTA, reason="checks the missing-extra guidance")
+def test_pyvista_missing_extra_message():
+    with pytest.raises(ImportError, match=r"pip install opfunu-core\[pyvista\]"):
+        Plotting(_sphere, [-1.0, -1.0], [1.0, 1.0], backend="pyvista", n_points=3).render()

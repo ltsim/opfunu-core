@@ -63,6 +63,13 @@ Compilation stays optional even with the extra installed: every problem accepts
 `problem.prepare()` compiles such an instance on demand), and
 `Benchmark.default_prepare` sets the policy for a whole session.
 
+For landscape visualization (`opfunu.plot.Plotting`, decoupled from the core):
+```sh
+$ pip install opfunu-core[plot]      # static 2D contour / 3D surface (matplotlib)
+$ pip install opfunu-core[plotly]    # interactive 3D surface / 2D contour (plotly)
+$ pip install opfunu-core[pyvista]   # interactive 3D mesh (pyvista)
+```
+
 Install from Github:
 ```sh
 $ pip install git+https://github.com/ltsim/opfunu-core
