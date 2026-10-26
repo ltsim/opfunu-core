@@ -1,9 +1,10 @@
-# Version 2026b0
+# Version v2026b1
 
-+ Added the class-based `opfunu.plot.Plotting` visualization suite (a decoupled, lazy-optional
-  rework of this cycle's unreleased `draw`/`interactive` prototypes): one object per landscape —
-  `Plotting(problem.evaluate)` infers the bounds from the problem, samples lazily through the
-  `_evaluate_batch` kernel and renders per `backend`/`mode` (`"matplotlib"` static 2D/3D by
++ **Breaking (plot):** replaced the function entry points `draw`/`interactive` released with
+  `v2026b0` by the class-based `opfunu.plot.Plotting` visualization suite: one object per
+  landscape — `Plotting(problem.evaluate)` infers the bounds from the problem, samples lazily
+  through the `_evaluate_batch` kernel and renders per `backend`/`mode` (`"matplotlib"` static
+  2D/3D by
   default, `"plotly"` interactive 2D/3D, `"pyvista"` interactive 3D). `show()` displays in the
   terminal or inline in Jupyter (HTML repr for plotly, PNG repr for matplotlib, pyvista uses
   the static notebook backend by default), `save()` picks the format from the file suffix —
@@ -15,6 +16,20 @@
   `[plotly]`/`[pyvista]` extras join `[plot]` (`[interactive]` stays the pyvista alias) —
   with `examples/plotting.py`, the notebooks `examples/plotting_matplotlib.ipynb` and
   `examples/plotting_plotly.ipynb`, `examples/styles/paper.mplstyle` and `docs/plot.md`
++ Kept the core dependencies NumPy-only: the Jupyter kernel (`ipykernel`) that had crept into
+  `dependencies` while running the example notebooks moved to a dev-only `notebook` dependency
+  group (`uv sync --group notebook`), so published wheel metadata never requires it
++ Docs: mkdocs-material gained a top tab bar (Home / Getting Started / API Reference / Project)
+  with the left sidebar reserved for the sections of the active tab, a vector favicon and logo
+  (`docs/img/`), and a guard rule for docstring examples — bare doctest reprs like
+  `<Plotting backend=...>` leak unescaped into the rendered HTML and must use fenced code blocks
+
++ Opened a new cycle of the release model: this version lives on `release/v2026b1` and
++   publishes to PyPI under the same name, `v2026b1`, when the cycle merges into `master`
+
+---------------------------------------------------------------------
+
+# Version v2026b0
 
 + Standardized the base classes (whole-repo over-engineering audit): the shape storage
 +   (`_ndim`/`_bounds`) behind `bounds`/`ndim`/`lb`/`ub`, the `is_succeed`/`is_ndim_compatible`/
@@ -49,7 +64,7 @@
 
 ---------------------------------------------------------------------
 
-# Version 2026a0
+# Version v2026a0
 
 + Added automatic coordinate-shift propagation (issue #19): every benchmark function accepts a `shift`
   constructor argument, forwarded via `super().__init__(...)` to the parent class, evaluating

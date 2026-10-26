@@ -9,6 +9,8 @@ strict: true
 
 theme:
   name: material
+  logo: img/logo.svg
+  favicon: img/favicon.svg
   palette:
     scheme: default
     primary: green

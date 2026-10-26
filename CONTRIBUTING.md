@@ -23,7 +23,7 @@ This project uses a release-cadenced branching model. The long-lived branches ar
 
 - **`master`** — the stable, default branch. It receives one merge per release cycle and carries
   the published version.
-- **`release/v<year><edition><version>`** (e.g. `release/v2026b0`) — the current release branch,
+- **`release/v<year><edition><version>`** (e.g. `release/v2026b1`) — the current release branch,
   **reserved exclusively for versioning**: version bumps, changelog entries, citation updates,
   and the release tag. No feature work is committed directly to it.
 
@@ -51,16 +51,16 @@ The sequence advances `v2026a0 → v2026a1 → … → v2026a9 → v2026b0 → �
 The published package version is the cycle name itself, `v` prefix included:
 
 ```
-__version__ = "v2026b0"
+__version__ = "v2026b1"
 ```
 
 so branch, git tag, GitHub release and PyPI release share one spelling. Be aware of how PEP 440
 reads that string:
 
-- PyPI normalizes away the `v` prefix — `v2026b0` is published and resolved as `2026b0`.
+- PyPI normalizes away the `v` prefix — `v2026b1` is published and resolved as `2026b1`.
 - The edition letter is interpreted as a pre-release marker (`a` = alpha, `b` = beta, `c`/`rc` =
   release candidate), so installers do not resolve it by default and an exact pin is the only
-  reliable way to get it: `pip install "opfunu-core==v2026b0"`. Not even `--pre` helps while the
+  reliable way to get it: `pip install "opfunu-core==v2026b1"`. Not even `--pre` helps while the
   final `2026.0` (the `v2026a0` release) is on PyPI: a pre-release of `2026` sorts *below* it.
 - Letters beyond `c` are not valid PEP 440 at all (`v2026d0` cannot be published), so the letter
   track stops at edition `c`; continuing past it requires a different numeric form.
@@ -73,7 +73,7 @@ reads that string:
    complete, refresh `CITATION.cff` (`version`, `date-released`) and finalize the changelog.
 3. Open a pull request from the release branch into `master`; merge it once CI passes.
 4. Tag the merge commit `v<year><edition><version>` and publish the GitHub release — this triggers
-   `publish.yml` to build and upload to PyPI under the same name (`v2026b0`, resolved as `2026b0`).
+   `publish.yml` to build and upload to PyPI under the same name (`v2026b1`, resolved as `2026b1`).
 5. Cut the next release branch from `master` and repeat.
 
 ## Getting Started
@@ -116,7 +116,7 @@ reads that string:
     ```
 
 6. Create a pull request from your branch to the current release branch
-   (for example `release/v2026b0`).
+   (for example `release/v2026b1`).
 
 ## Git Hooks
 
@@ -176,7 +176,7 @@ python -m pytest
 actively welcome your pull requests:
 
 1. Fork the repo and create your category branch (see [Branching Workflow](#branching-workflow))
-   from the current release branch, e.g. `release/v2026b0`.
+   from the current release branch, e.g. `release/v2026b1`.
 2. If you've added code that should be tested, add tests.
 3. If you've changed APIs, update the documentation.
 4. Ensure the test suite passes.

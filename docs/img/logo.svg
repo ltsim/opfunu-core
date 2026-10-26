@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <!--
+    opfunu-core logo: the same contour-landscape motif with an extra band,
+    framed by two corner brackets that evoke the search-space bounds.
+    Light greens/teal so it reads on the green header bar of the docs theme.
+  -->
+  <g stroke="#e8f5e9" stroke-width="7" stroke-linecap="square" fill="none">
+    <path d="M16 40V16h24"/>
+    <path d="M112 88v24H88"/>
+  </g>
+  <g transform="rotate(-18 64 64)">
+    <ellipse cx="64" cy="64" rx="46" ry="35" fill="#a5d6a7"/>
+    <ellipse cx="64" cy="64" rx="35" ry="26" fill="#4caf50"/>
+    <ellipse cx="64" cy="64" rx="24" ry="17.5" fill="#009688"/>
+    <ellipse cx="64" cy="64" rx="13" ry="9" fill="#00695c"/>
+    <circle cx="64" cy="64" r="4" fill="#b9f6ca"/>
+  </g>
+</svg>

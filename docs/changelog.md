@@ -4,7 +4,26 @@ The full changelog is maintained in the repository:
 
 [CHANGELOG.md](https://github.com/ltsim/opfunu-core/blob/master/CHANGELOG.md)
 
-## Version 2026b0
+## Version v2026b1
+
+* **Breaking (plot):** the `draw`/`interactive` entry points released with `v2026b0` are replaced
+  by the class-based `opfunu.plot.Plotting` suite: `matplotlib` (default, 2D/3D), `plotly`
+  (interactive 2D/3D) and `pyvista` (interactive 3D mesh), each behind its own lazy extra
+  (`[plot]`, `[plotly]`, `[pyvista]`); bounds are inferred from a bound `problem.evaluate`,
+  sampling is cached, and figures display inline in Jupyter. `save()` picks the format from the
+  file suffix (matplotlib PDF/SVG/EPS/PS/PGF, plotly HTML + optional kaleido images, pyvista
+  screenshots and vector graphics); themes via `style`/`rc` (matplotlib), `template` (plotly),
+  `theme` (pyvista). Ships `examples/plotting.py`, the two example notebooks,
+  `examples/styles/paper.mplstyle` and `docs/plot.md`.
+* Core dependencies stay NumPy-only: the Jupyter kernel (`ipykernel`) lives in a dev-only
+  `notebook` dependency group instead of `dependencies`.
+* Docs: top tab bar (Home / Getting Started / API Reference / Project) with a section-only
+  sidebar, SVG favicon and logo in `docs/img/`, and fenced docstring examples (bare doctest
+  reprs leaked unescaped into the rendered pages).
+* Released on the `release/v2026b1` branch; published to PyPI under the same name, `v2026b1`,
+  when the cycle merges into `master`.
+
+## Version v2026b0
 
 * Released on the `release/v2026b0` branch; published to PyPI under the same name, `v2026b0`,
   when the cycle merges into `master`.
@@ -22,7 +41,7 @@ The full changelog is maintained in the repository:
   `None` (the default) follows the package-wide `Benchmark.default_prepare` policy. `prepare()` is a
   quiet no-op without Numba, so the PyPy path is unchanged.
 
-## Version 2026a0
+## Version v2026a0
 
 * Maintenance release based on the original `opfunu` library.
 * Project migrated to a `src/` layout and managed with [uv](https://github.com/astral-sh/uv).
