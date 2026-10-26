@@ -82,14 +82,16 @@ class Plotting:
 
     Examples
     --------
-    >>> from opfunu.name_based import Ackley01
-    >>> from opfunu.plot import Plotting
-    >>> f = Ackley01(ndim=5)
-    >>> plot = Plotting(f.evaluate, mode="2d", n_points=3)  # bounds inferred, nothing rendered yet
-    >>> plot
-    <Plotting backend='matplotlib' mode='2d' dims=(1, 2) n_points=3>
-    >>> plot.save("landscape.pdf")  # doctest: +SKIP
-    PosixPath('landscape.pdf')
+    ```python
+    from opfunu.name_based import Ackley01
+    from opfunu.plot import Plotting
+
+    f = Ackley01(ndim=5)
+    plot = Plotting(f.evaluate, mode="2d", n_points=3)  # bounds inferred, renders lazily
+    plot  # displayed inline in Jupyter via the PNG repr
+    plot.save("landscape.pdf", dpi=600)
+    plot.close()
+    ```
     """
 
     def __init__(
