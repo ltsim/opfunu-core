@@ -108,6 +108,8 @@ Plotting(f.evaluate, style="styles/paper.mplstyle")   # see examples/styles/
   and
   [`examples/plotting_plotly.ipynb`](https://github.com/ltsim/opfunu-core/blob/master/examples/plotting_plotly.ipynb).
   A non-notebook script lives at [`examples/plotting.py`](https://github.com/ltsim/opfunu-core/blob/master/examples/plotting.py).
+  From a repository checkout, `uv sync --extra plot --group notebook` (or
+  `--extra plotly`) adds the Jupyter kernel; the package itself never depends on it.
 
 ## API
 

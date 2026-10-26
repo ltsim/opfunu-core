@@ -160,6 +160,7 @@ The project is managed with [uv](https://github.com/astral-sh/uv):
 ```sh
 $ uv sync                # install runtime + dev dependencies
 $ uv sync --group docs   # additionally install the docs tooling
+$ uv sync --group notebook   # Jupyter kernel for the example notebooks
 ```
 
 Ruff (lint and format):

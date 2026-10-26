@@ -92,6 +92,10 @@ reads that string:
     npm install
     ```
 
+    To run the example notebooks in `examples/`, install the kernel group as well:
+    `uv sync --group numba --group notebook` (the core package itself never depends on
+    ipykernel — it lives only in this development group).
+
 3. Create a new category branch for your changes, named after the work you are doing:
 
     ```
