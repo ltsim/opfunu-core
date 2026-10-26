@@ -31,6 +31,22 @@
 
 # Version v2026b0
 
++ Added the class-based `opfunu.plot.Plotting` visualization suite (a decoupled, lazy-optional
+  rework of this cycle's unreleased `draw`/`interactive` prototypes): one object per landscape —
+  `Plotting(problem.evaluate)` infers the bounds from the problem, samples lazily through the
+  `_evaluate_batch` kernel and renders per `backend`/`mode` (`"matplotlib"` static 2D/3D by
+  default, `"plotly"` interactive 2D/3D, `"pyvista"` interactive 3D). `show()` displays in the
+  terminal or inline in Jupyter (HTML repr for plotly, PNG repr for matplotlib, pyvista uses
+  the static notebook backend by default), `save()` picks the format from the file suffix —
+  matplotlib raster plus PDF/SVG/EPS/PS and LaTeX-native PGF, plotly HTML plus images via
+  optional `kaleido`, pyvista screenshots, `save_graphic` vectors and HTML — and themes come
+  through matplotlib `style` (names, lists, `.mplstyle` paths or rc dicts, applied per plot
+  without leaking global rcParams; third-party style packages work once imported) plus `rc`,
+  plotly `template` and pyvista `theme`; `HAS_PLOTLY` reports availability and the new
+  `[plotly]`/`[pyvista]` extras join `[plot]` (`[interactive]` stays the pyvista alias) —
+  with `examples/plotting.py`, the notebooks `examples/plotting_matplotlib.ipynb` and
+  `examples/plotting_plotly.ipynb`, `examples/styles/paper.mplstyle` and `docs/plot.md`
+
 + Standardized the base classes (whole-repo over-engineering audit): the shape storage
 +   (`_ndim`/`_bounds`) behind `bounds`/`ndim`/`lb`/`ub`, the `is_succeed`/`is_ndim_compatible`/
 +   `create_solution` implementations and the shared trait defaults (`name`, `continuous`, …,
