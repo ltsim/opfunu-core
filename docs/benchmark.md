@@ -11,17 +11,26 @@ Every function in `opfunu-core` inherits from one of the base classes defined in
 
 ## Benchmark and Formula
 
-::: opfunu.benchmark
-    options:
-      members: [Formula, Benchmark]
+```{eval-rst}
+.. automodule:: opfunu.benchmark
+   :members: Formula, Benchmark
+```
 
 ## FuncBenchmark
 
-::: opfunu.benchmark.func.FuncBenchmark
+```{eval-rst}
+.. autoclass:: opfunu.benchmark.func.FuncBenchmark
+   :members:
+   :undoc-members:
+```
 
 ## CecBenchmark
 
-::: opfunu.benchmark.cec.CecBenchmark
+```{eval-rst}
+.. autoclass:: opfunu.benchmark.cec.CecBenchmark
+   :members:
+   :undoc-members:
+```
 
 ## Coordinate shifts
 

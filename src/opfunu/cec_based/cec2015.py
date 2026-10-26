@@ -15,8 +15,8 @@ from opfunu.utils import operator
 class F12015(CecBenchmark):
     """
     .. [1] Chen, Q., Liu, B., Zhang, Q., Liang, J., Suganthan, P., & Qu, B. (2014). Problem definitions and evaluation criteria for CEC 2015
-    special session on bound constrained single-objective computationally expensive numerical optimization. Technical Report,
-    Computational Intelligence Laboratory, Zhengzhou University, Zhengzhou, China and Technical Report, Nanyang Technological University.
+       special session on bound constrained single-objective computationally expensive numerical optimization. Technical Report,
+       Computational Intelligence Laboratory, Zhengzhou University, Zhengzhou, China and Technical Report, Nanyang Technological University.
     """
 
     name = "F1: Rotated Bent Cigar Function"
@@ -91,8 +91,8 @@ class F12015(CecBenchmark):
 class F22015(F12015):
     """
     .. [1] Chen, Q., Liu, B., Zhang, Q., Liang, J., Suganthan, P., & Qu, B. (2014). Problem definitions and evaluation criteria for CEC 2015
-    special session on bound constrained single-objective computationally expensive numerical optimization. Technical Report,
-    Computational Intelligence Laboratory, Zhengzhou University, Zhengzhou, China and Technical Report, Nanyang Technological University.
+       special session on bound constrained single-objective computationally expensive numerical optimization. Technical Report,
+       Computational Intelligence Laboratory, Zhengzhou University, Zhengzhou, China and Technical Report, Nanyang Technological University.
     """
 
     name = "F2: Rotated Discus Function"
@@ -140,8 +140,8 @@ class F22015(F12015):
 class F32015(F12015):
     """
     .. [1] Chen, Q., Liu, B., Zhang, Q., Liang, J., Suganthan, P., & Qu, B. (2014). Problem definitions and evaluation criteria for CEC 2015
-    special session on bound constrained single-objective computationally expensive numerical optimization. Technical Report,
-    Computational Intelligence Laboratory, Zhengzhou University, Zhengzhou, China and Technical Report, Nanyang Technological University.
+       special session on bound constrained single-objective computationally expensive numerical optimization. Technical Report,
+       Computational Intelligence Laboratory, Zhengzhou University, Zhengzhou, China and Technical Report, Nanyang Technological University.
     """
 
     name = "F3: Shifted and Rotated Weierstrass Function"
@@ -192,8 +192,8 @@ class F32015(F12015):
 class F42015(F12015):
     """
     .. [1] Chen, Q., Liu, B., Zhang, Q., Liang, J., Suganthan, P., & Qu, B. (2014). Problem definitions and evaluation criteria for CEC 2015
-    special session on bound constrained single-objective computationally expensive numerical optimization. Technical Report,
-    Computational Intelligence Laboratory, Zhengzhou University, Zhengzhou, China and Technical Report, Nanyang Technological University.
+       special session on bound constrained single-objective computationally expensive numerical optimization. Technical Report,
+       Computational Intelligence Laboratory, Zhengzhou University, Zhengzhou, China and Technical Report, Nanyang Technological University.
     """
 
     name = "F4: Shifted and Rotated Schwefel’s Function"
@@ -248,8 +248,8 @@ class F42015(F12015):
 class F52015(F12015):
     """
     .. [1] Chen, Q., Liu, B., Zhang, Q., Liang, J., Suganthan, P., & Qu, B. (2014). Problem definitions and evaluation criteria for CEC 2015
-    special session on bound constrained single-objective computationally expensive numerical optimization. Technical Report,
-    Computational Intelligence Laboratory, Zhengzhou University, Zhengzhou, China and Technical Report, Nanyang Technological University.
+       special session on bound constrained single-objective computationally expensive numerical optimization. Technical Report,
+       Computational Intelligence Laboratory, Zhengzhou University, Zhengzhou, China and Technical Report, Nanyang Technological University.
     """
 
     name = "F5: Shifted and Rotated Katsuura Function"
@@ -302,8 +302,8 @@ class F52015(F12015):
 class F62015(F12015):
     """
     .. [1] Chen, Q., Liu, B., Zhang, Q., Liang, J., Suganthan, P., & Qu, B. (2014). Problem definitions and evaluation criteria for CEC 2015
-    special session on bound constrained single-objective computationally expensive numerical optimization. Technical Report,
-    Computational Intelligence Laboratory, Zhengzhou University, Zhengzhou, China and Technical Report, Nanyang Technological University.
+       special session on bound constrained single-objective computationally expensive numerical optimization. Technical Report,
+       Computational Intelligence Laboratory, Zhengzhou University, Zhengzhou, China and Technical Report, Nanyang Technological University.
     """
 
     name = "F6: Shifted and Rotated HappyCat Function"
@@ -356,8 +356,8 @@ class F62015(F12015):
 class F72015(F12015):
     """
     .. [1] Chen, Q., Liu, B., Zhang, Q., Liang, J., Suganthan, P., & Qu, B. (2014). Problem definitions and evaluation criteria for CEC 2015
-    special session on bound constrained single-objective computationally expensive numerical optimization. Technical Report,
-    Computational Intelligence Laboratory, Zhengzhou University, Zhengzhou, China and Technical Report, Nanyang Technological University.
+       special session on bound constrained single-objective computationally expensive numerical optimization. Technical Report,
+       Computational Intelligence Laboratory, Zhengzhou University, Zhengzhou, China and Technical Report, Nanyang Technological University.
     """
 
     name = "F7: Shifted and Rotated HGBat Function"
@@ -409,8 +409,8 @@ class F72015(F12015):
 class F82015(F12015):
     """
     .. [1] Chen, Q., Liu, B., Zhang, Q., Liang, J., Suganthan, P., & Qu, B. (2014). Problem definitions and evaluation criteria for CEC 2015
-    special session on bound constrained single-objective computationally expensive numerical optimization. Technical Report,
-    Computational Intelligence Laboratory, Zhengzhou University, Zhengzhou, China and Technical Report, Nanyang Technological University.
+       special session on bound constrained single-objective computationally expensive numerical optimization. Technical Report,
+       Computational Intelligence Laboratory, Zhengzhou University, Zhengzhou, China and Technical Report, Nanyang Technological University.
     """
 
     name = "F8: Shifted and Rotated Expanded Griewank’s plus Rosenbrock’s Function"
@@ -462,8 +462,8 @@ class F82015(F12015):
 class F92015(F12015):
     """
     .. [1] Chen, Q., Liu, B., Zhang, Q., Liang, J., Suganthan, P., & Qu, B. (2014). Problem definitions and evaluation criteria for CEC 2015
-    special session on bound constrained single-objective computationally expensive numerical optimization. Technical Report,
-    Computational Intelligence Laboratory, Zhengzhou University, Zhengzhou, China and Technical Report, Nanyang Technological University.
+       special session on bound constrained single-objective computationally expensive numerical optimization. Technical Report,
+       Computational Intelligence Laboratory, Zhengzhou University, Zhengzhou, China and Technical Report, Nanyang Technological University.
     """
 
     name = "F9: Shifted and Rotated Expanded Scaffer’s F6 Function"
@@ -516,8 +516,8 @@ class F92015(F12015):
 class F102015(CecBenchmark):
     """
     .. [1] Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2013). Problem definitions and evaluation criteria for the CEC 2014
-    special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
-    Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
+       special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
+       Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
     """
 
     name = "F10: Hybrid Function 1 (N=3)"
@@ -624,8 +624,8 @@ class F102015(CecBenchmark):
 class F112015(F102015):
     """
     .. [1] Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2013). Problem definitions and evaluation criteria for the CEC 2014
-    special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
-    Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
+       special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
+       Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
     """
 
     name = "F11: Hybrid Function 2 (N=4)"
@@ -705,8 +705,8 @@ class F112015(F102015):
 class F122015(F102015):
     """
     .. [1] Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2013). Problem definitions and evaluation criteria for the CEC 2014
-    special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
-    Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
+       special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
+       Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
     """
 
     name = "F12: Hybrid Function 3 (N=5)"
@@ -793,8 +793,8 @@ class F122015(F102015):
 class F132015(CecBenchmark):
     """
     .. [1] Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2013). Problem definitions and evaluation criteria for the CEC 2014
-    special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
-    Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
+       special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
+       Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
     """
 
     name = "F13: Composition Function 1 (N=5)"
@@ -903,8 +903,8 @@ class F132015(CecBenchmark):
 class F142015(F132015):
     """
     .. [1] Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2013). Problem definitions and evaluation criteria for the CEC 2014
-    special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
-    Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
+       special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
+       Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
     """
 
     name = "F14: Composition Function 2 (N=3)"
@@ -989,8 +989,8 @@ class F142015(F132015):
 class F152015(CecBenchmark):
     """
     .. [1] Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2013). Problem definitions and evaluation criteria for the CEC 2014
-    special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
-    Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
+       special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
+       Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
     """
 
     name = "F15: Composition Function 3 (N=5)"

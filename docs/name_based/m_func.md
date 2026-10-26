@@ -1,120 +1,103 @@
 # Functions — M
 
-::: opfunu.name_based.m_func.Matyas
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.m_func.Matyas
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.m_func.McCormick
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.m_func.McCormick
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.m_func.Meyer
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.m_func.Meyer
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.m_func.Michalewicz
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.m_func.Michalewicz
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.m_func.MieleCantrell
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.m_func.MieleCantrell
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.m_func.Mishra01
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.m_func.Mishra01
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.m_func.Mishra02
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.m_func.Mishra02
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.m_func.Mishra03
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.m_func.Mishra03
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.m_func.Mishra04
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.m_func.Mishra04
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.m_func.Mishra05
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.m_func.Mishra05
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.m_func.Mishra06
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.m_func.Mishra06
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.m_func.Mishra07
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.m_func.Mishra07
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.m_func.Mishra08
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.m_func.Mishra08
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.m_func.Mishra09
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.m_func.Mishra09
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.m_func.Mishra10
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.m_func.Mishra10
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.m_func.Mishra11
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.m_func.Mishra11
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.m_func.MultiModal
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.m_func.MultiModal
+   :members:
+   :undoc-members:
+```

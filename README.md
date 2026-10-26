@@ -11,7 +11,7 @@
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/ltsim/opfunu-core/publish.yml?style=flat-square&logo=pypi&label=Publish)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/ltsim/opfunu-core/test.yml?style=flat-square&logo=pytest&label=Testing)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/ltsim/opfunu-core/type.yml?style=flat-square&logo=mypy&label=Type-checking)
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/ltsim/opfunu-core/docs.yml?style=flat-square&logo=githubpages&label=Docs)
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/ltsim/opfunu-core/docs.yml?style=flat-square&logo=githubpages&label=Docs)](https://ltsim.github.io/opfunu-core/)
 
 This library is a maintenance version, a fork of [OPFUNU (Optimization Reference Functions in NUMPy)](https://github.com/thieu1995/opfunu). Is one of the most comprehensive Python libraries of numerical optimization reference functions. It contains all the functions from the CEC competitions of 2005, 2008, 2010, 2013, 2014, 2015, 2017, 2019, 2020, 2021, and 2022. In addition, it implements over 300 traditional functions with varying dimensions.
 
@@ -178,13 +178,17 @@ $ uv run mypy          # type-check the package (config in pyproject.toml)
 $ uv run mypy-coverage # report type-annotation coverage
 ```
 
-MkDocs (documentation, Material theme):
+Sphinx (documentation, Nature theme):
 
 ```sh
-$ uv run mkdocs serve                # live preview at http://127.0.0.1:8000
-$ uv run mkdocs build                # build the static site into site/
-$ uv run mkdocs gh-deploy --force    # publish to GitHub Pages
+$ uv sync --group docs                                             # install the docs tooling
+$ uv run sphinx-autobuild docs docs/_build/html --watch src        # live preview at http://127.0.0.1:8000
+$ uv run sphinx-build -b html docs docs/_build/html -W --keep-going  # strict build into docs/_build/html
+$ make -C docs livehtml                                            # same live preview via the Makefile
 ```
+
+GitHub Pages is built and deployed by the `docs.yml` workflow (push to `master` or `workflow_dispatch`);
+set the Pages **Source** to *GitHub Actions* in repository settings.
 
 Run the test suite with:
 

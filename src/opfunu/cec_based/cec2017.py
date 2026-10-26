@@ -16,7 +16,7 @@ from opfunu.utils import operator
 class F12017(CecBenchmark):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F1: Shifted and Rotated Bent Cigar"
@@ -91,7 +91,7 @@ class F12017(CecBenchmark):
 class F22017(F12017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F2: Shifted and Rotated Zakharov Function"
@@ -139,7 +139,7 @@ class F22017(F12017):
 class F32017(F12017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F3: Shifted and Rotated Rosenbrock’s Function"
@@ -192,7 +192,7 @@ class F32017(F12017):
 class F42017(F12017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F4: Shifted and Rotated Rastrigin’s Function"
@@ -248,7 +248,7 @@ class F42017(F12017):
 class F52017(F12017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F5: Shifted and Rotated Schaffer’s F7 Function"
@@ -301,7 +301,7 @@ class F52017(F12017):
 class F62017(F12017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F6: Shifted and Rotated Lunacek Bi-Rastrigin’s Function"
@@ -354,7 +354,7 @@ class F62017(F12017):
 class F72017(F12017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F7: Shifted and Rotated Non-Continuous Rastrigin’s Function"
@@ -407,7 +407,7 @@ class F72017(F12017):
 class F82017(F12017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F8: Shifted and Rotated Levy Function"
@@ -457,7 +457,7 @@ class F82017(F12017):
 class F92017(F12017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F9: Shifted and Rotated Schwefel’s Function"
@@ -510,7 +510,7 @@ class F92017(F12017):
 class F102017(CecBenchmark):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F10: Hybrid Function 1"
@@ -614,7 +614,7 @@ class F102017(CecBenchmark):
 class F112017(F102017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F11: Hybrid Function 2"
@@ -695,7 +695,7 @@ class F112017(F102017):
 class F122017(F102017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F12: Hybrid Function 3"
@@ -774,7 +774,7 @@ class F122017(F102017):
 class F132017(F102017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F13: Hybrid Function 4"
@@ -856,7 +856,7 @@ class F132017(F102017):
 class F142017(F102017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F14: Hybrid Function 5"
@@ -934,7 +934,7 @@ class F142017(F102017):
 class F152017(F102017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F15: Hybrid Function 6"
@@ -1012,7 +1012,7 @@ class F152017(F102017):
 class F162017(F102017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F16: Hybrid Function 7"
@@ -1099,7 +1099,7 @@ class F162017(F102017):
 class F172017(F102017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F17: Hybrid Function 8"
@@ -1181,7 +1181,7 @@ class F172017(F102017):
 class F182017(F102017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F18: Hybrid Function 9"
@@ -1268,7 +1268,7 @@ class F182017(F102017):
 class F192017(F102017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F19: Hybrid Function 10"
@@ -1353,7 +1353,7 @@ class F192017(F102017):
 class F202017(CecBenchmark):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F20: Composition Function 1"
@@ -1457,7 +1457,7 @@ class F202017(CecBenchmark):
 class F212017(F202017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F21: Composition Function 2"
@@ -1543,7 +1543,7 @@ class F212017(F202017):
 class F222017(F202017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F22: Composition Function 3"
@@ -1634,7 +1634,7 @@ class F222017(F202017):
 class F232017(F202017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F23: Composition Function 4"
@@ -1725,7 +1725,7 @@ class F232017(F202017):
 class F242017(F202017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F24: Composition Function 5"
@@ -1822,7 +1822,7 @@ class F242017(F202017):
 class F252017(F202017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F25: Composition Function 6"
@@ -1920,7 +1920,7 @@ class F252017(F202017):
 class F262017(F202017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F26: Composition Function 7"
@@ -2024,7 +2024,7 @@ class F262017(F202017):
 class F272017(F202017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F27: Composition Function 8"
@@ -2131,7 +2131,7 @@ class F272017(F202017):
 class F282017(F202017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F28: Composition Function 9"
@@ -2224,7 +2224,7 @@ class F282017(F202017):
 class F292017(F202017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F29: Composition Function 10"

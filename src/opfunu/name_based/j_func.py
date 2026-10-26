@@ -14,7 +14,7 @@ from opfunu.benchmark.func import FuncBenchmark
 class JennrichSampson(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Jennrich-Sampson Function"
@@ -67,12 +67,13 @@ class JennrichSampson(FuncBenchmark):
 
 
 class Judge(FuncBenchmark):
-    """
+    r"""
     .. [1] Gavana, A. Global Optimization Benchmarks and AMPGO retrieved 2015
 
     .. math::
-        f_{\text{Judge}}(x) = \\sum_{i=1}^{20}
-        \\left [ \\left (x_1 + A_i x_2 + B x_2^2 \right ) - C_i \right ]^2
+        f_{\text{Judge}}(x) = \sum_{i=1}^{20}
+        \left [ \left (x_1 + A_i x_2 + B x_2^2 \right ) - C_i \right ]^2
+
 
     .. math::
         \begin{cases}
@@ -85,9 +86,10 @@ class Judge(FuncBenchmark):
         B = [0.645, 0.585, 0.310, 0.058, 0.455, 0.779, 0.259, 0.202, 0.028,
              0.099, 0.142, 0.296, 0.175, 0.180, 0.842, 0.039, 0.103, 0.620,
              0.158, 0.704]
-        \\end{cases}
-    with :math:`x_i \\in [-10, 10]` for :math:`i = 1, 2`.
-    *Global optimum*: :math:`f(x_i) = 16.0817307` for :math:`\\mathbf{x} = [0.86479, 1.2357]`.
+        \end{cases}
+
+    with :math:`x_i \in [-10, 10]` for :math:`i = 1, 2`.
+    *Global optimum*: :math:`f(x_i) = 16.0817307` for :math:`\mathbf{x} = [0.86479, 1.2357]`.
     """
 
     name = "Judge Function"

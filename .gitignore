@@ -322,9 +322,6 @@ venv.bak/
 # Rope project settings
 .ropeproject
 
-# mkdocs documentation
-/site
-
 # mypy
 .mypy_cache/
 .dmypy.json
@@ -355,9 +352,6 @@ poetry.toml
 
 # LSP config files
 pyrightconfig.json
-
-# Sphinx documentation
-docs/build/
 
 # Agent & tooling configs (local only)
 AGENTS.md

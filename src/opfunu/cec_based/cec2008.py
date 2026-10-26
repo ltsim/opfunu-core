@@ -15,8 +15,8 @@ from opfunu.utils import operator
 class F12008(CecBenchmark):
     """
     .. [1] Tang, K., Yáo, X., Suganthan, P. N., MacNish, C., Chen, Y. P., Chen, C. M., & Yang, Z. (2007). Benchmark functions
-    for the CEC’2008 special session and competition on large scale global optimization.
-    Nature inspired computation and applications laboratory, USTC, China, 24, 1-18.
+       for the CEC’2008 special session and competition on large scale global optimization.
+       Nature inspired computation and applications laboratory, USTC, China, 24, 1-18.
     """
 
     name = "F1: Shifted Sphere Function"
@@ -77,8 +77,8 @@ class F12008(CecBenchmark):
 class F22008(CecBenchmark):
     """
     .. [1] Tang, K., Yáo, X., Suganthan, P. N., MacNish, C., Chen, Y. P., Chen, C. M., & Yang, Z. (2007). Benchmark functions
-    for the CEC’2008 special session and competition on large scale global optimization.
-    Nature inspired computation and applications laboratory, USTC, China, 24, 1-18.
+       for the CEC’2008 special session and competition on large scale global optimization.
+       Nature inspired computation and applications laboratory, USTC, China, 24, 1-18.
     """
 
     name = "F2: Schwefel’s Problem 2.21"
@@ -139,8 +139,8 @@ class F22008(CecBenchmark):
 class F32008(CecBenchmark):
     """
     .. [1] Tang, K., Yáo, X., Suganthan, P. N., MacNish, C., Chen, Y. P., Chen, C. M., & Yang, Z. (2007). Benchmark functions
-    for the CEC’2008 special session and competition on large scale global optimization.
-    Nature inspired computation and applications laboratory, USTC, China, 24, 1-18.
+       for the CEC’2008 special session and competition on large scale global optimization.
+       Nature inspired computation and applications laboratory, USTC, China, 24, 1-18.
     """
 
     name = "F3: Shifted Rosenbrock’s Function"
@@ -201,8 +201,8 @@ class F32008(CecBenchmark):
 class F42008(CecBenchmark):
     """
     .. [1] Tang, K., Yáo, X., Suganthan, P. N., MacNish, C., Chen, Y. P., Chen, C. M., & Yang, Z. (2007). Benchmark functions
-    for the CEC’2008 special session and competition on large scale global optimization.
-    Nature inspired computation and applications laboratory, USTC, China, 24, 1-18.
+       for the CEC’2008 special session and competition on large scale global optimization.
+       Nature inspired computation and applications laboratory, USTC, China, 24, 1-18.
     """
 
     name = "F4: Shifted Rastrigin’s Function"
@@ -265,8 +265,8 @@ class F42008(CecBenchmark):
 class F52008(CecBenchmark):
     """
     .. [1] Tang, K., Yáo, X., Suganthan, P. N., MacNish, C., Chen, Y. P., Chen, C. M., & Yang, Z. (2007). Benchmark functions
-    for the CEC’2008 special session and competition on large scale global optimization.
-    Nature inspired computation and applications laboratory, USTC, China, 24, 1-18.
+       for the CEC’2008 special session and competition on large scale global optimization.
+       Nature inspired computation and applications laboratory, USTC, China, 24, 1-18.
     """
 
     name = "F5: Shifted Griewank’s Function"
@@ -329,8 +329,8 @@ class F52008(CecBenchmark):
 class F62008(CecBenchmark):
     """
     .. [1] Tang, K., Yáo, X., Suganthan, P. N., MacNish, C., Chen, Y. P., Chen, C. M., & Yang, Z. (2007). Benchmark functions
-    for the CEC’2008 special session and competition on large scale global optimization.
-    Nature inspired computation and applications laboratory, USTC, China, 24, 1-18.
+       for the CEC’2008 special session and competition on large scale global optimization.
+       Nature inspired computation and applications laboratory, USTC, China, 24, 1-18.
     """
 
     name = "F6: Shifted Ackley’s Function"
@@ -393,8 +393,8 @@ class F62008(CecBenchmark):
 class F72008(CecBenchmark):
     """
     .. [1] Tang, K., Yáo, X., Suganthan, P. N., MacNish, C., Chen, Y. P., Chen, C. M., & Yang, Z. (2007). Benchmark functions
-    for the CEC’2008 special session and competition on large scale global optimization.
-    Nature inspired computation and applications laboratory, USTC, China, 24, 1-18.
+       for the CEC’2008 special session and competition on large scale global optimization.
+       Nature inspired computation and applications laboratory, USTC, China, 24, 1-18.
     """
 
     name = "F7: FastFractal “DoubleDip” Function"

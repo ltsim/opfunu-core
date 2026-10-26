@@ -1,22 +1,19 @@
 # Functions — N
 
-::: opfunu.name_based.n_func.NeedleEye
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.n_func.NeedleEye
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.n_func.NewFunction01
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.n_func.NewFunction01
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.n_func.NewFunction02
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.n_func.NewFunction02
+   :members:
+   :undoc-members:
+```

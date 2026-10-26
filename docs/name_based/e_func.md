@@ -1,50 +1,43 @@
 # Functions — E
 
-::: opfunu.name_based.e_func.Easom
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.e_func.Easom
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.e_func.Eckerle4
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.e_func.Eckerle4
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.e_func.EggCrate
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.e_func.EggCrate
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.e_func.EggHolder
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.e_func.EggHolder
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.e_func.ElAttarVidyasagarDutta
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.e_func.ElAttarVidyasagarDutta
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.e_func.Exp2
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.e_func.Exp2
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.e_func.Exponential
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.e_func.Exponential
+   :members:
+   :undoc-members:
+```

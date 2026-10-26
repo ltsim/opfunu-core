@@ -286,14 +286,11 @@ class CecBenchmark(Benchmark):
 
     def check_solution(self, x: np.ndarray, dim_max: int | None = None, dim_support: list[int] | None = None) -> None:
         """
-        Raise the error if the problem size is not equal to the solution length
+        Raise the error if the problem size is not equal to the solution length.
 
-        Parameters
-        ----------
-        x : np.ndarray
-            The solution
-        dim_max : The maximum number of variables that the function is supported
-        dim_support : List of the supported dimensions
+        :param x: The solution.
+        :param dim_max: The maximum number of variables that the function is supported.
+        :param dim_support: List of the supported dimensions.
         """
 
         if dim_max is None:
