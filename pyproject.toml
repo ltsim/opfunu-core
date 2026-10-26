@@ -82,6 +82,10 @@ numba = [
     "numba>=0.68.0; implementation_name == 'cpython'",
 ]
 
+notebook = [
+    "ipykernel>=7.3.0",
+]
+
 docs = [
     "mkdocs>=1.6.0",
     "mkdocs-material>=9.5.0",

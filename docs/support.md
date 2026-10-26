@@ -17,11 +17,13 @@ The project is managed with [uv](https://github.com/astral-sh/uv):
 $ uv sync                # install runtime (NumPy only) + dev dependencies
 $ uv sync --group numba  # opt-in guvectorize vectorization (CPython only)
 $ uv sync --group docs   # additionally install the docs tooling
+$ uv sync --group notebook  # Jupyter kernel for the example notebooks
 ```
 
-CI runs three test jobs per pull request: a compiled CPython matrix (`uv sync --group numba`),
+CI runs four test jobs per pull request: a compiled CPython matrix (`uv sync --group numba`),
 a no-Numba CPython job, and a PyPy job (both `uv sync` only), so every change is verified with
-and without Numba.
+and without Numba, plus a viz-extras job (`uv sync --extra plot --extra plotly --extra pyvista`)
+that exercises the `opfunu.plot` backends under Xvfb.
 
 ### Ruff
 
