@@ -14,7 +14,7 @@ from opfunu.benchmark.func import FuncBenchmark
 class CamelThreeHump(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Camel Function – Three Hump"
@@ -68,7 +68,7 @@ class CamelThreeHump(FuncBenchmark):
 class CamelSixHump(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Camel Function – Six Hump"
@@ -123,7 +123,7 @@ class CamelSixHump(FuncBenchmark):
 class ChenBird(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Chen Bird Function"
@@ -179,7 +179,7 @@ class ChenBird(FuncBenchmark):
 class ChenV(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Chen V Function"
@@ -240,7 +240,7 @@ class ChenV(FuncBenchmark):
 class Chichinadze(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Chichinadze Function"
@@ -304,7 +304,7 @@ class Chichinadze(FuncBenchmark):
 class ChungReynolds(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Chung Reynolds Function"
@@ -411,7 +411,7 @@ class Cigar(FuncBenchmark):
 class Cola(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Cola Function"
@@ -512,7 +512,7 @@ class Cola(FuncBenchmark):
 class Colville(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Colville Function"
@@ -576,7 +576,7 @@ class Colville(FuncBenchmark):
 class Corana(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Corana Function"
@@ -638,7 +638,7 @@ class Corana(FuncBenchmark):
 class CosineMixture(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Cosine Mixture Function"
@@ -692,7 +692,7 @@ class CosineMixture(FuncBenchmark):
 class CrossInTray(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Cross-in-Tray Function"
@@ -759,7 +759,7 @@ class CrossInTray(FuncBenchmark):
 class CrossLegTable(FuncBenchmark):
     """
     .. [1] Mishra, S. Global Optimization by Differential Evolution and Particle Swarm Methods:
-    Evaluation on Some Benchmark Functions Munich University, 2006
+       Evaluation on Some Benchmark Functions Munich University, 2006
     """
 
     name = "Cross-Leg-Table Function"
@@ -818,7 +818,7 @@ class CrossLegTable(FuncBenchmark):
 class CrownedCross(FuncBenchmark):
     """
     .. [1] Mishra, S. Global Optimization by Differential Evolution and Particle Swarm Methods:
-    Evaluation on Some Benchmark Functions Munich University, 2006
+       Evaluation on Some Benchmark Functions Munich University, 2006
     """
 
     name = "Cross-Leg-Table Function"
@@ -877,7 +877,7 @@ class CrownedCross(FuncBenchmark):
 class Csendes(FuncBenchmark):
     """
     .. [1] Mishra, S. Global Optimization by Differential Evolution and Particle Swarm Methods:
-    Evaluation on Some Benchmark Functions Munich University, 2006
+       Evaluation on Some Benchmark Functions Munich University, 2006
     """
 
     name = "Csendes Function"
@@ -932,7 +932,7 @@ class Csendes(FuncBenchmark):
 class Cube(FuncBenchmark):
     """
     .. [1] Mishra, S. Global Optimization by Differential Evolution and Particle Swarm Methods:
-    Evaluation on Some Benchmark Functions Munich University, 2006
+       Evaluation on Some Benchmark Functions Munich University, 2006
     """
 
     name = "Cube Function"

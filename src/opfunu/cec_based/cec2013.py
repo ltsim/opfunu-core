@@ -15,8 +15,8 @@ from opfunu.utils import operator
 class F12013(CecBenchmark):
     """
     .. [1] Liang, J. J., Qu, B. Y., Suganthan, P. N., & Hernández-Díaz, A. G. (2013). Problem definitions and evaluation criteria
-    for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
-    Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
+       for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
+       Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
     """
 
     name = "F1: Sphere Function"
@@ -81,8 +81,8 @@ class F12013(CecBenchmark):
 class F22013(CecBenchmark):
     """
     .. [1] Liang, J. J., Qu, B. Y., Suganthan, P. N., & Hernández-Díaz, A. G. (2013). Problem definitions and evaluation criteria
-    for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
-    Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
+       for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
+       Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
     """
 
     name = "F2: Rotated High Conditioned Elliptic Function"
@@ -157,8 +157,8 @@ class F22013(CecBenchmark):
 class F32013(CecBenchmark):
     """
     .. [1] Liang, J. J., Qu, B. Y., Suganthan, P. N., & Hernández-Díaz, A. G. (2013). Problem definitions and evaluation criteria
-    for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
-    Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
+       for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
+       Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
     """
 
     name = "F3: Rotated Bent Cigar Function"
@@ -235,8 +235,8 @@ class F32013(CecBenchmark):
 class F42013(F22013):
     """
     .. [1] Liang, J. J., Qu, B. Y., Suganthan, P. N., & Hernández-Díaz, A. G. (2013). Problem definitions and evaluation criteria
-    for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
-    Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
+       for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
+       Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
     """
 
     name = "F4: Rotated Discus Function"
@@ -284,8 +284,8 @@ class F42013(F22013):
 class F52013(F12013):
     """
     .. [1] Liang, J. J., Qu, B. Y., Suganthan, P. N., & Hernández-Díaz, A. G. (2013). Problem definitions and evaluation criteria
-    for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
-    Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
+       for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
+       Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
     """
 
     name = "F5: Different Powers Function"
@@ -331,8 +331,8 @@ class F52013(F12013):
 class F62013(F22013):
     """
     .. [1] Liang, J. J., Qu, B. Y., Suganthan, P. N., & Hernández-Díaz, A. G. (2013). Problem definitions and evaluation criteria
-    for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
-    Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
+       for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
+       Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
     """
 
     name = "F6: Rotated Rosenbrock’s Function"
@@ -381,8 +381,8 @@ class F62013(F22013):
 class F72013(F32013):
     """
     .. [1] Liang, J. J., Qu, B. Y., Suganthan, P. N., & Hernández-Díaz, A. G. (2013). Problem definitions and evaluation criteria
-    for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
-    Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
+       for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
+       Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
     """
 
     name = "F7: Rotated Schaffers F7 Function"
@@ -440,8 +440,8 @@ class F72013(F32013):
 class F82013(F32013):
     """
     .. [1] Liang, J. J., Qu, B. Y., Suganthan, P. N., & Hernández-Díaz, A. G. (2013). Problem definitions and evaluation criteria
-    for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
-    Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
+       for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
+       Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
     """
 
     name = "F8: Rotated Ackley’s Function"
@@ -494,8 +494,8 @@ class F82013(F32013):
 class F92013(F32013):
     """
     .. [1] Liang, J. J., Qu, B. Y., Suganthan, P. N., & Hernández-Díaz, A. G. (2013). Problem definitions and evaluation criteria
-    for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
-    Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
+       for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
+       Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
     """
 
     name = "F9: Rotated Weierstrass Function"
@@ -566,8 +566,8 @@ class F92013(F32013):
 class F102013(F22013):
     """
     .. [1] Liang, J. J., Qu, B. Y., Suganthan, P. N., & Hernández-Díaz, A. G. (2013). Problem definitions and evaluation criteria
-    for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
-    Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
+       for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
+       Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
     """
 
     name = "F10: Rotated Griewank’s Function"
@@ -618,8 +618,8 @@ class F102013(F22013):
 class F112013(F12013):
     """
     .. [1] Liang, J. J., Qu, B. Y., Suganthan, P. N., & Hernández-Díaz, A. G. (2013). Problem definitions and evaluation criteria
-    for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
-    Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
+       for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
+       Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
     """
 
     name = "F11: Rastrigin’s Function"
@@ -670,8 +670,8 @@ class F112013(F12013):
 class F122013(F32013):
     """
     .. [1] Liang, J. J., Qu, B. Y., Suganthan, P. N., & Hernández-Díaz, A. G. (2013). Problem definitions and evaluation criteria
-    for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
-    Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
+       for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
+       Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
     """
 
     name = "F12: Rotated Rastrigin’s Function"
@@ -730,8 +730,8 @@ class F122013(F32013):
 class F132013(F32013):
     """
     .. [1] Liang, J. J., Qu, B. Y., Suganthan, P. N., & Hernández-Díaz, A. G. (2013). Problem definitions and evaluation criteria
-    for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
-    Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
+       for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
+       Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
     """
 
     name = "F13: Non-continuous Rotated Rastrigin’s Function"
@@ -795,8 +795,8 @@ class F132013(F32013):
 class F142013(F12013):
     """
     .. [1] Liang, J. J., Qu, B. Y., Suganthan, P. N., & Hernández-Díaz, A. G. (2013). Problem definitions and evaluation criteria
-    for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
-    Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
+       for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
+       Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
     """
 
     name = "F14: Schwefel’s Function"
@@ -856,8 +856,8 @@ class F142013(F12013):
 class F152013(F22013):
     """
     .. [1] Liang, J. J., Qu, B. Y., Suganthan, P. N., & Hernández-Díaz, A. G. (2013). Problem definitions and evaluation criteria
-    for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
-    Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
+       for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
+       Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
     """
 
     name = "F15: Rotated Schwefel’s Function"
@@ -917,8 +917,8 @@ class F152013(F22013):
 class F162013(F32013):
     """
     .. [1] Liang, J. J., Qu, B. Y., Suganthan, P. N., & Hernández-Díaz, A. G. (2013). Problem definitions and evaluation criteria
-    for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
-    Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
+       for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
+       Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
     """
 
     name = "F16: Rotated Katsuura Function"
@@ -977,8 +977,8 @@ class F162013(F32013):
 class F172013(F12013):
     """
     .. [1] Liang, J. J., Qu, B. Y., Suganthan, P. N., & Hernández-Díaz, A. G. (2013). Problem definitions and evaluation criteria
-    for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
-    Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
+       for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
+       Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
     """
 
     name = "F17: Lunacek bi-Rastrigin Function"
@@ -1031,8 +1031,8 @@ class F172013(F12013):
 class F182013(F32013):
     """
     .. [1] Liang, J. J., Qu, B. Y., Suganthan, P. N., & Hernández-Díaz, A. G. (2013). Problem definitions and evaluation criteria
-    for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
-    Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
+       for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
+       Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
     """
 
     name = "F18: Rotated Lunacek bi-Rastrigin Function"
@@ -1088,8 +1088,8 @@ class F182013(F32013):
 class F192013(F22013):
     """
     .. [1] Liang, J. J., Qu, B. Y., Suganthan, P. N., & Hernández-Díaz, A. G. (2013). Problem definitions and evaluation criteria
-    for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
-    Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
+       for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
+       Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
     """
 
     name = "F19: Rotated Expanded Griewank’s plus Rosenbrock’s Function"
@@ -1141,8 +1141,8 @@ class F192013(F22013):
 class F202013(F32013):
     """
     .. [1] Liang, J. J., Qu, B. Y., Suganthan, P. N., & Hernández-Díaz, A. G. (2013). Problem definitions and evaluation criteria
-    for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
-    Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
+       for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
+       Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
     """
 
     name = "F20: Rotated Expanded Scaffer’s F6 Function"
@@ -1197,8 +1197,8 @@ class F202013(F32013):
 class F212013(CecBenchmark):
     """
     .. [1] Liang, J. J., Qu, B. Y., Suganthan, P. N., & Hernández-Díaz, A. G. (2013). Problem definitions and evaluation criteria
-    for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
-    Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
+       for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
+       Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
     """
 
     name = "F21: Composition Function 1"
@@ -1321,8 +1321,8 @@ class F212013(CecBenchmark):
 class F222013(CecBenchmark):
     """
     .. [1] Liang, J. J., Qu, B. Y., Suganthan, P. N., & Hernández-Díaz, A. G. (2013). Problem definitions and evaluation criteria
-    for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
-    Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
+       for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
+       Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
     """
 
     name = "F22: Composition Function 2"
@@ -1422,8 +1422,8 @@ class F222013(CecBenchmark):
 class F232013(CecBenchmark):
     """
     .. [1] Liang, J. J., Qu, B. Y., Suganthan, P. N., & Hernández-Díaz, A. G. (2013). Problem definitions and evaluation criteria
-    for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
-    Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
+       for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
+       Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
     """
 
     name = "F23: Composition Function 3"
@@ -1525,8 +1525,8 @@ class F232013(CecBenchmark):
 class F242013(CecBenchmark):
     """
     .. [1] Liang, J. J., Qu, B. Y., Suganthan, P. N., & Hernández-Díaz, A. G. (2013). Problem definitions and evaluation criteria
-    for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
-    Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
+       for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
+       Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
     """
 
     name = "F24: Composition Function 4"
@@ -1630,8 +1630,8 @@ class F242013(CecBenchmark):
 class F252013(F242013):
     """
     .. [1] Liang, J. J., Qu, B. Y., Suganthan, P. N., & Hernández-Díaz, A. G. (2013). Problem definitions and evaluation criteria
-    for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
-    Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
+       for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
+       Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
     """
 
     name = "F25: Composition Function 5"
@@ -1671,8 +1671,8 @@ class F252013(F242013):
 class F262013(CecBenchmark):
     """
     .. [1] Liang, J. J., Qu, B. Y., Suganthan, P. N., & Hernández-Díaz, A. G. (2013). Problem definitions and evaluation criteria
-    for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
-    Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
+       for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
+       Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
     """
 
     name = "F26: Composition Function 6"
@@ -1788,8 +1788,8 @@ class F262013(CecBenchmark):
 class F272013(CecBenchmark):
     """
     .. [1] Liang, J. J., Qu, B. Y., Suganthan, P. N., & Hernández-Díaz, A. G. (2013). Problem definitions and evaluation criteria
-    for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
-    Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
+       for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
+       Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
     """
 
     name = "F27: Composition Function 7"
@@ -1905,8 +1905,8 @@ class F272013(CecBenchmark):
 class F282013(CecBenchmark):
     """
     .. [1] Liang, J. J., Qu, B. Y., Suganthan, P. N., & Hernández-Díaz, A. G. (2013). Problem definitions and evaluation criteria
-    for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
-    Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
+       for the CEC 2013 special session on real-parameter optimization. Computational Intelligence Laboratory, Zhengzhou University,
+       Zhengzhou, China and Nanyang Technological University, Singapore, Technical Report, 201212(34), 281-295..
     """
 
     name = "F28: Composition Function 8"

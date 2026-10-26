@@ -15,7 +15,7 @@ from opfunu.benchmark.func import FuncBenchmark
 class Easom(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Easom Function"
@@ -73,7 +73,7 @@ class Easom(FuncBenchmark):
 class ElAttarVidyasagarDutta(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "El-Attar-Vidyasagar-Dutta Function"
@@ -127,7 +127,7 @@ class ElAttarVidyasagarDutta(FuncBenchmark):
 class EggCrate(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Egg Crate Function"
@@ -181,7 +181,7 @@ class EggCrate(FuncBenchmark):
 class EggHolder(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Egg Holder Function"
@@ -241,7 +241,7 @@ class EggHolder(FuncBenchmark):
 class Exponential(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Exponential Function"
@@ -295,7 +295,7 @@ class Exponential(FuncBenchmark):
 class Exp2(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Exp 2 Function"

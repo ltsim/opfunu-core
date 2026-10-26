@@ -15,7 +15,7 @@ from opfunu.utils import operator
 class F12019(CecBenchmark):
     """
     .. [1] The 100-Digit Challenge: Problem Definitions and Evaluation Criteria for the 100-Digit
-    Challenge Special Session and Competition on Single Objective Numerical Optimization
+       Challenge Special Session and Competition on Single Objective Numerical Optimization
     """
 
     name = "F1: Storn’s Chebyshev Polynomial Fitting Problem"
@@ -80,7 +80,7 @@ class F12019(CecBenchmark):
 class F22019(CecBenchmark):
     """
     .. [1] The 100-Digit Challenge: Problem Definitions and Evaluation Criteria for the 100-Digit
-    Challenge Special Session and Competition on Single Objective Numerical Optimization
+       Challenge Special Session and Competition on Single Objective Numerical Optimization
     """
 
     name = "F2: Inverse Hilbert Matrix Problem"
@@ -147,9 +147,9 @@ class F22019(CecBenchmark):
 class F32019(CecBenchmark):
     """
     .. [1] The 100-Digit Challenge: Problem Definitions and Evaluation Criteria for the 100-Digit
-    Challenge Special Session and Competition on Single Objective Numerical Optimization
+       Challenge Special Session and Competition on Single Objective Numerical Optimization
 
-    **Note: The CEC 2019 implementation and this implementation results match when x* = [0,...,0] and
+    **Note:** The CEC 2019 implementation and this implementation results match when x* = [0, ..., 0].
     """
 
     name = "F3: Lennard-Jones Minimum Energy Cluster Problem"
@@ -214,7 +214,7 @@ class F32019(CecBenchmark):
 class F42019(CecBenchmark):
     """
     .. [1] The 100-Digit Challenge: Problem Definitions and Evaluation Criteria for the 100-Digit
-    Challenge Special Session and Competition on Single Objective Numerical Optimization
+       Challenge Special Session and Competition on Single Objective Numerical Optimization
     """
 
     name = "F4: Shifted and Rotated Rastrigin’s Function"
@@ -289,7 +289,7 @@ class F42019(CecBenchmark):
 class F52019(F42019):
     """
     .. [1] The 100-Digit Challenge: Problem Definitions and Evaluation Criteria for the 100-Digit
-    Challenge Special Session and Competition on Single Objective Numerical Optimization
+       Challenge Special Session and Competition on Single Objective Numerical Optimization
     """
 
     name = "F5: Shifted and Rotated Griewank’s Function"
@@ -340,7 +340,7 @@ class F52019(F42019):
 class F62019(F42019):
     """
     .. [1] The 100-Digit Challenge: Problem Definitions and Evaluation Criteria for the 100-Digit
-    Challenge Special Session and Competition on Single Objective Numerical Optimization
+       Challenge Special Session and Competition on Single Objective Numerical Optimization
     """
 
     name = "F6: Shifted and Rotated Weierstrass Function"
@@ -391,7 +391,7 @@ class F62019(F42019):
 class F72019(F42019):
     """
     .. [1] The 100-Digit Challenge: Problem Definitions and Evaluation Criteria for the 100-Digit
-    Challenge Special Session and Competition on Single Objective Numerical Optimization
+       Challenge Special Session and Competition on Single Objective Numerical Optimization
     """
 
     name = "F7: Shifted and Rotated Schwefel’s Function"
@@ -442,7 +442,7 @@ class F72019(F42019):
 class F82019(F42019):
     """
     .. [1] The 100-Digit Challenge: Problem Definitions and Evaluation Criteria for the 100-Digit
-    Challenge Special Session and Competition on Single Objective Numerical Optimization
+       Challenge Special Session and Competition on Single Objective Numerical Optimization
     """
 
     name = "F8: Shifted and Rotated Expanded Schaffer’s F6 Function"
@@ -493,7 +493,7 @@ class F82019(F42019):
 class F92019(F42019):
     """
     .. [1] The 100-Digit Challenge: Problem Definitions and Evaluation Criteria for the 100-Digit
-    Challenge Special Session and Competition on Single Objective Numerical Optimization
+       Challenge Special Session and Competition on Single Objective Numerical Optimization
     """
 
     name = "F9: Shifted and Rotated Happy Cat Function"
@@ -544,7 +544,7 @@ class F92019(F42019):
 class F102019(F42019):
     """
     .. [1] The 100-Digit Challenge: Problem Definitions and Evaluation Criteria for the 100-Digit
-    Challenge Special Session and Competition on Single Objective Numerical Optimization
+       Challenge Special Session and Competition on Single Objective Numerical Optimization
     """
 
     name = "F10: Shifted and Rotated Ackley Function"

@@ -15,7 +15,7 @@ from opfunu.utils import operator
 class F12021(CecBenchmark):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2021
-    Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
+       Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
     """
 
     name = "F1: Shifted and Rotated Bent Cigar Function (F1 CEC-2017)"
@@ -90,7 +90,7 @@ class F12021(CecBenchmark):
 class F22021(CecBenchmark):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2021
-    Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
+       Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
     """
 
     name = "F2: Shifted and Rotated Schwefel’s Function (F11 CEC-2014)"
@@ -165,7 +165,7 @@ class F22021(CecBenchmark):
 class F32021(CecBenchmark):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2021
-    Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
+       Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
     """
 
     name = "F3: Shifted and Rotated Lunacek bi-Rastrigin Function (F7 CEC-2017)"
@@ -240,7 +240,7 @@ class F32021(CecBenchmark):
 class F42021(CecBenchmark):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2021
-    Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
+       Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
     """
 
     name = "F4: Expanded Rosenbrock’s plus Griewangk’s Function (F15 CEC-2014)"
@@ -315,7 +315,7 @@ class F42021(CecBenchmark):
 class F52021(CecBenchmark):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2021
-    Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
+       Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
     """
 
     name = "F17: Hybrid Function 1 (F17 CEC-2014)"
@@ -426,7 +426,7 @@ class F52021(CecBenchmark):
 class F62021(CecBenchmark):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2021
-    Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
+       Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
     """
 
     name = "F16: Hybrid Function 2 (F15 CEC-2017)"
@@ -530,7 +530,7 @@ class F62021(CecBenchmark):
 class F72021(CecBenchmark):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2021
-    Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
+       Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
     """
 
     name = "F7: Hybrid Function 3 (F21 CEC-2014)"
@@ -647,7 +647,7 @@ class F72021(CecBenchmark):
 class F82021(CecBenchmark):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2021
-    Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
+       Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
     """
 
     name = "F8: Composition Function 1 (F21 CEC-2017)"
@@ -750,7 +750,7 @@ class F82021(CecBenchmark):
 class F92021(CecBenchmark):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2021
-    Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
+       Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
     """
 
     name = "F9: Composition Function 2 (F23 CEC-2017)"
@@ -860,7 +860,7 @@ class F92021(CecBenchmark):
 class F102021(CecBenchmark):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2021
-    Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
+       Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
     """
 
     name = "F10: Composition Function 3 (F24 CEC-2017)"

@@ -17,9 +17,14 @@ The full changelog is maintained in the repository:
   `examples/styles/paper.mplstyle` and `docs/plot.md`.
 * Core dependencies stay NumPy-only: the Jupyter kernel (`ipykernel`) lives in a dev-only
   `notebook` dependency group instead of `dependencies`.
-* Docs: top tab bar (Home / Getting Started / API Reference / Project) with a section-only
-  sidebar, SVG favicon and logo in `docs/img/`, and fenced docstring examples (bare doctest
-  reprs leaked unescaped into the rendered pages).
+* Docs: moved from MkDocs/Material to Sphinx with the built-in *Nature* theme — MyST Markdown,
+  autodoc API reference inside `{eval-rst}` blocks, `sphinxcontrib-bibtex` citations, and a strict
+  `sphinx-build -W` build. Navigation is captioned toctrees + a `globaltoc` sidebar (no more Material
+  top tabs). Added `sphinx-autobuild` live preview + a `docs/Makefile`; benchmark docstrings were
+  repaired for reST (raw LaTeX, valid math/citation blocks); GitHub Pages now deploys a Sphinx artifact
+  from `docs.yml` (set Pages Source to *GitHub Actions*).
+* Docs: `docs/img/favicon.svg` (contour bands + minimum dot) is the default logo and favicon of
+  the built site.
 * Released on the `release/v2026b1` branch; published to PyPI under the same name, `v2026b1`,
   when the cycle merges into `master`.
 

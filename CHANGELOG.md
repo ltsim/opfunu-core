@@ -19,10 +19,23 @@
 + Kept the core dependencies NumPy-only: the Jupyter kernel (`ipykernel`) that had crept into
   `dependencies` while running the example notebooks moved to a dev-only `notebook` dependency
   group (`uv sync --group notebook`), so published wheel metadata never requires it
-+ Docs: mkdocs-material gained a top tab bar (Home / Getting Started / API Reference / Project)
-  with the left sidebar reserved for the sections of the active tab, a vector favicon and logo
-  (`docs/img/`), and a guard rule for docstring examples — bare doctest reprs like
-  `<Plotting backend=...>` leak unescaped into the rendered HTML and must use fenced code blocks
++ Docs: migrated the documentation stack from MkDocs + *Material* to **Sphinx** with the built-in
+  **Nature** theme — Markdown sources parsed by MyST (`myst-parser`), the API reference rebuilt on
+  `sphinx.ext.autodoc` inside `{eval-rst}` blocks (replacing the mkdocstrings `:::` directives), citations
+  via `sphinxcontrib-bibtex`, and a strict `sphinx-build -W --keep-going` gate. Navigation is now
+  captioned toctrees + `globaltoc` sidebar instead of the Material top tab bar. Added `sphinx-autobuild`
+  local live preview (`uv run sphinx-autobuild docs docs/_build/html --watch src`, `make -C docs livehtml`)
+  and a `docs/Makefile`. Benchmark docstrings were converted to valid reST (raw strings for LaTeX so
+  `\text`/`\frac` no longer collapse to control characters, correctly indented `.. math::` blocks, properly
+  continued `.. [1]` citations, and fixed inline `:math:` roles); a handful of obviously copy-pasted /
+  truncated `latex_formula*` attributes were corrected to match their own docstrings. The GitHub Pages
+  workflow (`.github/workflows/docs.yml`) now builds with Sphinx and deploys through the Pages artifact
+  actions (`configure-pages` / `upload-pages-artifact` / `deploy-pages`) instead of `mkdocs gh-deploy`; the
+  Pages *Source* must be set to *GitHub Actions*. The docs dependency group now pulls `sphinx`,
+  `myst-parser`, `sphinxcontrib-bibtex`, `sphinx-autobuild` (drops `mkdocs`, `mkdocs-material`,
+  `mkdocstrings`, `mkdocs-bibtex`, `pypandoc-binary`)
++ Docs: `docs/img/favicon.svg` — the nested contour bands descending into the global minimum —
+  is now the default for both the site logo and the favicon
 
 + Opened a new cycle of the release model: this version lives on `release/v2026b1` and
 +   publishes to PyPI under the same name, `v2026b1`, when the cycle merges into `master`

@@ -15,7 +15,7 @@ from opfunu.benchmark.func import FuncBenchmark
 class Matyas(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
 
     .. math::
         f_{\text{Matyas}}(x) = 0.26(x_1^2 + x_2^2) - 0.48 x_1 x_2
@@ -73,14 +73,15 @@ class Matyas(FuncBenchmark):
 
 
 class McCormick(FuncBenchmark):
-    """
+    r"""
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
 
     .. math::
-        f(x) = - x_{1} + 2 x_{2} + \\left(x_{1} - x_{2}\right)^{2} + \\sin\\left(x_{1} + x_{2}\right) + 1
+        f(x) = - x_{1} + 2 x_{2} + \left(x_{1} - x_{2}\right)^{2} + \sin\left(x_{1} + x_{2}\right) + 1
 
-    Here :math:`x_1 \\in [-1.5, 4], x_2 \\in [-3, 4]` .
+
+    Here :math:`x_1 \in [-1.5, 4], x_2 \in [-3, 4]` .
     *Global optimum*: :math:`f(x) = -1.913222954981037`for :math:`x = [-0.5471975602214493, -1.547197559268372]`
     """
 
@@ -212,21 +213,22 @@ class Meyer(FuncBenchmark):
 
 
 class Michalewicz(FuncBenchmark):
-    """
+    r"""
     .. [1] Adorio, E. MVF - "Multivariate Test Functions Library in C for
-    Unconstrained Global Optimization", 2005
+       Unconstrained Global Optimization", 2005
 
     .. math::
-        f(x) = - \\sum_{i=1}^{2} \\sin\\left(x_i\right) \\sin^{2 m}\\left(\frac{i x_i^{2}}{\\pi}\right)
+        f(x) = - \sum_{i=1}^{2} \sin\left(x_i\right) \sin^{2 m}\left(\frac{i x_i^{2}}{\pi}\right)
 
-    Here :math:`x_i \\in [0, \\pi]`.
+
+    Here :math:`x_i \in [0, \pi]`.
     *Global optimum*: :math:`f(x) = -1.8013`for :math:`x = [0, 0]`
     """
 
     name = "McCormick Function"
-    latex_formula = r"f(x) = - x_{1} + 2 x_{2} + \left(x_{1} - x_{2}\right)^{2} + \sin\left(x_{1} + x_{2}\right) + 1"
+    latex_formula = r"f(x) = - \sum_{i=1}^{2} \sin\left(x_i\right) \sin^{2 m}\left(\frac{i x_i^{2}}{\pi}\right)"
     latex_formula_dimension = r"d = 2"
-    latex_formula_bounds = r"x_i \in [0, \pi]`"
+    latex_formula_bounds = r"x_i \in [0, \pi]"
     latex_formula_global_optimum = r"f(0, 0) = -1.8013"
     continuous = True
     linear = False
@@ -276,7 +278,7 @@ class Michalewicz(FuncBenchmark):
 class MieleCantrell(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
 
     .. math::
         f(x) = (e^{-x_1} - x_2)^4 + 100(x_2 - x_3)^6 + \tan^4(x_3 - x_4) + x_1^8
@@ -336,7 +338,7 @@ class MieleCantrell(FuncBenchmark):
 class Mishra01(FuncBenchmark):
     r"""
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
 
     .. math::
         f(x) = (1 + x_n)^{x_n}
@@ -396,16 +398,17 @@ class Mishra01(FuncBenchmark):
 
 
 class Mishra02(FuncBenchmark):
-    """
+    r"""
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
 
     .. math::
         f(x) = (1 + x_n)^{x_n}
-        x_n = n - \\sum_{i=1}^{n-1} \frac{(x_i + x_{i+1})}{2}
+        x_n = n - \sum_{i=1}^{n-1} \frac{(x_i + x_{i+1})}{2}
 
-    Here :math:`x_i \\in [0, 1] for i \\in [1, n]`.
-    *Global optimum*: :math:`f(x) = 2`for :math:`x_i = 1 for all i \\in [1, n]`
+
+    Here :math:`x_i \in [0, 1] for i \in [1, n]`.
+    *Global optimum*: :math:`f(x) = 2`for :math:`x_i = 1 for all i \in [1, n]`
     """
 
     name = "Mishra 2 Function"
@@ -458,14 +461,15 @@ class Mishra02(FuncBenchmark):
 
 
 class Mishra03(FuncBenchmark):
-    """
+    r"""
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
 
     .. math::
-        f(x) = \\sqrt{\\lvert \\cos{\\sqrt{\\lvert x_1^2 + x_2^2 \rvert}} \rvert} + 0.01(x_1 + x_2)
+        f(x) = \sqrt{\lvert \cos{\sqrt{\lvert x_1^2 + x_2^2 \rvert}} \rvert} + 0.01(x_1 + x_2)
 
-    Here :math:`x_i \\in [0, 1] for i \\in [1, n]`.
+
+    Here :math:`x_i \in [0, 1] for i \in [1, n]`.
     *Global optimum*: :math:`f(-9.99378322, -9.99918927) = -0.19990562`
     """
 
@@ -518,14 +522,15 @@ class Mishra03(FuncBenchmark):
 
 
 class Mishra04(FuncBenchmark):
-    """
+    r"""
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
 
     .. math::
-        f(x) = \\sqrt{\\lvert \\sin{\\sqrt{\\lvert x_1^2 + x_2^2 \rvert}} \rvert} + 0.01(x_1 + x_2)
+        f(x) = \sqrt{\lvert \sin{\sqrt{\lvert x_1^2 + x_2^2 \rvert}} \rvert} + 0.01(x_1 + x_2)
 
-    Here :math:`x_i \\in [-10, 10] for i \\in [1, n]`.
+
+    Here :math:`x_i \in [-10, 10] for i \in [1, n]`.
     *Global optimum*: :math:`f(-8.71499636, -9.0533148) = -0.17767`
     """
 
@@ -578,14 +583,15 @@ class Mishra04(FuncBenchmark):
 
 
 class Mishra05(FuncBenchmark):
-    """
+    r"""
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
 
     .. math::
-        f(x) = \\left [ \\sin^2 ((\\cos(x_1) + \\cos(x_2))^2) + \\cos^2 ((\\sin(x_1) + \\sin(x_2))^2) + x_1 \right ]^2 + 0.01(x_1 + x_2)
+        f(x) = \left [ \sin^2 ((\cos(x_1) + \cos(x_2))^2) + \cos^2 ((\sin(x_1) + \sin(x_2))^2) + x_1 \right ]^2 + 0.01(x_1 + x_2)
 
-    Here :math:`x_i \\in [-10, 10] for i \\in [1, 2]`.
+
+    Here :math:`x_i \in [-10, 10] for i \in [1, 2]`.
     *Global optimum*: :math:`f(-1.98682, -10) = -1.019829519930646`
     """
 
@@ -647,14 +653,15 @@ class Mishra05(FuncBenchmark):
 
 
 class Mishra06(FuncBenchmark):
-    """
+    r"""
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
 
     .. math::
-        f(x) = -\\log{\\left [ \\sin^2 ((\\cos(x_1) + \\cos(x_2))^2) - \\cos^2 ((\\sin(x_1) + \\sin(x_2))^2) + x_1 \right ]^2} + 0.01 \\left[(x_1 -1)^2 + (x_2 - 1)^2 \right]
+        f(x) = -\log{\left [ \sin^2 ((\cos(x_1) + \cos(x_2))^2) - \cos^2 ((\sin(x_1) + \sin(x_2))^2) + x_1 \right ]^2} + 0.01 \left[(x_1 -1)^2 + (x_2 - 1)^2 \right]
 
-    Here :math:`x_i \\in [-10, 10] for i \\in [1, 2]`.
+
+    Here :math:`x_i \in [-10, 10] for i \in [1, 2]`.
     *Global optimum*: :math:`f(2.88631, 1.82326) = -2.28395`
     """
 
@@ -710,15 +717,16 @@ class Mishra06(FuncBenchmark):
 
 
 class Mishra07(FuncBenchmark):
-    """
+    r"""
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
 
     .. math::
-        f(x) = \\left [\\prod_{i=1}^{n} x_i - n! \right]^2
+        f(x) = \left [\prod_{i=1}^{n} x_i - n! \right]^2
 
-    Here :math:`x_i \\in [-10, 10] for i \\in [1, n]`.
-    *Global optimum*: :math:`f(\\sqrt{n}) = 0, `
+
+    Here :math:`x_i \in [-10, 10] for i \in [1, n]`.
+    *Global optimum*: :math:`f(\sqrt{n}) = 0,`
     """
 
     name = "Mishra 7 Function"
@@ -774,16 +782,17 @@ class Mishra07(FuncBenchmark):
 
 
 class Mishra08(FuncBenchmark):
-    """
+    r"""
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
 
     .. math::
-        f(x) = 0.001 \\left[\\lvert x_1^{10} - 20x_1^9 + 180x_1^8 - 960 x_1^7 + 3360x_1^6 - 8064x_1^5 + 13340x_1^4 - 15360x_1^3
-       + 11520x_1^2 - 5120x_1 + 2624 \rvert \\lvert x_2^4 + 12x_2^3 + 54x_2^2 + 108x_2 + 81 \rvert \right]^2
+        f(x) = 0.001 \left[\lvert x_1^{10} - 20x_1^9 + 180x_1^8 - 960 x_1^7 + 3360x_1^6 - 8064x_1^5 + 13340x_1^4 - 15360x_1^3
+       + 11520x_1^2 - 5120x_1 + 2624 \rvert \lvert x_2^4 + 12x_2^3 + 54x_2^2 + 108x_2 + 81 \rvert \right]^2
 
-    Here :math:`x_i \\in [-10, 10] for i \\in [1, 2]`.
-    *Global optimum*: :math:`f(2, -3) = 0, `
+
+    Here :math:`x_i \in [-10, 10] for i \in [1, 2]`.
+    *Global optimum*: :math:`f(2, -3) = 0,`
     """
 
     name = "Mishra 8 Function"
@@ -849,28 +858,30 @@ class Mishra08(FuncBenchmark):
 
 
 class Mishra09(FuncBenchmark):
-    """
+    r"""
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
 
     .. math::
-        f(x) = \\left[ ab^2c + abc^2 + b^2 + (x_1 + x_2 - x_3)^2 \right]^2
+        f(x) = \left[ ab^2c + abc^2 + b^2 + (x_1 + x_2 - x_3)^2 \right]^2
+
 
     Where, in this exercise:
 
     .. math::
         \begin{cases} a = 2x_1^3 + 5x_1x_2 + 4x_3 - 2x_1^2x_3 - 18 \\
         b = x_1 + x_2^3 + x_1x_2^2 + x_1x_3^2 - 22 \\
-        c = 8x_1^2 + 2x_2x_3 + 2x_2^2 + 3x_2^3 - 52 \\end{cases}
+        c = 8x_1^2 + 2x_2x_3 + 2x_2^2 + 3x_2^3 - 52 \end{cases}
 
 
-    Here :math:`x_i \\in [-10, 10] for i \\in [1, 2, 3]`.
-    *Global optimum*: :math:`f(1, 2, 3) = 0, `
+
+    Here :math:`x_i \in [-10, 10] for i \in [1, 2, 3]`.
+    *Global optimum*: :math:`f(1, 2, 3) = 0,`
     """
 
     name = "Mishra 9 Function"
-    latex_formula = r"\left[ ab^2c + abc^2 + b^2 + (x_1 + x_2 - x_3)^2 \right]^2"
-    latex_formula_dimension = r"d = 2"
+    latex_formula = r"f(x) = \left[ ab^2c + abc^2 + b^2 + (x_1 + x_2 - x_3)^2 \right]^2"
+    latex_formula_dimension = r"d = 3"
     latex_formula_bounds = r"x_i \in [-10, 10] \forall i \in [1, 2, 3]"
     latex_formula_global_optimum = r"f(1, 2, 3) = 0"
     continuous = True
@@ -920,19 +931,20 @@ class Mishra09(FuncBenchmark):
 
 
 class Mishra10(FuncBenchmark):
-    """
+    r"""
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
 
     .. math::
-        f(x) = \\left[ \\lfloor x_1 \\perp x_2 \rfloor - \\lfloor x_1 \rfloor - \\lfloor x_2 \rfloor \right]^2
+        f(x) = \left[ \lfloor x_1 \perp x_2 \rfloor - \lfloor x_1 \rfloor - \lfloor x_2 \rfloor \right]^2
 
-    Here :math:`x_i \\in [-10, 10] for i \\in [1, 2]`.
-    *Global optimum*: :math:`f(2, 2) = 0, `
+
+    Here :math:`x_i \in [-10, 10] for i \in [1, 2]`.
+    *Global optimum*: :math:`f(2, 2) = 0,`
     """
 
     name = "Mishra 10 Function"
-    latex_formula = r"\left[ \lfloor x_1 \perp x_2 \rfloor - \lfloor x_1 \rfloor - \lfloor x_2 \rfloor \right]^2"
+    latex_formula = r"f(x) = \left[ \lfloor x_1 \perp x_2 \rfloor - \lfloor x_1 \rfloor - \lfloor x_2 \rfloor \right]^2"
     latex_formula_dimension = r"d = 2"
     latex_formula_bounds = r"x_i \in [-10, 10] \forall i \in [1, 2]"
     latex_formula_global_optimum = r"f(2, 2) = 0"
@@ -981,19 +993,20 @@ class Mishra10(FuncBenchmark):
 
 
 class Mishra11(FuncBenchmark):
-    """
+    r"""
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
 
     .. math::
-        f(x) = \\left [ \frac{1}{n} \\sum_{i=1}^{n} \\lvert x_i \rvert - \\left(\\prod_{i=1}^{n} \\lvert x_i \rvert \right )^{\frac{1}{n}} \right]^2
+        f(x) = \left [ \frac{1}{n} \sum_{i=1}^{n} \lvert x_i \rvert - \left(\prod_{i=1}^{n} \lvert x_i \rvert \right )^{\frac{1}{n}} \right]^2
 
-    Here :math:`x_i \\in [-10, 10] for i \\in [1, 2]`.
-    *Global optimum*: :math:`f(0) = 0, `
+
+    Here :math:`x_i \in [-10, 10] for i \in [1, 2]`.
+    *Global optimum*: :math:`f(0) = 0,`
     """
 
     name = "Mishra 11 Function"
-    latex_formula = r"\left [ \frac{1}{n} \sum_{i=1}^{n} \lvert x_i \rvert - \left(\prod_{i=1}^{n} \lvert x_i \rvert \right )^{\frac{1}{n}} \right]^2"
+    latex_formula = r"f(x) = \left [ \frac{1}{n} \sum_{i=1}^{n} \lvert x_i \rvert - \left(\prod_{i=1}^{n} \lvert x_i \rvert \right )^{\frac{1}{n}} \right]^2"
     latex_formula_dimension = r"d = n"
     latex_formula_bounds = r"x_i \in [-10, 10] \forall i \in [1, n]"
     latex_formula_global_optimum = r"f(0) = 0"
@@ -1041,18 +1054,19 @@ class Mishra11(FuncBenchmark):
 
 
 class MultiModal(FuncBenchmark):
-    """
+    r"""
     .. [1] Gavana, A. Global Optimization Benchmarks and AMPGO retrieved 2015
 
     .. math::
-        f(x) = \\left( \\sum_{i=1}^n \\lvert x_i \rvert \right) \\left( \\prod_{i=1}^n \\lvert x_i \rvert \right)
+        f(x) = \left( \sum_{i=1}^n \lvert x_i \rvert \right) \left( \prod_{i=1}^n \lvert x_i \rvert \right)
 
-    Here :math:`x_i \\in [-10, 10] for i \\in [1, n]`.
-    *Global optimum*: :math:`f(0) = 0, `
+
+    Here :math:`x_i \in [-10, 10] for i \in [1, n]`.
+    *Global optimum*: :math:`f(0) = 0,`
     """
 
     name = "Mishra 11 Function"
-    latex_formula = r"\left( \sum_{i=1}^n \lvert x_i \rvert \right) \left( \prod_{i=1}^n \lvert x_i \rvert \right)"
+    latex_formula = r"f(x) = \left( \sum_{i=1}^n \lvert x_i \rvert \right) \left( \prod_{i=1}^n \lvert x_i \rvert \right)"
     latex_formula_dimension = r"d = n"
     latex_formula_bounds = r"x_i \in [-10, 10] \forall i \in [1, n]"
     latex_formula_global_optimum = r"f(0) = 0"

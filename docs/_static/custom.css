@@ -1,0 +1,18 @@
+/* Small tweaks for the built-in Nature theme. */
+
+/* Long autodoc signatures (e.g. the ~13-arg problem constructors) should wrap
+   instead of forcing a horizontal scrollbar across the whole page. */
+.sig-prename,
+.sig-name {
+  overflow-wrap: anywhere;
+}
+
+/* Give the API tables and code blocks a little breathing room on narrow views. */
+table.docutils {
+  width: auto;
+}
+
+img.logo {
+  max-width: 220px;
+  height: auto;
+}

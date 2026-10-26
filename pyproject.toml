@@ -87,11 +87,10 @@ notebook = [
 ]
 
 docs = [
-    "mkdocs>=1.6.0",
-    "mkdocs-material>=9.5.0",
-    "mkdocstrings[python]>=0.27.0",
-    "mkdocs-bibtex>=2.6.0",
-    "pypandoc-binary>=1.15",
+    "sphinx>=8.1",
+    "myst-parser>=4.0",
+    "sphinxcontrib-bibtex>=2.6",
+    "sphinx-autobuild>=2024.10",
 ]
 
 [project.urls]

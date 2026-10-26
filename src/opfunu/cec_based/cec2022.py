@@ -15,7 +15,7 @@ from opfunu.utils import operator
 class F12022(CecBenchmark):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2022
-    Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
+       Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
     """
 
     name = "F1: Shifted and full Rotated Zakharov Function"
@@ -89,7 +89,7 @@ class F12022(CecBenchmark):
 class F22022(F12022):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2022
-    Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
+       Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
     """
 
     name = "F2: Shifted and Rotated Rosenbrock’s Function"
@@ -139,7 +139,7 @@ class F22022(F12022):
 class F32022(F12022):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2022
-    Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
+       Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
     """
 
     name = "F3: Shifted and full Rotated Expanded Schaffer’s F7"
@@ -190,7 +190,7 @@ class F32022(F12022):
 class F42022(F12022):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2022
-    Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
+       Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
     """
 
     name = "F4: Shifted and Rotated Non-Continuous Rastrigin’s Function"
@@ -241,7 +241,7 @@ class F42022(F12022):
 class F52022(F12022):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2022
-    Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
+       Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
     """
 
     name = "F5: Shifted and Rotated Levy Function"
@@ -292,7 +292,7 @@ class F52022(F12022):
 class F62022(CecBenchmark):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2022
-    Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
+       Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
     """
 
     name = "F6: Hybrid Function 1"
@@ -400,7 +400,7 @@ class F62022(CecBenchmark):
 class F72022(CecBenchmark):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2022
-    Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
+       Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
     """
 
     name = "F7: Hybrid Function 2"
@@ -540,7 +540,7 @@ class F72022(CecBenchmark):
 class F82022(CecBenchmark):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2022
-    Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
+       Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
     """
 
     name = "F8: Hybrid Function 3"
@@ -657,7 +657,7 @@ class F82022(CecBenchmark):
 class F92022(CecBenchmark):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2022
-    Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
+       Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
     """
 
     name = "F9: Composition Function 1"
@@ -773,7 +773,7 @@ class F92022(CecBenchmark):
 class F102022(CecBenchmark):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2022
-    Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
+       Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
     """
 
     name = "F10: Composition Function 2"
@@ -874,7 +874,7 @@ class F102022(CecBenchmark):
 class F112022(CecBenchmark):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2022
-    Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
+       Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
     """
 
     name = "F11: Composition Function 3"
@@ -990,7 +990,7 @@ class F112022(CecBenchmark):
 class F122022(CecBenchmark):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2022
-    Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
+       Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
     """
 
     name = "F12: Composition Function 4"

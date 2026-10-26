@@ -74,7 +74,7 @@ class Plotting:
         Passed to ``plotter.show()`` inside notebooks; defaults to ``"static"``.
     theme : pyvista only
         ``pyvista.Theme`` object applied via ``plotter.set_theme``.
-    **backend_options
+    ``**backend_options``
         Remaining backend-specific options (validated per view): matplotlib
         ``levels``; plotly ``width``, ``height``, ``colorscale``,
         ``hovertemplate``; pyvista ``window_size``, ``show_edges``,
@@ -82,16 +82,16 @@ class Plotting:
 
     Examples
     --------
-    ```python
-    from opfunu.name_based import Ackley01
-    from opfunu.plot import Plotting
+    .. code-block:: python
 
-    f = Ackley01(ndim=5)
-    plot = Plotting(f.evaluate, mode="2d", n_points=3)  # bounds inferred, renders lazily
-    plot  # displayed inline in Jupyter via the PNG repr
-    plot.save("landscape.pdf", dpi=600)
-    plot.close()
-    ```
+       from opfunu.name_based import Ackley01
+       from opfunu.plot import Plotting
+
+       f = Ackley01(ndim=5)
+       plot = Plotting(f.evaluate, mode="2d", n_points=3)  # bounds inferred, renders lazily
+       plot  # displayed inline in Jupyter via the PNG repr
+       plot.save("landscape.pdf", dpi=600)
+       plot.close()
     """
 
     def __init__(

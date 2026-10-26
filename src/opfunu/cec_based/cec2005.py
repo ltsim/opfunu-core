@@ -16,8 +16,8 @@ from opfunu.utils.numba_compat import njit
 class F12005(CecBenchmark):
     """
     .. [1] Suganthan, P.N., Hansen, N., Liang, J.J., Deb, K., Chen, Y.P., Auger, A. and Tiwari, S., 2005.
-    Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
-    KanGAL report, 2005005(2005), p.2005.
+       Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
+       KanGAL report, 2005005(2005), p.2005.
     """
 
     name = "F1: Shifted Sphere Function"
@@ -76,8 +76,8 @@ class F12005(CecBenchmark):
 class F22005(CecBenchmark):
     """
     .. [1] Suganthan, P.N., Hansen, N., Liang, J.J., Deb, K., Chen, Y.P., Auger, A. and Tiwari, S., 2005.
-    Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
-    KanGAL report, 2005005(2005), p.2005.
+       Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
+       KanGAL report, 2005005(2005), p.2005.
     """
 
     name = "F2: Shifted Schwefel’s Problem 1.2"
@@ -143,8 +143,8 @@ class F22005(CecBenchmark):
 class F32005(CecBenchmark):
     """
     .. [1] Suganthan, P.N., Hansen, N., Liang, J.J., Deb, K., Chen, Y.P., Auger, A. and Tiwari, S., 2005.
-    Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
-    KanGAL report, 2005005(2005), p.2005.
+       Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
+       KanGAL report, 2005005(2005), p.2005.
     """
 
     name = "F3: Shifted Rotated High Conditioned Elliptic Function"
@@ -211,8 +211,8 @@ class F32005(CecBenchmark):
 class F42005(CecBenchmark):
     """
     .. [1] Suganthan, P.N., Hansen, N., Liang, J.J., Deb, K., Chen, Y.P., Auger, A. and Tiwari, S., 2005.
-    Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
-    KanGAL report, 2005005(2005), p.2005.
+       Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
+       KanGAL report, 2005005(2005), p.2005.
     """
 
     name = "F4: Shifted Schwefel’s Problem 1.2 with Noise in Fitness"
@@ -279,8 +279,8 @@ class F42005(CecBenchmark):
 class F52005(CecBenchmark):
     """
     .. [1] Suganthan, P.N., Hansen, N., Liang, J.J., Deb, K., Chen, Y.P., Auger, A. and Tiwari, S., 2005.
-    Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
-    KanGAL report, 2005005(2005), p.2005.
+       Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
+       KanGAL report, 2005005(2005), p.2005.
     """
 
     name = "F5: Schwefel’s Problem 2.6 with Global Optimum on Bounds"
@@ -369,8 +369,8 @@ class F52005(CecBenchmark):
 class F62005(CecBenchmark):
     """
     .. [1] Suganthan, P.N., Hansen, N., Liang, J.J., Deb, K., Chen, Y.P., Auger, A. and Tiwari, S., 2005.
-    Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
-    KanGAL report, 2005005(2005), p.2005.
+       Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
+       KanGAL report, 2005005(2005), p.2005.
     """
 
     name = "F6: Shifted Rosenbrock’s Function"
@@ -432,8 +432,8 @@ class F62005(CecBenchmark):
 class F72005(CecBenchmark):
     """
     .. [1] Suganthan, P.N., Hansen, N., Liang, J.J., Deb, K., Chen, Y.P., Auger, A. and Tiwari, S., 2005.
-    Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
-    KanGAL report, 2005005(2005), p.2005.
+       Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
+       KanGAL report, 2005005(2005), p.2005.
     """
 
     name = "F7: Shifted Rotated Griewank’s Function without Bounds"
@@ -501,8 +501,8 @@ class F72005(CecBenchmark):
 class F82005(CecBenchmark):
     """
     .. [1] Suganthan, P.N., Hansen, N., Liang, J.J., Deb, K., Chen, Y.P., Auger, A. and Tiwari, S., 2005.
-    Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
-    KanGAL report, 2005005(2005), p.2005.
+       Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
+       KanGAL report, 2005005(2005), p.2005.
     """
 
     name = "F8: Shifted Rotated Ackley’s Function with Global Optimum on Bounds"
@@ -574,8 +574,8 @@ class F82005(CecBenchmark):
 class F92005(CecBenchmark):
     """
     .. [1] Suganthan, P.N., Hansen, N., Liang, J.J., Deb, K., Chen, Y.P., Auger, A. and Tiwari, S., 2005.
-    Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
-    KanGAL report, 2005005(2005), p.2005.
+       Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
+       KanGAL report, 2005005(2005), p.2005.
     """
 
     name = "F9: Shifted Rastrigin’s Function"
@@ -641,8 +641,8 @@ class F92005(CecBenchmark):
 class F102005(CecBenchmark):
     """
     .. [1] Suganthan, P.N., Hansen, N., Liang, J.J., Deb, K., Chen, Y.P., Auger, A. and Tiwari, S., 2005.
-    Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
-    KanGAL report, 2005005(2005), p.2005.
+       Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
+       KanGAL report, 2005005(2005), p.2005.
     """
 
     name = "F10: Shifted Rotated Rastrigin’s Function"
@@ -710,8 +710,8 @@ class F102005(CecBenchmark):
 class F112005(CecBenchmark):
     """
     .. [1] Suganthan, P.N., Hansen, N., Liang, J.J., Deb, K., Chen, Y.P., Auger, A. and Tiwari, S., 2005.
-    Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
-    KanGAL report, 2005005(2005), p.2005.
+       Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
+       KanGAL report, 2005005(2005), p.2005.
     """
 
     name = "F11: Shifted Rotated Weierstrass Function"
@@ -803,8 +803,8 @@ class F112005(CecBenchmark):
 class F122005(CecBenchmark):
     """
     .. [1] Suganthan, P.N., Hansen, N., Liang, J.J., Deb, K., Chen, Y.P., Auger, A. and Tiwari, S., 2005.
-    Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
-    KanGAL report, 2005005(2005), p.2005.
+       Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
+       KanGAL report, 2005005(2005), p.2005.
     """
 
     name = "F12: Schwefel’s Problem 2.13"
@@ -883,8 +883,8 @@ class F122005(CecBenchmark):
 class F132005(CecBenchmark):
     """
     .. [1] Suganthan, P.N., Hansen, N., Liang, J.J., Deb, K., Chen, Y.P., Auger, A. and Tiwari, S., 2005.
-    Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
-    KanGAL report, 2005005(2005), p.2005.
+       Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
+       KanGAL report, 2005005(2005), p.2005.
     """
 
     name = "F13: Shifted Expanded Griewank’s plus Rosenbrock’s Function (F8F2)"
@@ -952,8 +952,8 @@ class F132005(CecBenchmark):
 class F142005(CecBenchmark):
     """
     .. [1] Suganthan, P.N., Hansen, N., Liang, J.J., Deb, K., Chen, Y.P., Auger, A. and Tiwari, S., 2005.
-    Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
-    KanGAL report, 2005005(2005), p.2005.
+       Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
+       KanGAL report, 2005005(2005), p.2005.
     """
 
     name = "F14: Shifted Rotated Expanded Scaffer’s F6 Function"
@@ -1043,8 +1043,8 @@ def _F152005_fi__(x: np.ndarray, idx: int) -> float:
 class F152005(CecBenchmark):
     """
     .. [1] Suganthan, P.N., Hansen, N., Liang, J.J., Deb, K., Chen, Y.P., Auger, A. and Tiwari, S., 2005.
-    Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
-    KanGAL report, 2005005(2005), p.2005.
+       Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
+       KanGAL report, 2005005(2005), p.2005.
     """
 
     name = "F15: Hybrid Composition Function"
@@ -1181,8 +1181,8 @@ def _F162005_fi__(x: np.ndarray, idx: int) -> float:
 class F162005(CecBenchmark):
     """
     .. [1] Suganthan, P.N., Hansen, N., Liang, J.J., Deb, K., Chen, Y.P., Auger, A. and Tiwari, S., 2005.
-    Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
-    KanGAL report, 2005005(2005), p.2005.
+       Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
+       KanGAL report, 2005005(2005), p.2005.
     """
 
     name = "F16: Rotated Version of Hybrid Composition Function F15"
@@ -1307,8 +1307,8 @@ class F162005(CecBenchmark):
 class F172005(F162005):
     """
     .. [1] Suganthan, P.N., Hansen, N., Liang, J.J., Deb, K., Chen, Y.P., Auger, A. and Tiwari, S., 2005.
-    Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
-    KanGAL report, 2005005(2005), p.2005.
+       Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
+       KanGAL report, 2005005(2005), p.2005.
     """
 
     name = "F17: F16 with Noise in Fitness"
@@ -1402,8 +1402,8 @@ def _F182005_fi__(x: np.ndarray, idx: int) -> float:
 class F182005(CecBenchmark):
     """
     .. [1] Suganthan, P.N., Hansen, N., Liang, J.J., Deb, K., Chen, Y.P., Auger, A. and Tiwari, S., 2005.
-    Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
-    KanGAL report, 2005005(2005), p.2005.
+       Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
+       KanGAL report, 2005005(2005), p.2005.
     """
 
     name = "F18: Rotated Hybrid Composition Function"
@@ -1530,8 +1530,8 @@ class F182005(CecBenchmark):
 class F192005(F182005):
     """
     .. [1] Suganthan, P.N., Hansen, N., Liang, J.J., Deb, K., Chen, Y.P., Auger, A. and Tiwari, S., 2005.
-    Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
-    KanGAL report, 2005005(2005), p.2005.
+       Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
+       KanGAL report, 2005005(2005), p.2005.
     """
 
     name = "F19: Rotated Hybrid Composition Function with narrow basin global optimum"
@@ -1587,8 +1587,8 @@ class F192005(F182005):
 class F202005(F182005):
     """
     .. [1] Suganthan, P.N., Hansen, N., Liang, J.J., Deb, K., Chen, Y.P., Auger, A. and Tiwari, S., 2005.
-    Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
-    KanGAL report, 2005005(2005), p.2005.
+       Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
+       KanGAL report, 2005005(2005), p.2005.
     """
 
     name = "F20: Rotated Hybrid Composition Function with Global Optimum on the Bounds"
@@ -1656,8 +1656,8 @@ def _F212005_fi__(x: np.ndarray, idx: int) -> float:
 class F212005(CecBenchmark):
     """
     .. [1] Suganthan, P.N., Hansen, N., Liang, J.J., Deb, K., Chen, Y.P., Auger, A. and Tiwari, S., 2005.
-    Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
-    KanGAL report, 2005005(2005), p.2005.
+       Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
+       KanGAL report, 2005005(2005), p.2005.
     """
 
     name = "F21: Rotated Hybrid Composition Function"
@@ -1794,8 +1794,8 @@ class F212005(CecBenchmark):
 class F222005(F212005):
     """
     .. [1] Suganthan, P.N., Hansen, N., Liang, J.J., Deb, K., Chen, Y.P., Auger, A. and Tiwari, S., 2005.
-    Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
-    KanGAL report, 2005005(2005), p.2005.
+       Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
+       KanGAL report, 2005005(2005), p.2005.
     """
 
     name = "F22: Rotated Hybrid Composition Function with High Condition Number Matrix"
@@ -1837,8 +1837,8 @@ class F222005(F212005):
 class F232005(F212005):
     """
     .. [1] Suganthan, P.N., Hansen, N., Liang, J.J., Deb, K., Chen, Y.P., Auger, A. and Tiwari, S., 2005.
-    Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
-    KanGAL report, 2005005(2005), p.2005.
+       Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
+       KanGAL report, 2005005(2005), p.2005.
     """
 
     name = "F21: Rotated Hybrid Composition Function"
@@ -1941,8 +1941,8 @@ def _F242005_fi__(x: np.ndarray, idx: int) -> float:
 class F242005(CecBenchmark):
     """
     .. [1] Suganthan, P.N., Hansen, N., Liang, J.J., Deb, K., Chen, Y.P., Auger, A. and Tiwari, S., 2005.
-    Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
-    KanGAL report, 2005005(2005), p.2005.
+       Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
+       KanGAL report, 2005005(2005), p.2005.
     """
 
     name = "F24: Rotated Hybrid Composition Function"
@@ -2079,8 +2079,8 @@ class F242005(CecBenchmark):
 class F252005(F242005):
     """
     .. [1] Suganthan, P.N., Hansen, N., Liang, J.J., Deb, K., Chen, Y.P., Auger, A. and Tiwari, S., 2005.
-    Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
-    KanGAL report, 2005005(2005), p.2005.
+       Problem definitions and evaluation criteria for the CEC 2005 special session on real-parameter optimization.
+       KanGAL report, 2005005(2005), p.2005.
     """
 
     name = "F25: Rotated Hybrid Composition Function without bounds"

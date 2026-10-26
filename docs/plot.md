@@ -113,12 +113,13 @@ Plotting(f.evaluate, style="styles/paper.mplstyle")   # see examples/styles/
 
 ## API
 
-::: opfunu.plot
-    options:
-      members_order: alphabetical
-      show_if_no_docstring: true
-      filters: ["!^_"]
+```{eval-rst}
+.. automodule:: opfunu.plot
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.plot.plotting
-    options:
-      members: [Plotting]
+```{eval-rst}
+.. automodule:: opfunu.plot.plotting
+   :members: Plotting
+```

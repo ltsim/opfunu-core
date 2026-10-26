@@ -14,6 +14,7 @@ from opfunu.benchmark.func import FuncBenchmark
 class Ackley01(FuncBenchmark):
     r"""
     .. [1] Adorio, E. MVF - "Multivariate Test Functions Library in C for Unconstrained Global Optimization", 2005
+
     TODO: the -0.2 factor in the exponent of the first term is given as -0.02 in Jamil et al.
     """
 
@@ -71,7 +72,7 @@ class Ackley01(FuncBenchmark):
 class Ackley02(FuncBenchmark):
     r"""
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark FunctionsFor Global Optimization Problems Int.
-    Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Ackley 02"
@@ -125,7 +126,7 @@ class Ackley02(FuncBenchmark):
 class Ackley03(FuncBenchmark):
     r"""
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark FunctionsFor Global Optimization Problems Int.
-    Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Ackley 03"

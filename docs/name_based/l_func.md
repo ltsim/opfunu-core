@@ -1,43 +1,37 @@
 # Functions — L
 
-::: opfunu.name_based.l_func.Langermann
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.l_func.Langermann
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.l_func.LennardJones
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.l_func.LennardJones
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.l_func.Leon
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.l_func.Leon
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.l_func.Levy03
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.l_func.Levy03
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.l_func.Levy05
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.l_func.Levy05
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.l_func.Levy13
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.l_func.Levy13
+   :members:
+   :undoc-members:
+```

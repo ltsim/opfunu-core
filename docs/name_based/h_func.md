@@ -1,50 +1,43 @@
 # Functions — H
 
-::: opfunu.name_based.h_func.Hansen
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.h_func.Hansen
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.h_func.Hartmann3
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.h_func.Hartmann3
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.h_func.Hartmann6
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.h_func.Hartmann6
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.h_func.HelicalValley
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.h_func.HelicalValley
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.h_func.Himmelblau
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.h_func.Himmelblau
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.h_func.HolderTable
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.h_func.HolderTable
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.h_func.Hosaki
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.h_func.Hosaki
+   :members:
+   :undoc-members:
+```

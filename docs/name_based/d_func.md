@@ -1,85 +1,73 @@
 # Functions — D
 
-::: opfunu.name_based.d_func.Damavandi
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.d_func.Damavandi
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.d_func.DeVilliersGlasser01
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.d_func.DeVilliersGlasser01
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.d_func.DeVilliersGlasser02
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.d_func.DeVilliersGlasser02
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.d_func.Deb01
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.d_func.Deb01
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.d_func.Deb03
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.d_func.Deb03
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.d_func.Decanomial
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.d_func.Decanomial
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.d_func.Deceptive
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.d_func.Deceptive
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.d_func.DeckkersAarts
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.d_func.DeckkersAarts
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.d_func.DeflectedCorrugatedSpring
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.d_func.DeflectedCorrugatedSpring
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.d_func.DixonPrice
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.d_func.DixonPrice
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.d_func.Dolan
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.d_func.Dolan
+   :members:
+   :undoc-members:
+```
 
-::: opfunu.name_based.d_func.DropWave
-    options:
-        heading_level: 2
-        show_root_full_path: false
-        show_if_no_docstring: true
-        merge_init_into_class: true
+```{eval-rst}
+.. autoclass:: opfunu.name_based.d_func.DropWave
+   :members:
+   :undoc-members:
+```

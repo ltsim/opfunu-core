@@ -14,7 +14,7 @@ from opfunu.benchmark.func import FuncBenchmark
 class BartelsConn(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Bartels Conn Function"
@@ -68,7 +68,7 @@ class BartelsConn(FuncBenchmark):
 class Beale(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Beale Function"
@@ -129,7 +129,7 @@ class Beale(FuncBenchmark):
 class BiggsExp02(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Biggs EXP2 Function"
@@ -188,7 +188,7 @@ class BiggsExp02(FuncBenchmark):
 class BiggsExp03(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Biggs EXP3 Function"
@@ -247,7 +247,7 @@ class BiggsExp03(FuncBenchmark):
 class BiggsExp04(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Biggs EXP4 Function"
@@ -306,7 +306,7 @@ class BiggsExp04(FuncBenchmark):
 class BiggsExp05(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Biggs EXP5 Function"
@@ -365,7 +365,7 @@ class BiggsExp05(FuncBenchmark):
 class Bird(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Bird Function"
@@ -429,7 +429,7 @@ class Bird(FuncBenchmark):
 class Bohachevsky1(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Bohachevsky 1 Function"
@@ -483,7 +483,7 @@ class Bohachevsky1(FuncBenchmark):
 class Bohachevsky2(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Bohachevsky 2 Function"
@@ -537,7 +537,7 @@ class Bohachevsky2(FuncBenchmark):
 class Bohachevsky3(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Bohachevsky 3 Function"
@@ -591,7 +591,7 @@ class Bohachevsky3(FuncBenchmark):
 class Booth(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Booth Function"
@@ -645,7 +645,7 @@ class Booth(FuncBenchmark):
 class BoxBetts(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Box-Betts Quadratic Sum Function"
@@ -701,7 +701,7 @@ class BoxBetts(FuncBenchmark):
 class Branin01(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Branin RCOS 1 Function"
@@ -765,7 +765,7 @@ class Branin01(FuncBenchmark):
 class Branin02(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Branin RCOS 2 Function"
@@ -827,7 +827,7 @@ class Branin02(FuncBenchmark):
 class Brent(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Brent Function"
@@ -881,7 +881,7 @@ class Brent(FuncBenchmark):
 class Brown(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Brown Function"
@@ -937,7 +937,7 @@ class Brown(FuncBenchmark):
 class Bukin02(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Bukin 2 Function"
@@ -991,7 +991,7 @@ class Bukin02(FuncBenchmark):
 class Bukin04(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Bukin 4 Function"
@@ -1045,7 +1045,7 @@ class Bukin04(FuncBenchmark):
 class Bukin06(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Bukin 6 Function"

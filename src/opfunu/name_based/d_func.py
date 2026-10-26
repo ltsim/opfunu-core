@@ -14,7 +14,7 @@ from opfunu.benchmark.func import FuncBenchmark
 class Damavandi(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Damavandi Function"
@@ -76,7 +76,7 @@ class Damavandi(FuncBenchmark):
 class Deb01(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Deb 1 Function"
@@ -130,7 +130,7 @@ class Deb01(FuncBenchmark):
 class Deb03(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Deb 3 Function"
@@ -314,7 +314,7 @@ class Deceptive(FuncBenchmark):
 class DeckkersAarts(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Deckkers-Aarts Function"
@@ -429,7 +429,7 @@ class DeflectedCorrugatedSpring(FuncBenchmark):
 class DeVilliersGlasser01(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "DeVilliers-Glasser 1 Function"
@@ -485,7 +485,7 @@ class DeVilliersGlasser01(FuncBenchmark):
 class DeVilliersGlasser02(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "DeVilliers-Glasser 2 Function"
@@ -546,7 +546,7 @@ class DeVilliersGlasser02(FuncBenchmark):
 class DixonPrice(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Dixon & Price Function"
@@ -602,7 +602,7 @@ class DixonPrice(FuncBenchmark):
 class Dolan(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Dolan Function"

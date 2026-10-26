@@ -14,7 +14,7 @@ from opfunu.benchmark.func import FuncBenchmark
 class Qing(FuncBenchmark):
     """
     .. [1]  Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization Problems
-    Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
 
     .. math::
 
@@ -77,7 +77,7 @@ class Qing(FuncBenchmark):
 class Quadratic(FuncBenchmark):
     """
     .. [1]  Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization Problems
-    Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
 
     .. math::
 
@@ -148,7 +148,7 @@ class Quadratic(FuncBenchmark):
 class Quartic(FuncBenchmark):
     """
     .. [1]  Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization Problems
-    Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
 
     .. math::
 
@@ -211,15 +211,15 @@ class Quartic(FuncBenchmark):
 
 
 class Quintic(FuncBenchmark):
-    """
+    r"""
     .. [1]  Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization Problems
-    Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
 
     .. math::
+        f_{\text{Quintic}}(x) = \sum_{i=1}^{n} \left|{x_{i}^{5} - 3 x_{i}^{4}+ 4 x_{i}^{3} + 2 x_{i}^{2} - 10 x_{i} -4}\right|
 
-        f_{\text{Quintic}}(x) = \\sum_{i=1}^{n} \\left|{x_{i}^{5} - 3 x_{i}^{4}+ 4 x_{i}^{3} + 2 x_{i}^{2} - 10 x_{i} -4}\right|
 
-    Here, :math:`n` represents the number of dimensions and :math:`x_i \\in [-10, 10]` for :math:`i = 1, ..., n`.
+    Here, :math:`n` represents the number of dimensions and :math:`x_i \in [-10, 10]` for :math:`i = 1, ..., n`.
 
     *Global optimum*: :math:`f(x_i) = 0` for :math:`x_i = -1` for :math:`i = 1, ..., n`
     """
