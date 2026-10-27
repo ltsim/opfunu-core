@@ -187,8 +187,8 @@ $ uv run sphinx-build -b html docs docs/_build/html -W --keep-going  # strict bu
 $ make -C docs livehtml                                            # same live preview via the Makefile
 ```
 
-GitHub Pages is built and deployed by the `docs.yml` workflow (push to `master` or `workflow_dispatch`);
-set the Pages **Source** to *GitHub Actions* in repository settings.
+GitHub Pages is built by the `docs.yml` workflow (push to `master` or `workflow_dispatch`), which
+deploys the Sphinx site to the `gh-pages` branch; the Pages **Source** stays *Deploy from a branch*.
 
 Run the test suite with:
 

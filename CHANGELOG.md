@@ -29,9 +29,9 @@
   `\text`/`\frac` no longer collapse to control characters, correctly indented `.. math::` blocks, properly
   continued `.. [1]` citations, and fixed inline `:math:` roles); a handful of obviously copy-pasted /
   truncated `latex_formula*` attributes were corrected to match their own docstrings. The GitHub Pages
-  workflow (`.github/workflows/docs.yml`) now builds with Sphinx and deploys through the Pages artifact
-  actions (`configure-pages` / `upload-pages-artifact` / `deploy-pages`) instead of `mkdocs gh-deploy`; the
-  Pages *Source* must be set to *GitHub Actions*. The docs dependency group now pulls `sphinx`,
+  workflow (`.github/workflows/docs.yml`) now builds with Sphinx and deploys the site to the `gh-pages`
+  branch (via `peaceiris/actions-gh-pages`) instead of `mkdocs gh-deploy`; the Pages *Source* stays
+  *Deploy from a branch*. The docs dependency group now pulls `sphinx`,
   `myst-parser`, `sphinxcontrib-bibtex`, `sphinx-autobuild` (drops `mkdocs`, `mkdocs-material`,
   `mkdocstrings`, `mkdocs-bibtex`, `pypandoc-binary`)
 + Docs: `docs/img/favicon.svg` — the nested contour bands descending into the global minimum —
