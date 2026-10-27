@@ -37,12 +37,13 @@ Every function in `opfunu-core` inherits from one of the base classes defined in
 Every benchmark function accepts an optional `shift` constructor argument (a
 scalar is broadcast to all dimensions). It is an ordinary parameter of each
 class's `__init__` and is forwarded through `super().__init__(...)` all the way
-to `Benchmark`, which stores it privately. Once construction finishes, the
-translation is applied automatically:
-
-- Fitness: `f(x) = f_base(x - o)`
-- Global optimum: `x_global = x*_base + o` (`f_global` is unchanged)
-- Search space: `bounds_new = bounds_base + o` (per dimension)
+to `Benchmark`, which stores it privately. The shift is fixed when the problem
+is constructed, passed to the kernel as its second argument, and normalized
+once at construction (same scalar-broadcast / length / finite checks, still
+eager). The stored bounds and optimum stay unshifted while the `bounds`/`lb`/`ub`/
+`x_global` properties apply the normalized offset on read (`f_global` is
+invariant, since `f(x) = f_base(x - o)`). Building a new problem is the only
+way to change it.
 
 ```python
 from opfunu.name_based import Ackley01
@@ -54,10 +55,8 @@ print(func.is_succeed(func.x_global))  # True
 ```
 
 `ndim`, `bounds`, `lb`, `ub` remain public read-only properties, plus a
-read-only `shift` property. The shift can also be changed after construction
-with `func.set_shift(o)`, and removed with `func.set_shift(None)`. Calling
-`set_shift` repeatedly never accumulates: the base bounds and optimum are
-snapshotted on the first shift and restored before each new translation.
+read-only `shift` property. `get_paras()` still reports `"shift"` when the
+problem is shifted.
 
 ## Implementing a problem
 
@@ -66,7 +65,8 @@ A name-based problem defines its kernel inline and hands the metadata to the bas
 ```python
 class Quadratic(FuncBenchmark):
     def __init__(self, ndim=None, bounds=None, parallel=False, fastmath=True, dtype=np.float64):
-        def compute(x, out):
+        def compute(x, shift, out):
+            x = x - shift
             out[0] = (
                 -3803.84
                 - 138.08 * x[0]
@@ -98,7 +98,8 @@ Simple CEC problems declare the kernel straight in the `super().__init__` call �
 the base loads the shift/rotation data, then binds:
 
 ```python
-def compute(x, f_shift, f_bias, out):
+def compute(x, shift, f_shift, f_bias, out):
+    x = x - shift
     out[0] = ...
 
 
@@ -120,23 +121,66 @@ ordinary parameters of every class's `__init__` and are forwarded to
 `super().__init__(...)`; `prepare` defaults to `None` so the package-wide
 `Benchmark.default_prepare` policy applies unless the caller chooses explicitly.
 
-Problems that compute extra kernel parameters after `super().__init__` (permutation
-vectors, composition weights, index blocks, …) bind explicitly instead:
+Problems that load or derive their own competition data (matrix row selection, reshaping,
+permutation vectors, composition weights, index blocks, …) do it *before* the state is
+installed, through the base's `load` hook, then bind explicitly:
 
 ```python
+def load(problem, ndim, support_path):          # runs before super().__init__ installs the state
+    problem.f_shift = problem.check_shift_matrix(f_shift, selected_idx=0, ndim=ndim, support_path=support_path)
+
+super().__init__(..., load=load, x_global=lambda problem, ndim: np.asarray(problem.f_shift[0]))
 self._bind_kernel(compute, ["f_shift", "P", "m_group", "f_matrix"], paras=[...])  # plain=True if Numba-incompatible
 ```
 
-`compute` and every other `Benchmark` property are read-only: configuration is
-supplied through `__init__` kwargs (`dtype`, `dim_changeable`, `verbose`, `prepare`, …), and
-data-dependent metadata written by subclasses goes through protected fields
-(`self._f_global`, `self._x_global`, `self._paras`, `self._support_path`, `self._ndim`,
-`self._bounds`). The shape (`bounds`/`ndim`/`lb`/`ub`), `is_succeed`, `is_ndim_compatible`
+`x_global=` and `f_global=` accept a value or a `(problem, ndim)` callable and default to the
+official shift and the bias, so most classes pass nothing at all.
+
+A CEC class that is meant to be subclassed (the hybrid/composition families) takes the same
+knobs as keyword-only arguments — `default_bounds=`, `x_global=`, `f_global=`, `load=`, and,
+when it binds its own kernel, `compute=`/`param_names=`/`paras=` — and forwards them to
+`super().__init__()` with `None` meaning "keep my own value". A subclass therefore re-describes
+the data, the optimum or the kernel through the constructor instead of touching state:
+
+```python
+class F202010(F12010):                     # F12010 forwards default_bounds/x_global/...
+    def __init__(self, ndim=None, bounds=None, f_shift="f01_o", ...):
+        super().__init__(ndim, bounds, f_shift, ..., x_global=lambda problem, dim: np.asarray(problem.f_shift + 1))
+        self._bind_kernel(compute, ["f_shift"])     # only when the kernel itself differs
+```
+
+A `load=` hook passed to such a class runs *after* the parent's own loading, so it can adjust
+what the parent loaded (`problem.f_shift[0, 1::2] = 5`) before the optimum is derived from it.
+
+`compute` and every other `Benchmark` property are read-only, and there are **no
+protected setters**: the state is written exactly once, by `Benchmark.__init__`, from
+the values the bases hand it (`ndim=`, `bounds=`, `f_global=`, `x_global=`,
+`support_path=` — keyword-only). A subclass therefore resolves everything it needs
+*before* calling `super().__init__(...)` instead of patching fields afterwards; `FuncBenchmark`
+does that with its `default_bounds`/`f_global`/`x_global` arguments, and `CecBenchmark`
+with `default_bounds`, the official `f_shift`/`f_matrix`/`f_shuffle` files, an optional
+`load(problem, ndim, support_path)` hook for class-specific data (matrix row selection,
+reshaping, permutation vectors, …) and optional `x_global=`/`f_global=` values or
+`(problem, ndim)` callables (defaults: the official shift and the bias).
+`check_ndim_and_bounds` is a **pure resolver** — it validates and returns
+`(ndim, bounds)` without touching any state — and `make_support_data_path` returns the
+data folder instead of storing it. The shape (`bounds`/`ndim`/`lb`/`ub`), `is_succeed`,
+`is_ndim_compatible`
 and `create_solution` are implemented once on `Benchmark`; `FuncBenchmark`/`CecBenchmark`
-only add their own `check_ndim_and_bounds`/`check_solution` and CEC specifics. All private
-kernel state (the bound `__compute`, `__paras`, `numba_compiled`, …)
-lives in name-mangled storage behind those properties. The private
-`__build_compute` helper is only reachable through `_bind_kernel`
+only add their own `check_ndim_and_bounds`/`check_solution` and CEC specifics. All the state —
+the optimum (`__f_global`/`__x_global`), the shape (`__ndim`/`__bounds`), the display
+parameters (`__paras`), the data folder (`__support_path`) and the kernel internals (the bound
+`__compute`, `numba_compiled`, …) — is name-mangled on `Benchmark`, so an assignment to a
+`_`-prefixed name in a subclass would only shadow the storage and leave the properties stale;
+the only sanctioned writers are `Benchmark.__init__` and `Benchmark._bind_kernel`
+(the latter owns `paras`, which may also be given as `paras=lambda problem: {...}`).
+The shift is validated/normalized
+exactly once in the constructor (after dimensionality is resolved) and passed to the kernel
+as its second argument; `param_names` lists must not contain `"shift"` because the base
+injects it automatically. Unshifted problems receive a vector of zeros so the compiled
+gufunc signature is uniform. The stored bounds and optimum stay unshifted while
+`bounds`/`lb`/`ub`/`x_global` apply the normalized offset on read (`f_global` is invariant).
+The private `__build_compute` helper is only reachable through `_bind_kernel`
 (`plain=True` binds the Python kernel directly, with no Numba attempt) and the
 public `prepare()` method.
 
@@ -222,6 +266,7 @@ matrices) to arrays; zero-dimensional arrays unwrap to scalars. Anything else ra
 Attribute-lookup and normalization errors propagate — a mistyped `param_names` entry or
 an un-normalizable value is a bug, not a compile failure. Only Numba
 compilation/warmup failures fall back to the plain Python kernel, keeping the same
-`(x, *params, out)` calling convention; the exception is stored on `_compile_error`
+`(x, shift, *params, out)` calling convention; the exception is stored on `_compile_error`
 (`None` on success, when Numba is absent, or when compilation was declined) and
-printed when `verbose=True`.
+printed when `verbose=True`. The shift is *not* part of `param_names` — it is injected
+automatically by the base class.

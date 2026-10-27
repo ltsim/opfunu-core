@@ -128,9 +128,9 @@ func = Ackley01(ndim=3, shift=[2.0, -1.5, 3.0])
 print(func.x_global)  # base optimum + shift
 print(func.bounds)  # base bounds + shift
 print(func.is_succeed(func.x_global))  # True
-
-func.set_shift(None)  # back to the unshifted problem
 ```
+
+The shift is fixed at construction (pass `shift=` again to get a different one).
 
 ## Construction flags
 

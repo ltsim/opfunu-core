@@ -36,6 +36,33 @@
   `mkdocstrings`, `mkdocs-bibtex`, `pypandoc-binary`)
 + Docs: `docs/img/favicon.svg` — the nested contour bands descending into the global minimum —
   is now the default for both the site logo and the favicon
++ **Breaking (subclasses):** the data-dependent `Benchmark` fields became name-mangled private
+  storage (`__support_path`, `__paras`, `__f_global`, `__x_global`, `__ndim`, `__bounds`) instead of
+  the protected `_support_path`/`_paras`/`_f_global`/`_x_global`/`_ndim`/`_bounds` attributes, so
+  assigning one of those names in a subclass no longer reaches the storage behind the read-only
+  `support_path`/`paras`/`f_global`/`x_global`/`ndim`/`bounds` properties
++ **Breaking (subclasses):** the state is now installed only by `Benchmark.__init__`, which gained
+  the keyword-only `ndim`, `bounds` and `support_path` arguments; the six protected writers
+  (`_set_ndim()`, `_set_bounds()`, `_set_f_global()`, `_set_x_global()`, `_set_paras()`,
+  `_set_support_path()`) are removed, so `FuncBenchmark`/`CecBenchmark` and every CEC problem
+  resolve their shape, data and optima *before* calling `super().__init__()` instead of patching
+  fields afterwards. `check_ndim_and_bounds` became a pure resolver returning `(ndim, bounds)`,
+  `make_support_data_path` returns the data folder, and `CecBenchmark` gained `x_global=`/`f_global=`
+  (value or `(problem, ndim)` callable, defaulting to the official shift and the bias) plus a
+  `load(problem, ndim, support_path)` hook for class-specific data; the CEC problems that are meant
+  to be subclassed forward those knobs (plus `default_bounds=` and, when they bind their own kernel,
+  `compute=`/`param_names=`/`paras=`), so a subclass re-describes its data, optimum or kernel through
+  its constructor — with `None` always meaning "keep my own value" and a forwarded `load` hook running
+  after the parent's; `_bind_kernel` keeps ownership of `paras`, which may also be a callable
++ **Breaking:** the coordinate shift is now a constructor-only kernel argument — every kernel
+  signature is `compute(x, shift, *params, out)` starting with `x = x - shift`, the base injects
+  the shift automatically (it is not a `param_names` entry), unshifted problems receive zeros so
+  the compiled signature is uniform, and third-party kernels must adopt the new second parameter;
++ `set_shift()` and `_apply_shift()` are removed together with the post-construction constructor
+  wrapper and the base-state snapshots — the shift is normalized once (same scalar-broadcast /
+  length / finite checks, still eager) and then immutable because the kernel is bound with it; the
+  stored bounds and optimum stay unshifted while `bounds`/`lb`/`ub`/`x_global` apply the offset on
+  read and `f_global` is invariant, and `get_paras()` keeps reporting `shift`.
 
 + Opened a new cycle of the release model: this version lives on `release/v2026b1` and
 +   publishes to PyPI under the same name, `v2026b1`, when the cycle merges into `master`
