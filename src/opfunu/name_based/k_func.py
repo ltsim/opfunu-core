@@ -59,7 +59,8 @@ class Katsuura(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             d = 32
             k = np.atleast_2d(np.arange(1, d + 1)).T
             idx = np.arange(0.0, x.shape[0] * 1.0)
@@ -124,7 +125,8 @@ class Keane(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             val = np.sin(x[0] - x[1]) ** 2 * np.sin(x[0] + x[1]) ** 2
             out[0] = val / np.sqrt(x[0] ** 2 + x[1] ** 2)
 
@@ -195,7 +197,8 @@ class Kowalik(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, b: np.ndarray, a: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, b: np.ndarray, a: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             vec = b - (x[0] * (a**2 + a * x[1]) / (a**2 + a * x[2] + x[3]))
             out[0] = np.sum(vec**2)
 

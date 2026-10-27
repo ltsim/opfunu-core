@@ -56,7 +56,8 @@ class Parsopoulos(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = np.cos(x[0]) ** 2.0 + np.sin(x[1]) ** 2.0
 
         super().__init__(

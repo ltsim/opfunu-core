@@ -48,7 +48,8 @@ class Damavandi(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, epsilon: float, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, epsilon: float, out: np.ndarray) -> None:
+            x = x - shift
             num = np.sin(np.pi * (x[0] - 2.0)) * np.sin(np.pi * (x[1] - 2.0))
             den = (np.pi**2) * (x[0] - 2.0) * (x[1] - 2.0) + epsilon
             factor1 = 1.0 - (np.abs(num / den)) ** 5.0
@@ -107,7 +108,8 @@ class Deb01(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = -(1.0 / x.shape[0]) * np.sum(np.sin(5 * np.pi * x) ** 6.0)
 
         super().__init__(
@@ -161,7 +163,8 @@ class Deb03(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = -(1.0 / x.shape[0]) * np.sum(np.sin(5 * np.pi * (x**0.75 - 0.05)) ** 6.0)
 
         super().__init__(
@@ -218,7 +221,8 @@ class Decanomial(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             val = x[1] ** 4 + 12 * x[1] ** 3 + 54 * x[1] ** 2 + 108 * x[1] + 81.0
             val2 = x[0] ** 10.0 - 20 * x[0] ** 9 + 180 * x[0] ** 8 - 960 * x[0] ** 7
             val2 += 3360 * x[0] ** 6 - 8064 * x[0] ** 5 + 13340 * x[0] ** 4
@@ -275,7 +279,8 @@ class Deceptive(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             alpha = np.arange(1.0, x.shape[0] + 1.0) / (x.shape[0] + 1.0)
             beta = 2.0
             g = np.zeros((x.shape[0],))
@@ -345,7 +350,8 @@ class DeckkersAarts(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = (
                 1.0e5 * x[0] ** 2 + x[1] ** 2 - (x[0] ** 2 + x[1] ** 2) ** 2 + 1.0e-5 * (x[0] ** 2 + x[1] ** 2) ** 4
             )
@@ -402,7 +408,8 @@ class DeflectedCorrugatedSpring(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, alpha: typing.Any, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, alpha: typing.Any, out: np.ndarray) -> None:
+            x = x - shift
             K = 5.0
             out[0] = -np.cos(K * np.sqrt(np.sum((x - alpha) ** 2))) + 0.1 * np.sum((x - alpha) ** 2)
 
@@ -460,7 +467,8 @@ class DeVilliersGlasser01(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             t = 0.1 * np.arange(24)
             y = 60.137 * (1.371**t) * np.sin(3.112 * t + 1.761)
             out[0] = sum((x[0] * (x[1] ** t) * np.sin(x[2] * t + x[3]) - y) ** 2.0)
@@ -519,7 +527,8 @@ class DeVilliersGlasser02(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             t = 0.1 * np.arange(16)
             y = 53.81 * 1.27**t * np.tanh(3.012 * t + np.sin(2.13 * t)) * np.cos(np.exp(0.507) * t)
             out[0] = np.sum(
@@ -577,7 +586,8 @@ class DixonPrice(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             i = np.arange(2, x.shape[0] + 1)
             s = i * (2.0 * x[1:] ** 2.0 - x[:-1]) ** 2.0
             out[0] = np.sum(s) + (x[0] - 1.0) ** 2.0
@@ -635,7 +645,8 @@ class Dolan(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = np.abs(
                 (x[0] + 1.7 * x[1]) * np.sin(x[0])
                 - 1.5 * x[2]
@@ -697,7 +708,8 @@ class DropWave(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             norm_x = np.sum(x**2)
             out[0] = -(1 + np.cos(12 * np.sqrt(norm_x))) / (0.5 * norm_x + 2)
 

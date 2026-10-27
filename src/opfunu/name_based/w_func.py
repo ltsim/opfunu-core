@@ -53,7 +53,8 @@ class Watson(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             i = np.atleast_2d(np.arange(30.0)).T
             a = i / 29.0
             j = np.arange(5.0)

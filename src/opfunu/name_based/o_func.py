@@ -65,7 +65,8 @@ class OddSquare(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, b: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, b: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             b = b[0 : x.shape[0]]
             d = x.shape[0] * max((x - b) ** 2.0)
             h = np.sum((x - b) ** 2.0)

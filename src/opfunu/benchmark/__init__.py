@@ -4,7 +4,6 @@
 # --------------------------------------------------%
 import abc
 import dataclasses
-import functools
 import sys
 import typing
 
@@ -34,6 +33,12 @@ class Benchmark(abc.ABC):
     shared evaluation machinery (``evaluate``, ``_evaluate_batch``), the shape
     storage behind ``bounds``/``ndim``/``lb``/``ub``, and the mathematical trait
     defaults below are implemented once, here.
+
+    Every kernel is called as ``(x, shift, *params, out)``: the coordinate shift is
+    injected by the base as the second argument and is therefore part of the compiled
+    signature, fixed once at construction (an unshifted problem receives zeros). The
+    stored bounds and optimum stay unshifted; ``bounds``/``lb``/``ub``/``x_global``
+    translate them on read, while ``f_global`` is invariant.
     """
 
     name: str = "Benchmark name"
@@ -64,16 +69,23 @@ class Benchmark(abc.ABC):
 
     _gufunc_cache: typing.ClassVar[dict[tuple[typing.Any, ...], typing.Any]] = {}
 
+    #: Coordinate shift: the raw constructor value, the normalized vector (``None``
+    #: while unshifted) and the array handed to the kernel as its second argument
+    #: (a zero vector when unshifted, so the compiled signature is uniform).
+    __shift_raw: typing.Any
     __shift: np.ndarray | None
-    __base_bounds: np.ndarray | None
-    __base_x_global: np.ndarray | None
-    __init_depth: int
+    __kernel_shift: np.ndarray
 
-    #: Shape storage: (ndim, 2) bounds matrix and its dimensionality, written by
-    #: the concrete ``check_ndim_and_bounds`` implementations and exposed through
-    #: the read-only ``bounds``/``ndim``/``lb``/``ub`` properties.
-    _ndim: int
-    _bounds: np.ndarray
+    #: Private state owned exclusively by ``Benchmark``: the shape (``ndim``/``bounds``
+    #: behind ``bounds``/``ndim``/``lb``/``ub``), both global-optimum parts (value and
+    #: location), the support-data folder and the display parameters. Subclasses hand
+    #: the resolved values to ``__init__``; nothing writes them later.
+    __support_path: Traversable | None
+    __paras: dict[str, typing.Any]
+    __f_global: float
+    __x_global: np.ndarray
+    __ndim: int
+    __bounds: np.ndarray
 
     def __init__(
         self,
@@ -88,6 +100,10 @@ class Benchmark(abc.ABC):
         verbose: bool = False,
         shift: typing.Any = None,
         prepare: bool | None = None,
+        *,
+        ndim: int,
+        bounds: np.ndarray,
+        support_path: Traversable | None = None,
     ) -> None:
         self.__parallel: bool = bool(parallel)
         self.__fastmath: bool = bool(fastmath)
@@ -105,62 +121,50 @@ class Benchmark(abc.ABC):
         self.__compute: typing.Callable[..., None] | None = None
         self.__dim_changeable: bool = bool(dim_changeable)
         self.__dim_default: int = int(dim_default)
-        # Stored raw; the translation runs post-construction (see __init_subclass__),
-        # once the subclass has set its bounds and global optimum.
-        self.__shift: np.ndarray | None = shift
-        self.__base_bounds: np.ndarray | None = None
-        self.__base_x_global: np.ndarray | None = None
-        # Protected storage: written by subclasses while constructing data-dependent
-        # metadata (loaded shift vectors, ndim-derived optima, display parameters).
-        self._support_path: Traversable | None = None
-        self._paras: dict[str, typing.Any] = {}
-        self._f_global: float = float(f_global)
-        self._x_global: np.ndarray = np.asarray(x_global if x_global is not None else [])
-        # Shape storage; the concrete check_ndim_and_bounds of each base fills it.
-        self._ndim = 0
-        self._bounds = np.array([])
-
-    def __init_subclass__(cls, **kwargs: typing.Any) -> None:
-        super().__init_subclass__(**kwargs)
-        orig_init = cls.__dict__.get("__init__")
-        if orig_init is not None and not getattr(orig_init, "__opfunu_shift_wrapped__", False):
-
-            @functools.wraps(orig_init)
-            def __init__(self: "Benchmark", *args: typing.Any, **kw: typing.Any) -> None:
-                # Nested constructors (e.g. CEC chains calling super().__init__)
-                # re-enter this wrapper; only the outermost exit applies the shift,
-                # so subclass bodies mutating state after super().__init__() are seen.
-                depth = getattr(self, "_Benchmark__init_depth", 0) + 1
-                self.__init_depth = depth
-                try:
-                    orig_init(self, *args, **kw)
-                finally:
-                    self.__init_depth = depth - 1
-                if depth == 1:
-                    raw = getattr(self, "_Benchmark__shift", None)
-                    if raw is not None:
-                        self._apply_shift(raw)
-
-            __init__.__opfunu_shift_wrapped__ = True  # type: ignore[attr-defined]
-            cls.__init__ = __init__  # type: ignore[method-assign]
+        # The state below is written exactly once, here: ``Benchmark`` is its only
+        # owner, so subclasses hand the resolved values to this constructor instead
+        # of mutating them afterwards (there are no protected writers any more).
+        self.__ndim = int(ndim)
+        self.__bounds = np.asarray(bounds, dtype=float)
+        self.__f_global = float(f_global)
+        self.__x_global = np.asarray(x_global if x_global is not None else [])
+        self.__support_path = support_path
+        self.__paras: dict[str, typing.Any] = {}
+        # The shift is a kernel argument, so it is resolved against the ndim above
+        # and is fixed for the lifetime of the compiled kernel.
+        self.__shift_raw: typing.Any = shift
+        self.__shift: np.ndarray | None = None
+        self.__kernel_shift: np.ndarray = np.zeros(0, dtype=self.__dtype)
+        self._finalize_shift()
 
     @property
     def shift(self) -> np.ndarray | None:
-        """The coordinate shift vector, or ``None`` when the problem is unshifted."""
-        return getattr(self, "_Benchmark__shift", None)
+        """The coordinate shift vector, or ``None`` when the problem is unshifted (read-only)."""
+        return self.__shift
 
-    def _set_bounds(self, bounds: np.ndarray) -> None:
-        """Write the (ndim, 2) bounds matrix behind the read-only ``bounds`` property."""
-        self._bounds = np.asarray(bounds, dtype=float)
+    def _finalize_shift(self) -> None:
+        """
+        Validate the constructor shift against the dimensionality given to ``__init__``.
 
-    def _normalize_shift(self, shift: typing.Any) -> np.ndarray:
-        """Validate a user shift vector against the problem dimensionality."""
+        Called once, at the end of ``Benchmark.__init__``: the shift travels to the
+        kernel as its second argument, so it becomes part of the compiled signature and
+        cannot change later. Scalars are broadcast, a length mismatch or a non-finite
+        entry raises ``ValueError``, and an unshifted problem gets a zero vector so
+        every kernel shares one signature.
+        """
+        raw = self.__shift_raw
         ndim = int(self.ndim)
-        if isinstance(shift, (int, float, np.integer, np.floating)):
-            offset = np.full(ndim, float(shift))
+        if raw is None:
+            self.__shift = None
+            self.__kernel_shift = np.zeros(ndim, dtype=self.dtype)
+            return
+        if isinstance(raw, (int, float, np.integer, np.floating)):
+            offset = np.full(ndim, float(raw))
         else:
             try:
-                offset = np.asarray(shift, dtype=float).ravel()
+                # np.array (not np.asarray) so the owned vector never aliases the
+                # caller's array: the shift is fixed once the kernel is bound.
+                offset = np.array(raw, dtype=float).ravel()
             except (TypeError, ValueError) as exc:
                 raise ValueError(f"The shift must be a scalar or a 1D array-like of length {ndim}!") from exc
             if offset.size == 1 and ndim > 1:
@@ -169,54 +173,14 @@ class Benchmark(abc.ABC):
             raise ValueError(f"The shift length ({offset.size}) must match ndim ({ndim})!")
         if not np.all(np.isfinite(offset)):
             raise ValueError("The shift vector must contain only finite numbers!")
-        return offset
-
-    def _apply_shift(self, shift: typing.Any) -> None:
-        """Translate bounds and global optimum by ``shift`` (idempotent, re-settable)."""
-        offset = self._normalize_shift(shift)
-        if self.__base_bounds is None:
-            self.__base_bounds = np.array(self.bounds, dtype=float, copy=True)
-        if self.__base_x_global is None:
-            try:
-                current = np.array(self.x_global, dtype=float, copy=True)
-            except (TypeError, ValueError):
-                current = np.array([])
-            self.__base_x_global = current
-        assert self.__base_bounds is not None and self.__base_x_global is not None
-        # Restore the base state first so repeated calls do not accumulate.
-        self._set_bounds(self.__base_bounds.copy())
-        base_x = self.__base_x_global
-        if base_x.size > 0:
-            self._x_global = base_x.copy()
-        # Translate the search space: bounds_new = bounds_base + o.
-        self._set_bounds(self.__base_bounds + offset[:, None])
-        # Translate the optimum: x_global = x*_base + o.
-        if base_x.size > 0:
-            flat = base_x.ravel()
-            if flat.size == offset.size:
-                self._x_global = flat + offset
-            else:
-                raise ValueError(f"Cannot shift x_global of length {flat.size} with shift of length {offset.size}!")
-        self.__shift = offset.copy()
-        self._paras["shift"] = self.__shift.copy()
-
-    def set_shift(self, shift: typing.Any = None) -> None:
-        """Set (or reset with ``None``) the coordinate shift after construction."""
-        if shift is None:
-            if self.__base_bounds is not None:
-                self._set_bounds(self.__base_bounds.copy())
-            if self.__base_x_global is not None and self.__base_x_global.size > 0:
-                self._x_global = self.__base_x_global.copy()
-            self.__shift = None
-            self._paras.pop("shift", None)
-        else:
-            self._apply_shift(shift)
+        self.__shift = offset
+        self.__kernel_shift = np.ascontiguousarray(offset, dtype=self.dtype)
 
     # --- configuration exposed through read-only properties ------------------
-    # Every property on this class is reader-only: values are supplied to
-    # ``__init__`` (or to ``_bind_kernel``) at construction time. Subclasses
-    # write the data-dependent fields through the protected ``_f_global``,
-    # ``_x_global``, ``_paras`` and ``_support_path`` attributes.
+    # Every property on this class is reader-only: the state behind them is passed
+    # to ``__init__`` (and the display metadata to ``_bind_kernel``) by the bases,
+    # which resolve it before calling ``super().__init__()``. ``Benchmark`` is the
+    # only writer; there are no protected setters to mutate the state afterwards.
     @property
     def parallel(self) -> bool:
         """Whether the gufunc kernel is compiled with ``target="parallel"`` (read-only)."""
@@ -235,7 +199,7 @@ class Benchmark(abc.ABC):
     @property
     def support_path(self) -> Traversable | None:
         """The package-data directory holding shift/rotation files (CEC only, read-only)."""
-        return self._support_path
+        return self.__support_path
 
     @property
     def verbose(self) -> bool:
@@ -245,7 +209,7 @@ class Benchmark(abc.ABC):
     @property
     def paras(self) -> dict[str, typing.Any]:
         """Display metadata mapping parameter names to their runtime values (read-only)."""
-        return self._paras
+        return self.__paras
 
     @property
     def numba_compiled(self) -> bool:
@@ -255,12 +219,21 @@ class Benchmark(abc.ABC):
     @property
     def f_global(self) -> float:
         """The known global optimum of the problem (read-only)."""
-        return self._f_global
+        return self.__f_global
 
     @property
     def x_global(self) -> np.ndarray:
-        """A location of the global optimum (1-D array, ``len(x_global) == ndim``, read-only)."""
-        return self._x_global
+        """
+        A location of the global optimum (1-D array, ``len(x_global) == ndim``, read-only).
+
+        The stored optimum is the unshifted one; a shifted problem reports it
+        translated by the offset (``x_global = x*_base + o``).
+        """
+        shift = self.__shift
+        stored = self.__x_global
+        if shift is None or stored.size == 0:
+            return stored
+        return typing.cast("np.ndarray", stored + shift)
 
     @property
     def dim_changeable(self) -> bool:
@@ -304,18 +277,26 @@ class Benchmark(abc.ABC):
         param_names: list[str] | None = None,
         *,
         plain: bool = False,
-        paras: dict[str, typing.Any] | list[str] | tuple[str, ...] | None = None,
+        paras: typing.Union[
+            dict[str, typing.Any], list[str], tuple[str, ...], typing.Callable[..., dict[str, typing.Any]], None
+        ] = None,
     ) -> None:
         """
         Install ``compute`` and bind it for execution.
 
-        The only sanctioned caller of the private ``__build_compute``
-        The only sanctioned caller of the private ``__build_compute``
-        helper. ``param_names`` lists the kernel parameters in call order
+        The only sanctioned caller of the private ``__build_compute`` helper.
+        ``param_names`` lists the kernel parameters in call order
         (instance attributes read at bind time); ``paras`` is display
         metadata (a dict, or a list of attribute names resolved against
         ``self``; defaults to ``{name: getattr(self, name)}`` for
         ``param_names``).
+        The coordinate shift is *not* one of ``param_names``: the base injects
+        it as the kernel's second argument, right after ``x``, so every kernel —
+        compiled or plain — is called as ``(x, shift, *params, out)`` and the
+        gufunc signature always carries it (an unshifted problem receives
+        zeros). It was resolved once by ``Benchmark.__init__`` and never changes.
+        ``paras`` may also be a callable taking the problem, evaluated here, for
+        problems whose display metadata only exists after the base loaded its data.
         With ``plain=True`` the kernel is declared Numba-incompatible and
         bound uncompiled, whatever the ``prepare`` flag says; otherwise it is
         compiled through ``__build_compute`` when Numba is installed and the
@@ -329,14 +310,13 @@ class Benchmark(abc.ABC):
         names: list[str] = list(param_names) if param_names is not None else []
         self.__param_names = names
         if paras is None:
-            if names:
-                self._paras = {name: getattr(self, name) for name in names}
-            else:
-                self._paras = {}
+            self.__paras = {name: getattr(self, name) for name in names} if names else {}
         elif isinstance(paras, dict):
-            self._paras = dict(paras)
+            self.__paras = dict(paras)
         elif isinstance(paras, (list, tuple)):
-            self._paras = {name: getattr(self, name) for name in paras}
+            self.__paras = {name: getattr(self, name) for name in paras}
+        elif callable(paras):
+            self.__paras = dict(paras(self))
         else:
             raise TypeError(f"Unsupported paras metadata type: {type(paras)}")
         if self.__kernel is None:
@@ -454,11 +434,14 @@ class Benchmark(abc.ABC):
         Compile the bound kernel into a ``guvectorize`` gufunc.
 
         ``param_names`` lists the instance attributes the kernel needs
-        (in call order, after ``x`` and before ``out``). The caller decides
-        whether a compilation attempt is made; this helper assumes Numba is
-        installed. Attribute lookup and normalization errors propagate; only
-        Numba compilation/warmup failures fall back to the plain Python
-        kernel, keeping the same ``(x, *params, out)`` calling convention.
+        (in call order, after the injected shift and before ``out``). The shift
+        itself is always the second core argument, so the signature is
+        ``(n),(n),...->()`` and an unshifted problem still receives a zero
+        vector. The caller decides whether a compilation attempt is made; this
+        helper assumes Numba is installed. Attribute lookup and normalization
+        errors propagate; only Numba compilation/warmup failures fall back to
+        the plain Python kernel, keeping the same
+        ``(x, shift, *params, out)`` calling convention.
         On fallback the raised exception is stored in ``_compile_error``
         (useful for diagnosing silent fallbacks). Compilation (plus a warmup
         call) happens here — either at instantiation through ``_bind_kernel``
@@ -478,8 +461,9 @@ class Benchmark(abc.ABC):
             raise TypeError(f"Too many kernel dimensions for a gufunc signature: {needed} > {len(alphabet)}")
         letters = iter(alphabet)
         nb_float = nb.from_dtype(self.dtype)
-        layouts = ["(n)"]
-        nbtypes: list[typing.Any] = [nb_float[:]]
+        # `n` is also the layout of the injected shift vector, always argument #2.
+        layouts = ["(n)", "(n)"]
+        nbtypes: list[typing.Any] = [nb_float[:], nb_float[:]]
         for (_, npdtype), ndim in zip(normed, ndims):
             nbdtype: typing.Any = nb.from_dtype(np.dtype(npdtype))
             if ndim == 0:
@@ -511,7 +495,7 @@ class Benchmark(abc.ABC):
             x0 = np.zeros(self.ndim, dtype=self.dtype)
             if self.__out.dtype != self.dtype:
                 self.__out = np.empty(1, dtype=self.dtype)
-            gufunc(x0, *[v for v, _ in normed], self.__out)
+            gufunc(x0, self.__kernel_shift, *[v for v, _ in normed], self.__out)
             self.__numba_compiled = True
             return typing.cast(typing.Callable[..., None], gufunc)
         except Exception as exc:
@@ -546,12 +530,10 @@ class Benchmark(abc.ABC):
         compute = self._compute
         if compute is None:
             raise RuntimeError(f"{type(self).__name__} has no kernel; call _bind_kernel first.")
-        shift = self.__shift
-        if shift is not None:
-            x = np.asarray(x, dtype=float) - np.asarray(shift, dtype=float)
         arr = np.ascontiguousarray(x, dtype=self.dtype)
         params = [self._cast_kernel_param(getattr(self, name)) for name in self._param_names]
-        compute(arr, *params, self._out)
+        # The kernel owns the translation: it receives (x, shift, *params, out).
+        compute(arr, self.__kernel_shift, *params, self._out)
         return self.__cast_result(self._out[0])
 
     def _evaluate_batch(self, x: np.ndarray) -> np.ndarray:
@@ -568,14 +550,11 @@ class Benchmark(abc.ABC):
         if arr.ndim == 1:
             arr = arr[np.newaxis, :]
         if not self.numba_compiled:
-            # Plain-Python kernels are scalar ``(x, *params, out)`` writers; loop.
+            # Plain-Python kernels are scalar ``(x, shift, *params, out)`` writers; loop.
             return np.asarray([self.__evaluate(row) for row in arr], dtype=self.dtype)
-        shift = self.__shift
-        if shift is not None:
-            arr = np.ascontiguousarray(np.asarray(arr, dtype=float) - np.asarray(shift, dtype=float), dtype=self.dtype)
         out = np.empty(arr.shape[0], dtype=self.dtype)
         params = [self._cast_kernel_param(getattr(self, name)) for name in self._param_names]
-        compute(arr, *params, out)
+        compute(arr, self.__kernel_shift, *params, out)
         return out
 
     def _repr_latex_(self) -> str:
@@ -598,9 +577,14 @@ class Benchmark(abc.ABC):
         return Formula(self.latex_formula_global_optimum)
 
     @abc.abstractmethod
-    def check_ndim_and_bounds(self, *args: typing.Any, **kwargs: typing.Any) -> None:
+    def check_ndim_and_bounds(self, *args: typing.Any, **kwargs: typing.Any) -> tuple[int, np.ndarray]:
         """
-        Check the bounds when initializing the object.
+        Resolve the dimensionality and the (ndim, 2) bounds matrix for this problem.
+
+        A pure resolver: it validates the requested shape against the problem's
+        configuration and returns ``((ndim, bounds))`` without touching any state.
+        Each base calls it *before* ``super().__init__()``, whose ``ndim``/``bounds``
+        keyword arguments then install the result as immutable state.
 
         Parameters
         ----------
@@ -630,7 +614,10 @@ class Benchmark(abc.ABC):
         Return the parameters of the problem. Depended on function
         """
         default = {"bounds": self.bounds, "ndim": self.ndim}
-        return {**default, **self.paras}
+        paras = {**default, **self.paras}
+        if self.__shift is not None:
+            paras["shift"] = self.__shift.copy()
+        return paras
 
     def evaluate(self, x: np.ndarray, *args: typing.Any) -> np.floating | np.integer:
         """
@@ -709,8 +696,14 @@ class Benchmark(abc.ABC):
         The lower/upper bounds to be used for optimization problem. This a 2D-matrix of [lower, upper] array that
         contain the lower and upper bounds for the problem. The problem should not be asked for evaluation outside
         these bounds. ``len(bounds) == ndim``.
+
+        The stored bounds are the unshifted ones; a shifted problem reports them
+        translated by the offset (``bounds_new = bounds_base + o``).
         """
-        return self._bounds
+        shift = self.__shift
+        if shift is None:
+            return self.__bounds
+        return typing.cast("np.ndarray", self.__bounds + shift[:, None])
 
     @property
     def ndim(self) -> int:
@@ -722,7 +715,7 @@ class Benchmark(abc.ABC):
         ndim : int
             The dimensionality of the problem
         """
-        return self._ndim
+        return self.__ndim
 
     @property
     def lb(self) -> np.ndarray:

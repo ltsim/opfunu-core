@@ -62,7 +62,10 @@ class Langermann(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, c: np.ndarray, a: np.ndarray, b: np.ndarray, out: np.ndarray) -> None:
+        def compute(
+            x: np.ndarray, shift: np.ndarray, c: np.ndarray, a: np.ndarray, b: np.ndarray, out: np.ndarray
+        ) -> None:
+            x = x - shift
             out[0] = -np.sum(
                 c
                 * np.exp(-(1 / np.pi) * ((x[0] - a) ** 2 + (x[1] - b) ** 2))
@@ -150,7 +153,8 @@ class LennardJones(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, dim_supported: list[int], out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, dim_supported: list[int], out: np.ndarray) -> None:
+            x = x - shift
             if x.shape[0] not in dim_supported:
                 raise ValueError(f"{'LennardJones'} problem is only supported ndim in {dim_supported}!")
             k = int(x.shape[0] / 3)
@@ -254,7 +258,8 @@ class Leon(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = 100.0 * (x[1] - x[0] ** 2.0) ** 2.0 + (1 - x[0]) ** 2.0
 
         super().__init__(
@@ -320,7 +325,8 @@ class Levy03(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             y = 1 + (x - 1) / 4
             v = np.sum((y[:-1] - 1) ** 2 * (1 + 10 * np.sin(np.pi * y[1:]) ** 2))
             z = (y[-1] - 1) ** 2
@@ -383,7 +389,8 @@ class Levy05(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             idx = np.arange(1, 6)
             a = idx * np.cos((idx - 1) * x[0] + idx)
             b = idx * np.cos((idx + 1) * x[1] + idx)
@@ -447,7 +454,8 @@ class Levy13(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             u = np.sin(3 * np.pi * x[0]) ** 2
             v = (x[0] - 1) ** 2 * (1 + (np.sin(3 * np.pi * x[1])) ** 2)
             w = (x[1] - 1) ** 2 * (1 + (np.sin(2 * np.pi * x[1])) ** 2)

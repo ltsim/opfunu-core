@@ -46,7 +46,8 @@ class Ackley01(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             ndim = x.shape[0]
             u = np.sum(x**2)
             v = np.sum(np.cos(2 * np.pi * x))
@@ -103,7 +104,8 @@ class Ackley02(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = -200 * np.exp(-0.02 * np.sqrt(x[0] ** 2 + x[1] ** 2))
 
         super().__init__(
@@ -159,7 +161,8 @@ class Ackley03(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = -200 * np.exp(-0.02 * np.sqrt(x[0] ** 2 + x[1] ** 2)) + 5 * np.exp(
                 np.cos(3 * x[0]) + np.sin(3 * x[1])
             )
@@ -215,7 +218,8 @@ class Adjiman(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = np.cos(x[0]) * np.sin(x[1]) - x[0] / (x[1] ** 2 + 1)
 
         super().__init__(
@@ -269,7 +273,8 @@ class Alpine01(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = np.sum(np.abs(x * np.sin(x) + 0.1 * x))
 
         super().__init__(
@@ -323,7 +328,8 @@ class Alpine02(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = np.prod(np.sqrt(x) * np.sin(x))
 
         super().__init__(
@@ -379,7 +385,8 @@ class AMGM(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             f1 = np.sum(x) / x.shape[0]
             f2 = np.prod(x) ** (1.0 / x.shape[0])
             out[0] = (f1 - f2) ** 2

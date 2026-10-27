@@ -52,7 +52,8 @@ class Matyas(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = 0.26 * (x[0] ** 2 + x[1] ** 2) - 0.48 * x[0] * x[1]
 
         super().__init__(
@@ -113,7 +114,8 @@ class McCormick(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = np.sin(x[0] + x[1]) + (x[0] - x[1]) ** 2 - 1.5 * x[0] + 2.5 * x[1] + 1
 
         super().__init__(
@@ -166,7 +168,8 @@ class Meyer(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, b: np.ndarray, a: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, b: np.ndarray, a: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             vec = x[0] * np.exp(x[1] / (b + x[2]))
             out[0] = np.sum((a - vec) ** 2)
 
@@ -253,7 +256,8 @@ class Michalewicz(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             m = 10.0
             idx = np.arange(1, x.shape[0] + 1)
             out[0] = -np.sum(np.sin(x) * np.sin(idx * x**2 / np.pi) ** (2 * m))
@@ -315,7 +319,8 @@ class MieleCantrell(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = (np.exp(-x[0]) - x[1]) ** 4 + 100 * (x[1] - x[2]) ** 6 + np.tan(x[2] - x[3]) ** 4 + x[0] ** 8
 
         super().__init__(
@@ -376,7 +381,8 @@ class Mishra01(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             xn = x.shape[0] - np.sum(x[0:-1])
             out[0] = (1 + xn) ** xn
 
@@ -439,7 +445,8 @@ class Mishra02(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             xn = x.shape[0] - np.sum((x[:-1] + x[1:]) / 2.0)
             out[0] = (1 + xn) ** xn
 
@@ -501,7 +508,8 @@ class Mishra03(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = 0.01 * (x[0] + x[1]) + np.sqrt(np.abs(np.cos(np.sqrt(np.abs(x[0] ** 2 + x[1] ** 2)))))
 
         super().__init__(
@@ -562,7 +570,8 @@ class Mishra04(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = 0.01 * (x[0] + x[1]) + np.sqrt(np.abs(np.sin(np.sqrt(np.abs(x[0] ** 2 + x[1] ** 2)))))
 
         super().__init__(
@@ -623,7 +632,8 @@ class Mishra05(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = (
                 0.01 * x[0]
                 + 0.1 * x[1]
@@ -693,7 +703,8 @@ class Mishra06(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             a = 0.1 * ((x[0] - 1) ** 2 + (x[1] - 1) ** 2)
             u = (np.cos(x[0]) + np.cos(x[1])) ** 2
             v = (np.sin(x[0]) + np.sin(x[1])) ** 2
@@ -757,7 +768,8 @@ class Mishra07(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, fact: float, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, fact: float, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = (np.prod(x) - fact) ** 2.0
 
         resolved_ndim = ndim if isinstance(ndim, int) and ndim > 1 else 2
@@ -823,7 +835,8 @@ class Mishra08(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             val = np.abs(
                 x[0] ** 10
                 - 20 * x[0] ** 9
@@ -907,7 +920,8 @@ class Mishra09(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             a = 2 * x[0] ** 3 + 5 * x[0] * x[1] + 4 * x[2] - 2 * x[0] ** 2 * x[2] - 18
             b = x[0] + x[1] ** 3 + x[0] * x[1] ** 2 + x[0] * x[2] ** 2 - 22.0
             c = 8 * x[0] ** 2 + 2 * x[1] * x[2] + 2 * x[1] ** 2 + 3 * x[1] ** 3 - 52
@@ -971,7 +985,8 @@ class Mishra10(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             x_int = x.astype(np.int64)
             out[0] = ((x_int[0] + x_int[1]) - (x_int[0] * x_int[1])) ** 2.0
 
@@ -1033,7 +1048,8 @@ class Mishra11(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = ((1.0 / x.shape[0]) * np.sum(np.abs(x)) - (np.prod(np.abs(x))) ** 1.0 / x.shape[0]) ** 2.0
 
         super().__init__(
@@ -1093,7 +1109,8 @@ class MultiModal(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = np.sum(np.abs(x)) * np.prod(np.abs(x))
 
         super().__init__(

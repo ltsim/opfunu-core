@@ -43,44 +43,51 @@ class FuncBenchmark(Benchmark):
         dim_supported: list[int] | None = None,
         param_names: list[str] | None = None,
         plain: bool = False,
-        paras: dict[str, typing.Any] | list[str] | tuple[str, ...] | None = None,
+        paras: typing.Union[
+            dict[str, typing.Any], list[str], tuple[str, ...], typing.Callable[..., dict[str, typing.Any]], None
+        ] = None,
         verbose: bool = False,
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        super().__init__(
-            parallel=parallel,
-            fastmath=fastmath,
-            dtype=dtype,
-            compute=compute,
-            # Callables need the resolved dimensionality; they are evaluated below,
-            # after ``check_ndim_and_bounds``.
-            f_global=f_global if not callable(f_global) else 0.0,
-            x_global=x_global if (x_global is not None and not callable(x_global)) else None,
-            dim_changeable=dim_changeable if dim_changeable is not None else False,
-            dim_default=dim_default if dim_default is not None else 2,
-            verbose=verbose,
-            shift=shift,
-            prepare=prepare,
-        )
-
-        self.__dim_supported: list[int] = list(dim_supported) if dim_supported is not None else []
-
         if type(self) is FuncBenchmark:
             raise TypeError("FuncBenchmark is abstract; subclass it and provide compute()")
         if default_bounds is None:
             raise TypeError("FuncBenchmark requires default_bounds; pass it to super().__init__()")
 
-        self.check_ndim_and_bounds(ndim, bounds, default_bounds)
-        # ``f_global``/``x_global`` depend on the resolved dimensionality, so they
-        # are (re)written through the protected storage after the bounds check.
-        self._f_global = float(f_global(self.ndim) if callable(f_global) else f_global)
+        changeable = dim_changeable if dim_changeable is not None else False
+        default = dim_default if dim_default is not None else 2
+        # Everything the base stores is resolved *first*, then handed to the constructor
+        # as immutable state: the shape, the two global-optimum parts and the support data.
+        resolved_ndim, resolved_bounds = self.check_ndim_and_bounds(
+            ndim, bounds, default_bounds, dim_changeable=changeable, dim_default=default
+        )
+        # ``f_global``/``x_global`` may be callables of the resolved dimensionality.
+        resolved_f_global = f_global(resolved_ndim) if callable(f_global) else f_global
         if callable(x_global):
-            self._x_global = np.asarray(x_global(self.ndim))
+            resolved_x_global = np.asarray(x_global(resolved_ndim))
         elif x_global is None:
-            self._x_global = np.asarray(np.zeros(self.ndim))
+            resolved_x_global = np.zeros(resolved_ndim)
         else:
-            self._x_global = np.asarray(x_global)
+            resolved_x_global = np.asarray(x_global)
+
+        super().__init__(
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
+            compute=compute,
+            f_global=resolved_f_global,
+            x_global=resolved_x_global,
+            dim_changeable=changeable,
+            dim_default=default,
+            verbose=verbose,
+            shift=shift,
+            prepare=prepare,
+            ndim=resolved_ndim,
+            bounds=resolved_bounds,
+            support_path=None,
+        )
+        self.__dim_supported: list[int] = list(dim_supported) if dim_supported is not None else []
         self._bind_kernel(compute, param_names or [], plain=plain, paras=paras)
 
     @property
@@ -93,10 +100,20 @@ class FuncBenchmark(Benchmark):
         self.__dim_supported = list(value)
 
     def check_ndim_and_bounds(
-        self, ndim: int | None = None, bounds: typing.Any = None, default_bounds: typing.Any = None
-    ) -> None:
+        self,
+        ndim: int | None = None,
+        bounds: typing.Any = None,
+        default_bounds: typing.Any = None,
+        *,
+        dim_changeable: bool = False,
+        dim_default: int = 2,
+    ) -> tuple[int, np.ndarray]:
         """
-        Check the bounds when initializing the object.
+        Resolve the dimensionality and bounds matrix for this problem (pure resolver).
+
+        Validates the requested shape against the problem's configuration and returns
+        ``(ndim, bounds)`` without touching any state; ``__init__`` installs the result
+        as immutable state through ``super().__init__()``.
 
         Parameters
         ----------
@@ -106,36 +123,31 @@ class FuncBenchmark(Benchmark):
             List of lower bound and upper bound, should use default None value
         default_bounds : np.ndarray
             List of initial lower bound and upper bound values
+        dim_changeable : bool
+            Whether the dimensionality can be changed at construction
+        dim_default : int
+            The fallback dimensionality for fixed-size problems
         """
         if ndim is None:
-            self._bounds = default_bounds if bounds is None else np.array(bounds).T
-            self._ndim = self._bounds.shape[0]
-        else:
-            if bounds is None:
-                if self.dim_changeable:
-                    if isinstance(ndim, int) and ndim > 1:
-                        self._ndim = int(ndim)
-                        self._bounds = np.array([default_bounds[0] for _ in range(self._ndim)])
-                    else:
-                        raise ValueError("ndim must be an integer and > 1!")
-                else:
-                    self._ndim = self.dim_default
-                    self._bounds = default_bounds
-                    print(f"{self.__class__.__name__} is fixed problem with {self.dim_default} variables!")
-            else:
-                if self.dim_changeable:
-                    self._bounds = np.array(bounds).T
-                    self._ndim = self._bounds.shape[0]
-                    print(f"{self.__class__.__name__} problem is set with {self._ndim} variables!")
-                else:
-                    self._bounds = np.array(bounds).T
-                    if self._bounds.shape[0] != self.dim_default:
-                        raise ValueError(
-                            f"{self.__class__.__name__} is fixed problem with {self._ndim} variables. "
-                            "Please setup the correct bounds!"
-                        )
-                    else:
-                        self._ndim = self.dim_default
+            resolved_bounds = default_bounds if bounds is None else np.array(bounds).T
+            return len(resolved_bounds), np.asarray(resolved_bounds, dtype=float)
+        if bounds is None:
+            if dim_changeable:
+                if isinstance(ndim, int) and ndim > 1:
+                    return ndim, np.array([default_bounds[0] for _ in range(ndim)])
+                raise ValueError("ndim must be an integer and > 1!")
+            print(f"{self.__class__.__name__} is fixed problem with {dim_default} variables!")
+            return dim_default, np.asarray(default_bounds, dtype=float)
+        resolved_bounds = np.array(bounds).T
+        if dim_changeable:
+            print(f"{self.__class__.__name__} problem is set with {len(resolved_bounds)} variables!")
+            return len(resolved_bounds), resolved_bounds
+        if len(resolved_bounds) != dim_default:
+            raise ValueError(
+                f"{self.__class__.__name__} is fixed problem with {len(resolved_bounds)} variables. "
+                "Please setup the correct bounds!"
+            )
+        return dim_default, resolved_bounds
 
     def check_solution(self, x: np.ndarray) -> None:
         """
@@ -146,5 +158,5 @@ class FuncBenchmark(Benchmark):
         x : np.ndarray
             The solution
         """
-        if not self.dim_changeable and (len(x) != self._ndim):
-            raise ValueError(f"The length of solution should have {self._ndim} variables!")
+        if not self.dim_changeable and (len(x) != self.ndim):
+            raise ValueError(f"The length of solution should have {self.ndim} variables!")
