@@ -21,8 +21,8 @@ The full changelog is maintained in the repository:
   autodoc API reference inside `{eval-rst}` blocks, `sphinxcontrib-bibtex` citations, and a strict
   `sphinx-build -W` build. Navigation is captioned toctrees + a `globaltoc` sidebar (no more Material
   top tabs). Added `sphinx-autobuild` live preview + a `docs/Makefile`; benchmark docstrings were
-  repaired for reST (raw LaTeX, valid math/citation blocks); GitHub Pages now deploys a Sphinx artifact
-  from `docs.yml` (set Pages Source to *GitHub Actions*).
+  repaired for reST (raw LaTeX, valid math/citation blocks); GitHub Pages now deploys the Sphinx
+  build to the `gh-pages` branch from `docs.yml` (Pages Source stays *Deploy from a branch*).
 * Docs: `docs/img/favicon.svg` (contour bands + minimum dot) is the default logo and favicon of
   the built site.
 * **Breaking (subclasses):** the data-dependent `Benchmark` fields (`_f_global`, `_x_global`,

@@ -19,8 +19,13 @@ concurrency:
 
 jobs:
   build:
-    name: Build docs (Sphinx)
+    name: Build & deploy docs (Sphinx)
     runs-on: ubuntu-latest
+
+    # contents: write is needed by the deploy step to push the gh-pages branch;
+    # on pull_request runs the deploy step is skipped, so nothing writes.
+    permissions:
+      contents: write
 
     steps:
       - uses: actions/checkout@v6
@@ -39,31 +44,10 @@ jobs:
       - name: Disable Jekyll processing
         run: touch docs/_build/html/.nojekyll
 
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v6
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v5
+      - name: Deploy to GitHub Pages (gh-pages branch)
+        if: github.event_name != 'pull_request'
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          path: docs/_build/html
-
-  deploy:
-    name: Deploy to GitHub Pages
-    if: github.event_name != 'pull_request'
-    needs: build
-    runs-on: ubuntu-latest
-
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v5
-
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: docs/_build/html
