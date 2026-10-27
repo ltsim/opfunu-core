@@ -54,7 +54,8 @@ class Salomon(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             u = np.sqrt(np.sum(x**2))
             out[0] = 1 - np.cos(2 * np.pi * u) + 0.1 * u
 

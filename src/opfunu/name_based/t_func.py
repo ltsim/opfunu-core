@@ -54,7 +54,8 @@ class TestTubeHolder(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             u = np.sin(x[0]) * np.cos(x[1])
             v = (x[0] ** 2 + x[1] ** 2) / 200
             out[0] = -4 * np.abs(u * np.exp(np.abs(np.cos(v))))

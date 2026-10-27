@@ -53,7 +53,8 @@ class Qing(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             i = np.arange(1, x.shape[0] + 1)
             out[0] = np.sum((x**2.0 - i) ** 2.0)
 
@@ -118,7 +119,8 @@ class Quadratic(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = (
                 -3803.84
                 - 138.08 * x[0]
@@ -187,7 +189,8 @@ class Quartic(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             i = np.arange(1, x.shape[0] + 1)
             out[0] = np.sum(i * x**4.0) + np.random.rand()
 
@@ -252,7 +255,8 @@ class Quintic(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = np.sum(np.abs(x**5 - 3 * x**4 + 4 * x**3 + 2 * x**2 - 10 * x - 4))
 
         super().__init__(

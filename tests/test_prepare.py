@@ -19,7 +19,8 @@ class _Kernel(FuncBenchmark):
     """Minimal problem with a self-contained kernel, reused across these tests."""
 
     def __init__(self, ndim=None, bounds=None, **kwargs):
-        def compute(x, out):
+        def compute(x, shift, out):
+            x = x - shift
             out[0] = float(np.sum(x * x))
 
         super().__init__(

@@ -4,7 +4,13 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
+import sys
 import typing
+
+if sys.version_info >= (3, 11):
+    from importlib.resources.abc import Traversable as _Traversable
+else:  # Python 3.10: Traversable lives in importlib.abc
+    from importlib.abc import Traversable as _Traversable
 
 import numpy as np
 
@@ -57,12 +63,27 @@ class F12021(CecBenchmark):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, x - f_shift)
             out[0] = operator.bent_cigar_func(z) + f_bias
 
+        def load(problem: "CecBenchmark", ndim: int, support_path: _Traversable | None) -> None:
+            problem.f_shift = problem.check_shift_data(f_shift, support_path=support_path)[:ndim]
+            problem.f_matrix = problem.check_matrix_data(
+                f_matrix, needed_dim=True, ndim=ndim, support_path=support_path
+            )
+
         super().__init__(
+            ndim=ndim,
+            bounds=bounds,
+            load=load,
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
@@ -74,12 +95,6 @@ class F12021(CecBenchmark):
             shift=shift,
             prepare=prepare,
         )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
-        )
-        self.f_shift = self.check_shift_data(f_shift)[: self.ndim]
-        self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
-        self._x_global = np.asarray(self.f_shift)
         self._bind_kernel(
             compute,
             ["f_matrix", "f_shift", "f_bias"],
@@ -132,12 +147,27 @@ class F22021(CecBenchmark):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, 1000.0 * (x - f_shift) / 100)
             out[0] = operator.modified_schwefel_func(z) + f_bias
 
+        def load(problem: "CecBenchmark", ndim: int, support_path: _Traversable | None) -> None:
+            problem.f_shift = problem.check_shift_data(f_shift, support_path=support_path)[:ndim]
+            problem.f_matrix = problem.check_matrix_data(
+                f_matrix, needed_dim=True, ndim=ndim, support_path=support_path
+            )
+
         super().__init__(
+            ndim=ndim,
+            bounds=bounds,
+            load=load,
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
@@ -149,12 +179,6 @@ class F22021(CecBenchmark):
             shift=shift,
             prepare=prepare,
         )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
-        )
-        self.f_shift = self.check_shift_data(f_shift)[: self.ndim]
-        self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
-        self._x_global = np.asarray(self.f_shift)
         self._bind_kernel(
             compute,
             ["f_matrix", "f_shift", "f_bias"],
@@ -207,12 +231,27 @@ class F32021(CecBenchmark):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, 600.0 * (x - f_shift) / 100)
             out[0] = operator.lunacek_bi_rastrigin_func(z, shift=2.5) + f_bias
 
+        def load(problem: "CecBenchmark", ndim: int, support_path: _Traversable | None) -> None:
+            problem.f_shift = problem.check_shift_data(f_shift, support_path=support_path)[:ndim]
+            problem.f_matrix = problem.check_matrix_data(
+                f_matrix, needed_dim=True, ndim=ndim, support_path=support_path
+            )
+
         super().__init__(
+            ndim=ndim,
+            bounds=bounds,
+            load=load,
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
@@ -224,12 +263,6 @@ class F32021(CecBenchmark):
             shift=shift,
             prepare=prepare,
         )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
-        )
-        self.f_shift = self.check_shift_data(f_shift)[: self.ndim]
-        self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
-        self._x_global = np.asarray(self.f_shift)
         self._bind_kernel(
             compute,
             ["f_matrix", "f_shift", "f_bias"],
@@ -282,12 +315,27 @@ class F42021(CecBenchmark):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, 5.0 * (x - f_shift) / 100)
             out[0] = operator.expanded_griewank_rosenbrock_func(z) + f_bias
 
+        def load(problem: "CecBenchmark", ndim: int, support_path: _Traversable | None) -> None:
+            problem.f_shift = problem.check_shift_data(f_shift, support_path=support_path)[:ndim]
+            problem.f_matrix = problem.check_matrix_data(
+                f_matrix, needed_dim=True, ndim=ndim, support_path=support_path
+            )
+
         super().__init__(
+            ndim=ndim,
+            bounds=bounds,
+            load=load,
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
@@ -299,12 +347,6 @@ class F42021(CecBenchmark):
             shift=shift,
             prepare=prepare,
         )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
-        )
-        self.f_shift = self.check_shift_data(f_shift)[: self.ndim]
-        self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
-        self._x_global = np.asarray(self.f_shift)
         self._bind_kernel(
             compute,
             ["f_matrix", "f_shift", "f_bias"],
@@ -359,6 +401,7 @@ class F52021(CecBenchmark):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_shift: typing.Any,
             idx1: typing.Any,
             idx2: typing.Any,
@@ -369,6 +412,7 @@ class F52021(CecBenchmark):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = x - f_shift
             z1 = np.concatenate((z[idx1], z[idx2], z[idx3]))
             mz = operator.dot_mv(f_matrix, z1)
@@ -379,7 +423,20 @@ class F52021(CecBenchmark):
                 + f_bias
             )
 
+        def load(problem: "CecBenchmark", ndim: int, support_path: _Traversable | None) -> None:
+            problem.f_shift = problem.check_shift_data(f_shift, support_path=support_path)[:ndim]
+            problem.f_matrix = problem.check_matrix_data(
+                f_matrix, needed_dim=True, ndim=ndim, support_path=support_path
+            )
+            problem.f_shuffle = problem.check_shuffle_data(
+                f_shuffle, needed_dim=True, ndim=ndim, support_path=support_path
+            )
+            problem.f_shuffle = (problem.f_shuffle - 1).astype(int)
+
         super().__init__(
+            ndim=ndim,
+            bounds=bounds,
+            load=load,
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
@@ -391,14 +448,6 @@ class F52021(CecBenchmark):
             shift=shift,
             prepare=prepare,
         )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
-        )
-        self.f_shift = self.check_shift_data(f_shift)[: self.ndim]
-        self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
-        self.f_shuffle = self.check_shuffle_data(f_shuffle, needed_dim=True)
-        self.f_shuffle = (self.f_shuffle - 1).astype(int)
-        self._x_global = np.asarray(self.f_shift)
         self.n_funcs = 3
         self.p = np.array([0.3, 0.3, 0.4])
         self.n1 = int(np.ceil(self.p[0] * self.ndim))
@@ -470,6 +519,7 @@ class F62021(CecBenchmark):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_matrix: typing.Any,
             f_shift: typing.Any,
             idx1: typing.Any,
@@ -479,6 +529,7 @@ class F62021(CecBenchmark):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             mz = operator.dot_mv(f_matrix, x - f_shift)
             out[0] = (
                 operator.expanded_schaffer_f6_func(mz[idx1])
@@ -488,7 +539,20 @@ class F62021(CecBenchmark):
                 + f_bias
             )
 
+        def load(problem: "CecBenchmark", ndim: int, support_path: _Traversable | None) -> None:
+            problem.f_shift = problem.check_shift_data(f_shift, support_path=support_path)[:ndim]
+            problem.f_matrix = problem.check_matrix_data(
+                f_matrix, needed_dim=True, ndim=ndim, support_path=support_path
+            )
+            problem.f_shuffle = problem.check_shuffle_data(
+                f_shuffle, needed_dim=True, ndim=ndim, support_path=support_path
+            )
+            problem.f_shuffle = (problem.f_shuffle - 1).astype(int)
+
         super().__init__(
+            ndim=ndim,
+            bounds=bounds,
+            load=load,
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
@@ -500,14 +564,6 @@ class F62021(CecBenchmark):
             shift=shift,
             prepare=prepare,
         )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
-        )
-        self.f_shift = self.check_shift_data(f_shift)[: self.ndim]
-        self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
-        self.f_shuffle = self.check_shuffle_data(f_shuffle, needed_dim=True)
-        self.f_shuffle = (self.f_shuffle - 1).astype(int)
-        self._x_global = np.asarray(self.f_shift)
         self.n_funcs = 4
         self.p = np.array([0.2, 0.2, 0.3, 0.3])
         self.n1 = int(np.ceil(self.p[0] * self.ndim))
@@ -574,6 +630,7 @@ class F72021(CecBenchmark):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_shift: typing.Any,
             idx1: typing.Any,
             idx2: typing.Any,
@@ -588,6 +645,7 @@ class F72021(CecBenchmark):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = x - f_shift
             z1 = np.concatenate((z[idx1], z[idx2], z[idx3], z[idx4], z[idx5]))
             mz = operator.dot_mv(f_matrix, z1)
@@ -600,7 +658,20 @@ class F72021(CecBenchmark):
                 + f_bias
             )
 
+        def load(problem: "CecBenchmark", ndim: int, support_path: _Traversable | None) -> None:
+            problem.f_shift = problem.check_shift_data(f_shift, support_path=support_path)[:ndim]
+            problem.f_matrix = problem.check_matrix_data(
+                f_matrix, needed_dim=True, ndim=ndim, support_path=support_path
+            )
+            problem.f_shuffle = problem.check_shuffle_data(
+                f_shuffle, needed_dim=True, ndim=ndim, support_path=support_path
+            )
+            problem.f_shuffle = (problem.f_shuffle - 1).astype(int)
+
         super().__init__(
+            ndim=ndim,
+            bounds=bounds,
+            load=load,
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
@@ -612,14 +683,6 @@ class F72021(CecBenchmark):
             shift=shift,
             prepare=prepare,
         )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
-        )
-        self.f_shift = self.check_shift_data(f_shift)[: self.ndim]
-        self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
-        self.f_shuffle = self.check_shuffle_data(f_shuffle, needed_dim=True)
-        self.f_shuffle = (self.f_shuffle - 1).astype(int)
-        self._x_global = np.asarray(self.f_shift)
         self.n_funcs = 5
         self.p = np.array([0.1, 0.2, 0.2, 0.2, 0.3])
         self.n1 = int(np.ceil(self.p[0] * self.ndim))
@@ -687,6 +750,7 @@ class F82021(CecBenchmark):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_matrix: typing.Any,
             f_shift: typing.Any,
             lamdas: typing.Any,
@@ -695,6 +759,7 @@ class F82021(CecBenchmark):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             z0 = operator.dot_mv(f_matrix[: x.shape[0], :], x - f_shift[0])
             g0 = lamdas[0] * operator.rastrigin_func(z0) + bias[0]
             w0 = operator.calculate_weight(x - f_shift[0], xichmas[0])
@@ -715,7 +780,15 @@ class F82021(CecBenchmark):
             gs = np.array([g0, g1, g2])
             out[0] = operator.dot_vv(ws, gs) + f_bias
 
+        def load(problem: "CecBenchmark", ndim: int, support_path: _Traversable | None) -> None:
+            problem.f_shift = problem.check_shift_matrix(f_shift, ndim=ndim, support_path=support_path)[:, :ndim]
+            problem.f_matrix = problem.check_matrix_data(f_matrix, ndim=ndim, support_path=support_path)[:, :ndim]
+
         super().__init__(
+            ndim=ndim,
+            bounds=bounds,
+            load=load,
+            x_global=lambda problem, dim: np.asarray(problem.f_shift[0]),
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
@@ -727,12 +800,6 @@ class F82021(CecBenchmark):
             shift=shift,
             prepare=prepare,
         )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
-        )
-        self.f_shift = self.check_shift_matrix(f_shift)[:, : self.ndim]
-        self.f_matrix = self.check_matrix_data(f_matrix)[:, : self.ndim]
-        self._x_global = np.asarray(self.f_shift[0])
         self.n_funcs = 3
         self.xichmas = [10, 20, 30]
         self.lamdas = [1.0, 10.0, 1.0]
@@ -792,6 +859,7 @@ class F92021(CecBenchmark):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_matrix: typing.Any,
             f_shift: typing.Any,
             lamdas: typing.Any,
@@ -800,6 +868,7 @@ class F92021(CecBenchmark):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             z0 = operator.dot_mv(f_matrix[: x.shape[0], :], x - f_shift[0])
             g0 = lamdas[0] * operator.ackley_func(z0) + bias[0]
             w0 = operator.calculate_weight(x - f_shift[0], xichmas[0])
@@ -824,7 +893,15 @@ class F92021(CecBenchmark):
             gs = np.array([g0, g1, g2, g3])
             out[0] = operator.dot_vv(ws, gs) + f_bias
 
+        def load(problem: "CecBenchmark", ndim: int, support_path: _Traversable | None) -> None:
+            problem.f_shift = problem.check_shift_matrix(f_shift, ndim=ndim, support_path=support_path)[:, :ndim]
+            problem.f_matrix = problem.check_matrix_data(f_matrix, ndim=ndim, support_path=support_path)[:, :ndim]
+
         super().__init__(
+            ndim=ndim,
+            bounds=bounds,
+            load=load,
+            x_global=lambda problem, dim: np.asarray(problem.f_shift[0]),
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
@@ -836,12 +913,6 @@ class F92021(CecBenchmark):
             shift=shift,
             prepare=prepare,
         )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
-        )
-        self.f_shift = self.check_shift_matrix(f_shift)[:, : self.ndim]
-        self.f_matrix = self.check_matrix_data(f_matrix)[:, : self.ndim]
-        self._x_global = np.asarray(self.f_shift[0])
         self.n_funcs = 4
         self.xichmas = [10, 20, 30, 40]
         self.lamdas = [10.0, 1e-6, 10, 1.0]
@@ -902,6 +973,7 @@ class F102021(CecBenchmark):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_matrix: typing.Any,
             f_shift: typing.Any,
             lamdas: typing.Any,
@@ -910,6 +982,7 @@ class F102021(CecBenchmark):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             z0 = operator.dot_mv(f_matrix[: x.shape[0], :], x - f_shift[0])
             g0 = lamdas[0] * operator.rastrigin_func(z0) + bias[0]
             w0 = operator.calculate_weight(x - f_shift[0], xichmas[0])
@@ -939,7 +1012,15 @@ class F102021(CecBenchmark):
             gs = np.array([g0, g1, g2, g3, g4])
             out[0] = operator.dot_vv(ws, gs) + f_bias
 
+        def load(problem: "CecBenchmark", ndim: int, support_path: _Traversable | None) -> None:
+            problem.f_shift = problem.check_shift_matrix(f_shift, ndim=ndim, support_path=support_path)[:, :ndim]
+            problem.f_matrix = problem.check_matrix_data(f_matrix, ndim=ndim, support_path=support_path)[:, :ndim]
+
         super().__init__(
+            ndim=ndim,
+            bounds=bounds,
+            load=load,
+            x_global=lambda problem, dim: np.asarray(problem.f_shift[0]),
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
@@ -951,12 +1032,6 @@ class F102021(CecBenchmark):
             shift=shift,
             prepare=prepare,
         )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
-        )
-        self.f_shift = self.check_shift_matrix(f_shift)[:, : self.ndim]
-        self.f_matrix = self.check_matrix_data(f_matrix)[:, : self.ndim]
-        self._x_global = np.asarray(self.f_shift[0])
         self.n_funcs = 5
         self.xichmas = [10, 20, 30, 40, 50]
         self.lamdas = [10.0, 1.0, 10.0, 1e-6, 1.0]

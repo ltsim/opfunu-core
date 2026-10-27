@@ -25,6 +25,18 @@ The full changelog is maintained in the repository:
   from `docs.yml` (set Pages Source to *GitHub Actions*).
 * Docs: `docs/img/favicon.svg` (contour bands + minimum dot) is the default logo and favicon of
   the built site.
+* **Breaking (subclasses):** the data-dependent `Benchmark` fields (`_f_global`, `_x_global`,
+  `_paras`, `_support_path`, `_ndim`, `_bounds`) became name-mangled private storage written only by
+  `Benchmark.__init__` (keyword-only `ndim=`/`bounds=`/`support_path=`); the six `_set_*()` writers
+  are gone, `check_ndim_and_bounds()` is a pure resolver returning `(ndim, bounds)`, and the
+  `FuncBenchmark`/`CecBenchmark` bases and all CEC problems now resolve shape, data and optima before
+  `super().__init__()` — `CecBenchmark` gained `x_global=`/`f_global=` and a `load()` hook, which the
+  subclassed CEC problems forward (with `default_bounds=`, and `compute=`/`param_names=`/`paras=` where
+  they bind their own kernel). The
+  coordinate shift is a constructor-only kernel argument (`compute(x, shift, *params, out)` with
+  `x = x - shift`), injected automatically (not in `param_names`); `set_shift()`/`_apply_shift()` are
+  removed, and the stored bounds/optimum stay unshifted while `bounds`/`lb`/`ub`/`x_global` apply the
+  offset on read with `f_global` invariant.
 * Released on the `release/v2026b1` branch; published to PyPI under the same name, `v2026b1`,
   when the cycle merges into `master`.
 

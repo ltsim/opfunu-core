@@ -4,7 +4,13 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
+import sys
 import typing
+
+if sys.version_info >= (3, 11):
+    from importlib.resources.abc import Traversable as _Traversable
+else:  # Python 3.10: Traversable lives in importlib.abc
+    from importlib.abc import Traversable as _Traversable
 
 import numpy as np
 
@@ -55,7 +61,8 @@ class F12005(CecBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = np.sum((x - f_shift) ** 2) + f_bias
 
         super().__init__(
@@ -115,7 +122,8 @@ class F22005(CecBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+            x = x - shift
             ndim = x.shape[0]
             total = 0.0
             for idx in range(0, ndim):
@@ -187,8 +195,14 @@ class F32005(CecBenchmark):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_shift: typing.Any, f_matrix: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_shift: typing.Any,
+            f_matrix: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_vm((x - f_shift), f_matrix)
             out[0] = operator.elliptic_func(z) + f_bias
 
@@ -253,7 +267,8 @@ class F42005(CecBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+            x = x - shift
             ndim = len(x)
             results = [np.sum(x[:idx] - f_shift[:idx]) ** 2 for idx in range(0, ndim)]
             out[0] = np.sum(results) * (1 + 0.4 * np.abs(np.random.normal(0, 1))) + f_bias
@@ -325,8 +340,14 @@ class F52005(CecBenchmark):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             ndim = x.shape[0]
             best = 0.0
             for idx in range(0, ndim):
@@ -339,26 +360,29 @@ class F52005(CecBenchmark):
                     best = diff
             out[0] = best + f_bias
 
+        def load(problem: "CecBenchmark", ndim: int, support_path: _Traversable | None) -> None:
+            shift_data, matrix_data = problem.load_shift_and_matrix_data(f_shift, support_path=support_path)
+            problem.f_shift = shift_data[:ndim]
+            problem.f_matrix = matrix_data[:ndim, :ndim]
+            problem.f_shift[: int(0.25 * ndim) + 1] = -100
+            problem.f_shift[int(0.75 * ndim) :] = 100
+
         super().__init__(
-            parallel=parallel,
-            fastmath=fastmath,
-            dtype=dtype,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[-100.0, 100.0] for _ in range(30)]),
             dim_changeable=True,
             dim_default=30,
             dim_max=100,
             f_bias=f_bias,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
             shift=shift,
             prepare=prepare,
+            x_global=lambda problem, dim: np.asarray(problem.f_shift),
+            load=load,
         )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
-        )
-        shift_data, matrix_data = self.load_shift_and_matrix_data(f_shift)
-        self.f_shift = shift_data[: self.ndim]
-        self.f_matrix = matrix_data[: self.ndim, : self.ndim]
-        self._x_global = np.asarray(self.f_shift)
-        self.f_shift[: int(0.25 * self.ndim) + 1] = -100
-        self.f_shift[int(0.75 * self.ndim) :] = 100
         self._bind_kernel(
             compute,
             ["f_matrix", "f_shift", "f_bias"],
@@ -411,7 +435,8 @@ class F62005(CecBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = operator.rosenbrock_func(x - f_shift, shift=1.0) + f_bias
 
         super().__init__(
@@ -476,8 +501,14 @@ class F72005(CecBenchmark):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_shift: typing.Any, f_matrix: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_shift: typing.Any,
+            f_matrix: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_vm((x - f_shift), f_matrix)
             out[0] = operator.griewank_func(z) + f_bias
 
@@ -542,10 +573,21 @@ class F82005(CecBenchmark):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_shift: typing.Any, f_matrix: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_shift: typing.Any,
+            f_matrix: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_vm((x - f_shift), f_matrix)
             out[0] = operator.ackley_func(z) + f_bias
+
+        def load(problem: "CecBenchmark", ndim: int, support_path: _Traversable | None) -> None:
+            a = np.arange(0, ndim)
+            problem.f_shift[a % 2 == 0] = -32
+            problem.f_shift[a % 2 == 1] = np.random.uniform(-32.0, 32.0, int(ndim / 2))
 
         super().__init__(
             ndim=ndim,
@@ -559,11 +601,8 @@ class F82005(CecBenchmark):
             dtype=dtype,
             shift=shift,
             prepare=prepare,
+            load=load,
         )
-
-        a = np.arange(0, self.ndim)
-        self.f_shift[a % 2 == 0] = -32
-        self.f_shift[a % 2 == 1] = np.random.uniform(-32.0, 32.0, int(self.ndim / 2))
         self._bind_kernel(
             compute,
             ["f_shift", "f_matrix", "f_bias"],
@@ -619,7 +658,8 @@ class F92005(CecBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+            x = x - shift
             z = x - f_shift
             out[0] = operator.rastrigin_func(z) + f_bias
 
@@ -685,8 +725,14 @@ class F102005(CecBenchmark):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_shift: typing.Any, f_matrix: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_shift: typing.Any,
+            f_matrix: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_vm((x - f_shift), f_matrix)
             out[0] = operator.rastrigin_func(z) + f_bias
 
@@ -758,6 +804,7 @@ class F112005(CecBenchmark):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_shift: typing.Any,
             f_matrix: typing.Any,
             a: typing.Any,
@@ -766,6 +813,7 @@ class F112005(CecBenchmark):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_vm((x - f_shift), f_matrix)
             out[0] = operator.weierstrass_norm_func(z, a, b, k_max) + f_bias
 
@@ -782,7 +830,6 @@ class F112005(CecBenchmark):
             shift=shift,
             prepare=prepare,
         )
-
         self.a = a
         self.b = b
         self.k_max = k_max
@@ -847,12 +894,14 @@ class F122005(CecBenchmark):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_matrix_a: typing.Any,
             f_shift: typing.Any,
             f_matrix_b: typing.Any,
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             ndim = len(x)
             result = 0.0
 
@@ -928,7 +977,8 @@ class F132005(CecBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = operator.grie_rosen_cec_func(x - f_shift) + f_bias
 
         super().__init__(
@@ -996,29 +1046,35 @@ class F142005(CecBenchmark):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_shift: typing.Any, f_matrix: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_shift: typing.Any,
+            f_matrix: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_vm((x - f_shift), f_matrix)
             out[0] = operator.expanded_schaffer_f6_func(z) + f_bias
 
         super().__init__(
-            parallel=parallel,
-            fastmath=fastmath,
-            dtype=dtype,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[-100.0, 100.0] for _ in range(30)]),
             dim_changeable=True,
             dim_default=30,
             dim_max=100,
             dim_supported=[10, 30, 50],
+            f_shift=f_shift,
+            f_matrix=f_matrix,
             f_bias=f_bias,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
             shift=shift,
             prepare=prepare,
+            x_global=lambda problem, dim: np.asarray(problem.f_shift),
         )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
-        )
-        self.f_shift = self.check_shift_data(f_shift)[: self.ndim]
-        self.f_matrix = self.check_matrix_data(f_matrix)
-        self._x_global = np.asarray(self.f_shift)
         self._bind_kernel(
             compute,
             ["f_shift", "f_matrix", "f_bias"],
@@ -1087,6 +1143,7 @@ class F152005(CecBenchmark):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             n_funcs: int,
             f_shift: typing.Any,
             xichmas: np.ndarray,
@@ -1098,6 +1155,7 @@ class F152005(CecBenchmark):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             ndim = len(x)
             weights = np.ones(n_funcs)
             fits = np.ones(n_funcs)
@@ -1115,27 +1173,40 @@ class F152005(CecBenchmark):
             weights = weights / np.sum(weights)
             out[0] = np.sum(operator.dot_vv(weights, (fits + bias))) + f_bias
 
+        lamdas = np.array([1, 1, 10, 10, 5.0 / 60, 5.0 / 60, 5.0 / 32, 5.0 / 32, 5.0 / 100, 5.0 / 100])
+        bias_arr = np.array([0, 100, 200, 300, 400, 500, 600, 700, 800, 900])  # ==> f_shift[0] is the global optimum
+        n_funcs = 10
+        xichmas = np.ones(n_funcs)
+        C = 2000
+
+        def load(problem: "CecBenchmark", ndim: int, support_path: _Traversable | None) -> None:
+            problem.f_shift = problem.load_matrix_data(f_shift, support_path=support_path)[
+                :, :ndim
+            ]  # This shift as matrix for M functions
+            problem.lamdas = lamdas
+            problem.bias = bias_arr
+            problem.n_funcs = n_funcs
+            problem.xichmas = xichmas
+            problem.C = C
+            problem.M = np.identity(ndim)
+            problem.y = 5 * np.ones(ndim)
+
         super().__init__(
-            parallel=parallel,
-            fastmath=fastmath,
-            dtype=dtype,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[-5.0, 5.0] for _ in range(30)]),
             dim_changeable=True,
             dim_default=30,
             dim_max=100,
             f_bias=f_bias,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
             shift=shift,
             prepare=prepare,
+            x_global=lambda problem, dim: np.asarray(problem.f_shift[0]),
+            load=load,
         )
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-5.0, 5.0] for _ in range(self.dim_default)]))
-        self.f_shift = self.load_matrix_data(f_shift)[:, : self.ndim]  # This shift as matrix for M functions
-        self.lamdas = np.array([1, 1, 10, 10, 5.0 / 60, 5.0 / 60, 5.0 / 32, 5.0 / 32, 5.0 / 100, 5.0 / 100])
-        self.bias = np.array([0, 100, 200, 300, 400, 500, 600, 700, 800, 900])  # ==> f_shift[0] is the global optimum
-        self.n_funcs = 10
-        self.xichmas = np.ones(self.n_funcs)
-        self.C = 2000
-        self.M = np.identity(self.ndim)
-        self.y = 5 * np.ones(self.ndim)
-        self._x_global = np.asarray(self.f_shift[0])
         self._bind_kernel(
             compute,
             ["n_funcs", "f_shift", "xichmas", "lamdas", "M", "y", "C", "bias", "f_bias"],
@@ -1226,6 +1297,7 @@ class F162005(CecBenchmark):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             n_funcs: int,
             f_shift: typing.Any,
             xichmas: np.ndarray,
@@ -1237,6 +1309,7 @@ class F162005(CecBenchmark):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             ndim = len(x)
             weights = np.ones(n_funcs)
             fits = np.ones(n_funcs)
@@ -1254,28 +1327,41 @@ class F162005(CecBenchmark):
             weights = weights / np.sum(weights)
             out[0] = np.sum(operator.dot_vv(weights, (fits + bias))) + f_bias
 
+        lamdas = np.array([1, 1, 10, 10, 5.0 / 60, 5.0 / 60, 5.0 / 32, 5.0 / 32, 5.0 / 100, 5.0 / 100])
+        bias_arr = np.array([0, 100, 200, 300, 400, 500, 600, 700, 800, 900])  # ==> f_shift[0] is the global optimum
+        n_funcs = 10
+        xichmas = np.ones(n_funcs)
+        C = 2000
+
+        def load(problem: "CecBenchmark", ndim: int, support_path: _Traversable | None) -> None:
+            problem.f_shift = problem.load_matrix_data(f_shift, support_path=support_path)[
+                :, :ndim
+            ]  # This shift as matrix for M functions
+            problem.M = problem.check_matrix_data(f_matrix, support_path=support_path)
+            problem.lamdas = lamdas
+            problem.bias = bias_arr
+            problem.n_funcs = n_funcs
+            problem.xichmas = xichmas
+            problem.C = C
+            problem.y = 5 * np.ones(ndim)
+
         super().__init__(
-            parallel=parallel,
-            fastmath=fastmath,
-            dtype=dtype,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[-5.0, 5.0] for _ in range(30)]),
             dim_changeable=True,
             dim_default=30,
             dim_max=100,
             dim_supported=[10, 30, 50],
             f_bias=f_bias,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
             shift=shift,
             prepare=prepare,
+            x_global=lambda problem, dim: np.asarray(problem.f_shift[0]),
+            load=load,
         )
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-5.0, 5.0] for _ in range(self.dim_default)]))
-        self.f_shift = self.load_matrix_data(f_shift)[:, : self.ndim]  # This shift as matrix for M functions
-        self.M = self.check_matrix_data(f_matrix)
-        self.lamdas = np.array([1, 1, 10, 10, 5.0 / 60, 5.0 / 60, 5.0 / 32, 5.0 / 32, 5.0 / 100, 5.0 / 100])
-        self.bias = np.array([0, 100, 200, 300, 400, 500, 600, 700, 800, 900])  # ==> f_shift[0] is the global optimum
-        self.n_funcs = 10
-        self.xichmas = np.ones(self.n_funcs)
-        self.C = 2000
-        self.y = 5 * np.ones(self.ndim)
-        self._x_global = np.asarray(self.f_shift[0])
         self._bind_kernel(
             compute,
             ["n_funcs", "f_shift", "xichmas", "lamdas", "M", "y", "C", "bias", "f_bias"],
@@ -1336,6 +1422,7 @@ class F172005(F162005):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             n_funcs: typing.Any,
             f_shift: typing.Any,
             xichmas: typing.Any,
@@ -1348,6 +1435,7 @@ class F172005(F162005):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             ndim = len(x)
             weights = np.ones(n_funcs)
             fits = np.ones(n_funcs)
@@ -1444,9 +1532,12 @@ class F182005(CecBenchmark):
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
         prepare: bool | None = None,
+        *,
+        load: typing.Callable[["CecBenchmark", int, _Traversable | None], None] | None = None,
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             n_funcs: int,
             f_shift: typing.Any,
             xichmas: np.ndarray,
@@ -1458,6 +1549,7 @@ class F182005(CecBenchmark):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             ndim = len(x)
             weights = np.ones(n_funcs)
             fits = np.ones(n_funcs)
@@ -1475,30 +1567,45 @@ class F182005(CecBenchmark):
             weights = weights / np.sum(weights)
             out[0] = np.sum(operator.dot_vv(weights, (fits + bias))) + f_bias
 
+        lamdas = np.array(
+            [2 * 5.0 / 32, 5.0 / 32, 2 * 1, 1, 2 * 5.0 / 100, 5.0 / 100, 2 * 10, 10, 2 * 5.0 / 60, 5.0 / 60]
+        )
+        bias_arr = np.array([0, 100, 200, 300, 400, 500, 600, 700, 800, 900])  # ==> f_shift[0] is the global optimum
+        n_funcs = 10
+        xichmas_arr = np.array([1, 2, 1.5, 1.5, 1, 1, 1.5, 1.5, 2, 2])
+        C = 2000
+
+        def _load(problem: "CecBenchmark", ndim: int, support_path: _Traversable | None) -> None:
+            problem.f_shift = problem.load_matrix_data(f_shift, support_path=support_path)[
+                :, :ndim
+            ]  # This shift as matrix for M functions
+            problem.M = problem.check_matrix_data(f_matrix, support_path=support_path)
+            problem.lamdas = lamdas
+            problem.bias = bias_arr
+            problem.n_funcs = n_funcs
+            problem.xichmas = xichmas_arr
+            problem.C = C
+            problem.y = 5 * np.ones(ndim)
+            if load is not None:
+                load(problem, ndim, support_path)
+
         super().__init__(
-            parallel=parallel,
-            fastmath=fastmath,
-            dtype=dtype,
+            ndim=ndim,
+            bounds=bounds,
+            default_bounds=np.array([[-5.0, 5.0] for _ in range(30)]),
             dim_changeable=True,
             dim_default=30,
             dim_max=100,
             dim_supported=[10, 30, 50],
             f_bias=f_bias,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
             shift=shift,
             prepare=prepare,
+            x_global=lambda problem, dim: np.asarray(problem.f_shift[0]),
+            load=_load,
         )
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-5.0, 5.0] for _ in range(self.dim_default)]))
-        self.f_shift = self.load_matrix_data(f_shift)[:, : self.ndim]  # This shift as matrix for M functions
-        self.M = self.check_matrix_data(f_matrix)
-        self.lamdas = np.array(
-            [2 * 5.0 / 32, 5.0 / 32, 2 * 1, 1, 2 * 5.0 / 100, 5.0 / 100, 2 * 10, 10, 2 * 5.0 / 60, 5.0 / 60]
-        )
-        self.bias = np.array([0, 100, 200, 300, 400, 500, 600, 700, 800, 900])  # ==> f_shift[0] is the global optimum
-        self.n_funcs = 10
-        self.xichmas = np.array([1, 2, 1.5, 1.5, 1, 1, 1.5, 1.5, 2, 2])
-        self.C = 2000
-        self.y = 5 * np.ones(self.ndim)
-        self._x_global = np.asarray(self.f_shift[0])
         self._bind_kernel(
             compute,
             ["n_funcs", "f_shift", "xichmas", "lamdas", "M", "y", "C", "bias", "f_bias"],
@@ -1556,6 +1663,12 @@ class F192005(F182005):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
+        def _load_extra(problem: "CecBenchmark", ndim: int, support_path: _Traversable | None) -> None:
+            problem.lamdas = np.array(
+                [0.1 * 5 / 32, 5.0 / 32, 2 * 1, 1, 2 * 5.0 / 100, 5.0 / 100, 2.0 * 10, 10, 2 * 5.0 / 60, 5.0 / 60]
+            )
+            problem.xichmas = np.array([0.1, 2, 1.5, 1.5, 1, 1, 1.5, 1.5, 2, 2])
+
         super().__init__(
             ndim,
             bounds,
@@ -1567,21 +1680,8 @@ class F192005(F182005):
             dtype=dtype,
             shift=shift,
             prepare=prepare,
+            load=_load_extra,
         )
-        self.lamdas = np.array(
-            [0.1 * 5 / 32, 5.0 / 32, 2 * 1, 1, 2 * 5.0 / 100, 5.0 / 100, 2.0 * 10, 10, 2 * 5.0 / 60, 5.0 / 60]
-        )
-        self.xichmas = np.array([0.1, 2, 1.5, 1.5, 1, 1, 1.5, 1.5, 2, 2])
-        self._paras = {
-            "f_shift": self.f_shift,
-            "f_bias": self.f_bias,
-            "lambda": self.lamdas,
-            "bias": self.bias,
-            "n_funcs": self.n_funcs,
-            "C": self.C,
-            "M": self.M,
-            "y": self.y,
-        }
 
 
 class F202005(F182005):
@@ -1613,6 +1713,10 @@ class F202005(F182005):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
+        def _load_extra(problem: "CecBenchmark", ndim: int, support_path: _Traversable | None) -> None:
+            # Odd-indexed coordinates of the first sub-shift sit at 5.
+            problem.f_shift[0, 1::2] = 5
+
         super().__init__(
             ndim,
             bounds,
@@ -1624,19 +1728,8 @@ class F202005(F182005):
             dtype=dtype,
             shift=shift,
             prepare=prepare,
+            load=_load_extra,
         )
-        self.f_shift[0, 1::2] = 5
-        self._x_global = np.asarray(self.f_shift[0])
-        self._paras = {
-            "f_shift": self.f_shift,
-            "f_bias": self.f_bias,
-            "lambda": self.lamdas,
-            "bias": self.bias,
-            "n_funcs": self.n_funcs,
-            "C": self.C,
-            "M": self.M,
-            "y": self.y,
-        }
 
 
 @njit(fastmath=True)
@@ -1701,6 +1794,7 @@ class F212005(CecBenchmark):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             n_funcs: int,
             f_shift: typing.Any,
             xichmas: np.ndarray,
@@ -1712,6 +1806,7 @@ class F212005(CecBenchmark):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             ndim = len(x)
             weights = np.ones(n_funcs)
             fits = np.ones(n_funcs)
@@ -1730,7 +1825,12 @@ class F212005(CecBenchmark):
             weights = weights / np.sum(weights)
             out[0] = np.sum(operator.dot_vv(weights, (fits + bias))) + f_bias
 
+        def load(problem: "CecBenchmark", ndim: int, support_path: _Traversable | None) -> None:
+            problem.f_shift = problem.load_matrix_data(f_shift, support_path=support_path)[:, :ndim]
+
         super().__init__(
+            load=load,
+            x_global=lambda problem, dim: np.asarray(problem.f_shift[0]),
             ndim=ndim,
             bounds=bounds,
             default_bounds=[[-5.0, 5.0]],
@@ -1740,8 +1840,6 @@ class F212005(CecBenchmark):
             shift=shift,
             prepare=prepare,
         )
-        self.f_shift = self.load_matrix_data(f_shift)[:, : self.ndim]
-        self._x_global = np.asarray(self.f_shift[0])
         self.M = self.check_matrix_data(f_matrix)
         self.lamdas = np.array(
             [
@@ -1762,7 +1860,6 @@ class F212005(CecBenchmark):
         self.xichmas = np.array([1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 2.0, 2.0, 2.0, 2.0])
         self.C = 2000
         self.y = 5 * np.ones(self.ndim)
-        self._x_global = np.asarray(self.f_shift[0])
         self._bind_kernel(
             compute,
             ["n_funcs", "f_shift", "xichmas", "lamdas", "M", "y", "C", "bias", "f_bias"],
@@ -1867,6 +1964,7 @@ class F232005(F212005):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_shift: typing.Any,
             n_funcs: typing.Any,
             xichmas: typing.Any,
@@ -1879,6 +1977,7 @@ class F232005(F212005):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             ndim = len(x)
             x = operator.rounder(x, np.abs(x - f_shift[0]))
             weights = np.ones(n_funcs)
@@ -1983,9 +2082,12 @@ class F242005(CecBenchmark):
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
         prepare: bool | None = None,
+        *,
+        default_bounds: typing.Any = None,
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             n_funcs: int,
             f_shift: typing.Any,
             xichmas: typing.Any,
@@ -1997,6 +2099,7 @@ class F242005(CecBenchmark):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             ndim = len(x)
             weights = np.ones(n_funcs)
             fits = np.ones(n_funcs)
@@ -2014,7 +2117,15 @@ class F242005(CecBenchmark):
             weights = weights / np.sum(weights)
             out[0] = np.sum(operator.dot_vv(weights, (fits + bias))) + f_bias
 
+        def load(problem: "CecBenchmark", ndim: int, support_path: _Traversable | None) -> None:
+            problem.f_shift = problem.load_matrix_data(f_shift, support_path=support_path)[:, :ndim]
+
         super().__init__(
+            default_bounds=np.array([-5.0, 5.0]) if default_bounds is None else default_bounds,
+            ndim=ndim,
+            bounds=bounds,
+            load=load,
+            x_global=lambda problem, dim: np.asarray(problem.f_shift[0]),
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
@@ -2026,8 +2137,6 @@ class F242005(CecBenchmark):
             shift=shift,
             prepare=prepare,
         )
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-5.0, 5.0] for _ in range(self.dim_default)]))
-        self.f_shift = self.load_matrix_data(f_shift)[:, : self.ndim]  # This shift as matrix for M functions
         self.M = self.check_matrix_data(f_matrix)
         self.lamdas = np.array(
             [10.0, 5.0 / 20.0, 1.0, 5.0 / 32.0, 1.0, 5.0 / 100.0, 5.0 / 50.0, 1.0, 5.0 / 100.0, 5.0 / 100.0]
@@ -2037,7 +2146,6 @@ class F242005(CecBenchmark):
         self.xichmas = 2 * np.ones(self.ndim)
         self.C = 2000
         self.y = 5 * np.ones(self.ndim)
-        self._x_global = np.asarray(self.f_shift[0])
         self._bind_kernel(
             compute,
             ["n_funcs", "f_shift", "xichmas", "lamdas", "M", "y", "C", "bias", "f_bias"],
@@ -2111,10 +2219,10 @@ class F252005(F242005):
             f_shift,
             f_matrix,
             f_bias,
+            default_bounds=np.array([2.0, 5.0]),
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
             prepare=prepare,
         )
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[2.0, 5.0] for _ in range(self.dim_default)]))

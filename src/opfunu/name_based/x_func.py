@@ -55,7 +55,8 @@ class XinSheYang01(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             i = np.arange(1.0, x.shape[0] + 1.0)
             out[0] = np.sum(np.random.random(x.shape[0]) * (np.abs(x) ** i))
 

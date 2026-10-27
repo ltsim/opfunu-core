@@ -55,25 +55,26 @@ class F12019(CecBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, f_bias: typing.Any, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, f_bias: typing.Any, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = operator.chebyshev_func(x) + f_bias
 
         super().__init__(
-            parallel=parallel,
-            fastmath=fastmath,
-            dtype=dtype,
+            ndim,
+            bounds,
+            f_shift,
+            f_bias=f_bias,
+            default_bounds=np.array([-8192.0, 8192.0]),
             dim_changeable=False,
             dim_default=9,
             dim_max=9,
-            f_bias=f_bias,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
             shift=shift,
             prepare=prepare,
+            x_global=lambda problem, dim: np.zeros(dim),
         )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-8192.0, 8192.0] for _ in range(self.dim_default)])
-        )
-        self.f_shift = self.check_shift_data(f_shift)[: self.ndim]
-        self._x_global = np.asarray(np.zeros(self.ndim))
         self._bind_kernel(compute, ["f_bias"], paras={"f_shift": self.f_shift, "f_bias": self.f_bias})
 
 
@@ -120,27 +121,28 @@ class F22019(CecBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, f_bias: typing.Any, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, f_bias: typing.Any, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = operator.inverse_hilbert_func(x) + f_bias
 
         super().__init__(
-            parallel=parallel,
-            fastmath=fastmath,
-            dtype=dtype,
+            ndim,
+            bounds,
+            f_shift,
+            f_bias=f_bias,
+            default_bounds=np.array([-16384.0, 16384.0]),
             dim_changeable=False,
             dim_default=16,
             dim_max=16,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
             shift=shift,
             prepare=prepare,
+            # the f_global and x_global was obtained by executing the cec2019 c code
+            f_global=lambda problem, dim: float(int(np.sqrt(dim)) + f_bias),
+            x_global=lambda problem, dim: np.zeros(dim),
         )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-16384.0, 16384.0] for _ in range(self.dim_default)])
-        )
-        self.f_shift = self.check_shift_data(f_shift)[: self.ndim]
-        self.f_bias = f_bias
-        # the f_global and x_global was obtained by executing the cec2019 c code
-        self._f_global = float(int(np.sqrt(self.ndim)) + f_bias)
-        self._x_global = np.asarray(np.zeros(self.ndim))
         self._bind_kernel(compute, ["f_bias"], paras={"f_shift": self.f_shift, "f_bias": self.f_bias})
 
 
@@ -189,25 +191,27 @@ class F32019(CecBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, f_bias: typing.Any, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, f_bias: typing.Any, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = operator.lennard_jones_func(x) + f_bias
 
         super().__init__(
-            parallel=parallel,
-            fastmath=fastmath,
-            dtype=dtype,
+            ndim,
+            bounds,
+            f_shift,
+            f_bias=f_bias,
+            default_bounds=np.array([-4.0, 4.0]),
             dim_changeable=False,
             dim_default=18,
             dim_max=18,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
             shift=shift,
             prepare=prepare,
+            # f_global calculated by verifying the cec2019 C value for f(x*) where x*==f_shift
+            f_global=12.712062001703194 + f_bias,
         )
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-4.0, 4.0] for _ in range(self.dim_default)]))
-        self.f_shift = self.check_shift_data(f_shift)[: self.ndim]
-        self.f_bias = f_bias
-        # f_global calculated by verifying the cec2019 C value for f(x*) where x*==f_shift
-        self._f_global = float(12.712062001703194 + self.f_bias)
-        self._x_global = np.asarray(self.f_shift)
         self._bind_kernel(compute, ["f_bias"], paras={"f_shift": self.f_shift, "f_bias": self.f_bias})
 
 
@@ -256,29 +260,34 @@ class F42019(CecBenchmark):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, x - f_shift)
             out[0] = operator.rastrigin_func(z) + f_bias
 
         super().__init__(
-            parallel=parallel,
-            fastmath=fastmath,
-            dtype=dtype,
+            ndim,
+            bounds,
+            f_shift,
+            f_matrix,
+            f_bias=f_bias,
+            default_bounds=np.array([-100.0, 100.0]),
             dim_changeable=True,
             dim_default=10,
             dim_max=10,
             dim_supported=[2, 10],
-            f_bias=f_bias,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
             shift=shift,
             prepare=prepare,
         )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
-        )
-        self.f_shift = self.check_shift_data(f_shift)[: self.ndim]
-        self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
-        self._x_global = np.asarray(self.f_shift)
         self._bind_kernel(
             compute,
             ["f_matrix", "f_shift", "f_bias"],
@@ -317,8 +326,14 @@ class F52019(F42019):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, x - f_shift)
             out[0] = operator.griewank_func(z) + f_bias
 
@@ -368,8 +383,14 @@ class F62019(F42019):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, x - f_shift)
             out[0] = operator.weierstrass_norm_func(z) + f_bias
 
@@ -419,8 +440,14 @@ class F72019(F42019):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, x - f_shift)
             out[0] = operator.modified_schwefel_func(z) + f_bias
 
@@ -470,8 +497,14 @@ class F82019(F42019):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, 0.005 * (x - f_shift))
             out[0] = operator.expanded_scaffer_f6_func(z) + f_bias
 
@@ -521,8 +554,14 @@ class F92019(F42019):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, x - f_shift)
             out[0] = operator.happy_cat_func(z, shift=-1.0) + f_bias
 
@@ -572,8 +611,14 @@ class F102019(F42019):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, x - f_shift)
             out[0] = operator.ackley_func(z) + f_bias
 

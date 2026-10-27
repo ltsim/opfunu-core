@@ -45,7 +45,8 @@ class JennrichSampson(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             idx = np.arange(1, 11)
             out[0] = np.sum((2 + 2 * idx - (np.exp(idx * x[0]) + np.exp(idx * x[1]))) ** 2)
 
@@ -122,7 +123,10 @@ class Judge(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, a: np.ndarray, b: np.ndarray, c: np.ndarray, out: np.ndarray) -> None:
+        def compute(
+            x: np.ndarray, shift: np.ndarray, a: np.ndarray, b: np.ndarray, c: np.ndarray, out: np.ndarray
+        ) -> None:
+            x = x - shift
             out[0] = np.sum(((x[0] + x[1] * a + (x[1] ** 2.0) * b) - c) ** 2.0)
 
         self.c = np.asarray(

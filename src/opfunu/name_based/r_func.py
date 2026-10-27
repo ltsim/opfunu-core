@@ -55,7 +55,8 @@ class Rana(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             t1 = np.sqrt(np.abs(x[1:] + x[:-1] + 1))
             t2 = np.sqrt(np.abs(x[1:] - x[:-1] + 1))
             v = (x[1:] + 1) * np.cos(t2) * np.sin(t1) + x[:-1] * np.cos(t1) * np.sin(t2)

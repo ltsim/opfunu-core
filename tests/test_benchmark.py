@@ -18,7 +18,8 @@ class _DummyProblem(FuncBenchmark):
     """Minimal concrete subclass using the declarative kernel + metadata style."""
 
     def __init__(self, ndim=None, bounds=None, **kwargs):
-        def compute(x, out):
+        def compute(x, shift, out):
+            x = x - shift
             out[0] = float(np.sum(x**2))
 
         super().__init__(
@@ -38,7 +39,8 @@ class _InlineProblem(FuncBenchmark):
     """Compact declaration style: kernel and metadata are passed to ``super().__init__``."""
 
     def __init__(self, ndim=None, bounds=None, parallel=False, fastmath=True, dtype=np.float64):
-        def compute(x, out):
+        def compute(x, shift, out):
+            x = x - shift
             out[0] = float(np.sum(x**2))
 
         super().__init__(
@@ -92,6 +94,7 @@ READ_ONLY_PROPERTIES = [
     "numba_compiled",
     "f_global",
     "x_global",
+    "shift",
     "dim_changeable",
     "dim_default",
     "_param_names",
@@ -108,12 +111,85 @@ def test_metadata_are_read_only_properties():
     assert np.array_equal(problem.x_global, np.zeros(2))
     assert problem.dim_default == 2
     assert problem.dim_changeable is True
-    # Data-dependent metadata lives in protected storage; the rest is name-mangled.
-    assert "_f_global" in vars(problem)
-    assert "_x_global" in vars(problem)
-    assert "_paras" in vars(problem)
-    assert "_Benchmark__dim_default" in vars(problem)
-    assert "_Benchmark__dim_changeable" in vars(problem)
+    # Every field, including the data-dependent metadata written by the bases
+    # through the protected ``_set_*`` writers, lives in name-mangled storage.
+    for key in (
+        "_Benchmark__f_global",
+        "_Benchmark__x_global",
+        "_Benchmark__paras",
+        "_Benchmark__support_path",
+        "_Benchmark__ndim",
+        "_Benchmark__bounds",
+        "_Benchmark__shift_raw",
+        "_Benchmark__shift",
+        "_Benchmark__kernel_shift",
+        "_Benchmark__dim_default",
+        "_Benchmark__dim_changeable",
+    ):
+        assert key in vars(problem), key
+    # The former protected spellings are gone: no shadow attribute may exist.
+    for key in ("_f_global", "_x_global", "_paras", "_support_path", "_ndim", "_bounds"):
+        assert key not in vars(problem), key
+    # The shift plumbing is constructor-only: no base-state snapshots left.
+    for key in ("_Benchmark__base_bounds", "_Benchmark__base_f_global", "_Benchmark__base_x_global"):
+        assert key not in vars(problem), key
+    assert problem.ndim == 2
+    assert problem.bounds.shape == (2, 2)
+    assert problem.support_path is None
+    assert problem.paras == {}
+
+
+def test_state_is_constructor_only():
+    """No protected writers exist: the private state is installed by ``__init__`` alone."""
+    for gone in (
+        "_set_support_path",
+        "_set_paras",
+        "_set_f_global",
+        "_set_x_global",
+        "_set_ndim",
+        "_set_bounds",
+    ):
+        assert not hasattr(Benchmark, gone), gone
+
+    # ``bounds`` is forwarded by the dummy, so a caller-supplied value must reach the state;
+    # ``x_global``/``f_global``/``paras``/``support_path`` come from the dummy's own constructor.
+    problem = _DummyProblem(ndim=3, bounds=np.array([[-2.0] * 3, [2.0] * 3]))
+    assert problem.ndim == 3
+    assert np.array_equal(problem.x_global, [0.0, 0.0, 0.0])
+    assert problem.bounds.shape == (3, 2)
+    assert np.array_equal(problem.lb, [-2.0, -2.0, -2.0])
+    assert problem.f_global == 0.0
+    assert problem.paras == {}
+    assert problem.support_path is None
+
+    # Every piece of it is exposed read-only.
+    for name in ("ndim", "bounds", "f_global", "x_global", "paras", "support_path"):
+        with pytest.raises(AttributeError):
+            setattr(problem, name, getattr(problem, name))
+
+    # Writing the old protected spelling only shadows: the properties keep reporting
+    # the state the constructor installed, so a stale subclass write can never leak in.
+    problem._x_global = np.array([9.0, 9.0, 9.0])
+    problem._ndim = 99
+    assert np.array_equal(problem.x_global, [0.0, 0.0, 0.0])
+    assert problem.ndim == 3
+    # the shadow attribute exists, yet the private storage never saw it
+    assert np.array_equal(problem._x_global, [9.0, 9.0, 9.0])
+    assert np.array_equal(vars(problem)["_Benchmark__x_global"], [0.0, 0.0, 0.0])
+
+
+def test_check_ndim_and_bounds_is_a_pure_resolver():
+    """The shape resolver validates and returns; it no longer touches any state."""
+    problem = _DummyProblem(ndim=4)
+    before_ndim, before_bounds = problem.ndim, problem.bounds.copy()
+    ndim, bounds = problem.check_ndim_and_bounds(
+        6, None, np.array([[-15.0, 15.0]] * 2), dim_changeable=True, dim_default=2
+    )
+    assert ndim == 6 and bounds.shape == (6, 2)
+    assert problem.ndim == before_ndim
+    assert np.array_equal(problem.bounds, before_bounds)
+    with pytest.raises(ValueError):
+        problem.check_ndim_and_bounds(1, None, np.array([[-15.0, 15.0]] * 2), dim_changeable=True, dim_default=2)
 
 
 @pytest.mark.parametrize("name", READ_ONLY_PROPERTIES)

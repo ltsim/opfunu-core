@@ -49,7 +49,8 @@ class Easom(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             a = (x[0] - np.pi) ** 2 + (x[1] - np.pi) ** 2
             out[0] = -np.cos(x[0]) * np.cos(x[1]) * np.exp(-a)
 
@@ -104,7 +105,8 @@ class ElAttarVidyasagarDutta(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = (x[0] ** 2 + x[1] - 10) ** 2 + (x[0] + x[1] ** 2 - 7) ** 2 + (x[0] ** 2 + x[1] ** 3 - 1) ** 2
 
         super().__init__(
@@ -158,7 +160,8 @@ class EggCrate(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = x[0] ** 2 + x[1] ** 2 + 25 * (np.sin(x[0]) ** 2 + np.sin(x[1]) ** 2)
 
         super().__init__(
@@ -215,7 +218,8 @@ class EggHolder(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             vec = -(x[1:] + 47) * np.sin(np.sqrt(np.abs(x[1:] + x[:-1] / 2.0 + 47))) - x[:-1] * np.sin(
                 np.sqrt(np.abs(x[:-1] - (x[1:] + 47)))
             )
@@ -272,7 +276,8 @@ class Exponential(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = -np.exp(-0.5 * np.sum(x**2.0))
 
         super().__init__(
@@ -326,7 +331,8 @@ class Exp2(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             i = np.arange(10.0)
             vec = (np.exp(-i * x[0] / 10.0) - 5 * np.exp(-i * x[1] / 10.0) - np.exp(-i / 10.0) + 5 * np.exp(-i)) ** 2
             out[0] = np.sum(vec)
@@ -382,7 +388,8 @@ class Eckerle4(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, b: np.ndarray, a: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, b: np.ndarray, a: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             vec = x[0] / x[1] * np.exp(-((b - x[2]) ** 2) / (2 * x[1] ** 2))
             out[0] = np.sum((a - vec) ** 2)
 

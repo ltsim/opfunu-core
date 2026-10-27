@@ -45,7 +45,8 @@ class CamelThreeHump(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = 2 * x[0] ** 2 - 1.05 * x[0] ** 4 + x[0] ** 6 / 6 + x[0] * x[1] + x[1] ** 2
 
         super().__init__(
@@ -99,7 +100,8 @@ class CamelSixHump(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = (4 - 2.1 * x[0] ** 2 + x[0] ** 4 / 3) * x[0] ** 2 + x[0] * x[1] + (4 * x[1] ** 2 - 4) * x[1] ** 2
 
         super().__init__(
@@ -154,7 +156,8 @@ class ChenBird(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = -0.001 / (0.001**2 + (x[0] - 0.4 * x[1] - 0.1) ** 2) - 0.001 / (
                 0.001**2 + (2 * x[0] + x[1] - 1.5) ** 2
             )
@@ -210,7 +213,8 @@ class ChenV(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = (
                 -0.001 / (0.001**2 + (x[0] ** 2 + x[1] ** 2 - 1) ** 2)
                 - 0.001 / (0.001**2 + (x[0] ** 2 + x[1] ** 2 - 0.5) ** 2)
@@ -274,7 +278,8 @@ class Chichinadze(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = (
                 x[0] ** 2
                 - 12 * x[0]
@@ -335,7 +340,8 @@ class ChungReynolds(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = np.sum(x**2) ** 2
 
         super().__init__(
@@ -388,7 +394,8 @@ class Cigar(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = x[0] ** 2 + 1e6 * np.sum(x[1:] ** 2)
 
         super().__init__(
@@ -442,7 +449,8 @@ class Cola(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, d: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, d: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             xi = np.atleast_2d(np.asarray([0.0, x[0]] + list(x[1::2])))
             xj = np.repeat(xi, xi.shape[1], axis=0)
             xi = xi.T
@@ -546,7 +554,8 @@ class Colville(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = (
                 100 * (x[0] - x[1] ** 2) ** 2
                 + (1 - x[0]) ** 2
@@ -607,7 +616,8 @@ class Corana(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             d = [1.0, 1000.0, 10.0, 100.0]
             r = 0
             for j in range(4):
@@ -669,7 +679,8 @@ class CosineMixture(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = -0.1 * np.sum(np.cos(5.0 * np.pi * x)) - np.sum(x**2.0)
 
         super().__init__(
@@ -726,7 +737,8 @@ class CrossInTray(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = -0.0001 * (
                 np.abs(np.sin(x[0]) * np.sin(x[1]) * np.exp(np.abs(100 - np.sqrt(x[0] ** 2 + x[1] ** 2) / np.pi))) + 1
             ) ** (0.1)
@@ -793,7 +805,8 @@ class CrossLegTable(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             u = 100 - np.sqrt(x[0] ** 2 + x[1] ** 2) / np.pi
             v = np.sin(x[0]) * np.sin(x[1])
             out[0] = -((np.abs(v * np.exp(np.abs(u))) + 1) ** (-0.1))
@@ -852,7 +865,8 @@ class CrownedCross(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             u = 100 - np.sqrt(x[0] ** 2 + x[1] ** 2) / np.pi
             v = np.sin(x[0]) * np.sin(x[1])
             out[0] = 0.0001 * (np.abs(v * np.exp(np.abs(u))) + 1) ** (0.1)
@@ -908,7 +922,8 @@ class Csendes(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, epsilon: float, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, epsilon: float, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = np.sum((x**6.0) * (2.0 + np.sin(1.0 / (x + epsilon))))
 
         super().__init__(
@@ -963,7 +978,8 @@ class Cube(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = 100.0 * (x[1] - x[0] ** 3.0) ** 2.0 + (1.0 - x[0]) ** 2.0
 
         super().__init__(
