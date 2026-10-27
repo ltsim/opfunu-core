@@ -4,7 +4,43 @@ The full changelog is maintained in the repository:
 
 [CHANGELOG.md](https://github.com/ltsim/opfunu-core/blob/master/CHANGELOG.md)
 
-## Version 2026b0
+## Version v2026b1
+
+* **Breaking (plot):** the `draw`/`interactive` entry points released with `v2026b0` are replaced
+  by the class-based `opfunu.plot.Plotting` suite: `matplotlib` (default, 2D/3D), `plotly`
+  (interactive 2D/3D) and `pyvista` (interactive 3D mesh), each behind its own lazy extra
+  (`[plot]`, `[plotly]`, `[pyvista]`); bounds are inferred from a bound `problem.evaluate`,
+  sampling is cached, and figures display inline in Jupyter. `save()` picks the format from the
+  file suffix (matplotlib PDF/SVG/EPS/PS/PGF, plotly HTML + optional kaleido images, pyvista
+  screenshots and vector graphics); themes via `style`/`rc` (matplotlib), `template` (plotly),
+  `theme` (pyvista). Ships `examples/plotting.py`, the two example notebooks,
+  `examples/styles/paper.mplstyle` and `docs/plot.md`.
+* Core dependencies stay NumPy-only: the Jupyter kernel (`ipykernel`) lives in a dev-only
+  `notebook` dependency group instead of `dependencies`.
+* Docs: moved from MkDocs/Material to Sphinx with the built-in *Nature* theme — MyST Markdown,
+  autodoc API reference inside `{eval-rst}` blocks, `sphinxcontrib-bibtex` citations, and a strict
+  `sphinx-build -W` build. Navigation is captioned toctrees + a `globaltoc` sidebar (no more Material
+  top tabs). Added `sphinx-autobuild` live preview + a `docs/Makefile`; benchmark docstrings were
+  repaired for reST (raw LaTeX, valid math/citation blocks); GitHub Pages now deploys a Sphinx artifact
+  from `docs.yml` (set Pages Source to *GitHub Actions*).
+* Docs: `docs/img/favicon.svg` (contour bands + minimum dot) is the default logo and favicon of
+  the built site.
+* **Breaking (subclasses):** the data-dependent `Benchmark` fields (`_f_global`, `_x_global`,
+  `_paras`, `_support_path`, `_ndim`, `_bounds`) became name-mangled private storage written only by
+  `Benchmark.__init__` (keyword-only `ndim=`/`bounds=`/`support_path=`); the six `_set_*()` writers
+  are gone, `check_ndim_and_bounds()` is a pure resolver returning `(ndim, bounds)`, and the
+  `FuncBenchmark`/`CecBenchmark` bases and all CEC problems now resolve shape, data and optima before
+  `super().__init__()` — `CecBenchmark` gained `x_global=`/`f_global=` and a `load()` hook, which the
+  subclassed CEC problems forward (with `default_bounds=`, and `compute=`/`param_names=`/`paras=` where
+  they bind their own kernel). The
+  coordinate shift is a constructor-only kernel argument (`compute(x, shift, *params, out)` with
+  `x = x - shift`), injected automatically (not in `param_names`); `set_shift()`/`_apply_shift()` are
+  removed, and the stored bounds/optimum stay unshifted while `bounds`/`lb`/`ub`/`x_global` apply the
+  offset on read with `f_global` invariant.
+* Released on the `release/v2026b1` branch; published to PyPI under the same name, `v2026b1`,
+  when the cycle merges into `master`.
+
+## Version v2026b0
 
 * Released on the `release/v2026b0` branch; published to PyPI under the same name, `v2026b0`,
   when the cycle merges into `master`.
@@ -22,7 +58,7 @@ The full changelog is maintained in the repository:
   `None` (the default) follows the package-wide `Benchmark.default_prepare` policy. `prepare()` is a
   quiet no-op without Numba, so the PyPy path is unchanged.
 
-## Version 2026a0
+## Version v2026a0
 
 * Maintenance release based on the original `opfunu` library.
 * Project migrated to a `src/` layout and managed with [uv](https://github.com/astral-sh/uv).

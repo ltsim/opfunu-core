@@ -4,7 +4,13 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
+import sys
 import typing
+
+if sys.version_info >= (3, 11):
+    from importlib.resources.abc import Traversable as _Traversable
+else:  # Python 3.10: Traversable lives in importlib.abc
+    from importlib.abc import Traversable as _Traversable
 
 import numpy as np
 
@@ -51,14 +57,22 @@ class F12010(CecBenchmark):
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
         prepare: bool | None = None,
+        *,
+        default_bounds: typing.Any = None,
+        f_bias: float | None = None,
+        f_global: typing.Any = None,
+        x_global: typing.Any = None,
     ) -> None:
-        def compute(x: np.ndarray, f_shift: typing.Any, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, f_shift: typing.Any, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = operator.elliptic_func(x - f_shift)
 
         super().__init__(
             ndim=ndim,
             bounds=bounds,
             f_shift=f_shift,
+            f_bias=0.0 if f_bias is None else f_bias,
+            default_bounds=default_bounds,
             dim_default=1000,
             dim_max=1000,
             parallel=parallel,
@@ -68,6 +82,8 @@ class F12010(CecBenchmark):
             param_names=["f_shift"],
             shift=shift,
             prepare=prepare,
+            f_global=0.0 if f_global is None else f_global,
+            x_global=x_global,
         )
 
 
@@ -95,20 +111,23 @@ class F22010(F12010):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, f_shift: typing.Any, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, f_shift: typing.Any, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = operator.rastrigin_func(x - f_shift)
 
         super().__init__(
             ndim=ndim,
             bounds=bounds,
             f_shift=f_shift,
+            f_bias=0.0,
+            default_bounds=np.array([-5.0, 5.0]),
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
             prepare=prepare,
+            f_global=0.0,
         )
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-5.0, 5.0] for _ in range(self.dim_default)]))
         self._bind_kernel(compute, ["f_shift"])
 
 
@@ -136,21 +155,22 @@ class F32010(F12010):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, f_shift: typing.Any, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, f_shift: typing.Any, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = operator.ackley_func(x - f_shift)
 
         super().__init__(
             ndim=ndim,
             bounds=bounds,
             f_shift=f_shift,
+            f_bias=0.0,
+            default_bounds=np.array([-32.0, 32.0]),
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
             prepare=prepare,
-        )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-32.0, 32.0] for _ in range(self.dim_default)])
+            f_global=0.0,
         )
         self._bind_kernel(compute, ["f_shift"])
 
@@ -196,15 +216,25 @@ class F42010(CecBenchmark):
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
         prepare: bool | None = None,
+        *,
+        default_bounds: typing.Any = None,
+        x_global: typing.Any = None,
+        f_global: typing.Any = None,
+        load: typing.Callable[["CecBenchmark", int, _Traversable | None], None] | None = None,
+        paras: typing.Union[
+            dict[str, typing.Any], list[str], tuple[str, ...], typing.Callable[..., dict[str, typing.Any]], None
+        ] = None,
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_shift: typing.Any,
             P: typing.Any,
             m_group: typing.Any,
             f_matrix: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = x - f_shift
             idx1 = P[:m_group]
             idx2 = P[m_group:]
@@ -212,35 +242,48 @@ class F42010(CecBenchmark):
             z_elliptic = z[idx2]
             out[0] = operator.elliptic_func(z_rot_elliptic) * 10**6 + operator.elliptic_func(z_elliptic)
 
+        self.m_group = m_group
+
+        def _load(problem: "CecBenchmark", resolved_ndim: int, support_path: _Traversable | None) -> None:
+            f_shift_data = problem.load_matrix_data(f_shift, support_path=support_path)
+            problem.f_matrix = problem.check_matrix_data(f_matrix, False, support_path=support_path)
+            problem.f_shift = f_shift_data[:1, :].ravel()[:resolved_ndim]
+            if resolved_ndim == 1000:
+                problem.P = (f_shift_data[1:, :].ravel() - np.ones(resolved_ndim)).astype(int)
+            else:
+                np.random.seed(0)
+                problem.P = np.random.permutation(resolved_ndim)
+            problem.m_group = problem.check_m_group(problem.m_group, ndim=resolved_ndim)
+            if load is not None:
+                load(problem, resolved_ndim, support_path)
+
         super().__init__(
-            parallel=parallel,
-            fastmath=fastmath,
-            dtype=dtype,
+            ndim=ndim,
+            bounds=bounds,
+            f_shift=None,
+            f_matrix=None,
+            f_bias=0.0,
+            default_bounds=np.array([-100.0, 100.0]) if default_bounds is None else default_bounds,
             dim_changeable=True,
             dim_default=1000,
             dim_max=1000,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
             shift=shift,
             prepare=prepare,
+            load=_load,
+            f_global=0.0 if f_global is None else f_global,
+            x_global=(lambda problem, dim: np.asarray(problem.f_shift)) if x_global is None else x_global,
         )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
-        )
-        f_shift = self.load_matrix_data(f_shift)
-        self.f_matrix = self.check_matrix_data(f_matrix, False)
-        self.f_shift = f_shift[:1, :].ravel()[: self.ndim]
-        if self.ndim == 1000:
-            self.P = (f_shift[1:, :].ravel() - np.ones(self.ndim)).astype(int)
+        if paras is None:
+            self._bind_kernel(
+                compute,
+                ["f_shift", "P", "m_group", "f_matrix"],
+                paras={"f_shift": self.f_shift, "P": self.P, "f_matrix": self.f_matrix, "m_group": self.m_group},
+            )
         else:
-            np.random.seed(0)
-            self.P = np.random.permutation(self.ndim)
-        self.m_group = self.check_m_group(m_group)
-        self._f_global = 0.0
-        self._x_global = np.asarray(self.f_shift)
-        self._bind_kernel(
-            compute,
-            ["f_shift", "P", "m_group", "f_matrix"],
-            paras={"f_shift": self.f_shift, "P": self.P, "f_matrix": self.f_matrix, "m_group": self.m_group},
-        )
+            self._bind_kernel(compute, ["f_shift", "P", "m_group", "f_matrix"], paras=paras)
 
 
 class F52010(F42010):
@@ -268,15 +311,25 @@ class F52010(F42010):
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
         prepare: bool | None = None,
+        *,
+        default_bounds: typing.Any = None,
+        x_global: typing.Any = None,
+        f_global: typing.Any = None,
+        load: typing.Callable[["CecBenchmark", int, _Traversable | None], None] | None = None,
+        paras: typing.Union[
+            dict[str, typing.Any], list[str], tuple[str, ...], typing.Callable[..., dict[str, typing.Any]], None
+        ] = None,
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_shift: typing.Any,
             P: typing.Any,
             m_group: typing.Any,
             f_matrix: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = x - f_shift
             idx1 = P[:m_group]
             idx2 = P[m_group:]
@@ -285,19 +338,23 @@ class F52010(F42010):
             out[0] = operator.rastrigin_func(z_rot_ras) * 10**6 + operator.rastrigin_func(z_ras)
 
         super().__init__(
-            ndim,
-            bounds,
-            f_shift,
-            f_matrix,
-            m_group,
+            ndim=ndim,
+            bounds=bounds,
+            f_shift=f_shift,
+            f_matrix=f_matrix,
+            m_group=m_group,
+            default_bounds=np.array([-5.0, 5.0]) if default_bounds is None else default_bounds,
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
             prepare=prepare,
+            x_global=x_global,
+            f_global=f_global,
+            load=load,
+            paras=paras,
         )
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-5.0, 5.0] for _ in range(self.dim_default)]))
-        self._bind_kernel(compute, ["f_shift", "P", "m_group", "f_matrix"])
+        self._bind_kernel(compute, ["f_shift", "P", "m_group", "f_matrix"], paras=paras)
 
 
 class F62010(F42010):
@@ -325,15 +382,25 @@ class F62010(F42010):
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
         prepare: bool | None = None,
+        *,
+        default_bounds: typing.Any = None,
+        x_global: typing.Any = None,
+        f_global: typing.Any = None,
+        load: typing.Callable[["CecBenchmark", int, _Traversable | None], None] | None = None,
+        paras: typing.Union[
+            dict[str, typing.Any], list[str], tuple[str, ...], typing.Callable[..., dict[str, typing.Any]], None
+        ] = None,
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_shift: typing.Any,
             P: typing.Any,
             m_group: typing.Any,
             f_matrix: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = x - f_shift
             idx1 = P[:m_group]
             idx2 = P[m_group:]
@@ -342,21 +409,23 @@ class F62010(F42010):
             out[0] = operator.ackley_func(z_rot_ras) * 10**6 + operator.ackley_func(z_ras)
 
         super().__init__(
-            ndim,
-            bounds,
-            f_shift,
-            f_matrix,
-            m_group,
+            ndim=ndim,
+            bounds=bounds,
+            f_shift=f_shift,
+            f_matrix=f_matrix,
+            m_group=m_group,
+            default_bounds=np.array([-32.0, 32.0]) if default_bounds is None else default_bounds,
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
             prepare=prepare,
+            x_global=x_global,
+            f_global=f_global,
+            load=load,
+            paras=paras,
         )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-32.0, 32.0] for _ in range(self.dim_default)])
-        )
-        self._bind_kernel(compute, ["f_shift", "P", "m_group", "f_matrix"])
+        self._bind_kernel(compute, ["f_shift", "P", "m_group", "f_matrix"], paras=paras)
 
 
 class F72010(CecBenchmark):
@@ -399,39 +468,64 @@ class F72010(CecBenchmark):
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
         prepare: bool | None = None,
+        *,
+        default_bounds: typing.Any = None,
+        x_global: typing.Any = None,
+        f_global: typing.Any = None,
+        load: typing.Callable[["CecBenchmark", int, _Traversable | None], None] | None = None,
+        paras: typing.Union[
+            dict[str, typing.Any], list[str], tuple[str, ...], typing.Callable[..., dict[str, typing.Any]], None
+        ] = None,
     ) -> None:
-        def compute(x: np.ndarray, f_shift: typing.Any, P: typing.Any, m_group: typing.Any, out: np.ndarray) -> None:
+        def compute(
+            x: np.ndarray, shift: np.ndarray, f_shift: typing.Any, P: typing.Any, m_group: typing.Any, out: np.ndarray
+        ) -> None:
+            x = x - shift
             z = x - f_shift
             z_schwefel = z[P[:m_group]]
             z_sphere = z[P[m_group:]]
             out[0] = operator.schwefel_12_func(z_schwefel) * 10**6 + operator.sphere_func(z_sphere)
 
+        self.m_group = m_group
+
+        def _load(problem: "CecBenchmark", resolved_ndim: int, support_path: _Traversable | None) -> None:
+            f_shift_data = problem.load_matrix_data(f_shift, support_path=support_path)
+            problem.f_shift = f_shift_data[:1, :].ravel()[:resolved_ndim]
+            if resolved_ndim == 1000:
+                problem.P = (f_shift_data[1:, :].ravel() - np.ones(resolved_ndim)).astype(int)
+            else:
+                np.random.seed(0)
+                problem.P = np.random.permutation(resolved_ndim)
+            problem.m_group = problem.check_m_group(problem.m_group, ndim=resolved_ndim)
+            if load is not None:
+                load(problem, resolved_ndim, support_path)
+
         super().__init__(
-            parallel=parallel,
-            fastmath=fastmath,
-            dtype=dtype,
+            ndim=ndim,
+            bounds=bounds,
+            f_shift=None,
+            f_bias=0.0,
+            default_bounds=np.array([-100.0, 100.0]) if default_bounds is None else default_bounds,
             dim_changeable=True,
             dim_default=1000,
             dim_max=1000,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
             shift=shift,
             prepare=prepare,
+            load=_load,
+            f_global=0.0 if f_global is None else f_global,
+            x_global=(lambda problem, dim: np.asarray(problem.f_shift)) if x_global is None else x_global,
         )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
-        )
-        f_shift = self.load_matrix_data(f_shift)
-        self.f_shift = f_shift[:1, :].ravel()[: self.ndim]
-        if self.ndim == 1000:
-            self.P = (f_shift[1:, :].ravel() - np.ones(self.ndim)).astype(int)
+        if paras is None:
+            self._bind_kernel(
+                compute,
+                ["f_shift", "P", "m_group"],
+                paras={"f_shift": self.f_shift, "P": self.P, "m_group": self.m_group},
+            )
         else:
-            np.random.seed(0)
-            self.P = np.random.permutation(self.ndim)
-        self.m_group = self.check_m_group(m_group)
-        self._f_global = 0.0
-        self._x_global = np.asarray(self.f_shift)
-        self._bind_kernel(
-            compute, ["f_shift", "P", "m_group"], paras={"f_shift": self.f_shift, "P": self.P, "m_group": self.m_group}
-        )
+            self._bind_kernel(compute, ["f_shift", "P", "m_group"], paras=paras)
 
 
 class F82010(F72010):
@@ -458,28 +552,47 @@ class F82010(F72010):
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
         prepare: bool | None = None,
+        *,
+        default_bounds: typing.Any = None,
+        x_global: typing.Any = None,
+        f_global: typing.Any = None,
+        load: typing.Callable[["CecBenchmark", int, _Traversable | None], None] | None = None,
+        paras: typing.Union[
+            dict[str, typing.Any], list[str], tuple[str, ...], typing.Callable[..., dict[str, typing.Any]], None
+        ] = None,
     ) -> None:
-        def compute(x: np.ndarray, f_shift: typing.Any, P: typing.Any, m_group: typing.Any, out: np.ndarray) -> None:
+        def compute(
+            x: np.ndarray, shift: np.ndarray, f_shift: typing.Any, P: typing.Any, m_group: typing.Any, out: np.ndarray
+        ) -> None:
+            x = x - shift
             z = x - f_shift
             z_rosen = z[P[:m_group]]
             z_sphere = z[P[m_group:]]
             out[0] = operator.rosenbrock_func(z_rosen) * 10**6 + operator.sphere_func(z_sphere)
 
+        def _x_global_opt(problem: "CecBenchmark", dim: int) -> np.ndarray:
+            xg = problem.f_shift.copy()
+            xg[problem.P[: problem.m_group]] = problem.f_shift[problem.P[: problem.m_group]] + 1
+            xg[problem.P[problem.m_group :]] = problem.f_shift[problem.P[problem.m_group :]]
+            return np.asarray(xg)
+
         super().__init__(
-            ndim,
-            bounds,
-            f_shift,
-            m_group,
+            ndim=ndim,
+            bounds=bounds,
+            f_shift=f_shift,
+            m_group=m_group,
+            default_bounds=default_bounds,
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
             prepare=prepare,
+            x_global=_x_global_opt if x_global is None else x_global,
+            f_global=f_global,
+            load=load,
+            paras=paras,
         )
-        self._x_global = np.asarray(self.f_shift.copy())
-        self.x_global[self.P[: self.m_group]] = self.f_shift[self.P[: self.m_group]] + 1
-        self.x_global[self.P[self.m_group :]] = self.f_shift[self.P[self.m_group :]]
-        self._bind_kernel(compute, ["f_shift", "P", "m_group"])
+        self._bind_kernel(compute, ["f_shift", "P", "m_group"], paras=paras)
 
 
 class F92010(CecBenchmark):
@@ -523,9 +636,18 @@ class F92010(CecBenchmark):
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
         prepare: bool | None = None,
+        *,
+        default_bounds: typing.Any = None,
+        x_global: typing.Any = None,
+        f_global: typing.Any = None,
+        load: typing.Callable[["CecBenchmark", int, _Traversable | None], None] | None = None,
+        paras: typing.Union[
+            dict[str, typing.Any], list[str], tuple[str, ...], typing.Callable[..., dict[str, typing.Any]], None
+        ] = None,
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_shift: typing.Any,
             count_up: int,
             P: typing.Any,
@@ -533,6 +655,7 @@ class F92010(CecBenchmark):
             f_matrix: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = x - f_shift
             result = 0.0
             for k in range(0, count_up):
@@ -542,36 +665,49 @@ class F92010(CecBenchmark):
             z2 = z[P[int(x.shape[0] / 2) :]]
             out[0] = result + operator.elliptic_func(z2)
 
+        self.m_group = m_group
+
+        def _load(problem: "CecBenchmark", resolved_ndim: int, support_path: _Traversable | None) -> None:
+            problem.f_matrix = problem.check_matrix_data(f_matrix, False, support_path=support_path)
+            f_shift_data = problem.load_matrix_data(f_shift, support_path=support_path)
+            problem.f_shift = f_shift_data[:1, :].ravel()[:resolved_ndim]
+            if resolved_ndim == 1000:
+                problem.P = (f_shift_data[1:, :].ravel() - np.ones(resolved_ndim)).astype(int)
+            else:
+                np.random.seed(0)
+                problem.P = np.random.permutation(resolved_ndim)
+            problem.m_group = problem.check_m_group(problem.m_group, ndim=resolved_ndim)
+            problem.count_up = int(resolved_ndim / (2 * problem.m_group))
+            if load is not None:
+                load(problem, resolved_ndim, support_path)
+
         super().__init__(
-            parallel=parallel,
-            fastmath=fastmath,
-            dtype=dtype,
+            ndim=ndim,
+            bounds=bounds,
+            f_shift=None,
+            f_matrix=None,
+            f_bias=0.0,
+            default_bounds=np.array([-100.0, 100.0]) if default_bounds is None else default_bounds,
             dim_changeable=True,
             dim_default=1000,
             dim_max=1000,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
             shift=shift,
             prepare=prepare,
+            load=_load,
+            f_global=0.0 if f_global is None else f_global,
+            x_global=(lambda problem, dim: np.asarray(problem.f_shift)) if x_global is None else x_global,
         )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
-        )
-        self.f_matrix = self.check_matrix_data(f_matrix, False)
-        f_shift = self.load_matrix_data(f_shift)
-        self.f_shift = f_shift[:1, :].ravel()[: self.ndim]
-        if self.ndim == 1000:
-            self.P = (f_shift[1:, :].ravel() - np.ones(self.ndim)).astype(int)
+        if paras is None:
+            self._bind_kernel(
+                compute,
+                ["f_shift", "count_up", "P", "m_group", "f_matrix"],
+                paras={"f_shift": self.f_shift, "P": self.P, "f_matrix": self.f_matrix, "m_group": self.m_group},
+            )
         else:
-            np.random.seed(0)
-            self.P = np.random.permutation(self.ndim)
-        self.m_group = self.check_m_group(m_group)
-        self._f_global = 0.0
-        self._x_global = np.asarray(self.f_shift)
-        self.count_up = int(self.ndim / (2 * self.m_group))
-        self._bind_kernel(
-            compute,
-            ["f_shift", "count_up", "P", "m_group", "f_matrix"],
-            paras={"f_shift": self.f_shift, "P": self.P, "f_matrix": self.f_matrix, "m_group": self.m_group},
-        )
+            self._bind_kernel(compute, ["f_shift", "count_up", "P", "m_group", "f_matrix"], paras=paras)
 
 
 class F102010(F92010):
@@ -599,9 +735,18 @@ class F102010(F92010):
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
         prepare: bool | None = None,
+        *,
+        default_bounds: typing.Any = None,
+        x_global: typing.Any = None,
+        f_global: typing.Any = None,
+        load: typing.Callable[["CecBenchmark", int, _Traversable | None], None] | None = None,
+        paras: typing.Union[
+            dict[str, typing.Any], list[str], tuple[str, ...], typing.Callable[..., dict[str, typing.Any]], None
+        ] = None,
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_shift: typing.Any,
             count_up: typing.Any,
             P: typing.Any,
@@ -609,6 +754,7 @@ class F102010(F92010):
             f_matrix: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = x - f_shift
             result = 0.0
             for k in range(0, count_up):
@@ -619,19 +765,23 @@ class F102010(F92010):
             out[0] = result + operator.rastrigin_func(z2)
 
         super().__init__(
-            ndim,
-            bounds,
-            f_shift,
-            f_matrix,
-            m_group,
+            ndim=ndim,
+            bounds=bounds,
+            f_shift=f_shift,
+            f_matrix=f_matrix,
+            m_group=m_group,
+            default_bounds=np.array([-5.0, 5.0]) if default_bounds is None else default_bounds,
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
             prepare=prepare,
+            x_global=x_global,
+            f_global=f_global,
+            load=load,
+            paras=paras,
         )
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-5.0, 5.0] for _ in range(self.dim_default)]))
-        self._bind_kernel(compute, ["f_shift", "count_up", "P", "m_group", "f_matrix"])
+        self._bind_kernel(compute, ["f_shift", "count_up", "P", "m_group", "f_matrix"], paras=paras)
 
 
 class F112010(F92010):
@@ -659,9 +809,18 @@ class F112010(F92010):
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
         prepare: bool | None = None,
+        *,
+        default_bounds: typing.Any = None,
+        x_global: typing.Any = None,
+        f_global: typing.Any = None,
+        load: typing.Callable[["CecBenchmark", int, _Traversable | None], None] | None = None,
+        paras: typing.Union[
+            dict[str, typing.Any], list[str], tuple[str, ...], typing.Callable[..., dict[str, typing.Any]], None
+        ] = None,
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_shift: typing.Any,
             count_up: typing.Any,
             P: typing.Any,
@@ -669,6 +828,7 @@ class F112010(F92010):
             f_matrix: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = x - f_shift
             result = 0.0
             for k in range(0, count_up):
@@ -679,21 +839,23 @@ class F112010(F92010):
             out[0] = result + operator.ackley_func(z2)
 
         super().__init__(
-            ndim,
-            bounds,
-            f_shift,
-            f_matrix,
-            m_group,
+            ndim=ndim,
+            bounds=bounds,
+            f_shift=f_shift,
+            f_matrix=f_matrix,
+            m_group=m_group,
+            default_bounds=np.array([-32.0, 32.0]) if default_bounds is None else default_bounds,
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
             prepare=prepare,
+            x_global=x_global,
+            f_global=f_global,
+            load=load,
+            paras=paras,
         )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-32.0, 32.0] for _ in range(self.dim_default)])
-        )
-        self._bind_kernel(compute, ["f_shift", "count_up", "P", "m_group", "f_matrix"])
+        self._bind_kernel(compute, ["f_shift", "count_up", "P", "m_group", "f_matrix"], paras=paras)
 
 
 class F122010(F72010):
@@ -718,10 +880,25 @@ class F122010(F72010):
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
         prepare: bool | None = None,
+        *,
+        default_bounds: typing.Any = None,
+        x_global: typing.Any = None,
+        f_global: typing.Any = None,
+        load: typing.Callable[["CecBenchmark", int, _Traversable | None], None] | None = None,
+        paras: typing.Union[
+            dict[str, typing.Any], list[str], tuple[str, ...], typing.Callable[..., dict[str, typing.Any]], None
+        ] = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_shift: typing.Any, count_up: int, P: typing.Any, m_group: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_shift: typing.Any,
+            count_up: int,
+            P: typing.Any,
+            m_group: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = x - f_shift
             result = 0.0
             for k in range(0, count_up):
@@ -730,19 +907,28 @@ class F122010(F72010):
             z2 = z[P[int(x.shape[0] / 2) :]]
             out[0] = result + operator.sphere_func(z2)
 
+        def _load_extra(problem: "CecBenchmark", resolved_ndim: int, support_path: _Traversable | None) -> None:
+            problem.count_up = int(resolved_ndim / (2 * problem.m_group))
+            if load is not None:
+                load(problem, resolved_ndim, support_path)
+
         super().__init__(
-            ndim,
-            bounds,
-            f_shift,
-            m_group,
+            ndim=ndim,
+            bounds=bounds,
+            f_shift=f_shift,
+            m_group=m_group,
+            default_bounds=default_bounds,
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
             prepare=prepare,
+            x_global=x_global,
+            f_global=f_global,
+            load=_load_extra,
+            paras=paras,
         )
-        self.count_up = int(self.ndim / (2 * self.m_group))
-        self._bind_kernel(compute, ["f_shift", "count_up", "P", "m_group"])
+        self._bind_kernel(compute, ["f_shift", "count_up", "P", "m_group"], paras=paras)
 
 
 class F132010(F72010):
@@ -770,8 +956,15 @@ class F132010(F72010):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_shift: typing.Any, count_up: int, P: typing.Any, m_group: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_shift: typing.Any,
+            count_up: int,
+            P: typing.Any,
+            m_group: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = x - f_shift
             result = 0.0
             for k in range(0, count_up):
@@ -779,6 +972,13 @@ class F132010(F72010):
                 result += operator.rosenbrock_func(z[idx1])
             z2 = z[P[int(x.shape[0] / 2) :]]
             out[0] = result + operator.sphere_func(z2)
+
+        def _optimum(problem: "CecBenchmark", dim: int) -> np.ndarray:
+            half = int(dim / 2)
+            xg = np.asarray(problem.f_shift).copy()
+            xg[problem.P[:half]] = np.asarray(problem.f_shift)[problem.P[:half]] + 1
+            xg[problem.P[half:]] = np.asarray(problem.f_shift)[problem.P[half:]]
+            return xg
 
         super().__init__(
             ndim,
@@ -790,11 +990,9 @@ class F132010(F72010):
             dtype=dtype,
             shift=shift,
             prepare=prepare,
+            x_global=_optimum,
         )
         self.count_up = int(self.ndim / (2 * self.m_group))
-        self._x_global = np.asarray(self.f_shift.copy())
-        self.x_global[self.P[: int(self.ndim / 2)]] = self.f_shift[self.P[: int(self.ndim / 2)]] + 1
-        self.x_global[self.P[int(self.ndim / 2) :]] = self.f_shift[self.P[int(self.ndim / 2) :]]
         self._bind_kernel(compute, ["f_shift", "count_up", "P", "m_group"])
 
 
@@ -824,6 +1022,7 @@ class F142010(F92010):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_shift: typing.Any,
             count_up: int,
             P: typing.Any,
@@ -831,6 +1030,7 @@ class F142010(F92010):
             f_matrix: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = x - f_shift
             result = 0.0
             for k in range(0, count_up):
@@ -883,6 +1083,7 @@ class F152010(F92010):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_shift: typing.Any,
             count_up: int,
             P: typing.Any,
@@ -890,6 +1091,7 @@ class F152010(F92010):
             f_matrix: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = x - f_shift
             result = 0.0
             for k in range(0, count_up):
@@ -904,13 +1106,13 @@ class F152010(F92010):
             f_shift,
             f_matrix,
             m_group,
+            default_bounds=np.array([-5.0, 5.0]),
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
             prepare=prepare,
         )
-        self.check_ndim_and_bounds(ndim, self.dim_max, bounds, np.array([[-5.0, 5.0] for _ in range(self.dim_default)]))
         self.count_up = int(self.ndim / self.m_group)
         self._bind_kernel(compute, ["f_shift", "count_up", "P", "m_group", "f_matrix"])
 
@@ -943,6 +1145,7 @@ class F162010(F92010):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_shift: typing.Any,
             count_up: int,
             P: typing.Any,
@@ -950,6 +1153,7 @@ class F162010(F92010):
             f_matrix: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = x - f_shift
             result = 0.0
             for k in range(0, count_up):
@@ -964,14 +1168,12 @@ class F162010(F92010):
             f_shift,
             f_matrix,
             m_group,
+            default_bounds=np.array([-32.0, 32.0]),
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
             prepare=prepare,
-        )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-32.0, 32.0] for _ in range(self.dim_default)])
         )
         self.count_up = int(self.ndim / self.m_group)
         self._bind_kernel(compute, ["f_shift", "count_up", "P", "m_group", "f_matrix"])
@@ -1003,8 +1205,15 @@ class F172010(F72010):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_shift: typing.Any, count_up: int, P: typing.Any, m_group: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_shift: typing.Any,
+            count_up: int,
+            P: typing.Any,
+            m_group: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = x - f_shift
             result = 0.0
             for k in range(0, count_up):
@@ -1053,8 +1262,15 @@ class F182010(F72010):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_shift: typing.Any, count_up: int, P: typing.Any, m_group: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_shift: typing.Any,
+            count_up: int,
+            P: typing.Any,
+            m_group: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = x - f_shift
             result = 0.0
             for k in range(0, count_up):
@@ -1072,9 +1288,9 @@ class F182010(F72010):
             dtype=dtype,
             shift=shift,
             prepare=prepare,
+            x_global=lambda problem, dim: np.asarray(problem.f_shift + 1),
         )
         self.count_up = int(self.ndim / self.m_group)
-        self._x_global = np.asarray(self.f_shift + 1)
         self._bind_kernel(compute, ["f_shift", "count_up", "P", "m_group"])
 
 
@@ -1102,7 +1318,8 @@ class F192010(F12010):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, f_shift: typing.Any, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, f_shift: typing.Any, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = operator.schwefel_12_func(x - f_shift)
 
         super().__init__(
@@ -1143,7 +1360,8 @@ class F202010(F12010):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, f_shift: typing.Any, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, f_shift: typing.Any, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = operator.rosenbrock_func(x - f_shift)
 
         super().__init__(
@@ -1155,6 +1373,6 @@ class F202010(F12010):
             dtype=dtype,
             shift=shift,
             prepare=prepare,
+            x_global=lambda problem, dim: np.asarray(problem.f_shift + 1),
         )
         self._bind_kernel(compute, ["f_shift"])
-        self._x_global = np.asarray(self.f_shift + 1)

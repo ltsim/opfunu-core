@@ -4,7 +4,13 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
+import sys
 import typing
+
+if sys.version_info >= (3, 11):
+    from importlib.resources.abc import Traversable as _Traversable
+else:  # Python 3.10: Traversable lives in importlib.abc
+    from importlib.abc import Traversable as _Traversable
 
 import numpy as np
 
@@ -15,8 +21,8 @@ from opfunu.utils import operator
 class F12014(CecBenchmark):
     """
     .. [1] Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2013). Problem definitions and evaluation criteria for the CEC 2014
-    special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
-    Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
+       special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
+       Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
     """
 
     name = "F1: Rotated High Conditioned Elliptic Function"
@@ -56,43 +62,56 @@ class F12014(CecBenchmark):
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
         prepare: bool | None = None,
+        *,
+        compute: typing.Callable[..., None] | None = None,
+        param_names: list[str] | None = None,
+        paras: typing.Union[
+            dict[str, typing.Any], list[str], tuple[str, ...], typing.Callable[..., dict[str, typing.Any]], None
+        ] = None,
     ) -> None:
-        def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+        def _compute(
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, x - f_shift)
             out[0] = operator.elliptic_func(z) + f_bias
 
+        # a subclass that describes its own kernel gets display metadata built from
+        # its own param_names; only a plain instance of this class uses the list below
+        own_paras = None if (compute is not None or param_names is not None) else ["f_shift", "f_bias", "f_matrix"]
+
         super().__init__(
-            parallel=parallel,
-            fastmath=fastmath,
-            dtype=dtype,
+            ndim,
+            bounds,
+            f_shift,
+            f_matrix,
+            f_bias=f_bias,
+            default_bounds=np.array([-100.0, 100.0]),
             dim_changeable=True,
             dim_default=30,
             dim_max=100,
             dim_supported=[10, 20, 30, 50, 100],
-            f_bias=f_bias,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
             shift=shift,
             prepare=prepare,
-        )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
-        )
-        self.f_shift = self.check_shift_data(f_shift)[: self.ndim]
-        self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
-        self._x_global = np.asarray(self.f_shift)
-        self._bind_kernel(
-            compute,
-            ["f_matrix", "f_shift", "f_bias"],
-            paras={"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix},
+            compute=_compute if compute is None else compute,
+            param_names=param_names if param_names is not None else ["f_matrix", "f_shift", "f_bias"],
+            paras=paras if paras is not None else own_paras,
         )
 
 
 class F22014(F12014):
     """
     .. [1] Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2013). Problem definitions and evaluation criteria for the CEC 2014
-    special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
-    Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
+       special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
+       Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
     """
 
     name = "F2: Rotated Bent Cigar Function"
@@ -117,8 +136,14 @@ class F22014(F12014):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, x - f_shift)
             out[0] = operator.bent_cigar_func(z) + f_bias
 
@@ -127,21 +152,22 @@ class F22014(F12014):
             bounds,
             f_shift,
             f_matrix,
-            f_bias,
+            f_bias=f_bias,
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
             prepare=prepare,
+            compute=compute,
+            param_names=["f_matrix", "f_shift", "f_bias"],
         )
-        self._bind_kernel(compute, ["f_matrix", "f_shift", "f_bias"])
 
 
 class F32014(F12014):
     """
     .. [1] Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2013). Problem definitions and evaluation criteria for the CEC 2014
-    special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
-    Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
+       special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
+       Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
     """
 
     name = "F3: Rotated Discus Function"
@@ -166,8 +192,14 @@ class F32014(F12014):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, x - f_shift)
             out[0] = operator.discus_func(z) + f_bias
 
@@ -176,21 +208,22 @@ class F32014(F12014):
             bounds,
             f_shift,
             f_matrix,
-            f_bias,
+            f_bias=f_bias,
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
             prepare=prepare,
+            compute=compute,
+            param_names=["f_matrix", "f_shift", "f_bias"],
         )
-        self._bind_kernel(compute, ["f_matrix", "f_shift", "f_bias"])
 
 
 class F42014(F12014):
     """
     .. [1] Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2013). Problem definitions and evaluation criteria for the CEC 2014
-    special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
-    Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
+       special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
+       Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
     """
 
     name = "F4: Shifted and Rotated Rosenbrock’s Function"
@@ -217,8 +250,14 @@ class F42014(F12014):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, 2.048 * (x - f_shift) / 100)
             out[0] = operator.rosenbrock_func(z, shift=1.0) + f_bias
 
@@ -240,8 +279,8 @@ class F42014(F12014):
 class F52014(F12014):
     """
     .. [1] Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2013). Problem definitions and evaluation criteria for the CEC 2014
-    special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
-    Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
+       special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
+       Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
     """
 
     name = "F5: Shifted and Rotated Ackley’s Function"
@@ -268,8 +307,14 @@ class F52014(F12014):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, x - f_shift)
             out[0] = operator.ackley_func(z) + f_bias
 
@@ -291,8 +336,8 @@ class F52014(F12014):
 class F62014(F12014):
     """
     .. [1] Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2013). Problem definitions and evaluation criteria for the CEC 2014
-    special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
-    Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
+       special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
+       Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
     """
 
     name = "F6: Shifted and Rotated Weierstrass Function"
@@ -321,8 +366,14 @@ class F62014(F12014):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, 0.5 * (x - f_shift) / 100)
             out[0] = operator.weierstrass_norm_func(z) + f_bias
 
@@ -344,8 +395,8 @@ class F62014(F12014):
 class F72014(F12014):
     """
     .. [1] Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2013). Problem definitions and evaluation criteria for the CEC 2014
-    special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
-    Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
+       special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
+       Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
     """
 
     name = "F7: Shifted and Rotated Griewank’s Function"
@@ -372,8 +423,14 @@ class F72014(F12014):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, 600.0 * (x - f_shift) / 100)
             out[0] = operator.griewank_func(z) + f_bias
 
@@ -395,8 +452,8 @@ class F72014(F12014):
 class F82014(CecBenchmark):
     """
     .. [1] Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2013). Problem definitions and evaluation criteria for the CEC 2014
-    special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
-    Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
+       special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
+       Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
     """
 
     name = "F8: Shifted Rastrigin’s Function"
@@ -435,35 +492,49 @@ class F82014(CecBenchmark):
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
         prepare: bool | None = None,
+        *,
+        compute: typing.Callable[..., None] | None = None,
+        param_names: list[str] | None = None,
+        paras: typing.Union[
+            dict[str, typing.Any], list[str], tuple[str, ...], typing.Callable[..., dict[str, typing.Any]], None
+        ] = None,
     ) -> None:
-        def compute(x: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+        def _compute(
+            x: np.ndarray, shift: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+        ) -> None:
+            x = x - shift
             out[0] = operator.rastrigin_func(5.12 * (x - f_shift) / 100) + f_bias
 
+        # a subclass that describes its own kernel gets display metadata built from
+        # its own param_names; only a plain instance of this class uses the list below
+        own_paras = None if (compute is not None or param_names is not None) else ["f_shift", "f_bias"]
+
         super().__init__(
-            parallel=parallel,
-            fastmath=fastmath,
-            dtype=dtype,
+            ndim,
+            bounds,
+            f_shift,
+            f_bias=f_bias,
+            default_bounds=np.array([-100.0, 100.0]),
             dim_changeable=True,
             dim_default=30,
             dim_max=100,
             dim_supported=[10, 20, 30, 50, 100],
-            f_bias=f_bias,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
             shift=shift,
             prepare=prepare,
+            compute=_compute if compute is None else compute,
+            param_names=param_names if param_names is not None else ["f_shift", "f_bias"],
+            paras=paras if paras is not None else own_paras,
         )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
-        )
-        self.f_shift = self.check_shift_data(f_shift)[: self.ndim]
-        self._x_global = np.asarray(self.f_shift)
-        self._bind_kernel(compute, ["f_shift", "f_bias"], paras={"f_shift": self.f_shift, "f_bias": self.f_bias})
 
 
 class F92014(F12014):
     """
     .. [1] Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2013). Problem definitions and evaluation criteria for the CEC 2014
-    special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
-    Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
+       special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
+       Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
     """
 
     name = "F9: Shifted and Rotated Rastrigin’s Function"
@@ -495,8 +566,14 @@ class F92014(F12014):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, 5.12 * (x - f_shift) / 100)
             out[0] = operator.rastrigin_func(z) + f_bias
 
@@ -518,8 +595,8 @@ class F92014(F12014):
 class F102014(F82014):
     """
     .. [1] Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2013). Problem definitions and evaluation criteria for the CEC 2014
-    special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
-    Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
+       special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
+       Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
     """
 
     name = "F10: Shifted Schwefel’s Function"
@@ -545,28 +622,30 @@ class F102014(F82014):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = operator.modified_schwefel_func(1000 * (x - f_shift) / 100) + f_bias
 
         super().__init__(
             ndim,
             bounds,
             f_shift,
-            f_bias,
+            f_bias=f_bias,
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
             prepare=prepare,
+            compute=compute,
+            param_names=["f_shift", "f_bias"],
         )
-        self._bind_kernel(compute, ["f_shift", "f_bias"])
 
 
 class F112014(F12014):
     """
     .. [1] Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2013). Problem definitions and evaluation criteria for the CEC 2014
-    special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
-    Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
+       special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
+       Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
     """
 
     name = "F11: Shifted and Rotated Schwefel’s Function"
@@ -600,8 +679,14 @@ class F112014(F12014):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, 1000 * (x - f_shift) / 100)
             out[0] = operator.modified_schwefel_func(z) + f_bias
 
@@ -623,8 +708,8 @@ class F112014(F12014):
 class F122014(F12014):
     """
     .. [1] Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2013). Problem definitions and evaluation criteria for the CEC 2014
-    special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
-    Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
+       special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
+       Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
     """
 
     name = "F12: Shifted and Rotated Katsuura Function"
@@ -657,8 +742,14 @@ class F122014(F12014):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, 5 * (x - f_shift) / 100)
             out[0] = operator.katsuura_func(z) + f_bias
 
@@ -680,8 +771,8 @@ class F122014(F12014):
 class F132014(F12014):
     """
     .. [1] Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2013). Problem definitions and evaluation criteria for the CEC 2014
-    special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
-    Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
+       special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
+       Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
     """
 
     name = "F13: Shifted and Rotated HappyCat Function"
@@ -712,8 +803,14 @@ class F132014(F12014):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, 5 * (x - f_shift) / 100)
             out[0] = operator.happy_cat_func(z, shift=-1.0) + f_bias
 
@@ -735,8 +832,8 @@ class F132014(F12014):
 class F142014(F12014):
     """
     .. [1] Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2013). Problem definitions and evaluation criteria for the CEC 2014
-    special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
-    Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
+       special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
+       Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
     """
 
     name = "F14: Shifted and Rotated HGBat Function"
@@ -768,8 +865,14 @@ class F142014(F12014):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, 5 * (x - f_shift) / 100)
             out[0] = operator.hgbat_func(z, shift=-1.0) + f_bias
 
@@ -791,8 +894,8 @@ class F142014(F12014):
 class F152014(F12014):
     """
     .. [1] Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2013). Problem definitions and evaluation criteria for the CEC 2014
-    special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
-    Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
+       special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
+       Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
     """
 
     name = "F15: Shifted and Rotated Expanded Griewank’s plus Rosenbrock’s Function"
@@ -822,8 +925,14 @@ class F152014(F12014):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, 5 * (x - f_shift) / 100)
             out[0] = operator.expanded_griewank_rosenbrock_func(z) + f_bias
 
@@ -845,8 +954,8 @@ class F152014(F12014):
 class F162014(F12014):
     """
     .. [1] Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2013). Problem definitions and evaluation criteria for the CEC 2014
-    special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
-    Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
+       special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
+       Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
     """
 
     name = "F16: Shifted and Rotated Expanded Scaffer’s F6 Function"
@@ -877,8 +986,14 @@ class F162014(F12014):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, x - f_shift)
             out[0] = operator.expanded_scaffer_f6_func(z) + f_bias
 
@@ -900,8 +1015,8 @@ class F162014(F12014):
 class F172014(CecBenchmark):
     """
     .. [1] Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2013). Problem definitions and evaluation criteria for the CEC 2014
-    special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
-    Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
+       special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
+       Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
     """
 
     name = "F17: Hybrid Function 1"
@@ -942,9 +1057,17 @@ class F172014(CecBenchmark):
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
         prepare: bool | None = None,
+        *,
+        compute: typing.Callable[..., None] | None = None,
+        param_names: list[str] | None = None,
+        paras: typing.Union[
+            dict[str, typing.Any], list[str], tuple[str, ...], typing.Callable[..., dict[str, typing.Any]], None
+        ] = None,
+        load: typing.Callable[["CecBenchmark", int, _Traversable | None], None] | None = None,
     ) -> None:
-        def compute(
+        def _compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_shift: typing.Any,
             idx1: typing.Any,
             idx2: typing.Any,
@@ -955,6 +1078,7 @@ class F172014(CecBenchmark):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = x - f_shift
             z1 = np.concatenate((z[idx1], z[idx2], z[idx3]))
             mz = operator.dot_mv(f_matrix, z1)
@@ -965,55 +1089,60 @@ class F172014(CecBenchmark):
                 + f_bias
             )
 
+        def _load(problem: "CecBenchmark", ndim: int, support_path: _Traversable | None) -> None:
+            problem.f_shuffle = (problem.f_shuffle - 1).astype(int)
+            problem.n_funcs = 3
+            problem.p = np.array([0.3, 0.3, 0.4])
+            problem.n1 = int(np.ceil(problem.p[0] * ndim))
+            problem.n2 = int(np.ceil(problem.p[1] * ndim)) + problem.n1
+            problem.idx1, problem.idx2, problem.idx3 = (
+                problem.f_shuffle[: problem.n1],
+                problem.f_shuffle[problem.n1 : problem.n2],
+                problem.f_shuffle[problem.n2 : ndim],
+            )
+            problem.g1 = operator.modified_schwefel_func
+            problem.g2 = operator.rastrigin_func
+            problem.g3 = operator.elliptic_func
+            if load is not None:
+                load(problem, ndim, support_path)
+
+        # a subclass that describes its own kernel gets display metadata built from
+        # its own param_names; only a plain instance of this class uses the list below
+        own_paras = (
+            None if (compute is not None or param_names is not None) else ["f_shift", "f_bias", "f_matrix", "f_shuffle"]
+        )
+
         super().__init__(
-            parallel=parallel,
-            fastmath=fastmath,
-            dtype=dtype,
+            ndim,
+            bounds,
+            f_shift,
+            f_matrix,
+            f_shuffle,
+            f_bias=f_bias,
+            default_bounds=np.array([-100.0, 100.0]),
             dim_changeable=True,
             dim_default=30,
             dim_max=100,
             dim_supported=[10, 20, 30, 50, 100],
-            f_bias=f_bias,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
             shift=shift,
             prepare=prepare,
-        )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
-        )
-        self.f_shift = self.check_shift_data(f_shift)[: self.ndim]
-        self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
-        self.f_shuffle = self.check_shuffle_data(f_shuffle, needed_dim=True)
-        self.f_shuffle = (self.f_shuffle - 1).astype(int)
-        self._x_global = np.asarray(self.f_shift)
-        self.n_funcs = 3
-        self.p = np.array([0.3, 0.3, 0.4])
-        self.n1 = int(np.ceil(self.p[0] * self.ndim))
-        self.n2 = int(np.ceil(self.p[1] * self.ndim)) + self.n1
-        self.idx1, self.idx2, self.idx3 = (
-            self.f_shuffle[: self.n1],
-            self.f_shuffle[self.n1 : self.n2],
-            self.f_shuffle[self.n2 : self.ndim],
-        )
-        self.g1 = operator.modified_schwefel_func
-        self.g2 = operator.rastrigin_func
-        self.g3 = operator.elliptic_func
-        self._bind_kernel(
-            compute,
-            ["f_shift", "idx1", "idx2", "idx3", "f_matrix", "n1", "n2", "f_bias"],
-            paras={
-                "f_shift": self.f_shift,
-                "f_bias": self.f_bias,
-                "f_matrix": self.f_matrix,
-                "f_shuffle": self.f_shuffle,
-            },
+            compute=_compute if compute is None else compute,
+            param_names=param_names
+            if param_names is not None
+            else ["f_shift", "idx1", "idx2", "idx3", "f_matrix", "n1", "n2", "f_bias"],
+            paras=paras if paras is not None else own_paras,
+            load=_load,
         )
 
 
 class F182014(F172014):
     """
     .. [1] Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2013). Problem definitions and evaluation criteria for the CEC 2014
-    special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
-    Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
+       special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
+       Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
     """
 
     name = "F18: Hybrid Function 2"
@@ -1057,6 +1186,7 @@ class F182014(F172014):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_shift: typing.Any,
             idx1: typing.Any,
             idx2: typing.Any,
@@ -1067,6 +1197,7 @@ class F182014(F172014):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = x - f_shift
             z1 = np.concatenate((z[idx1], z[idx2], z[idx3]))
             mz = operator.dot_mv(f_matrix, z1)
@@ -1083,21 +1214,22 @@ class F182014(F172014):
             f_shift,
             f_matrix,
             f_shuffle,
-            f_bias,
+            f_bias=f_bias,
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
             prepare=prepare,
+            compute=compute,
+            param_names=["f_shift", "idx1", "idx2", "idx3", "f_matrix", "n1", "n2", "f_bias"],
         )
-        self._bind_kernel(compute, ["f_shift", "idx1", "idx2", "idx3", "f_matrix", "n1", "n2", "f_bias"])
 
 
 class F192014(F172014):
     """
     .. [1] Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2013). Problem definitions and evaluation criteria for the CEC 2014
-    special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
-    Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
+       special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
+       Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
     """
 
     name = "F19: Hybrid Function 3"
@@ -1141,6 +1273,7 @@ class F192014(F172014):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_shift: typing.Any,
             idx1: typing.Any,
             idx2: typing.Any,
@@ -1153,6 +1286,7 @@ class F192014(F172014):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = x - f_shift
             z1 = np.concatenate((z[idx1], z[idx2], z[idx3], z[idx4]))
             mz = operator.dot_mv(f_matrix, z1)
@@ -1164,34 +1298,41 @@ class F192014(F172014):
                 + f_bias
             )
 
+        def load(problem: "CecBenchmark", ndim: int, support_path: _Traversable | None) -> None:
+            problem.n_funcs = 4
+            problem.p = np.array([0.2, 0.2, 0.3, 0.3])
+            problem.n1 = int(np.ceil(problem.p[0] * ndim))
+            problem.n2 = int(np.ceil(problem.p[1] * ndim)) + problem.n1
+            problem.n3 = int(np.ceil(problem.p[2] * ndim)) + problem.n2
+            problem.idx1, problem.idx2 = problem.f_shuffle[: problem.n1], problem.f_shuffle[problem.n1 : problem.n2]
+            problem.idx3, problem.idx4 = (
+                problem.f_shuffle[problem.n2 : problem.n3],
+                problem.f_shuffle[problem.n3 : ndim],
+            )
+
         super().__init__(
             ndim,
             bounds,
             f_shift,
             f_matrix,
             f_shuffle,
-            f_bias,
+            f_bias=f_bias,
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
             prepare=prepare,
+            compute=compute,
+            param_names=["f_shift", "idx1", "idx2", "idx3", "idx4", "f_matrix", "n1", "n2", "n3", "f_bias"],
+            load=load,
         )
-        self.n_funcs = 4
-        self.p = np.array([0.2, 0.2, 0.3, 0.3])
-        self.n1 = int(np.ceil(self.p[0] * self.ndim))
-        self.n2 = int(np.ceil(self.p[1] * self.ndim)) + self.n1
-        self.n3 = int(np.ceil(self.p[2] * self.ndim)) + self.n2
-        self.idx1, self.idx2 = self.f_shuffle[: self.n1], self.f_shuffle[self.n1 : self.n2]
-        self.idx3, self.idx4 = self.f_shuffle[self.n2 : self.n3], self.f_shuffle[self.n3 : self.ndim]
-        self._bind_kernel(compute, ["f_shift", "idx1", "idx2", "idx3", "idx4", "f_matrix", "n1", "n2", "n3", "f_bias"])
 
 
 class F202014(F192014):
     """
     .. [1] Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2013). Problem definitions and evaluation criteria for the CEC 2014
-    special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
-    Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
+       special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
+       Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
     """
 
     name = "F20: Hybrid Function 4"
@@ -1235,6 +1376,7 @@ class F202014(F192014):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_shift: typing.Any,
             idx1: typing.Any,
             idx2: typing.Any,
@@ -1247,6 +1389,7 @@ class F202014(F192014):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = x - f_shift
             z1 = np.concatenate((z[idx1], z[idx2], z[idx3], z[idx4]))
             mz = operator.dot_mv(f_matrix, z1)
@@ -1277,8 +1420,8 @@ class F202014(F192014):
 class F212014(F172014):
     """
     .. [1] Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2013). Problem definitions and evaluation criteria for the CEC 2014
-    special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
-    Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
+       special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
+       Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
     """
 
     name = "F21: Hybrid Function 5"
@@ -1319,9 +1462,17 @@ class F212014(F172014):
         dtype: typing.Any = np.float64,
         shift: typing.Any = None,
         prepare: bool | None = None,
+        *,
+        compute: typing.Callable[..., None] | None = None,
+        param_names: list[str] | None = None,
+        paras: typing.Union[
+            dict[str, typing.Any], list[str], tuple[str, ...], typing.Callable[..., dict[str, typing.Any]], None
+        ] = None,
+        load: typing.Callable[["CecBenchmark", int, _Traversable | None], None] | None = None,
     ) -> None:
-        def compute(
+        def _compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_shift: typing.Any,
             idx1: typing.Any,
             idx2: typing.Any,
@@ -1336,6 +1487,7 @@ class F212014(F172014):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = x - f_shift
             z1 = np.concatenate((z[idx1], z[idx2], z[idx3], z[idx4], z[idx5]))
             mz = operator.dot_mv(f_matrix, z1)
@@ -1348,41 +1500,50 @@ class F212014(F172014):
                 + f_bias
             )
 
+        def _load(problem: "CecBenchmark", ndim: int, support_path: _Traversable | None) -> None:
+            problem.n_funcs = 5
+            problem.p = np.array([0.1, 0.2, 0.2, 0.2, 0.3])
+            problem.n1 = int(np.ceil(problem.p[0] * ndim))
+            problem.n2 = int(np.ceil(problem.p[1] * ndim)) + problem.n1
+            problem.n3 = int(np.ceil(problem.p[2] * ndim)) + problem.n2
+            problem.n4 = int(np.ceil(problem.p[3] * ndim)) + problem.n3
+            problem.idx1, problem.idx2, problem.idx3 = (
+                problem.f_shuffle[: problem.n1],
+                problem.f_shuffle[problem.n1 : problem.n2],
+                problem.f_shuffle[problem.n2 : problem.n3],
+            )
+            problem.idx4, problem.idx5 = (
+                problem.f_shuffle[problem.n3 : problem.n4],
+                problem.f_shuffle[problem.n4 : ndim],
+            )
+            if load is not None:
+                load(problem, ndim, support_path)
+
         super().__init__(
             ndim,
             bounds,
             f_shift,
             f_matrix,
             f_shuffle,
-            f_bias,
+            f_bias=f_bias,
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
             prepare=prepare,
-        )
-        self.n_funcs = 5
-        self.p = np.array([0.1, 0.2, 0.2, 0.2, 0.3])
-        self.n1 = int(np.ceil(self.p[0] * self.ndim))
-        self.n2 = int(np.ceil(self.p[1] * self.ndim)) + self.n1
-        self.n3 = int(np.ceil(self.p[2] * self.ndim)) + self.n2
-        self.n4 = int(np.ceil(self.p[3] * self.ndim)) + self.n3
-        self.idx1, self.idx2, self.idx3 = (
-            self.f_shuffle[: self.n1],
-            self.f_shuffle[self.n1 : self.n2],
-            self.f_shuffle[self.n2 : self.n3],
-        )
-        self.idx4, self.idx5 = self.f_shuffle[self.n3 : self.n4], self.f_shuffle[self.n4 : self.ndim]
-        self._bind_kernel(
-            compute, ["f_shift", "idx1", "idx2", "idx3", "idx4", "idx5", "f_matrix", "n1", "n2", "n3", "n4", "f_bias"]
+            compute=_compute if compute is None else compute,
+            param_names=param_names
+            if param_names is not None
+            else ["f_shift", "idx1", "idx2", "idx3", "idx4", "idx5", "f_matrix", "n1", "n2", "n3", "n4", "f_bias"],
+            load=_load,
         )
 
 
 class F222014(F212014):
     """
     .. [1] Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2013). Problem definitions and evaluation criteria for the CEC 2014
-    special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
-    Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
+       special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
+       Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
     """
 
     name = "F22: Hybrid Function 6"
@@ -1426,6 +1587,7 @@ class F222014(F212014):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_shift: typing.Any,
             idx1: typing.Any,
             idx2: typing.Any,
@@ -1440,6 +1602,7 @@ class F222014(F212014):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = x - f_shift
             z1 = np.concatenate((z[idx1], z[idx2], z[idx3], z[idx4], z[idx5]))
             mz = operator.dot_mv(f_matrix, z1)
@@ -1458,23 +1621,35 @@ class F222014(F212014):
             f_shift,
             f_matrix,
             f_shuffle,
-            f_bias,
+            f_bias=f_bias,
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
             shift=shift,
             prepare=prepare,
-        )
-        self._bind_kernel(
-            compute, ["f_shift", "idx1", "idx2", "idx3", "idx4", "idx5", "f_matrix", "n1", "n2", "n3", "n4", "f_bias"]
+            compute=compute,
+            param_names=[
+                "f_shift",
+                "idx1",
+                "idx2",
+                "idx3",
+                "idx4",
+                "idx5",
+                "f_matrix",
+                "n1",
+                "n2",
+                "n3",
+                "n4",
+                "f_bias",
+            ],
         )
 
 
 class F232014(CecBenchmark):
     """
     .. [1] Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2013). Problem definitions and evaluation criteria for the CEC 2014
-    special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
-    Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
+       special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
+       Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
     """
 
     name = "F23: Composition Function 1"
@@ -1516,6 +1691,7 @@ class F232014(CecBenchmark):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             lamdas: typing.Any,
             g0: typing.Any,
             bias: typing.Any,
@@ -1526,6 +1702,7 @@ class F232014(CecBenchmark):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             g0 = lamdas[0] * g0.evaluate(x) + bias[0]
             w0 = operator.calculate_weight(x - f_shift[0], xichmas[0])
 
@@ -1550,46 +1727,49 @@ class F232014(CecBenchmark):
             gs = np.array([g0, g1, g2, g3, g4])
             out[0] = operator.dot_vv(ws, gs) + f_bias
 
+        def load(problem: "CecBenchmark", ndim: int, support_path: _Traversable | None) -> None:
+            problem.f_shift = problem.check_shift_matrix(f_shift)[:, :ndim]
+            problem.f_matrix = problem.check_matrix_data(f_matrix)[:, :ndim]
+            problem.n_funcs = 5
+            problem.xichmas = [10, 20, 30, 40, 50]
+            problem.lamdas = [1.0, 1e-6, 1e-26, 1e-6, 1e-6]
+            problem.bias = [0, 100, 200, 300, 400]
+            problem.g0 = F42014(ndim, None, problem.f_shift[0], problem.f_matrix[:ndim, :], f_bias=0)
+            problem.g1 = F12014(ndim, None, problem.f_shift[1], problem.f_matrix[ndim : 2 * ndim, :], f_bias=0)
+            problem.g2 = F22014(ndim, None, problem.f_shift[2], problem.f_matrix[2 * ndim : 3 * ndim, :], f_bias=0)
+            problem.g3 = F32014(ndim, None, problem.f_shift[3], problem.f_matrix[3 * ndim : 4 * ndim, :], f_bias=0)
+            problem.g4 = F12014(ndim, None, problem.f_shift[4], problem.f_matrix[4 * ndim : 5 * ndim, :], f_bias=0)
+
         super().__init__(
-            parallel=parallel,
-            fastmath=fastmath,
-            dtype=dtype,
+            ndim,
+            bounds,
+            f_shift,
+            f_matrix,
+            f_bias=f_bias,
+            default_bounds=np.array([-100.0, 100.0]),
             dim_changeable=True,
             dim_default=30,
             dim_max=100,
             dim_supported=[10, 20, 30, 50, 100],
-            f_bias=f_bias,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
             shift=shift,
             prepare=prepare,
-        )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
-        )
-        self.f_shift = self.check_shift_matrix(f_shift)[:, : self.ndim]
-        self.f_matrix = self.check_matrix_data(f_matrix)[:, : self.ndim]
-        self._x_global = np.asarray(self.f_shift[0])
-        self.n_funcs = 5
-        self.xichmas = [10, 20, 30, 40, 50]
-        self.lamdas = [1.0, 1e-6, 1e-26, 1e-6, 1e-6]
-        self.bias = [0, 100, 200, 300, 400]
-        self.g0 = F42014(self.ndim, None, self.f_shift[0], self.f_matrix[: self.ndim, :], f_bias=0)
-        self.g1 = F12014(self.ndim, None, self.f_shift[1], self.f_matrix[self.ndim : 2 * self.ndim, :], f_bias=0)
-        self.g2 = F22014(self.ndim, None, self.f_shift[2], self.f_matrix[2 * self.ndim : 3 * self.ndim, :], f_bias=0)
-        self.g3 = F32014(self.ndim, None, self.f_shift[3], self.f_matrix[3 * self.ndim : 4 * self.ndim, :], f_bias=0)
-        self.g4 = F12014(self.ndim, None, self.f_shift[4], self.f_matrix[4 * self.ndim : 5 * self.ndim, :], f_bias=0)
-        self._bind_kernel(
-            compute,
-            ["lamdas", "g0", "bias", "f_shift", "xichmas", "g2", "g3", "f_bias"],
-            paras={"f_shift": self.f_shift, "f_bias": self.f_bias, "f_matrix": self.f_matrix},
+            compute=compute,
+            param_names=["lamdas", "g0", "bias", "f_shift", "xichmas", "g2", "g3", "f_bias"],
+            paras=["f_shift", "f_bias", "f_matrix"],
+            load=load,
             plain=True,
+            x_global=lambda problem, dim: np.asarray(problem.f_shift[0]),
         )
 
 
 class F242014(F232014):
     """
     .. [1] Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2013). Problem definitions and evaluation criteria for the CEC 2014
-    special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
-    Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
+       special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
+       Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
     """
 
     name = "F24: Composition Function 2"
@@ -1618,6 +1798,7 @@ class F242014(F232014):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             lamdas: typing.Any,
             g0: typing.Any,
             bias: typing.Any,
@@ -1628,6 +1809,7 @@ class F242014(F232014):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             g0 = lamdas[0] * g0.evaluate(x) + bias[0]
             w0 = operator.calculate_weight(x - f_shift[0], xichmas[0])
 
@@ -1674,8 +1856,8 @@ class F242014(F232014):
 class F252014(F232014):
     """
     .. [1] Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2013). Problem definitions and evaluation criteria for the CEC 2014
-    special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
-    Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
+       special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
+       Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
     """
 
     name = "F25: Composition Function 3"
@@ -1702,6 +1884,7 @@ class F252014(F232014):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             lamdas: typing.Any,
             g0: typing.Any,
             bias: typing.Any,
@@ -1712,6 +1895,7 @@ class F252014(F232014):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             g0 = lamdas[0] * g0.evaluate(x) + bias[0]
             w0 = operator.calculate_weight(x - f_shift[0], xichmas[0])
 
@@ -1758,8 +1942,8 @@ class F252014(F232014):
 class F262014(F232014):
     """
     .. [1] Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2013). Problem definitions and evaluation criteria for the CEC 2014
-    special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
-    Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
+       special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
+       Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
     """
 
     name = "F26: Composition Function 4"
@@ -1787,6 +1971,7 @@ class F262014(F232014):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             lamdas: typing.Any,
             g0: typing.Any,
             bias: typing.Any,
@@ -1799,6 +1984,7 @@ class F262014(F232014):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             g0 = lamdas[0] * g0.evaluate(x) + bias[0]
             w0 = operator.calculate_weight(x - f_shift[0], xichmas[0])
 
@@ -1855,8 +2041,8 @@ class F262014(F232014):
 class F272014(F232014):
     """
     .. [1] Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2013). Problem definitions and evaluation criteria for the CEC 2014
-    special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
-    Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
+       special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
+       Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
     """
 
     name = "F27: Composition Function 5"
@@ -1883,6 +2069,7 @@ class F272014(F232014):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             lamdas: typing.Any,
             g0: typing.Any,
             bias: typing.Any,
@@ -1895,6 +2082,7 @@ class F272014(F232014):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             g0 = lamdas[0] * g0.evaluate(x) + bias[0]
             w0 = operator.calculate_weight(x - f_shift[0], xichmas[0])
 
@@ -1951,8 +2139,8 @@ class F272014(F232014):
 class F282014(F232014):
     """
     .. [1] Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2013). Problem definitions and evaluation criteria for the CEC 2014
-    special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
-    Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
+       special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
+       Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
     """
 
     name = "F28: Composition Function 6"
@@ -1979,6 +2167,7 @@ class F282014(F232014):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             lamdas: typing.Any,
             g0: typing.Any,
             bias: typing.Any,
@@ -1991,6 +2180,7 @@ class F282014(F232014):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             g0 = lamdas[0] * g0.evaluate(x) + bias[0]
             w0 = operator.calculate_weight(x - f_shift[0], xichmas[0])
 
@@ -2047,8 +2237,8 @@ class F282014(F232014):
 class F292014(F232014):
     """
     .. [1] Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2013). Problem definitions and evaluation criteria for the CEC 2014
-    special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
-    Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
+       special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
+       Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
     """
 
     name = "F29: Composition Function 7"
@@ -2076,6 +2266,7 @@ class F292014(F232014):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             lamdas: typing.Any,
             g0: typing.Any,
             bias: typing.Any,
@@ -2086,6 +2277,7 @@ class F292014(F232014):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             g0 = lamdas[0] * g0.evaluate(x) + bias[0]
             w0 = operator.calculate_weight(x - f_shift[0], xichmas[0])
 
@@ -2118,7 +2310,6 @@ class F292014(F232014):
         self.xichmas = [10, 30, 50]
         self.lamdas = [1, 1, 1]
         self.bias = [0, 100, 200]
-        self._x_global = np.asarray(self.f_shift[0])
         self.g0 = F172014(self.ndim, None, self.f_shift[0], f_shuffle=f_shuffle, f_bias=0)
         self.g1 = F182014(self.ndim, None, self.f_shift[1], f_shuffle=f_shuffle, f_bias=0)
         self.g2 = F192014(self.ndim, None, self.f_shift[2], f_shuffle=f_shuffle, f_bias=0)
@@ -2133,8 +2324,8 @@ class F292014(F232014):
 class F302014(F232014):
     """
     .. [1] Liang, J. J., Qu, B. Y., & Suganthan, P. N. (2013). Problem definitions and evaluation criteria for the CEC 2014
-    special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
-    Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
+       special session and competition on single objective real-parameter numerical optimization. Computational Intelligence Laboratory,
+       Zhengzhou University, Zhengzhou China and Technical Report, Nanyang Technological University, Singapore, 635, 490.
     """
 
     name = "F30: Composition Function 8"
@@ -2166,6 +2357,7 @@ class F302014(F232014):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             lamdas: typing.Any,
             g0: typing.Any,
             bias: typing.Any,
@@ -2176,6 +2368,7 @@ class F302014(F232014):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             g0 = lamdas[0] * g0.evaluate(x) + bias[0]
             w0 = operator.calculate_weight(x - f_shift[0], xichmas[0])
 
@@ -2208,7 +2401,6 @@ class F302014(F232014):
         self.xichmas = [10, 30, 50]
         self.lamdas = [1, 1, 1]
         self.bias = [0, 100, 200]
-        self._x_global = np.asarray(self.f_shift[0])
         self.g0 = F202014(
             self.ndim, None, self.f_shift[0], self.f_matrix[: self.ndim, :], f_shuffle=f_shuffle, f_bias=0
         )

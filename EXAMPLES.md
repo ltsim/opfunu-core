@@ -1,6 +1,6 @@
 # Examples
 
-This page shows how to use **opfunu-core** (version `v2026b0`). More runnable scripts live in the
+This page shows how to use **opfunu-core** (version `v2026b1`). More runnable scripts live in the
 [examples](https://github.com/ltsim/opfunu-core/tree/master/examples) folder.
 
 ## Import and version
@@ -130,3 +130,30 @@ model = GA.BaseGA(epoch=100, pop_size=50)
 gbest = model.solve(problem)
 print(f"Solution: {gbest.solution}, Fit: {gbest.target.fitness}")
 ```
+
+## Plotting landscapes
+
+`opfunu.plot.Plotting` renders the 2D/3D search landscape with one of three
+optional backends. Construction is lazy — sampling and the backend import happen
+on the first `show()`/`save()` — and bounds are inferred from a bound
+`evaluate` method.
+
+```python
+from opfunu.cec_based.cec2010 import F12010
+from opfunu.plot import Plotting
+
+f0 = F12010(ndim=10)
+
+plot = Plotting(f0.evaluate, backend="matplotlib", mode="2d", n_points=200)
+plot.show()                                  # plt.show() / inline in Jupyter
+plot.save("landscape.pdf", dpi=600)          # format from the suffix
+
+Plotting(f0.evaluate, backend="plotly", mode="3d").show()    # interactive surface
+Plotting(f0.evaluate, backend="pyvista").show()              # interactive mesh
+```
+
+Runnable variants: `examples/plotting.py` (script),
+`examples/plotting_matplotlib.ipynb` and `examples/plotting_plotly.ipynb`
+(notebooks), plus the academic `examples/styles/paper.mplstyle` custom theme.
+See [the plotting guide](https://ltsim.github.io/opfunu-core/plot/) for export
+formats and themes.

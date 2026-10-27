@@ -4,7 +4,13 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
+import sys
 import typing
+
+if sys.version_info >= (3, 11):
+    from importlib.resources.abc import Traversable as _Traversable
+else:  # Python 3.10: Traversable lives in importlib.abc
+    from importlib.abc import Traversable as _Traversable
 
 import numpy as np
 
@@ -15,7 +21,7 @@ from opfunu.utils import operator
 class F12020(CecBenchmark):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2020
-    Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
+       Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
     """
 
     name = "F1: Shifted and Rotated Bent Cigar Function (F1 CEC-2017)"
@@ -57,29 +63,34 @@ class F12020(CecBenchmark):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, x - f_shift)
             out[0] = operator.bent_cigar_func(z) + f_bias
 
         super().__init__(
-            parallel=parallel,
-            fastmath=fastmath,
-            dtype=dtype,
+            ndim,
+            bounds,
+            f_shift,
+            f_matrix,
+            f_bias=f_bias,
+            default_bounds=np.array([-100.0, 100.0]),
             dim_changeable=True,
             dim_default=30,
             dim_max=100,
             dim_supported=[2, 5, 10, 15, 20, 30, 50, 100],
-            f_bias=f_bias,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
             shift=shift,
             prepare=prepare,
         )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
-        )
-        self.f_shift = self.check_shift_data(f_shift)[: self.ndim]
-        self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
-        self._x_global = np.asarray(self.f_shift)
         self._bind_kernel(
             compute,
             ["f_matrix", "f_shift", "f_bias"],
@@ -90,7 +101,7 @@ class F12020(CecBenchmark):
 class F22020(CecBenchmark):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2020
-    Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
+       Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
     """
 
     name = "F2: Shifted and Rotated Schwefel’s Function (F11 CEC-2014)"
@@ -132,29 +143,34 @@ class F22020(CecBenchmark):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, 1000.0 * (x - f_shift) / 100)
             out[0] = operator.modified_schwefel_func(z) + f_bias
 
         super().__init__(
-            parallel=parallel,
-            fastmath=fastmath,
-            dtype=dtype,
+            ndim,
+            bounds,
+            f_shift,
+            f_matrix,
+            f_bias=f_bias,
+            default_bounds=np.array([[-100.0, 100.0] for _ in range(30)]),
             dim_changeable=True,
             dim_default=30,
             dim_max=100,
             dim_supported=[2, 5, 10, 15, 20, 30, 50, 100],
-            f_bias=f_bias,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
             shift=shift,
             prepare=prepare,
         )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
-        )
-        self.f_shift = self.check_shift_data(f_shift)[: self.ndim]
-        self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
-        self._x_global = np.asarray(self.f_shift)
         self._bind_kernel(
             compute,
             ["f_matrix", "f_shift", "f_bias"],
@@ -165,7 +181,7 @@ class F22020(CecBenchmark):
 class F32020(CecBenchmark):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2020
-    Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
+       Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
     """
 
     name = "F3: Shifted and Rotated Lunacek bi-Rastrigin Function (F7 CEC-2017)"
@@ -207,29 +223,34 @@ class F32020(CecBenchmark):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, 600.0 * (x - f_shift) / 100)
             out[0] = operator.lunacek_bi_rastrigin_func(z, shift=2.5) + f_bias
 
         super().__init__(
-            parallel=parallel,
-            fastmath=fastmath,
-            dtype=dtype,
+            ndim,
+            bounds,
+            f_shift,
+            f_matrix,
+            f_bias=f_bias,
+            default_bounds=np.array([[-100.0, 100.0] for _ in range(30)]),
             dim_changeable=True,
             dim_default=30,
             dim_max=100,
             dim_supported=[2, 5, 10, 15, 20, 30, 50, 100],
-            f_bias=f_bias,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
             shift=shift,
             prepare=prepare,
         )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
-        )
-        self.f_shift = self.check_shift_data(f_shift)[: self.ndim]
-        self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
-        self._x_global = np.asarray(self.f_shift)
         self._bind_kernel(
             compute,
             ["f_matrix", "f_shift", "f_bias"],
@@ -240,7 +261,7 @@ class F32020(CecBenchmark):
 class F42020(CecBenchmark):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2020
-    Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
+       Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
     """
 
     name = "F4: Expanded Rosenbrock’s plus Griewank’s Function (F15 CEC-2014)"
@@ -282,29 +303,34 @@ class F42020(CecBenchmark):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, 5.0 * (x - f_shift) / 100)
             out[0] = operator.expanded_griewank_rosenbrock_func(z) + f_bias
 
         super().__init__(
-            parallel=parallel,
-            fastmath=fastmath,
-            dtype=dtype,
+            ndim,
+            bounds,
+            f_shift,
+            f_matrix,
+            f_bias=f_bias,
+            default_bounds=np.array([[-100.0, 100.0] for _ in range(30)]),
             dim_changeable=True,
             dim_default=30,
             dim_max=100,
             dim_supported=[2, 5, 10, 15, 20, 30, 50, 100],
-            f_bias=f_bias,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
             shift=shift,
             prepare=prepare,
         )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
-        )
-        self.f_shift = self.check_shift_data(f_shift)[: self.ndim]
-        self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
-        self._x_global = np.asarray(self.f_shift)
         self._bind_kernel(
             compute,
             ["f_matrix", "f_shift", "f_bias"],
@@ -315,7 +341,7 @@ class F42020(CecBenchmark):
 class F52020(CecBenchmark):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2020
-    Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
+       Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
     """
 
     name = "F17: Hybrid Function 1 (F17 CEC-2014)"
@@ -359,6 +385,7 @@ class F52020(CecBenchmark):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_shift: typing.Any,
             idx1: typing.Any,
             idx2: typing.Any,
@@ -369,6 +396,7 @@ class F52020(CecBenchmark):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = x - f_shift
             z1 = np.concatenate((z[idx1], z[idx2], z[idx3]))
             mz = operator.dot_mv(f_matrix, z1)
@@ -379,38 +407,40 @@ class F52020(CecBenchmark):
                 + f_bias
             )
 
+        def load(problem: "CecBenchmark", ndim: int, support_path: _Traversable | None) -> None:
+            problem.f_shuffle = (problem.f_shuffle - 1).astype(int)
+            problem.n_funcs = 3
+            problem.p = np.array([0.3, 0.3, 0.4])
+            problem.n1 = int(np.ceil(problem.p[0] * ndim))
+            problem.n2 = int(np.ceil(problem.p[1] * ndim)) + problem.n1
+            problem.idx1, problem.idx2, problem.idx3 = (
+                problem.f_shuffle[: problem.n1],
+                problem.f_shuffle[problem.n1 : problem.n2],
+                problem.f_shuffle[problem.n2 : ndim],
+            )
+            problem.g1 = operator.modified_schwefel_func
+            problem.g2 = operator.rastrigin_func
+            problem.g3 = operator.elliptic_func
+
         super().__init__(
-            parallel=parallel,
-            fastmath=fastmath,
-            dtype=dtype,
+            ndim,
+            bounds,
+            f_shift,
+            f_matrix,
+            f_shuffle,
+            f_bias=f_bias,
+            default_bounds=np.array([[-100.0, 100.0] for _ in range(30)]),
             dim_changeable=True,
             dim_default=30,
             dim_max=100,
             dim_supported=[10, 15, 20, 30, 50, 100],
-            f_bias=f_bias,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
             shift=shift,
             prepare=prepare,
+            load=load,
         )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
-        )
-        self.f_shift = self.check_shift_data(f_shift)[: self.ndim]
-        self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
-        self.f_shuffle = self.check_shuffle_data(f_shuffle, needed_dim=True)
-        self.f_shuffle = (self.f_shuffle - 1).astype(int)
-        self._x_global = np.asarray(self.f_shift)
-        self.n_funcs = 3
-        self.p = np.array([0.3, 0.3, 0.4])
-        self.n1 = int(np.ceil(self.p[0] * self.ndim))
-        self.n2 = int(np.ceil(self.p[1] * self.ndim)) + self.n1
-        self.idx1, self.idx2, self.idx3 = (
-            self.f_shuffle[: self.n1],
-            self.f_shuffle[self.n1 : self.n2],
-            self.f_shuffle[self.n2 : self.ndim],
-        )
-        self.g1 = operator.modified_schwefel_func
-        self.g2 = operator.rastrigin_func
-        self.g3 = operator.elliptic_func
         self._bind_kernel(
             compute,
             ["f_shift", "idx1", "idx2", "idx3", "f_matrix", "n1", "n2", "f_bias"],
@@ -426,7 +456,7 @@ class F52020(CecBenchmark):
 class F62020(CecBenchmark):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2020
-    Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
+       Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
     """
 
     name = "F16: Hybrid Function 2 (F15 CEC-2017)"
@@ -470,6 +500,7 @@ class F62020(CecBenchmark):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_matrix: typing.Any,
             f_shift: typing.Any,
             idx1: typing.Any,
@@ -479,6 +510,7 @@ class F62020(CecBenchmark):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             mz = operator.dot_mv(f_matrix, x - f_shift)
             out[0] = (
                 operator.expanded_schaffer_f6_func(mz[idx1])
@@ -488,33 +520,38 @@ class F62020(CecBenchmark):
                 + f_bias
             )
 
+        def load(problem: "CecBenchmark", ndim: int, support_path: _Traversable | None) -> None:
+            problem.f_shuffle = (problem.f_shuffle - 1).astype(int)
+            problem.n_funcs = 4
+            problem.p = np.array([0.2, 0.2, 0.3, 0.3])
+            problem.n1 = int(np.ceil(problem.p[0] * ndim))
+            problem.n2 = int(np.ceil(problem.p[1] * ndim)) + problem.n1
+            problem.n3 = int(np.ceil(problem.p[2] * ndim)) + problem.n2
+            problem.idx1, problem.idx2 = problem.f_shuffle[: problem.n1], problem.f_shuffle[problem.n1 : problem.n2]
+            problem.idx3, problem.idx4 = (
+                problem.f_shuffle[problem.n2 : problem.n3],
+                problem.f_shuffle[problem.n3 : ndim],
+            )
+
         super().__init__(
-            parallel=parallel,
-            fastmath=fastmath,
-            dtype=dtype,
+            ndim,
+            bounds,
+            f_shift,
+            f_matrix,
+            f_shuffle,
+            f_bias=f_bias,
+            default_bounds=np.array([[-100.0, 100.0] for _ in range(30)]),
             dim_changeable=True,
             dim_default=30,
             dim_max=100,
             dim_supported=[10, 15, 20, 30, 50, 100],
-            f_bias=f_bias,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
             shift=shift,
             prepare=prepare,
+            load=load,
         )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
-        )
-        self.f_shift = self.check_shift_data(f_shift)[: self.ndim]
-        self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
-        self.f_shuffle = self.check_shuffle_data(f_shuffle, needed_dim=True)
-        self.f_shuffle = (self.f_shuffle - 1).astype(int)
-        self._x_global = np.asarray(self.f_shift)
-        self.n_funcs = 4
-        self.p = np.array([0.2, 0.2, 0.3, 0.3])
-        self.n1 = int(np.ceil(self.p[0] * self.ndim))
-        self.n2 = int(np.ceil(self.p[1] * self.ndim)) + self.n1
-        self.n3 = int(np.ceil(self.p[2] * self.ndim)) + self.n2
-        self.idx1, self.idx2 = self.f_shuffle[: self.n1], self.f_shuffle[self.n1 : self.n2]
-        self.idx3, self.idx4 = self.f_shuffle[self.n2 : self.n3], self.f_shuffle[self.n3 : self.ndim]
         self._bind_kernel(
             compute,
             ["f_matrix", "f_shift", "idx1", "idx2", "idx3", "idx4", "f_bias"],
@@ -530,7 +567,7 @@ class F62020(CecBenchmark):
 class F72020(CecBenchmark):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2020
-    Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
+       Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
     """
 
     name = "F7: Hybrid Function 3 (F21 CEC-2014)"
@@ -574,6 +611,7 @@ class F72020(CecBenchmark):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_shift: typing.Any,
             idx1: typing.Any,
             idx2: typing.Any,
@@ -588,6 +626,7 @@ class F72020(CecBenchmark):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = x - f_shift
             z1 = np.concatenate((z[idx1], z[idx2], z[idx3], z[idx4], z[idx5]))
             mz = operator.dot_mv(f_matrix, z1)
@@ -600,38 +639,43 @@ class F72020(CecBenchmark):
                 + f_bias
             )
 
+        def load(problem: "CecBenchmark", ndim: int, support_path: _Traversable | None) -> None:
+            problem.f_shuffle = (problem.f_shuffle - 1).astype(int)
+            problem.n_funcs = 5
+            problem.p = np.array([0.1, 0.2, 0.2, 0.2, 0.3])
+            problem.n1 = int(np.ceil(problem.p[0] * ndim))
+            problem.n2 = int(np.ceil(problem.p[1] * ndim)) + problem.n1
+            problem.n3 = int(np.ceil(problem.p[2] * ndim)) + problem.n2
+            problem.n4 = int(np.ceil(problem.p[3] * ndim)) + problem.n3
+            problem.idx1, problem.idx2, problem.idx3 = (
+                problem.f_shuffle[: problem.n1],
+                problem.f_shuffle[problem.n1 : problem.n2],
+                problem.f_shuffle[problem.n2 : problem.n3],
+            )
+            problem.idx4, problem.idx5 = (
+                problem.f_shuffle[problem.n3 : problem.n4],
+                problem.f_shuffle[problem.n4 : ndim],
+            )
+
         super().__init__(
-            parallel=parallel,
-            fastmath=fastmath,
-            dtype=dtype,
+            ndim,
+            bounds,
+            f_shift,
+            f_matrix,
+            f_shuffle,
+            f_bias=f_bias,
+            default_bounds=np.array([[-100.0, 100.0] for _ in range(30)]),
             dim_changeable=True,
             dim_default=30,
             dim_max=100,
             dim_supported=[10, 15, 20, 30, 50, 100],
-            f_bias=f_bias,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
             shift=shift,
             prepare=prepare,
+            load=load,
         )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
-        )
-        self.f_shift = self.check_shift_data(f_shift)[: self.ndim]
-        self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
-        self.f_shuffle = self.check_shuffle_data(f_shuffle, needed_dim=True)
-        self.f_shuffle = (self.f_shuffle - 1).astype(int)
-        self._x_global = np.asarray(self.f_shift)
-        self.n_funcs = 5
-        self.p = np.array([0.1, 0.2, 0.2, 0.2, 0.3])
-        self.n1 = int(np.ceil(self.p[0] * self.ndim))
-        self.n2 = int(np.ceil(self.p[1] * self.ndim)) + self.n1
-        self.n3 = int(np.ceil(self.p[2] * self.ndim)) + self.n2
-        self.n4 = int(np.ceil(self.p[3] * self.ndim)) + self.n3
-        self.idx1, self.idx2, self.idx3 = (
-            self.f_shuffle[: self.n1],
-            self.f_shuffle[self.n1 : self.n2],
-            self.f_shuffle[self.n2 : self.n3],
-        )
-        self.idx4, self.idx5 = self.f_shuffle[self.n3 : self.n4], self.f_shuffle[self.n4 : self.ndim]
         self._bind_kernel(
             compute,
             ["f_shift", "idx1", "idx2", "idx3", "idx4", "idx5", "f_matrix", "n1", "n2", "n3", "n4", "f_bias"],
@@ -647,7 +691,7 @@ class F72020(CecBenchmark):
 class F82020(CecBenchmark):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2020
-    Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
+       Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
     """
 
     name = "F8: Composition Function 1 (F21 CEC-2017)"
@@ -687,6 +731,7 @@ class F82020(CecBenchmark):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_matrix: typing.Any,
             f_shift: typing.Any,
             lamdas: typing.Any,
@@ -695,6 +740,7 @@ class F82020(CecBenchmark):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             z0 = operator.dot_mv(f_matrix[: x.shape[0], :], x - f_shift[0])
             g0 = lamdas[0] * operator.rastrigin_func(z0) + bias[0]
             w0 = operator.calculate_weight(x - f_shift[0], xichmas[0])
@@ -705,7 +751,6 @@ class F82020(CecBenchmark):
             w1 = operator.calculate_weight(x - f_shift[1], xichmas[1])
 
             # 3. Modifed Schwefel's Function F10’
-            # z2 = operator.dot_mv(f_matrix[2*x.shape[0]:3*x.shape[0], :], x - f_shift[2])
             z2 = 1000 * (x - f_shift[2]) / 100
             g2 = lamdas[2] * operator.modified_schwefel_func(z2) + bias[2]
             w2 = operator.calculate_weight(x - f_shift[2], xichmas[2])
@@ -715,31 +760,36 @@ class F82020(CecBenchmark):
             gs = np.array([g0, g1, g2])
             out[0] = operator.dot_vv(ws, gs) + f_bias
 
+        def load(problem: "CecBenchmark", ndim: int, support_path: _Traversable | None) -> None:
+            problem.f_shift = problem.check_shift_matrix(f_shift, ndim=ndim, support_path=support_path)[:, :ndim]
+            problem.f_matrix = problem.check_matrix_data(f_matrix, ndim=ndim, support_path=support_path)[:, :ndim]
+            problem.n_funcs = 3
+            problem.xichmas = [10, 20, 30]
+            problem.lamdas = [1.0, 10.0, 1.0]
+            problem.bias = [0, 100, 200]
+            problem.g0 = operator.rastrigin_func
+            problem.g1 = operator.griewank_func
+            problem.g2 = operator.modified_schwefel_func
+
         super().__init__(
-            parallel=parallel,
-            fastmath=fastmath,
-            dtype=dtype,
+            ndim,
+            bounds,
+            f_shift=f_shift,
+            f_matrix=f_matrix,
+            f_bias=f_bias,
+            default_bounds=np.array([[-100.0, 100.0] for _ in range(30)]),
             dim_changeable=True,
             dim_default=30,
             dim_max=100,
             dim_supported=[2, 5, 10, 15, 20, 30, 50, 100],
-            f_bias=f_bias,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
             shift=shift,
             prepare=prepare,
+            x_global=lambda problem, dim: np.asarray(problem.f_shift[0]),
+            load=load,
         )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
-        )
-        self.f_shift = self.check_shift_matrix(f_shift)[:, : self.ndim]
-        self.f_matrix = self.check_matrix_data(f_matrix)[:, : self.ndim]
-        self._x_global = np.asarray(self.f_shift[0])
-        self.n_funcs = 3
-        self.xichmas = [10, 20, 30]
-        self.lamdas = [1.0, 10.0, 1.0]
-        self.bias = [0, 100, 200]
-        self.g0 = operator.rastrigin_func
-        self.g1 = operator.griewank_func
-        self.g2 = operator.modified_schwefel_func
         self._bind_kernel(
             compute,
             ["f_matrix", "f_shift", "lamdas", "bias", "xichmas", "f_bias"],
@@ -750,7 +800,7 @@ class F82020(CecBenchmark):
 class F92020(CecBenchmark):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2020
-    Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
+       Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
     """
 
     name = "F9: Composition Function 2 (F23 CEC-2017)"
@@ -792,6 +842,7 @@ class F92020(CecBenchmark):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_matrix: typing.Any,
             f_shift: typing.Any,
             lamdas: typing.Any,
@@ -800,6 +851,7 @@ class F92020(CecBenchmark):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             z0 = operator.dot_mv(f_matrix[: x.shape[0], :], x - f_shift[0])
             g0 = lamdas[0] * operator.ackley_func(z0) + bias[0]
             w0 = operator.calculate_weight(x - f_shift[0], xichmas[0])
@@ -824,32 +876,37 @@ class F92020(CecBenchmark):
             gs = np.array([g0, g1, g2, g3])
             out[0] = operator.dot_vv(ws, gs) + f_bias
 
+        def load(problem: "CecBenchmark", ndim: int, support_path: _Traversable | None) -> None:
+            problem.f_shift = problem.check_shift_matrix(f_shift, ndim=ndim, support_path=support_path)[:, :ndim]
+            problem.f_matrix = problem.check_matrix_data(f_matrix, ndim=ndim, support_path=support_path)[:, :ndim]
+            problem.n_funcs = 4
+            problem.xichmas = [10, 20, 30, 40]
+            problem.lamdas = [10.0, 1e-6, 10, 1.0]
+            problem.bias = [0, 100, 200, 300]
+            problem.g0 = operator.ackley_func
+            problem.g1 = operator.elliptic_func
+            problem.g2 = operator.griewank_func
+            problem.g3 = operator.rastrigin_func
+
         super().__init__(
-            parallel=parallel,
-            fastmath=fastmath,
-            dtype=dtype,
+            ndim,
+            bounds,
+            f_shift=f_shift,
+            f_matrix=f_matrix,
+            f_bias=f_bias,
+            default_bounds=np.array([[-100.0, 100.0] for _ in range(30)]),
             dim_changeable=True,
             dim_default=30,
             dim_max=100,
             dim_supported=[2, 5, 10, 15, 20, 30, 50, 100],
-            f_bias=f_bias,
+            parallel=parallel,
+            fastmath=fastmath,
+            dtype=dtype,
             shift=shift,
             prepare=prepare,
+            x_global=lambda problem, dim: np.asarray(problem.f_shift[0]),
+            load=load,
         )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
-        )
-        self.f_shift = self.check_shift_matrix(f_shift)[:, : self.ndim]
-        self.f_matrix = self.check_matrix_data(f_matrix)[:, : self.ndim]
-        self._x_global = np.asarray(self.f_shift[0])
-        self.n_funcs = 4
-        self.xichmas = [10, 20, 30, 40]
-        self.lamdas = [10.0, 1e-6, 10, 1.0]
-        self.bias = [0, 100, 200, 300]
-        self.g0 = operator.ackley_func
-        self.g1 = operator.elliptic_func
-        self.g2 = operator.griewank_func
-        self.g3 = operator.rastrigin_func
         self._bind_kernel(
             compute,
             ["f_matrix", "f_shift", "lamdas", "bias", "xichmas", "f_bias"],
@@ -860,7 +917,7 @@ class F92020(CecBenchmark):
 class F102020(CecBenchmark):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2020
-    Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
+       Special Session and Competition on Single Objective Bound Constrained Numerical Optimization
     """
 
     name = "F10: Composition Function 3 (F24 CEC-2017)"
@@ -902,6 +959,7 @@ class F102020(CecBenchmark):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_matrix: typing.Any,
             f_shift: typing.Any,
             lamdas: typing.Any,
@@ -910,6 +968,7 @@ class F102020(CecBenchmark):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             z0 = operator.dot_mv(f_matrix[: x.shape[0], :], x - f_shift[0])
             g0 = lamdas[0] * operator.rastrigin_func(z0) + bias[0]
             w0 = operator.calculate_weight(x - f_shift[0], xichmas[0])
@@ -939,7 +998,15 @@ class F102020(CecBenchmark):
             gs = np.array([g0, g1, g2, g3, g4])
             out[0] = operator.dot_vv(ws, gs) + f_bias
 
+        def load(problem: "CecBenchmark", ndim: int, support_path: _Traversable | None) -> None:
+            problem.f_shift = problem.check_shift_matrix(f_shift, ndim=ndim, support_path=support_path)[:, :ndim]
+            problem.f_matrix = problem.check_matrix_data(f_matrix, ndim=ndim, support_path=support_path)[:, :ndim]
+
         super().__init__(
+            ndim=ndim,
+            bounds=bounds,
+            load=load,
+            x_global=lambda problem, dim: np.asarray(problem.f_shift[0]),
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
@@ -951,12 +1018,6 @@ class F102020(CecBenchmark):
             shift=shift,
             prepare=prepare,
         )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
-        )
-        self.f_shift = self.check_shift_matrix(f_shift)[:, : self.ndim]
-        self.f_matrix = self.check_matrix_data(f_matrix)[:, : self.ndim]
-        self._x_global = np.asarray(self.f_shift[0])
         self.n_funcs = 5
         self.xichmas = [10, 20, 30, 40, 50]
         self.lamdas = [10.0, 1.0, 10.0, 1e-6, 1.0]

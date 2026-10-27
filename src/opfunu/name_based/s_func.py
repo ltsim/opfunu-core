@@ -12,16 +12,16 @@ from opfunu.benchmark.func import FuncBenchmark
 
 
 class Salomon(FuncBenchmark):
-    """
+    r"""
     .. [1]  Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization Problems
-    Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
 
     .. math::
+        f_{\text{Salomon}}(x) = 1 - \cos \left (2 \pi \sqrt{\sum_{i=1}^{n} x_i^2} \right) + 0.1 \sqrt{\sum_{i=1}^n x_i^2}
 
-        f_{\text{Salomon}}(x) = 1 - \\cos \\left (2 \\pi \\sqrt{\\sum_{i=1}^{n} x_i^2} \right) + 0.1 \\sqrt{\\sum_{i=1}^n x_i^2}
 
 
-    Here, :math:`n` represents the number of dimensions and :math:`x_i \\in [-100, 100]` for :math:`i = 1, ..., n`.
+    Here, :math:`n` represents the number of dimensions and :math:`x_i \in [-100, 100]` for :math:`i = 1, ..., n`.
 
     *Global optimum*: :math:`f(x) = 0` for :math:`x_i = 0` for :math:`i = 1, ..., n`
     """
@@ -54,7 +54,8 @@ class Salomon(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             u = np.sqrt(np.sum(x**2))
             out[0] = 1 - np.cos(2 * np.pi * u) + 0.1 * u
 

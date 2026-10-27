@@ -7,11 +7,11 @@ decorated with `njit(fastmath=True)` — imported from the `opfunu.utils.numba_c
 `np.array(list)`, no `np.dot`/`np.matmul` — use the `dot_vv`/`dot_mv`/`dot_vm`/`dot_mm` loop helpers, SciPy-free by
 design). `fractal_1d_func` stays plain (RNG stream). Reuse these helpers — don't duplicate them.
 
-::: opfunu.utils.operator
-    options:
-      members_order: alphabetical
-      show_if_no_docstring: true
-      filters: ["!^_", "!^np$"]
+```{eval-rst}
+.. automodule:: opfunu.utils.operator
+   :members:
+   :undoc-members:
+```
 
 ## Numba compatibility shim
 
@@ -20,8 +20,8 @@ design). `fractal_1d_func` stays plain (RNG stream). Reuse these helpers — don
 decorated function is returned as-is. `benchmark/__init__.py` imports Numba lazily inside `__build_compute`, never at
 module top level, so the package stays import-safe on PyPy and minimal installs.
 
-::: opfunu.utils.numba_compat
-    options:
-      members_order: alphabetical
-      show_if_no_docstring: true
-      filters: ["!^_"]
+```{eval-rst}
+.. automodule:: opfunu.utils.numba_compat
+   :members:
+   :undoc-members:
+```

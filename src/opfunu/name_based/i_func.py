@@ -14,7 +14,7 @@ from opfunu.benchmark.func import FuncBenchmark
 class Infinity(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Hansen Function"
@@ -45,7 +45,8 @@ class Infinity(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, epsilon: float, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, epsilon: float, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = np.sum(x**6.0 * (np.sin(1.0 / (x + epsilon)) + 2.0))
 
         super().__init__(

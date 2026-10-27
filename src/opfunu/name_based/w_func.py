@@ -12,15 +12,15 @@ from opfunu.benchmark.func import FuncBenchmark
 
 
 class Watson(FuncBenchmark):
-    """
+    r"""
     .. [1]  Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization Problems
-    Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
 
     .. math::
+         f(x) = \sum_{i=0}^{29} \left\\{\sum_{j=0}^4 ((j + 1)a_i^j x_{j+1}) - \left[ \sum_{j=0}^5 a_i^j x_{j+1} \right ]^2 - 1 \right\\}^2 + x_1^2
 
-         f(x) = \\sum_{i=0}^{29} \\left\\{\\sum_{j=0}^4 ((j + 1)a_i^j x_{j+1}) - \\left[ \\sum_{j=0}^5 a_i^j x_{j+1} \right ]^2 - 1 \right\\}^2 + x_1^2
 
-    Where, in this exercise, :math:`a_i = i/29`. with :math:`x_i \\in [-5, 5]` for :math:`i = 1, ..., 6`.
+    Where, in this exercise, :math:`a_i = i/29`. with :math:`x_i \in [-5, 5]` for :math:`i = 1, ..., 6`.
 
     *Global optimum*: :math:`f(x) = 0.002288` for :math:`x = [-0.0158, 1.012, -0.2329, 1.260, -1.513, 0.9928]`
     """
@@ -53,7 +53,8 @@ class Watson(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             i = np.atleast_2d(np.arange(30.0)).T
             a = i / 29.0
             j = np.arange(5.0)

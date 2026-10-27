@@ -4,7 +4,13 @@
 #       Github: https://github.com/thieu1995        %
 # --------------------------------------------------%
 
+import sys
 import typing
+
+if sys.version_info >= (3, 11):
+    from importlib.resources.abc import Traversable as _Traversable
+else:  # Python 3.10: Traversable lives in importlib.abc
+    from importlib.abc import Traversable as _Traversable
 
 import numpy as np
 
@@ -15,8 +21,8 @@ from opfunu.utils import operator
 class F12008(CecBenchmark):
     """
     .. [1] Tang, K., Yáo, X., Suganthan, P. N., MacNish, C., Chen, Y. P., Chen, C. M., & Yang, Z. (2007). Benchmark functions
-    for the CEC’2008 special session and competition on large scale global optimization.
-    Nature inspired computation and applications laboratory, USTC, China, 24, 1-18.
+       for the CEC’2008 special session and competition on large scale global optimization.
+       Nature inspired computation and applications laboratory, USTC, China, 24, 1-18.
     """
 
     name = "F1: Shifted Sphere Function"
@@ -54,7 +60,8 @@ class F12008(CecBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = operator.sphere_func(x - f_shift) + f_bias
 
         super().__init__(
@@ -77,8 +84,8 @@ class F12008(CecBenchmark):
 class F22008(CecBenchmark):
     """
     .. [1] Tang, K., Yáo, X., Suganthan, P. N., MacNish, C., Chen, Y. P., Chen, C. M., & Yang, Z. (2007). Benchmark functions
-    for the CEC’2008 special session and competition on large scale global optimization.
-    Nature inspired computation and applications laboratory, USTC, China, 24, 1-18.
+       for the CEC’2008 special session and competition on large scale global optimization.
+       Nature inspired computation and applications laboratory, USTC, China, 24, 1-18.
     """
 
     name = "F2: Schwefel’s Problem 2.21"
@@ -116,7 +123,8 @@ class F22008(CecBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = np.max(np.abs(x - f_shift)) + f_bias
 
         super().__init__(
@@ -139,8 +147,8 @@ class F22008(CecBenchmark):
 class F32008(CecBenchmark):
     """
     .. [1] Tang, K., Yáo, X., Suganthan, P. N., MacNish, C., Chen, Y. P., Chen, C. M., & Yang, Z. (2007). Benchmark functions
-    for the CEC’2008 special session and competition on large scale global optimization.
-    Nature inspired computation and applications laboratory, USTC, China, 24, 1-18.
+       for the CEC’2008 special session and competition on large scale global optimization.
+       Nature inspired computation and applications laboratory, USTC, China, 24, 1-18.
     """
 
     name = "F3: Shifted Rosenbrock’s Function"
@@ -178,7 +186,8 @@ class F32008(CecBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = operator.rosenbrock_func(x - f_shift, shift=1.0) + f_bias
 
         super().__init__(
@@ -201,8 +210,8 @@ class F32008(CecBenchmark):
 class F42008(CecBenchmark):
     """
     .. [1] Tang, K., Yáo, X., Suganthan, P. N., MacNish, C., Chen, Y. P., Chen, C. M., & Yang, Z. (2007). Benchmark functions
-    for the CEC’2008 special session and competition on large scale global optimization.
-    Nature inspired computation and applications laboratory, USTC, China, 24, 1-18.
+       for the CEC’2008 special session and competition on large scale global optimization.
+       Nature inspired computation and applications laboratory, USTC, China, 24, 1-18.
     """
 
     name = "F4: Shifted Rastrigin’s Function"
@@ -240,7 +249,8 @@ class F42008(CecBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+            x = x - shift
             z = x - f_shift
             out[0] = operator.rastrigin_func(z) + f_bias
 
@@ -265,8 +275,8 @@ class F42008(CecBenchmark):
 class F52008(CecBenchmark):
     """
     .. [1] Tang, K., Yáo, X., Suganthan, P. N., MacNish, C., Chen, Y. P., Chen, C. M., & Yang, Z. (2007). Benchmark functions
-    for the CEC’2008 special session and competition on large scale global optimization.
-    Nature inspired computation and applications laboratory, USTC, China, 24, 1-18.
+       for the CEC’2008 special session and competition on large scale global optimization.
+       Nature inspired computation and applications laboratory, USTC, China, 24, 1-18.
     """
 
     name = "F5: Shifted Griewank’s Function"
@@ -304,7 +314,8 @@ class F52008(CecBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+            x = x - shift
             z = x - f_shift
             out[0] = operator.griewank_func(z) + f_bias
 
@@ -329,8 +340,8 @@ class F52008(CecBenchmark):
 class F62008(CecBenchmark):
     """
     .. [1] Tang, K., Yáo, X., Suganthan, P. N., MacNish, C., Chen, Y. P., Chen, C. M., & Yang, Z. (2007). Benchmark functions
-    for the CEC’2008 special session and competition on large scale global optimization.
-    Nature inspired computation and applications laboratory, USTC, China, 24, 1-18.
+       for the CEC’2008 special session and competition on large scale global optimization.
+       Nature inspired computation and applications laboratory, USTC, China, 24, 1-18.
     """
 
     name = "F6: Shifted Ackley’s Function"
@@ -368,7 +379,8 @@ class F62008(CecBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray) -> None:
+            x = x - shift
             z = x - f_shift
             out[0] = operator.ackley_func(z) + f_bias
 
@@ -393,8 +405,8 @@ class F62008(CecBenchmark):
 class F72008(CecBenchmark):
     """
     .. [1] Tang, K., Yáo, X., Suganthan, P. N., MacNish, C., Chen, Y. P., Chen, C. M., & Yang, Z. (2007). Benchmark functions
-    for the CEC’2008 special session and competition on large scale global optimization.
-    Nature inspired computation and applications laboratory, USTC, China, 24, 1-18.
+       for the CEC’2008 special session and competition on large scale global optimization.
+       Nature inspired computation and applications laboratory, USTC, China, 24, 1-18.
     """
 
     name = "F7: FastFractal “DoubleDip” Function"
@@ -432,12 +444,18 @@ class F72008(CecBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, f_bias: typing.Any, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, f_bias: typing.Any, out: np.ndarray) -> None:
+            x = x - shift
             ndim = len(x)
             results = [operator.fractal_1d_func(x[idx] + operator.twist_func(x[idx + 1])) for idx in range(0, ndim - 1)]
             out[0] = np.sum(results) + operator.fractal_1d_func(x[-1] + operator.twist_func(x[0])) + f_bias
 
+        def load(problem: "CecBenchmark", ndim: int, support_path: _Traversable | None) -> None:
+            problem.f_shift = problem.f_shift / np.max(problem.f_shift)
+
         super().__init__(
+            load=load,
+            f_global=-1e32,
             ndim=ndim,
             bounds=bounds,
             f_shift=f_shift,
@@ -451,7 +469,4 @@ class F72008(CecBenchmark):
             shift=shift,
             prepare=prepare,
         )
-        self.f_shift = self.f_shift / np.max(self.f_shift)
-        self._f_global = -1e32
-        self._x_global = np.asarray(self.f_shift)
         self._bind_kernel(compute, ["f_bias"], plain=True, paras={"f_shift": self.f_shift, "f_bias": self.f_bias})

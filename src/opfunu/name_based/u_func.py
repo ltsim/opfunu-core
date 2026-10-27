@@ -14,7 +14,7 @@ from opfunu.benchmark.func import FuncBenchmark
 class Ursem01(FuncBenchmark):
     """
     .. [1]  Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization Problems
-    Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
 
     .. math::
 
@@ -53,7 +53,8 @@ class Ursem01(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = -np.sin(2 * x[0] - 0.5 * np.pi) - 3.0 * np.cos(x[1]) - 0.5 * x[0]
 
         super().__init__(

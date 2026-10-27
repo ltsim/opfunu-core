@@ -26,9 +26,10 @@ Before solving an optimization problem, you should ask yourself:
 1. What aspects of the function landscape make the optimization process difficult?
 2. What type of a priori knowledge is most effective for searching particular types of function landscape?
 
-!!! note
-    To answer these questions, benchmark functions can be classified with features like **modality**, **basins**,
-    **valleys**, **separability** and **dimensionality**.
+:::{note}
+To answer these questions, benchmark functions can be classified with features like **modality**, **basins**,
+**valleys**, **separability** and **dimensionality**.
+:::
 
 Every function class in `opfunu-core` carries a set of boolean flags that encode these features, e.g.
 `continuous`, `linear`, `convex`, `unimodal`, `separable`, `differentiable`, `scalable`, `randomized_term`,

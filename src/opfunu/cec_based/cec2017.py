@@ -5,7 +5,13 @@
 # --------------------------------------------------%
 
 
+import sys
 import typing
+
+if sys.version_info >= (3, 11):
+    from importlib.resources.abc import Traversable as _Traversable
+else:  # Python 3.10: Traversable lives in importlib.abc
+    from importlib.abc import Traversable as _Traversable
 
 import numpy as np
 
@@ -16,7 +22,7 @@ from opfunu.utils import operator
 class F12017(CecBenchmark):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F1: Shifted and Rotated Bent Cigar"
@@ -58,12 +64,27 @@ class F12017(CecBenchmark):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, x - f_shift)
             out[0] = operator.bent_cigar_func(z) + f_bias
 
+        def load(problem: "CecBenchmark", ndim: int, support_path: _Traversable | None) -> None:
+            problem.f_shift = problem.check_shift_data(f_shift, support_path=support_path)[:ndim]
+            problem.f_matrix = problem.check_matrix_data(
+                f_matrix, needed_dim=True, ndim=ndim, support_path=support_path
+            )
+
         super().__init__(
+            ndim=ndim,
+            bounds=bounds,
+            load=load,
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
@@ -75,12 +96,6 @@ class F12017(CecBenchmark):
             shift=shift,
             prepare=prepare,
         )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
-        )
-        self.f_shift = self.check_shift_data(f_shift)[: self.ndim]
-        self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
-        self._x_global = np.asarray(self.f_shift)
         self._bind_kernel(
             compute,
             ["f_matrix", "f_shift", "f_bias"],
@@ -91,7 +106,7 @@ class F12017(CecBenchmark):
 class F22017(F12017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F2: Shifted and Rotated Zakharov Function"
@@ -116,8 +131,14 @@ class F22017(F12017):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, x - f_shift)
             out[0] = operator.zakharov_func(z) + f_bias
 
@@ -139,7 +160,7 @@ class F22017(F12017):
 class F32017(F12017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F3: Shifted and Rotated Rosenbrock’s Function"
@@ -169,8 +190,14 @@ class F32017(F12017):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, 2.048 * (x - f_shift) / 100)
             out[0] = operator.rosenbrock_func(z, shift=1.0) + f_bias
 
@@ -192,7 +219,7 @@ class F32017(F12017):
 class F42017(F12017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F4: Shifted and Rotated Rastrigin’s Function"
@@ -225,8 +252,14 @@ class F42017(F12017):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, x - f_shift)
             out[0] = operator.rastrigin_func(z) + f_bias
 
@@ -248,7 +281,7 @@ class F42017(F12017):
 class F52017(F12017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F5: Shifted and Rotated Schaffer’s F7 Function"
@@ -278,8 +311,14 @@ class F52017(F12017):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, 0.5 * (x - f_shift) / 100)
             out[0] = operator.schaffer_f7_func(z) + f_bias
 
@@ -301,7 +340,7 @@ class F52017(F12017):
 class F62017(F12017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F6: Shifted and Rotated Lunacek Bi-Rastrigin’s Function"
@@ -331,8 +370,14 @@ class F62017(F12017):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, 600.0 * (x - f_shift) / 100)
             out[0] = operator.lunacek_bi_rastrigin_func(z, shift=2.5) + f_bias
 
@@ -354,7 +399,7 @@ class F62017(F12017):
 class F72017(F12017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F7: Shifted and Rotated Non-Continuous Rastrigin’s Function"
@@ -384,8 +429,14 @@ class F72017(F12017):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, 5.12 * (x - f_shift) / 100)
             out[0] = operator.non_continuous_rastrigin_func(z) + f_bias
 
@@ -407,7 +458,7 @@ class F72017(F12017):
 class F82017(F12017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F8: Shifted and Rotated Levy Function"
@@ -434,8 +485,14 @@ class F82017(F12017):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, 5.12 * (x - f_shift) / 100)
             out[0] = operator.levy_func(z, shift=1.0) + f_bias
 
@@ -457,7 +514,7 @@ class F82017(F12017):
 class F92017(F12017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F9: Shifted and Rotated Schwefel’s Function"
@@ -487,8 +544,14 @@ class F92017(F12017):
         prepare: bool | None = None,
     ) -> None:
         def compute(
-            x: np.ndarray, f_matrix: typing.Any, f_shift: typing.Any, f_bias: typing.Any, out: np.ndarray
+            x: np.ndarray,
+            shift: np.ndarray,
+            f_matrix: typing.Any,
+            f_shift: typing.Any,
+            f_bias: typing.Any,
+            out: np.ndarray,
         ) -> None:
+            x = x - shift
             z = operator.dot_mv(f_matrix, 1000.0 * (x - f_shift) / 100)
             out[0] = operator.modified_schwefel_func(z) + f_bias
 
@@ -510,7 +573,7 @@ class F92017(F12017):
 class F102017(CecBenchmark):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F10: Hybrid Function 1"
@@ -554,6 +617,7 @@ class F102017(CecBenchmark):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_matrix: typing.Any,
             f_shift: typing.Any,
             idx1: typing.Any,
@@ -562,6 +626,7 @@ class F102017(CecBenchmark):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             mz = operator.dot_mv(f_matrix, x - f_shift)
             out[0] = (
                 operator.zakharov_func(mz[idx1])
@@ -570,7 +635,20 @@ class F102017(CecBenchmark):
                 + f_bias
             )
 
+        def load(problem: "CecBenchmark", ndim: int, support_path: _Traversable | None) -> None:
+            problem.f_shift = problem.check_shift_data(f_shift, support_path=support_path)[:ndim]
+            problem.f_matrix = problem.check_matrix_data(
+                f_matrix, needed_dim=True, ndim=ndim, support_path=support_path
+            )
+            problem.f_shuffle = problem.check_shuffle_data(
+                f_shuffle, needed_dim=True, ndim=ndim, support_path=support_path
+            )
+            problem.f_shuffle = (problem.f_shuffle - 1).astype(int)
+
         super().__init__(
+            ndim=ndim,
+            bounds=bounds,
+            load=load,
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
@@ -582,14 +660,6 @@ class F102017(CecBenchmark):
             shift=shift,
             prepare=prepare,
         )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
-        )
-        self.f_shift = self.check_shift_data(f_shift)[: self.ndim]
-        self.f_matrix = self.check_matrix_data(f_matrix, needed_dim=True)
-        self.f_shuffle = self.check_shuffle_data(f_shuffle, needed_dim=True)
-        self.f_shuffle = (self.f_shuffle - 1).astype(int)
-        self._x_global = np.asarray(self.f_shift)
         self.n_funcs = 3
         self.p = np.array([0.2, 0.4, 0.4])
         self.n1 = int(np.ceil(self.p[0] * self.ndim))
@@ -614,7 +684,7 @@ class F102017(CecBenchmark):
 class F112017(F102017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F11: Hybrid Function 2"
@@ -639,6 +709,7 @@ class F112017(F102017):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_matrix: typing.Any,
             f_shift: typing.Any,
             idx1: typing.Any,
@@ -647,6 +718,7 @@ class F112017(F102017):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             mz = operator.dot_mv(f_matrix, x - f_shift)
             out[0] = (
                 operator.elliptic_func(mz[idx1])
@@ -695,7 +767,7 @@ class F112017(F102017):
 class F122017(F102017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F12: Hybrid Function 3"
@@ -720,6 +792,7 @@ class F122017(F102017):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_matrix: typing.Any,
             f_shift: typing.Any,
             idx1: typing.Any,
@@ -728,6 +801,7 @@ class F122017(F102017):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             mz = operator.dot_mv(f_matrix, x - f_shift)
             miu0 = 2.5
             out[0] = (
@@ -774,7 +848,7 @@ class F122017(F102017):
 class F132017(F102017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F13: Hybrid Function 4"
@@ -799,6 +873,7 @@ class F132017(F102017):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_matrix: typing.Any,
             f_shift: typing.Any,
             idx1: typing.Any,
@@ -808,6 +883,7 @@ class F132017(F102017):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             mz = operator.dot_mv(f_matrix, x - f_shift)
             out[0] = (
                 operator.elliptic_func(mz[idx1])
@@ -856,7 +932,7 @@ class F132017(F102017):
 class F142017(F102017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F14: Hybrid Function 5"
@@ -881,6 +957,7 @@ class F142017(F102017):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_matrix: typing.Any,
             f_shift: typing.Any,
             idx1: typing.Any,
@@ -890,6 +967,7 @@ class F142017(F102017):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             mz = operator.dot_mv(f_matrix, x - f_shift)
             out[0] = (
                 operator.bent_cigar_func(mz[idx1])
@@ -934,7 +1012,7 @@ class F142017(F102017):
 class F152017(F102017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F15: Hybrid Function 6"
@@ -959,6 +1037,7 @@ class F152017(F102017):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_matrix: typing.Any,
             f_shift: typing.Any,
             idx1: typing.Any,
@@ -968,6 +1047,7 @@ class F152017(F102017):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             mz = operator.dot_mv(f_matrix, x - f_shift)
             out[0] = (
                 operator.expanded_scaffer_f6_func(mz[idx1])
@@ -1012,7 +1092,7 @@ class F152017(F102017):
 class F162017(F102017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F16: Hybrid Function 7"
@@ -1037,6 +1117,7 @@ class F162017(F102017):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_matrix: typing.Any,
             f_shift: typing.Any,
             idx1: typing.Any,
@@ -1047,6 +1128,7 @@ class F162017(F102017):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             mz = operator.dot_mv(f_matrix, x - f_shift)
             out[0] = (
                 operator.katsuura_func(mz[idx1])
@@ -1099,7 +1181,7 @@ class F162017(F102017):
 class F172017(F102017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F17: Hybrid Function 8"
@@ -1124,6 +1206,7 @@ class F172017(F102017):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_matrix: typing.Any,
             f_shift: typing.Any,
             idx1: typing.Any,
@@ -1134,6 +1217,7 @@ class F172017(F102017):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             mz = operator.dot_mv(f_matrix, x - f_shift)
             out[0] = (
                 operator.elliptic_func(mz[idx1])
@@ -1181,7 +1265,7 @@ class F172017(F102017):
 class F182017(F102017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F18: Hybrid Function 9"
@@ -1206,6 +1290,7 @@ class F182017(F102017):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_matrix: typing.Any,
             f_shift: typing.Any,
             idx1: typing.Any,
@@ -1216,6 +1301,7 @@ class F182017(F102017):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             mz = operator.dot_mv(f_matrix, x - f_shift)
             out[0] = (
                 operator.bent_cigar_func(mz[idx1])
@@ -1268,7 +1354,7 @@ class F182017(F102017):
 class F192017(F102017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F19: Hybrid Function 10"
@@ -1293,6 +1379,7 @@ class F192017(F102017):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_matrix: typing.Any,
             f_shift: typing.Any,
             idx1: typing.Any,
@@ -1304,6 +1391,7 @@ class F192017(F102017):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             mz = operator.dot_mv(f_matrix, x - f_shift)
             out[0] = (
                 operator.happy_cat_func(mz[idx1], shift=-1.0)
@@ -1353,7 +1441,7 @@ class F192017(F102017):
 class F202017(CecBenchmark):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F20: Composition Function 1"
@@ -1395,6 +1483,7 @@ class F202017(CecBenchmark):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_matrix: typing.Any,
             f_shift: typing.Any,
             lamdas: typing.Any,
@@ -1403,6 +1492,7 @@ class F202017(CecBenchmark):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             z0 = operator.dot_mv(f_matrix[: x.shape[0], :], 2.048 * (x - f_shift[0]) / 100) + 1
             g0 = lamdas[0] * operator.rosenbrock_func(z0) + bias[0]
             w0 = operator.calculate_weight(x - f_shift[0], xichmas[0])
@@ -1422,7 +1512,15 @@ class F202017(CecBenchmark):
             gs = np.array([g0, g1, g2])
             out[0] = operator.dot_vv(ws, gs) + f_bias
 
+        def load(problem: "CecBenchmark", ndim: int, support_path: _Traversable | None) -> None:
+            problem.f_shift = problem.check_shift_matrix(f_shift, ndim=ndim, support_path=support_path)[:, :ndim]
+            problem.f_matrix = problem.check_matrix_data(f_matrix, ndim=ndim, support_path=support_path)[:, :ndim]
+
         super().__init__(
+            ndim=ndim,
+            bounds=bounds,
+            load=load,
+            x_global=lambda problem, dim: np.asarray(problem.f_shift[0]),
             parallel=parallel,
             fastmath=fastmath,
             dtype=dtype,
@@ -1434,12 +1532,6 @@ class F202017(CecBenchmark):
             shift=shift,
             prepare=prepare,
         )
-        self.check_ndim_and_bounds(
-            ndim, self.dim_max, bounds, np.array([[-100.0, 100.0] for _ in range(self.dim_default)])
-        )
-        self.f_shift = self.check_shift_matrix(f_shift)[:, : self.ndim]
-        self.f_matrix = self.check_matrix_data(f_matrix)[:, : self.ndim]
-        self._x_global = np.asarray(self.f_shift[0])
         self.n_funcs = 3
         self.xichmas = [10, 20, 30]
         self.lamdas = [1.0, 1e-6, 1.0]
@@ -1457,7 +1549,7 @@ class F202017(CecBenchmark):
 class F212017(F202017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F21: Composition Function 2"
@@ -1486,6 +1578,7 @@ class F212017(F202017):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_matrix: typing.Any,
             f_shift: typing.Any,
             lamdas: typing.Any,
@@ -1494,6 +1587,7 @@ class F212017(F202017):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             z0 = operator.dot_mv(f_matrix[: x.shape[0], :], x - f_shift[0])
             g0 = lamdas[0] * operator.rastrigin_func(z0) + bias[0]
             w0 = operator.calculate_weight(x - f_shift[0], xichmas[0])
@@ -1543,7 +1637,7 @@ class F212017(F202017):
 class F222017(F202017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F22: Composition Function 3"
@@ -1572,6 +1666,7 @@ class F222017(F202017):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_matrix: typing.Any,
             f_shift: typing.Any,
             lamdas: typing.Any,
@@ -1580,6 +1675,7 @@ class F222017(F202017):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             z0 = operator.dot_mv(f_matrix[: x.shape[0], :], 2.048 * (x - f_shift[0]) / 100) + 1
             g0 = lamdas[0] * operator.rosenbrock_func(z0) + bias[0]
             w0 = operator.calculate_weight(x - f_shift[0], xichmas[0])
@@ -1634,7 +1730,7 @@ class F222017(F202017):
 class F232017(F202017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F23: Composition Function 4"
@@ -1663,6 +1759,7 @@ class F232017(F202017):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_matrix: typing.Any,
             f_shift: typing.Any,
             lamdas: typing.Any,
@@ -1671,6 +1768,7 @@ class F232017(F202017):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             z0 = operator.dot_mv(f_matrix[: x.shape[0], :], x - f_shift[0])
             g0 = lamdas[0] * operator.ackley_func(z0) + bias[0]
             w0 = operator.calculate_weight(x - f_shift[0], xichmas[0])
@@ -1725,7 +1823,7 @@ class F232017(F202017):
 class F242017(F202017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F24: Composition Function 5"
@@ -1754,6 +1852,7 @@ class F242017(F202017):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_matrix: typing.Any,
             f_shift: typing.Any,
             lamdas: typing.Any,
@@ -1762,6 +1861,7 @@ class F242017(F202017):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             z0 = operator.dot_mv(f_matrix[: x.shape[0], :], x - f_shift[0])
             g0 = lamdas[0] * operator.rastrigin_func(z0) + bias[0]
             w0 = operator.calculate_weight(x - f_shift[0], xichmas[0])
@@ -1822,7 +1922,7 @@ class F242017(F202017):
 class F252017(F202017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F25: Composition Function 6"
@@ -1851,6 +1951,7 @@ class F252017(F202017):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_matrix: typing.Any,
             f_shift: typing.Any,
             lamdas: typing.Any,
@@ -1859,6 +1960,7 @@ class F252017(F202017):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             z0 = operator.dot_mv(f_matrix[: x.shape[0], :], x - f_shift[0]) + 1
             g0 = lamdas[0] * operator.expanded_scaffer_f6_func(z0) + bias[0]
             w0 = operator.calculate_weight(x - f_shift[0], xichmas[0])
@@ -1920,7 +2022,7 @@ class F252017(F202017):
 class F262017(F202017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F26: Composition Function 7"
@@ -1949,6 +2051,7 @@ class F262017(F202017):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_matrix: typing.Any,
             f_shift: typing.Any,
             lamdas: typing.Any,
@@ -1957,6 +2060,7 @@ class F262017(F202017):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             z0 = operator.dot_mv(f_matrix[: x.shape[0], :], 5 * (x - f_shift[0]) / 100)
             g0 = lamdas[0] * operator.hgbat_func(z0, shift=-1.0) + bias[0]
             w0 = operator.calculate_weight(x - f_shift[0], xichmas[0])
@@ -2024,7 +2128,7 @@ class F262017(F202017):
 class F272017(F202017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F27: Composition Function 8"
@@ -2050,6 +2154,7 @@ class F272017(F202017):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             f_matrix: typing.Any,
             f_shift: typing.Any,
             lamdas: typing.Any,
@@ -2058,6 +2163,7 @@ class F272017(F202017):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             z0 = operator.dot_mv(f_matrix[: x.shape[0], :], x - f_shift[0])
             g0 = lamdas[0] * operator.ackley_func(z0) + bias[0]
             w0 = operator.calculate_weight(x - f_shift[0], xichmas[0])
@@ -2131,7 +2237,7 @@ class F272017(F202017):
 class F282017(F202017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F28: Composition Function 9"
@@ -2162,6 +2268,7 @@ class F282017(F202017):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             lamdas: typing.Any,
             g0: typing.Any,
             bias: typing.Any,
@@ -2172,6 +2279,7 @@ class F282017(F202017):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             g0 = lamdas[0] * g0.evaluate(x) + bias[0]
             w0 = operator.calculate_weight(x - f_shift[0], xichmas[0])
 
@@ -2224,7 +2332,7 @@ class F282017(F202017):
 class F292017(F202017):
     """
     .. [1] Problem Definitions and Evaluation Criteria for the CEC 2017
-    Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
+       Special Session and Competition on Single Objective Real-Parameter Numerical Optimization
     """
 
     name = "F29: Composition Function 10"
@@ -2255,6 +2363,7 @@ class F292017(F202017):
     ) -> None:
         def compute(
             x: np.ndarray,
+            shift: np.ndarray,
             lamdas: typing.Any,
             g0: typing.Any,
             bias: typing.Any,
@@ -2265,6 +2374,7 @@ class F292017(F202017):
             f_bias: typing.Any,
             out: np.ndarray,
         ) -> None:
+            x = x - shift
             g0 = lamdas[0] * g0.evaluate(x) + bias[0]
             w0 = operator.calculate_weight(x - f_shift[0], xichmas[0])
 

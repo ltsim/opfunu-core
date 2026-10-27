@@ -12,18 +12,18 @@ from opfunu.benchmark.func import FuncBenchmark
 
 
 class Parsopoulos(FuncBenchmark):
-    """
+    r"""
     .. [1]  Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization Problems
-    Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
 
     .. math::
+        f_{\text{Parsopoulos}}(x) = \cos(x_1)^2 + \sin(x_2)^2
 
-        f_{\text{Parsopoulos}}(x) = \\cos(x_1)^2 + \\sin(x_2)^2
 
-    with :math:`x_i \\in [-5, 5]` for :math:`i = 1, 2`.
+    with :math:`x_i \in [-5, 5]` for :math:`i = 1, 2`.
 
     *Global optimum*: This function has infinite number of global minima in R2, at points
-    :math:`\\left(k\frac{\\pi}{2}, \\lambda \\pi \right)`, where :math:`k = \\pm1, \\pm3, ...` and :math:`\\lambda = 0, \\pm1, \\pm2, ...`
+    :math:`\left(k\frac{\pi}{2}, \lambda \pi \right)`, where :math:`k = \pm1, \pm3, ...` and :math:`\lambda = 0, \pm1, \pm2, ...`
 
     In the given domain problem, function has 12 global minima all equal to zero.
     """
@@ -56,7 +56,8 @@ class Parsopoulos(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = np.cos(x[0]) ** 2.0 + np.sin(x[1]) ** 2.0
 
         super().__init__(

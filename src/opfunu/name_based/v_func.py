@@ -14,7 +14,7 @@ from opfunu.benchmark.func import FuncBenchmark
 class VenterSobiezcczanskiSobieski(FuncBenchmark):
     r"""
     .. [1]  Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization Problems
-    Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
 
     .. math::
 
@@ -53,7 +53,8 @@ class VenterSobiezcczanskiSobieski(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             u = x[0] ** 2.0 - 100.0 * np.cos(x[0]) ** 2.0
             v = -100.0 * np.cos(x[0] ** 2.0 / 30.0) + x[1] ** 2.0
             w = -100.0 * np.cos(x[1]) ** 2.0 - 100.0 * np.cos(x[1] ** 2.0 / 30.0)

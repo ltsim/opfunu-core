@@ -14,7 +14,7 @@ from opfunu.benchmark.func import FuncBenchmark
 class BartelsConn(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Bartels Conn Function"
@@ -45,7 +45,8 @@ class BartelsConn(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = np.abs(x[0] ** 2 + x[1] ** 2 + x[0] * x[1]) + np.abs(np.sin(x[0])) + np.abs(np.cos(x[1]))
 
         super().__init__(
@@ -68,7 +69,7 @@ class BartelsConn(FuncBenchmark):
 class Beale(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Beale Function"
@@ -102,7 +103,8 @@ class Beale(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = (
                 (1.5 - x[0] + x[0] * x[1]) ** 2
                 + (2.25 - x[0] + x[0] * x[1] ** 2) ** 2
@@ -129,7 +131,7 @@ class Beale(FuncBenchmark):
 class BiggsExp02(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Biggs EXP2 Function"
@@ -163,7 +165,8 @@ class BiggsExp02(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             t = np.arange(1, 11.0) * 0.1
             y = np.exp(-t) - 5 * np.exp(-10 * t)
             out[0] = np.sum((np.exp(-t * x[0]) - 5 * np.exp(-t * x[1]) - y) ** 2)
@@ -188,7 +191,7 @@ class BiggsExp02(FuncBenchmark):
 class BiggsExp03(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Biggs EXP3 Function"
@@ -222,7 +225,8 @@ class BiggsExp03(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             t = np.arange(1.0, 11.0) * 0.1
             y = np.exp(-t) - 5 * np.exp(-10 * t)
             out[0] = np.sum((np.exp(-t * x[0]) - x[2] * np.exp(-t * x[1]) - y) ** 2)
@@ -247,7 +251,7 @@ class BiggsExp03(FuncBenchmark):
 class BiggsExp04(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Biggs EXP4 Function"
@@ -281,7 +285,8 @@ class BiggsExp04(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             t = np.arange(1, 11.0) * 0.1
             y = np.exp(-t) - 5 * np.exp(-10 * t)
             out[0] = np.sum((x[2] * np.exp(-t * x[0]) - x[3] * np.exp(-t * x[1]) - y) ** 2)
@@ -306,7 +311,7 @@ class BiggsExp04(FuncBenchmark):
 class BiggsExp05(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Biggs EXP5 Function"
@@ -340,7 +345,8 @@ class BiggsExp05(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             t = np.arange(1, 12.0) * 0.1
             y = np.exp(-t) - 5 * np.exp(-10 * t) + 3 * np.exp(-4 * t)
             out[0] = np.sum((x[2] * np.exp(-t * x[0]) - x[3] * np.exp(-t * x[1]) + 3 * np.exp(-t * x[4]) - y) ** 2)
@@ -365,7 +371,7 @@ class BiggsExp05(FuncBenchmark):
 class Bird(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Bird Function"
@@ -401,7 +407,8 @@ class Bird(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = (
                 np.sin(x[0]) * np.exp((1 - np.cos(x[1])) ** 2)
                 + np.cos(x[1]) * np.exp((1 - np.sin(x[0])) ** 2)
@@ -429,7 +436,7 @@ class Bird(FuncBenchmark):
 class Bohachevsky1(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Bohachevsky 1 Function"
@@ -460,7 +467,8 @@ class Bohachevsky1(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = x[0] ** 2 + 2 * x[1] ** 2 - 0.3 * np.cos(3 * np.pi * x[0]) - 0.4 * np.cos(4 * np.pi * x[1]) + 0.7
 
         super().__init__(
@@ -483,7 +491,7 @@ class Bohachevsky1(FuncBenchmark):
 class Bohachevsky2(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Bohachevsky 2 Function"
@@ -514,7 +522,8 @@ class Bohachevsky2(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = x[0] ** 2 + 2 * x[1] ** 2 - 0.3 * np.cos(3 * np.pi * x[0]) * np.cos(4 * np.pi * x[1]) + 0.3
 
         super().__init__(
@@ -537,7 +546,7 @@ class Bohachevsky2(FuncBenchmark):
 class Bohachevsky3(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Bohachevsky 3 Function"
@@ -568,7 +577,8 @@ class Bohachevsky3(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = x[0] ** 2 + 2 * x[1] ** 2 - 0.3 * np.cos(3 * np.pi * x[0] + 4 * np.pi * x[1]) + 0.3
 
         super().__init__(
@@ -591,7 +601,7 @@ class Bohachevsky3(FuncBenchmark):
 class Booth(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Booth Function"
@@ -622,7 +632,8 @@ class Booth(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = (x[0] + 2 * x[1] - 7) ** 2 + (2 * x[0] + x[1] - 5) ** 2
 
         super().__init__(
@@ -645,7 +656,7 @@ class Booth(FuncBenchmark):
 class BoxBetts(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Box-Betts Quadratic Sum Function"
@@ -676,7 +687,8 @@ class BoxBetts(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             i = np.arange(1, 11)
             g = np.exp(-0.1 * i * x[0]) - np.exp(-0.1 * i * x[1]) - (np.exp(-0.1 * i) - np.exp(-i)) * x[2]
             out[0] = np.sum(g**2)
@@ -701,7 +713,7 @@ class BoxBetts(FuncBenchmark):
 class Branin01(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Branin RCOS 1 Function"
@@ -737,7 +749,8 @@ class Branin01(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = (
                 (x[1] - (5.1 / (4 * np.pi**2)) * x[0] ** 2 + 5 * x[0] / np.pi - 6) ** 2
                 + 10 * (1 - 1 / (8 * np.pi)) * np.cos(x[0])
@@ -765,7 +778,7 @@ class Branin01(FuncBenchmark):
 class Branin02(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Branin RCOS 2 Function"
@@ -799,7 +812,8 @@ class Branin02(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = (
                 (x[1] - (5.1 / (4 * np.pi**2)) * x[0] ** 2 + 5 * x[0] / np.pi - 6) ** 2
                 + 10 * (1 - 1 / (8 * np.pi)) * np.cos(x[0]) * np.cos(x[1])
@@ -827,7 +841,7 @@ class Branin02(FuncBenchmark):
 class Brent(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Brent Function"
@@ -858,7 +872,8 @@ class Brent(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = (x[0] + 10.0) ** 2.0 + (x[1] + 10.0) ** 2.0 + np.exp(-(x[0] ** 2.0) - x[1] ** 2.0)
 
         super().__init__(
@@ -881,7 +896,7 @@ class Brent(FuncBenchmark):
 class Brown(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Brown Function"
@@ -912,7 +927,8 @@ class Brown(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             x0 = x[:-1]
             x1 = x[1:]
             out[0] = np.sum((x0**2.0) ** (x1**2.0 + 1.0) + (x1**2.0) ** (x0**2.0 + 1.0))
@@ -937,7 +953,7 @@ class Brown(FuncBenchmark):
 class Bukin02(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Bukin 2 Function"
@@ -968,7 +984,8 @@ class Bukin02(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = 100 * (x[1] ** 2 - 0.01 * x[0] ** 2 + 1.0) + 0.01 * (x[0] + 10.0) ** 2.0
 
         super().__init__(
@@ -991,7 +1008,7 @@ class Bukin02(FuncBenchmark):
 class Bukin04(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Bukin 4 Function"
@@ -1022,7 +1039,8 @@ class Bukin04(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = 100 * x[1] ** 2 + 0.01 * np.abs(x[0] + 10)
 
         super().__init__(
@@ -1045,7 +1063,7 @@ class Bukin04(FuncBenchmark):
 class Bukin06(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Bukin 6 Function"
@@ -1078,7 +1096,8 @@ class Bukin06(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = 100 * np.sqrt(np.abs(x[1] - 0.01 * x[0] ** 2)) + 0.01 * np.abs(x[0] + 10)
 
         super().__init__(

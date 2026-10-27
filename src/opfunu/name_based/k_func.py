@@ -12,19 +12,20 @@ from opfunu.benchmark.func import FuncBenchmark
 
 
 class Katsuura(FuncBenchmark):
-    """
+    r"""
     .. [1] Adorio, E. MVF - "Multivariate Test Functions Library in C for
-    Unconstrained Global Optimization", 2005
-    [2] Gavana, A. Global Optimization Benchmarks and AMPGO retrieved 2015
+       Unconstrained Global Optimization", 2005
+       [2] Gavana, A. Global Optimization Benchmarks and AMPGO retrieved 2015
 
     .. math::
-        f_{\text{Katsuura}}(x) = \\prod_{i=0}^{n-1} \\left [ 1 +
-        (i+1) \\sum_{k=1}^{d} \\lfloor (2^k x_i) \rfloor 2^{-k} \right ]
+        f_{\text{Katsuura}}(x) = \prod_{i=0}^{n-1} \left [ 1 +
+        (i+1) \sum_{k=1}^{d} \lfloor (2^k x_i) \rfloor 2^{-k} \right ]
+
 
     Where, in this exercise, :math:`d = 32`.
     Here, :math:`n` represents the number of dimensions and
 
-    :math:`x_i \\in [0, 100]` for :math:`i = 1, ..., n`.
+    :math:`x_i \in [0, 100]` for :math:`i = 1, ..., n`.
 
     *Global optimum*: :math:`f(x) = 1` for :math:`x_i = 0` for
     :math:`i = 1, ..., n`.
@@ -58,7 +59,8 @@ class Katsuura(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             d = 32
             k = np.atleast_2d(np.arange(1, d + 1)).T
             idx = np.arange(0.0, x.shape[0] * 1.0)
@@ -83,13 +85,14 @@ class Katsuura(FuncBenchmark):
 
 
 class Keane(FuncBenchmark):
-    """
+    r"""
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
 
     .. math::
-        f_{\text{Keane}}(x) = \frac{\\sin^2(x_1 - x_2)\\sin^2(x_1 + x_2)}{\\sqrt{x_1^2 + x_2^2}}
-    with :math:`x_i \\in [0, 10]` for :math:`i = 1, 2`.
+        f_{\text{Keane}}(x) = \frac{\sin^2(x_1 - x_2)\sin^2(x_1 + x_2)}{\sqrt{x_1^2 + x_2^2}}
+
+    with :math:`x_i \in [0, 10]` for :math:`i = 1, 2`.
 
     *Global optimum*: :math:`f(x) = 0.0` for :math:`x = [7.85396153, 7.85396135]`.
     """
@@ -122,7 +125,8 @@ class Keane(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             val = np.sin(x[0] - x[1]) ** 2 * np.sin(x[0] + x[1]) ** 2
             out[0] = val / np.sqrt(x[0] ** 2 + x[1] ** 2)
 
@@ -144,21 +148,23 @@ class Keane(FuncBenchmark):
 
 
 class Kowalik(FuncBenchmark):
-    """
+    r"""
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
 
     .. math::
-        f_{\text{Kowalik}}(x) = \\sum_{i=0}^{10} \\left [ a_i
+        f_{\text{Kowalik}}(x) = \sum_{i=0}^{10} \left [ a_i
         - \frac{x_1 (b_i^2 + b_i x_2)} {b_i^2 + b_i x_3 + x_4} \right ]^2
+
 
     .. math::
         \begin{matrix}
         a = [4, 2, 1, 1/2, 1/4 1/8, 1/10, 1/12, 1/14, 1/16] \\
         b = [0.1957, 0.1947, 0.1735, 0.1600, 0.0844, 0.0627,
              0.0456, 0.0342, 0.0323, 0.0235, 0.0246]\\
-        \\end{matrix}
-    Here, :math:`n` represents the number of dimensions and :math:`x_i \\in [-5, 5]` for :math:`i = 1, ..., 4`.
+        \end{matrix}
+
+    Here, :math:`n` represents the number of dimensions and :math:`x_i \in [-5, 5]` for :math:`i = 1, ..., 4`.
 
     *Global optimum*: :math:`f(x) = 0.00030748610` for :math:`x = [0.192833, 0.190836, 0.123117, 0.135766]`.
     """
@@ -191,7 +197,8 @@ class Kowalik(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, b: np.ndarray, a: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, b: np.ndarray, a: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             vec = b - (x[0] * (a**2 + a * x[1]) / (a**2 + a * x[2] + x[3]))
             out[0] = np.sum(vec**2)
 

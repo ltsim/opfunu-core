@@ -14,7 +14,7 @@ from opfunu.benchmark.func import FuncBenchmark
 class Hansen(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Hansen Function"
@@ -47,7 +47,8 @@ class Hansen(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             i = np.arange(5.0)
             a = (i + 1) * np.cos(i * x[0] + i + 1)
             b = (i + 1) * np.cos((i + 2) * x[1] + i + 1)
@@ -73,7 +74,7 @@ class Hansen(FuncBenchmark):
 class Hartmann3(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Hartman 3 Function"
@@ -104,7 +105,10 @@ class Hartmann3(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, a: np.ndarray, p: np.ndarray, c: np.ndarray, out: np.ndarray) -> None:
+        def compute(
+            x: np.ndarray, shift: np.ndarray, a: np.ndarray, p: np.ndarray, c: np.ndarray, out: np.ndarray
+        ) -> None:
+            x = x - shift
             XX = np.atleast_2d(x)
             d = np.sum(a * (XX - p) ** 2, axis=1)
             out[0] = -np.sum(c * np.exp(-d))
@@ -136,7 +140,7 @@ class Hartmann3(FuncBenchmark):
 class Hartmann6(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Hartman 6 Function"
@@ -169,7 +173,10 @@ class Hartmann6(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, a: np.ndarray, p: np.ndarray, c: np.ndarray, out: np.ndarray) -> None:
+        def compute(
+            x: np.ndarray, shift: np.ndarray, a: np.ndarray, p: np.ndarray, c: np.ndarray, out: np.ndarray
+        ) -> None:
+            x = x - shift
             XX = np.atleast_2d(x)
             d = np.sum(a * (XX - p) ** 2, axis=1)
             out[0] = -np.sum(c * np.exp(-d))
@@ -213,7 +220,7 @@ class Hartmann6(FuncBenchmark):
 class HelicalValley(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Helical Valley"
@@ -244,7 +251,8 @@ class HelicalValley(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             r = np.sqrt(x[0] ** 2 + x[1] ** 2)
             theta = 1 / (2.0 * np.pi) * np.arctan2(x[1], x[0])
             out[0] = x[2] ** 2 + 100 * ((x[2] - 10 * theta) ** 2 + (r - 1) ** 2)
@@ -269,7 +277,7 @@ class HelicalValley(FuncBenchmark):
 class Himmelblau(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Himmelblau Function"
@@ -300,7 +308,8 @@ class Himmelblau(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = (x[0] ** 2 + x[1] - 11) ** 2 + (x[0] + x[1] ** 2 - 7) ** 2
 
         super().__init__(
@@ -323,7 +332,7 @@ class Himmelblau(FuncBenchmark):
 class Hosaki(FuncBenchmark):
     """
     .. [1] Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization
-    Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Problems Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
     """
 
     name = "Hosaki Function"
@@ -356,7 +365,8 @@ class Hosaki(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             val = 1 - 8 * x[0] + 7 * x[0] ** 2 - 7 / 3.0 * x[0] ** 3 + 0.25 * x[0] ** 4
             out[0] = val * x[1] ** 2 * np.exp(-x[1])
 
@@ -413,7 +423,8 @@ class HolderTable(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = -np.abs(np.sin(x[0]) * np.cos(x[1]) * np.exp(np.abs(1 - np.sqrt(x[0] ** 2 + x[1] ** 2) / np.pi)))
 
         super().__init__(

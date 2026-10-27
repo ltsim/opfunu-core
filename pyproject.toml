@@ -65,6 +65,8 @@ dependencies = [
 [project.optional-dependencies]
 numba = ["numba>=0.68.0; implementation_name == 'cpython'"]
 plot = ["matplotlib>=3.8.0"]
+plotly = ["plotly>=5.24.0"]
+pyvista = ["pyvista>=0.43.0"]
 interactive = ["pyvista>=0.43.0"]
 
 [dependency-groups]
@@ -80,12 +82,15 @@ numba = [
     "numba>=0.68.0; implementation_name == 'cpython'",
 ]
 
+notebook = [
+    "ipykernel>=7.3.0",
+]
+
 docs = [
-    "mkdocs>=1.6.0",
-    "mkdocs-material>=9.5.0",
-    "mkdocstrings[python]>=0.27.0",
-    "mkdocs-bibtex>=2.6.0",
-    "pypandoc-binary>=1.15",
+    "sphinx>=8.1",
+    "myst-parser>=4.0",
+    "sphinxcontrib-bibtex>=2.6",
+    "sphinx-autobuild>=2024.10",
 ]
 
 [project.urls]
@@ -155,6 +160,8 @@ module = [
     "numpy.*",
     "matplotlib",
     "matplotlib.*",
+    "plotly",
+    "plotly.*",
     "pyvista",
     "pyvista.*",
 ]

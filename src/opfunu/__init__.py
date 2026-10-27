@@ -18,7 +18,7 @@
 # >>>
 # >>> print(f1.get_paras())         # Print the parameters of function if has
 
-__version__ = "v2026b0"
+__version__ = "v2026b1"
 
 import inspect
 import re

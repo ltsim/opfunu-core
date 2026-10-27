@@ -12,25 +12,25 @@ from opfunu.benchmark.func import FuncBenchmark
 
 
 class TestTubeHolder(FuncBenchmark):
-    """
+    r"""
     .. [1]  Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization Problems
-    Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
 
     .. math::
+        f_{\text{TestTubeHolder}}(x) = - 4 \left | {e^{\left|{\cos \left(\frac{1}{200} x_{1}^{2} +
+        \frac{1}{200} x_{2}^{2}\right)} \right|}\sin\left(x_{1}\right) \cos\left(x_{2}\right)}\right|
 
-        f_{\text{TestTubeHolder}}(x) = - 4 \\left | {e^{\\left|{\\cos \\left(\frac{1}{200} x_{1}^{2} +
-        \frac{1}{200} x_{2}^{2}\right)} \right|}\\sin\\left(x_{1}\right) \\cos\\left(x_{2}\right)}\right|
 
-    with :math:`x_i \\in [-10, 10]` for :math:`i = 1, 2`.
+    with :math:`x_i \in [-10, 10]` for :math:`i = 1, 2`.
 
-    *Global optimum*: :math:`f(x) = -10.872299901558` for :math:`x= [-\\pi/2, 0]`
+    *Global optimum*: :math:`f(x) = -10.872299901558` for :math:`x= [-\pi/2, 0]`
     """
 
     name = "Qing Function"
-    latex_formula = r"f_{\text{TestTubeHolder}}(x)="
-    latex_formula_dimension = r"d = n"
-    latex_formula_bounds = r"x_i \in [-10, 10, ..., 10]"
-    latex_formula_global_optimum = r"f(0, 0, ...,0) = 1.0"
+    latex_formula = r"f_{\text{TestTubeHolder}}(x) = - 4 \left | {e^{\left|{\cos \left(\frac{1}{200} x_{1}^{2} + \frac{1}{200} x_{2}^{2}\right)} \right|}\sin\left(x_{1}\right) \cos\left(x_{2}\right)}\right|"
+    latex_formula_dimension = r"d = 2"
+    latex_formula_bounds = r"x_i \in [-10, 10]"
+    latex_formula_global_optimum = r"f(-\pi/2, 0) = -10.872299901558"
     continuous = True
     linear = False
     convex = True
@@ -54,7 +54,8 @@ class TestTubeHolder(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             u = np.sin(x[0]) * np.cos(x[1])
             v = (x[0] ** 2 + x[1] ** 2) / 200
             out[0] = -4 * np.abs(u * np.exp(np.abs(np.cos(v))))

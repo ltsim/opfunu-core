@@ -12,17 +12,17 @@ from opfunu.benchmark.func import FuncBenchmark
 
 
 class XinSheYang01(FuncBenchmark):
-    """
+    r"""
     .. [1]  Jamil, M. & Yang, X.-S. A Literature Survey of Benchmark Functions For Global Optimization Problems
-    Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
+       Int. Journal of Mathematical Modelling and Numerical Optimisation, 2013, 4, 150-194.
 
     .. math::
+         f(x) = \sum_{i=1}^{n} \epsilon_i \lvert x_i \rvert^i
 
-         f(x) = \\sum_{i=1}^{n} \\epsilon_i \\lvert x_i \rvert^i
 
-    The variable :math:`\\epsilon_i, (i = 1, ..., n)` is a random variable uniformly distributed in :math:`[0, 1]`.
+    The variable :math:`\epsilon_i, (i = 1, ..., n)` is a random variable uniformly distributed in :math:`[0, 1]`.
 
-    Here, :math:`n` represents the number of dimensions and :math:`x_i \\in [-5, 5]` for :math:`i = 1, ..., n`.
+    Here, :math:`n` represents the number of dimensions and :math:`x_i \in [-5, 5]` for :math:`i = 1, ..., n`.
 
     *Global optimum*: :math:`f(x) = 0` for :math:`x_i = 0` for :math:`i = 1, ..., n`
     """
@@ -55,7 +55,8 @@ class XinSheYang01(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             i = np.arange(1.0, x.shape[0] + 1.0)
             out[0] = np.sum(np.random.random(x.shape[0]) * (np.abs(x) ** i))
 

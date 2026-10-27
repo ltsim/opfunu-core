@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!--
+    opfunu-core favicon: a benchmark landscape as nested contour bands descending
+    into the global minimum (light core). Kept at three rings plus a dot so it
+    stays legible at 16 px. Colors follow the docs palette (green / teal).
+  -->
+  <g transform="rotate(-18 32 32)">
+    <ellipse cx="32" cy="32" rx="29" ry="23" fill="#81c784"/>
+    <ellipse cx="32" cy="32" rx="21" ry="16.5" fill="#4caf50"/>
+    <ellipse cx="32" cy="32" rx="13" ry="10" fill="#009688"/>
+    <circle cx="32" cy="32" r="4.5" fill="#b9f6ca"/>
+  </g>
+</svg>

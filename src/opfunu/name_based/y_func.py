@@ -12,18 +12,18 @@ from opfunu.benchmark.func import FuncBenchmark
 
 
 class YaoLiu04(FuncBenchmark):
-    """
+    r"""
     .. [1]  Yao X., Liu Y. (1997) Fast evolution strategies. In: Angeline P.J., Reynolds R.G., McDonnell J.R., Eberhart R. (eds)
-    Evolutionary Programming VI. EP 1997. Lecture Notes in Computer Science, vol 1213. Springer, Berlin, Heidelberg
+       Evolutionary Programming VI. EP 1997. Lecture Notes in Computer Science, vol 1213. Springer, Berlin, Heidelberg
 
     .. [2]  Mishra, S. Global Optimization by Differential Evolution and Particle Swarm Methods: Evaluation
-    on Some Benchmark Functions. Munich Personal RePEc Archive, 2006, 1005
+       on Some Benchmark Functions. Munich Personal RePEc Archive, 2006, 1005
 
     .. math::
+         f(x) = {max}_i \left\\{ \left | x_i \right | , 1 \leq i \leq n \right\\}
 
-         f(x) = {max}_i \\left\\{ \\left | x_i \right | , 1 \\leq i \\leq n \right\\}
 
-    Here, :math:`n` represents the number of dimensions and :math:`x_i \\in [-10, 10]` for :math:`i = 1, ..., n`.
+    Here, :math:`n` represents the number of dimensions and :math:`x_i \in [-10, 10]` for :math:`i = 1, ..., n`.
 
     *Global optimum*: :math:`f(x) = 0` for :math:`x_i = 0` for :math:`i = 1, ..., n`
     """
@@ -56,7 +56,8 @@ class YaoLiu04(FuncBenchmark):
         shift: typing.Any = None,
         prepare: bool | None = None,
     ) -> None:
-        def compute(x: np.ndarray, out: np.ndarray) -> None:
+        def compute(x: np.ndarray, shift: np.ndarray, out: np.ndarray) -> None:
+            x = x - shift
             out[0] = np.abs(x).max()
 
         super().__init__(

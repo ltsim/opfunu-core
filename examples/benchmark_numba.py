@@ -78,9 +78,9 @@ def patch_exit():
         return
     orig = CecBenchmark.load_matrix_data
 
-    def safe(self, filename):
+    def safe(self, filename, *args, **kwargs):
         try:
-            return orig(self, filename)
+            return orig(self, filename, *args, **kwargs)
         except SystemExit as e:
             raise FileNotFoundError(filename) from e
 
